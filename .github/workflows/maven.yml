@@ -27,8 +27,8 @@ jobs:
 
   coverage:
 
-    runs-on: [macos-latest]
-    name: coverage on macOS
+    runs-on: [ubuntu-latest]
+    name: coverage on Ubuntu
 
     steps:
       - uses: actions/checkout@v1
