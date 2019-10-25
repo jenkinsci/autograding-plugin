@@ -14,7 +14,7 @@ jobs:
         platform: [ubuntu-latest, macos-latest, windows-latest]
 
     runs-on: ${{ matrix.platform }}
-    name: on ${{ matrix.platform }}
+    name: build on ${{ matrix.platform }}
 
     steps:
     - uses: actions/checkout@v1
@@ -28,7 +28,7 @@ jobs:
   coverage:
 
     runs-on: [macos-latest]
-    name: on macOS
+    name: coverage on macOS
 
     steps:
       - uses: actions/checkout@v1
@@ -37,6 +37,10 @@ jobs:
         with:
           java-version: 1.8
       - name: Coverage with JaCoCo
-        run: |
-          mvn -V clean verify jacoco:prepare-agent test integration-test jacoco:report --file pom.xml -Djenkins.test.timeout=1000
-          sh "curl -s https://codecov.io/bash | bash -s - -t 5b3d88cd-5a5d-4684-bef1-a663294b7c3b"
+        run: mvn -V clean verify jacoco:prepare-agent test integration-test jacoco:report --file pom.xml -Djenkins.test.timeout=1000
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1.0.3
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+
