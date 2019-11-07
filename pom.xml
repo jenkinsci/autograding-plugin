@@ -108,6 +108,11 @@
 
   <dependencies>
 
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>warnings-ng</artifactId>
+      <version>7.0.0</version>
+    </dependency>
     <!-- Project Dependencies -->
     <dependency>
       <groupId>org.slf4j</groupId>
