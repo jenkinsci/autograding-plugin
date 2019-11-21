@@ -23,6 +23,7 @@ import jenkins.tasks.SimpleBuildStep;
 import io.jenkins.plugins.analysis.core.model.ResultAction;
 
 public class QualityEvaluator extends Recorder implements SimpleBuildStep {
+
     /**
      * Creates a new instance of {@link  QualityEvaluator}.
      */
@@ -37,10 +38,20 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
     public void perform(@Nonnull final Run<?, ?> run, @Nonnull final FilePath workspace,
             @Nonnull final Launcher launcher,
             @Nonnull final TaskListener listener) throws InterruptedException, IOException {
-        listener.getLogger().println("Hello Code Quality!");
+        listener.getLogger().println("[CodeQuality] Starting extraction of previous performed checks");
 
         List<ResultAction> actions = run.getActions(ResultAction.class);
-        listener.getLogger().println(actions.stream().map(ResultAction::getId).collect(Collectors.joining()));
+
+        listener.getLogger().println("[CodeQuality] -> found "+actions.size()+" checks");
+        listener.getLogger().println("[CodeQuality] Code Quality Results are: ");
+
+        for(ResultAction action : actions){
+
+            listener.getLogger().println(action.getResult().toString());
+
+        }
+
+        //listener.getLogger().println(actions.stream().map(ResultAction::getId).collect(Collectors.joining()));
     }
 
     /**
