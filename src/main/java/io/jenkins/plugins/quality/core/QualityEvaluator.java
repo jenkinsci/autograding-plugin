@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.ImmutableList;
+import edu.hm.hafner.analysis.Report;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -21,6 +23,7 @@ import hudson.tasks.Recorder;
 import jenkins.tasks.SimpleBuildStep;
 
 import io.jenkins.plugins.analysis.core.model.ResultAction;
+import sun.security.ec.point.ProjectivePoint;
 
 public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
@@ -46,9 +49,15 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         listener.getLogger().println("[CodeQuality] Code Quality Results are: ");
 
         for(ResultAction action : actions){
-
-            listener.getLogger().println(action.getResult().toString());
-
+            listener.getLogger().println("[CodeQuality] "+action.getResult().toString());
+            ImmutableList<String> errors = ImmutableList.copyOf(action.getResult().getErrorMessages());
+            for(String error : errors) {
+                listener.getLogger().println("[CodeQuality] "+error.toString());
+            }
+            ImmutableList<String> infos = ImmutableList.copyOf(action.getResult().getInfoMessages());
+            for(String info : infos) {
+                listener.getLogger().println("[CodeQuality] "+info.toString());
+            }
         }
 
         //listener.getLogger().println(actions.stream().map(ResultAction::getId).collect(Collectors.joining()));
