@@ -3,7 +3,6 @@ package io.jenkins.plugins.quality.core;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.annotation.Nonnull;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -34,9 +33,10 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
     }
 
     @Override
-    public void perform(@Nonnull final Run<?, ?> run, @Nonnull final FilePath workspace,
-            @Nonnull final Launcher launcher,
-            @Nonnull final TaskListener listener) throws InterruptedException, IOException {
+    public void perform(@NonNull final Run<?, ?> run, @NonNull final FilePath workspace,
+            @NonNull final Launcher launcher,
+            @NonNull final TaskListener listener) throws InterruptedException, IOException {
+
         listener.getLogger().println("Hello Code Quality!");
 
         List<ResultAction> actions = run.getActions(ResultAction.class);

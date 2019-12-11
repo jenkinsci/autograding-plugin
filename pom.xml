@@ -4,16 +4,16 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>3.50</version>
-    <relativePath />
+    <version>3.53</version>
+    <relativePath/>
   </parent>
 
   <artifactId>code-quality</artifactId>
   <groupId>io.jenkins.plugins</groupId>
   <packaging>hpi</packaging>
-  <name>Commit Quality Plugin</name>
+  <name>Code Quality Plugin</name>
   <version>0.1.0-SNAPSHOT</version>
-  <description>Jenkins plug-that defines an API to mine and analyze the quality of commits.</description>
+  <description>Jenkins plug-that defines an API to mine and analyze the overall code quality.</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,16 +21,27 @@
     <java.level>8</java.level>
     <jenkins-test-harness.version>2.49</jenkins-test-harness.version>
     <spotbugs.failOnError>false</spotbugs.failOnError>
-    <slf4j.version>1.7.28</slf4j.version>
-    <codingstyle.version>0.2.7</codingstyle.version>
+    <slf4j.version>1.7.29</slf4j.version>
+    <codingstyle.version>0.3.0</codingstyle.version>
 
     <module.name>${project.groupId}.forensics.api</module.name>
+    <url>https://github.com/jenkinsci/forensics-api-plugin</url>
 
     <!-- Library Dependencies Versions -->
     <error-prone.version>2.3.3</error-prone.version>
     <spotbugs.annotations>3.1.12</spotbugs.annotations>
     <commons.lang.version>3.9</commons.lang.version>
     <eclipse-collections.version>9.2.0</eclipse-collections.version>
+
+    <font-awesome-api.version>5.11.2-2-beta2</font-awesome-api.version>
+    <jquery3-api.version>3.4.1-2-beta1</jquery3-api.version>
+    <popper-api.version>1.15.0-2-beta1</popper-api.version>
+    <bootstrap4-api.version>4.4.1-1-beta1</bootstrap4-api.version>
+    <data-tables-api.version>1.10.20-2-beta1</data-tables-api.version>
+    <echarts-api.version>4.4.0-2-beta1</echarts-api.version>
+    <plugin-util-api.version>0.1.0-beta1</plugin-util-api.version>
+
+    <module.name>${project.groupId}.code.quality</module.name>
 
     <!-- Jenkins Plugin Dependencies Versions -->
     <workflow-api.version>2.34</workflow-api.version>
@@ -41,28 +52,29 @@
     <junit.version>5.5.2</junit.version>
     <junit-platform-launcher.version>1.5.2</junit-platform-launcher.version>
     <mockito.version>3.1.0</mockito.version>
-    <assertj.version>3.13.2</assertj.version>
-    <archunit.version>0.11.0</archunit.version>
+    <assertj.version>3.14.0</assertj.version>
+    <archunit.version>0.12.0</archunit.version>
+    <json-unit-fluent.version>2.11.1</json-unit-fluent.version>
 
     <!-- Maven plug-in versions -->
     <maven-pmd-plugin.version>3.12.0</maven-pmd-plugin.version>
-    <pmd.version>6.17.0</pmd.version>
+    <pmd.version>6.19.0</pmd.version>
     <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
-    <checkstyle.version>8.24</checkstyle.version>
+    <checkstyle.version>8.26</checkstyle.version>
     <spotbugs-maven-plugin.version>3.1.12.2</spotbugs-maven-plugin.version>
     <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
-    <maven-surefire.plugin>3.0.0-M3</maven-surefire.plugin>
-    <maven-failsafe.plugin>3.0.0-M3</maven-failsafe.plugin>
-    <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
+    <maven-surefire.plugin>3.0.0-M4</maven-surefire.plugin>
+    <maven-failsafe.plugin>3.0.0-M4</maven-failsafe.plugin>
+    <versions-maven-pluxgin.version>2.7</versions-maven-pluxgin.version>
     <depgraph-maven-plugin.version>3.3.0</depgraph-maven-plugin.version>
     <animal-sniffer-maven-plugin.version>1.18</animal-sniffer-maven-plugin.version>
     <maven-hpi-plugin.version>2.5</maven-hpi-plugin.version>
     <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
-    <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
+    <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
     <pitest-maven.plugin>1.4.10</pitest-maven.plugin>
-    <pitest-maven.junit5.plugin>0.9</pitest-maven.junit5.plugin>
-    <revapi-maven-plugin.version>0.11.1</revapi-maven-plugin.version>
-    <revapi-java.version>0.19.1</revapi-java.version>
+    <pitest-maven.junit5.plugin>0.10</pitest-maven.junit5.plugin>
+    <revapi-maven-plugin.version>0.11.2</revapi-maven-plugin.version>
+    <revapi-java.version>0.20.0</revapi-java.version>
     <assertj-assertions-generator-maven-plugin.version>2.2.0</assertj-assertions-generator-maven-plugin.version>
 
   </properties>
@@ -85,19 +97,21 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.jenkins-ci</groupId>
-        <artifactId>annotation-indexer</artifactId>
-        <version>1.12</version>
+        <groupId>io.jenkins.tools.bom</groupId>
+        <artifactId>bom-2.138.x</artifactId>
+        <version>3</version>
+        <scope>import</scope>
+        <type>pom</type>
       </dependency>
       <dependency>
-        <groupId>org.jenkins-ci.plugins</groupId>
-        <artifactId>junit</artifactId>
-        <version>1.3</version>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-core</artifactId>
+        <version>2.2</version>
       </dependency>
       <dependency>
-        <groupId>org.jenkins-ci.plugins.workflow</groupId>
-        <artifactId>workflow-step-api</artifactId>
-        <version>2.19</version>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm</artifactId>
+        <version>7.1</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -111,9 +125,10 @@
 
     <dependency>
       <groupId>io.jenkins.plugins</groupId>
-      <artifactId>warnings-ng</artifactId>
-      <version>7.0.0</version>
+      <artifactId>plugin-util-api</artifactId>
+      <version>${plugin-util-api.version}</version>
     </dependency>
+
     <!-- Project Dependencies -->
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -135,16 +150,39 @@
       <artifactId>commons-lang3</artifactId>
       <version>${commons.lang.version}</version>
     </dependency>
+
     <dependency>
-      <groupId>org.eclipse.collections</groupId>
-      <artifactId>eclipse-collections-api</artifactId>
-      <version>${eclipse-collections.version}</version>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>font-awesome-api</artifactId>
+      <version>${font-awesome-api.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.collections</groupId>
-      <artifactId>eclipse-collections</artifactId>
-      <version>${eclipse-collections.version}</version>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>bootstrap4-api</artifactId>
+      <version>${bootstrap4-api.version}</version>
     </dependency>
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>jquery3-api</artifactId>
+      <version>${jquery3-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>echarts-api</artifactId>
+      <version>${echarts-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>data-tables-api</artifactId>
+      <version>${data-tables-api.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>warnings-ng</artifactId>
+      <version>7.2.2</version>
+    </dependency>
+
 
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
@@ -222,12 +260,45 @@
       <artifactId>archunit-junit5-engine</artifactId>
       <version>${archunit.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.javacrumbs.json-unit</groupId>
+      <artifactId>json-unit-assertj</artifactId>
+      <version>${json-unit-fluent.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jenkins-ci.main</groupId>
+      <artifactId>jenkins-test-harness</artifactId>
+      <version>${jenkins-test-harness.version}</version>
+      <scope>test</scope>
       <exclusions>
         <exclusion>
-          <artifactId>junit-platform-engine</artifactId>
-          <groupId>org.junit.platform</groupId>
+          <groupId>org.jenkins-ci.main</groupId>
+          <artifactId>jenkins-test-harness-htmlunit</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.main</groupId>
+      <artifactId>jenkins-test-harness-htmlunit</artifactId>
+      <version>2.36.0-1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>plugin-util-api</artifactId>
+      <version>${plugin-util-api.version}</version>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+    <dependency>
+      <groupId>edu.hm.hafner</groupId>
+      <artifactId>codingstyle</artifactId>
+      <version>${codingstyle.version}</version>
+      <scope>test</scope>
+      <type>test-jar</type>
     </dependency>
 
   </dependencies>
@@ -465,6 +536,7 @@
           </packages>
           <excludes>
             <exclude>.*ITest</exclude>
+            <exclude>.*Action</exclude>
           </excludes>
           <entryPointClassPackage>io.jenkins.plugins.quality.assertions</entryPointClassPackage>
           <cleanTargetDir>true</cleanTargetDir>
