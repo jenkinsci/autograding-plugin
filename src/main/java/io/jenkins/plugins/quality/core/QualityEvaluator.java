@@ -26,11 +26,11 @@ import io.jenkins.plugins.analysis.core.model.ResultAction;
 import sun.security.ec.point.ProjectivePoint;
 
 public class QualityEvaluator extends Recorder implements SimpleBuildStep {
-
+    @DataBoundConstructor
     /**
      * Creates a new instance of {@link  QualityEvaluator}.
      */
-    @DataBoundConstructor
+
     public QualityEvaluator() {
         super();
 
@@ -48,19 +48,38 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         listener.getLogger().println("[CodeQuality] -> found "+actions.size()+" checks");
         listener.getLogger().println("[CodeQuality] Code Quality Results are: ");
 
+        final int score = computeScore(actions, listener);
+
         for(ResultAction action : actions){
-            listener.getLogger().println("[CodeQuality] "+action.getResult().toString());
-            ImmutableList<String> errors = ImmutableList.copyOf(action.getResult().getErrorMessages());
-            for(String error : errors) {
-                listener.getLogger().println("[CodeQuality] "+error.toString());
-            }
-            ImmutableList<String> infos = ImmutableList.copyOf(action.getResult().getInfoMessages());
-            for(String info : infos) {
-                listener.getLogger().println("[CodeQuality] "+info.toString());
-            }
+            listener.getLogger().println("[CodeQuality] For "+action.getResult().getId()+ " the following issues where found:");
+            listener.getLogger().println("[CodeQuality] Number of Errors: "+action.getResult().getTotalErrorsSize());
+            listener.getLogger().println("[CodeQuality] Number of High Issues: "+action.getResult().getTotalHighPrioritySize());
+            listener.getLogger().println("[CodeQuality] Number of Normal Issues: "+action.getResult().getTotalNormalPrioritySize());
+            listener.getLogger().println("[CodeQuality] Number of Low Issues: "+action.getResult().getTotalLowPrioritySize());
         }
 
+        listener.getLogger().println("[CodeQuality] Total score achieved: "+ score +" Points");
         //listener.getLogger().println(actions.stream().map(ResultAction::getId).collect(Collectors.joining()));
+    }
+
+    private int computeScore(List<ResultAction> actions,  @Nonnull final TaskListener listener) {
+        int score = 100;
+        for(ResultAction action : actions){
+            if(action.getResult().getTotalErrorsSize() > 0) {
+                score = score - (action.getResult().getTotalErrorsSize() * 4);
+            }
+            if(action.getResult().getTotalErrorsSize() > 0) {
+                score = score - (action.getResult().getTotalHighPrioritySize() * 3);
+            }
+            if(action.getResult().getTotalErrorsSize() > 0) {
+                score = score - (action.getResult().getTotalNormalPrioritySize() * 2);
+            }
+            if(action.getResult().getTotalErrorsSize() > 0) {
+                score = score - action.getResult().getTotalLowPrioritySize();
+            }
+
+        }
+        return score;
     }
 
     /**
