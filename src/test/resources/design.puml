@@ -6,8 +6,6 @@ skinparam component {
   BackgroundColor #f8f8f8
 }
 
-[Utilities] <<..util>>
-[Core] <<..util>>
-[Core] -> [Utilities]
+[Core] <<..core>>
 
 @enduml

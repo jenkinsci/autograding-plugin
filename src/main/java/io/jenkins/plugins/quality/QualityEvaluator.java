@@ -1,4 +1,4 @@
-package io.jenkins.plugins.quality.core;
+package io.jenkins.plugins.quality;
 
 import java.io.IOException;
 import java.util.List;
