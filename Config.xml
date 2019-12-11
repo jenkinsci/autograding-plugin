@@ -1,0 +1,24 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<gradingConf>
+	<score>0</score>
+	<checks>
+		<id>checkstyle</id>
+				<toCheck>true</toCheck>
+				<kindOfGrading>absolute</kindOfGrading>
+				<weightError>4</weightError>
+				<weightHigh>3</weightHigh>
+				<weightNormal>2</weightNormal>
+				<weightLow>1</weightLow>
+				<isPositive>true</isPositive>
+	</checks>
+	<checks>
+		<id>pmd</id>
+				<toCheck>false</toCheck>
+				<kindOfGrading>relative</kindOfGrading>
+				<weightError>4</weightError>
+				<weightHigh>3</weightHigh>
+				<weightNormal>2</weightNormal>
+				<weightLow>1</weightLow>
+				<isPositive>false</isPositive>
+	</checks>
+</gradingConf>
