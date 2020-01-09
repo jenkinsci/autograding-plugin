@@ -3,18 +3,12 @@ package io.jenkins.plugins.quality.core;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.*;
 
-import com.google.common.collect.ImmutableList;
-import com.google.inject.internal.cglib.core.$Constants;
-import edu.hm.hafner.analysis.Report;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -30,7 +24,6 @@ import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import jenkins.tasks.SimpleBuildStep;
 import io.jenkins.plugins.analysis.core.model.ResultAction;
-import sun.security.ec.point.ProjectivePoint;
 
 public class QualityEvaluator extends Recorder implements SimpleBuildStep {
     @DataBoundConstructor
@@ -52,14 +45,18 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         listener.getLogger().println("[CodeQuality] Starting extraction of previous performed checks");
         List<ResultAction> actions = run.getActions(ResultAction.class);
         //also get action von junit
+        // List<TestAction> testActions = run.getActions(TestResultAction.class);
         List<Configuration> configs = new ArrayList<>();
         List<Integer> maxScore = new ArrayList<>();
+        List<BaseResults> base = new ArrayList<>();
+
 
         try {
             listener.getLogger().println("[CodeQuality] Try to read Configurations.");
             readFile(configs, maxScore, workspace);
             listener.getLogger().println("[CodeQuality] -> found the following Configurations");
             // if config vorhanden dann loggen , außerdem entweder max score von dem abgezogen wird oder es wird bei null begonnen zum hochzählen von pkt.
+
             listener.getLogger().println("[CodeQuality] The max Score to achieve is: " + maxScore.get(0) );
             listener.getLogger().println(configs.toString());
 
@@ -73,15 +70,25 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         final int finalScore = computeScore(actions, maxScore.get(0), configs, listener);
 
         for(ResultAction action : actions){
+            BaseResults baseResult = new BaseResults();
+            baseResult.setId(action.getResult().getId());
+            baseResult.setTotalErrors(action.getResult().getTotalErrorsSize());
+            baseResult.setTotalHighs(action.getResult().getTotalHighPrioritySize());
+            baseResult.setTotalNormals(action.getResult().getTotalNormalPrioritySize());
+            baseResult.setTotalLows(action.getResult().getTotalLowPrioritySize());
             listener.getLogger().println("[CodeQuality] For "+action.getResult().getId()+ " the following issues where found:");
             listener.getLogger().println("[CodeQuality] Number of Errors: "+action.getResult().getTotalErrorsSize());
             listener.getLogger().println("[CodeQuality] Number of High Issues: "+action.getResult().getTotalHighPrioritySize());
             listener.getLogger().println("[CodeQuality] Number of Normal Issues: "+action.getResult().getTotalNormalPrioritySize());
             listener.getLogger().println("[CodeQuality] Number of Low Issues: "+action.getResult().getTotalLowPrioritySize());
+            base.add(baseResult);
         }
 
         listener.getLogger().println("[CodeQuality] Total score achieved: "+ finalScore +" Points");
         //listener.getLogger().println(actions.stream().map(ResultAction::getId).collect(Collectors.joining()));
+
+        Score scores = new Score(finalScore, maxScore.get(0), configs, base);
+
     }
 
     private void readFile(List<Configuration> configs, List<Integer>  maxScore, FilePath workspace) throws FileNotFoundException, XMLStreamException {
