@@ -57,7 +57,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         try {
             listener.getLogger().println("[CodeQuality] Try to read Configurations.");
-            readFile(configs, maxScore);
+            readFile(configs, maxScore, workspace);
             listener.getLogger().println("[CodeQuality] -> found the following Configurations");
             // if config vorhanden dann loggen , außerdem entweder max score von dem abgezogen wird oder es wird bei null begonnen zum hochzählen von pkt.
             listener.getLogger().println("[CodeQuality] The max Score to achieve is: " + maxScore.get(0) );
@@ -84,10 +84,11 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         //listener.getLogger().println(actions.stream().map(ResultAction::getId).collect(Collectors.joining()));
     }
 
-    private void readFile(List<Configuration> configs, List<Integer>  maxScore) throws FileNotFoundException, XMLStreamException {
+    private void readFile(List<Configuration> configs, List<Integer>  maxScore, FilePath workspace) throws FileNotFoundException, XMLStreamException {
+
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLEventReader eventReader;
-        eventReader = factory.createXMLEventReader(new FileInputStream("C:\\Users\\schattenpc\\Documents\\Studium\\sem7\\Bachelor\\code-quality-plugin\\Config.xml"));
+        eventReader = factory.createXMLEventReader(new FileInputStream(workspace + "\\Config.xml"));
 
         Configuration some = new Configuration();
 

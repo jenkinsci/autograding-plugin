@@ -266,6 +266,7 @@
         <version>${maven-surefire.plugin}</version>
         <configuration>
           <excludes>
+            <outputDirectory>${basedir}/target/test-reports</outputDirectory>
             <exclude>**/*ITest.*</exclude>
             <exclude>**/InjectedTest.*</exclude>
           </excludes>
