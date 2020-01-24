@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>3.50</version>
+    <version>3.9</version>
     <relativePath />
   </parent>
 
@@ -21,11 +21,17 @@
     <java.level>8</java.level>
     <jenkins-test-harness.version>2.49</jenkins-test-harness.version>
     <spotbugs.failOnError>false</spotbugs.failOnError>
-    <slf4j.version>1.7.28</slf4j.version>
+    <slf4j.version>1.7.30</slf4j.version>
     <module.name>${project.groupId}.forensics.api</module.name>
 
+    <plugin-util-api.version>0.1.0-beta5</plugin-util-api.version>
+    <font-awesome-api.version>5.12.0-1-beta1</font-awesome-api.version>
+    <bootstrap4-api.version>4.4.1-4-beta1</bootstrap4-api.version>
+    <echarts-api.version>4.4.0-7-beta1</echarts-api.version>
+    <data-tables-api.version>1.10.20-6-beta1</data-tables-api.version>
+
     <!-- Library Dependencies Versions -->
-    <error-prone.version>2.3.3</error-prone.version>
+    <error-prone.version>2.3.4</error-prone.version>
     <spotbugs.annotations>3.1.12</spotbugs.annotations>
     <commons.lang.version>3.9</commons.lang.version>
     <eclipse-collections.version>9.2.0</eclipse-collections.version>
@@ -76,9 +82,9 @@
 
   <developers>
     <developer>
-      <name>Ullrich Hafner</name>
-      <id>uhafner</id>
-      <email>ullrich.hafner@gmail.com</email>
+      <name>Eva-Maria Zeintl</name>
+      <id>evilfairy94</id>
+      <email>zeintl@hm.edu</email>
     </developer>
   </developers>
 
@@ -109,12 +115,57 @@
 
   <dependencies>
 
+    <!-- Project Dependencies -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.9.10.1</version>
+    </dependency>
     <dependency>
       <groupId>io.jenkins.plugins</groupId>
       <artifactId>warnings-ng</artifactId>
       <version>7.0.0</version>
     </dependency>
-    <!-- Project Dependencies -->
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>plugin-util-api</artifactId>
+      <version>${plugin-util-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>font-awesome-api</artifactId>
+      <version>${font-awesome-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>bootstrap4-api</artifactId>
+      <version>${bootstrap4-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>echarts-api</artifactId>
+      <version>${echarts-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>data-tables-api</artifactId>
+      <version>${data-tables-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>junit</artifactId>
+      <version>1.28</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>pitmutation</artifactId>
+      <version>1.0-17</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>code-coverage-api</artifactId>
+      <version>1.1.2</version>
+    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-nop</artifactId>
@@ -145,7 +196,6 @@
       <artifactId>eclipse-collections</artifactId>
       <version>${eclipse-collections.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-api</artifactId>
@@ -229,7 +279,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-
   </dependencies>
 
   <build>
