@@ -4,22 +4,27 @@
 	<checks>
 		<!-- default for all static analysis results like checkstyle, pmd -->
 		<id>default</id>
-				<toCheck>true</toCheck>
-				<kindOfGrading>absolute</kindOfGrading>
-				<!-- weight positive or negative values allowed -->
-				<weightError>-4</weightError>
-				<weightHigh>-3</weightHigh>
-				<weightNormal>-2</weightNormal>
-				<weightLow>-1</weightLow>
+			<toCheck>true</toCheck>
+			<kindOfGrading>absolute</kindOfGrading>
+			<!-- weight positive or negative values allowed -->
+			<weightError>-4</weightError>
+			<weightHigh>-3</weightHigh>
+			<weightNormal>-2</weightNormal>
+			<weightLow>-1</weightLow>
 	</checks>
 	<checks>
 		<id>pit</id>
-				<toCheck>false</toCheck>
-				<kindOfGrading>relative</kindOfGrading>
-				<weightError>4</weightError>
-				<weightHigh>3</weightHigh>
-				<weightNormal>2</weightNormal>
-				<weightLow>1</weightLow>
+			<toCheck>false</toCheck>
+			<kindOfGrading>relative</kindOfGrading>
+			<weightKilled>2</weightKilled>
+			<weightSurvived>0</weightSurvived>
+			<weightTimedOut>0</weightTimedOut>
+			<weightNonViable>0</weightNonViable>
+			<weightMemoryError>0</weightMemoryError>
+			<weightNotStarted>0</weightNotStarted>
+			<weightStarted>0</weightStarted>#
+			<weightRunError>0</weightRunError>
+			<weightNoCoverage>0</weightNoCoverage>
 	</checks>
 	<checks>
 		<id>junit</id>
@@ -27,7 +32,14 @@
 			<kindOfGrading>relative</kindOfGrading>
 			<totalTestsrun>4</totalTestsrun>
 			<weightfailures>3</weightfailures>
-			<weightError>2</>
+			<weightError>2</weightError>
 			<weightSkipped>1</weightSkipped>
+	</checks>
+	<checks>
+		<id>code-coverage-api</id>
+			<toCheck>true</toCheck>
+			<kindOfGrading>absolute</kindOfGrading>
+			<weightMissed>-3</weightMissed>
+			<weightCovered>1</weightCovered>
 	</checks>
 </gradingConf>

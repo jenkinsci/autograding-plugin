@@ -1,0 +1,37 @@
+package io.jenkins.plugins.quality.core;
+
+import io.jenkins.plugins.analysis.core.model.ResultAction;
+
+import java.util.List;
+import java.util.Map;
+
+public class DefaultChecks {
+
+
+    public void compute(Map<String, Configuration> configs, List<ResultAction> actions, Map<String, BaseResults> base,
+                        Score score) {
+        for (ResultAction action : actions) {
+            //read configs from XML File
+
+            //save base Results
+            base.put(action.getId(), new BaseResults(action.getId(), action.getResult().getTotalErrorsSize(),
+                    action.getResult().getTotalHighPrioritySize(), action.getResult().getTotalNormalPrioritySize(),
+                    action.getResult().getTotalLowPrioritySize(), action.getResult().getNewErrorSize()));
+
+            calculate(configs, action, score);
+        }
+    }
+
+    public void calculate(Map<String, Configuration> configs, ResultAction action, Score score) {
+        int change = 0;
+        if (configs.get(action.getId()).isToCheck()) {
+            change = change + configs.get(action.getId()).getWeightError() * action.getResult().getTotalErrorsSize();
+            change = change + configs.get(action.getId()).getWeightHigh() * action.getResult().getTotalHighPrioritySize();
+            change = change + configs.get(action.getId()).getWeightNormal() * action.getResult().getTotalNormalPrioritySize();
+            change = change + configs.get(action.getId()).getWeightLow() * action.getResult().getTotalLowPrioritySize();
+
+        }
+        score.addToScore(change);
+    }
+
+}

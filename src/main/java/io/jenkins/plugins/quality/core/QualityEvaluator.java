@@ -2,15 +2,19 @@ package io.jenkins.plugins.quality.core;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Nonnull;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.*;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+import hudson.tasks.junit.TestResultAction;
+import io.jenkins.plugins.analysis.warnings.Pit;
+import io.jenkins.plugins.coverage.CoverageAction;
+import io.jenkins.plugins.coverage.targets.CoverageResult;
+import org.jenkinsci.plugins.pitmutation.PitBuildAction;
+import org.jenkinsci.plugins.pitmutation.targets.MutationResult;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.jenkinsci.Symbol;
 import hudson.Extension;
@@ -39,168 +43,70 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
     @Override
     public void perform(@Nonnull final Run<?, ?> run, @Nonnull final FilePath workspace,
-            @Nonnull final Launcher launcher,
-            @Nonnull final TaskListener listener) throws InterruptedException, IOException {
+                        @Nonnull final Launcher launcher,
+                        @Nonnull final TaskListener listener) throws InterruptedException, IOException {
 
         listener.getLogger().println("[CodeQuality] Starting extraction of previous performed checks");
         List<ResultAction> actions = run.getActions(ResultAction.class);
-        //also get action von junit
-        // List<TestAction> testActions = run.getActions(TestResultAction.class);
-        List<Configuration> configs = new ArrayList<>();
+        List<TestResultAction> testActions = run.getActions(TestResultAction.class);
+        List<PitBuildAction> pitAction = run.getActions(PitBuildAction.class);
+        List<CoverageAction> coverageActions = run.getActions(CoverageAction.class);
+
+        Map<String, Configuration> configs = new HashMap<>();
         List<Integer> maxScore = new ArrayList<>();
-        List<BaseResults> base = new ArrayList<>();
+        Map<String, BaseResults> base = new HashMap<>();
+        Score score = new Score();
 
+        //maxScore  holen und in Score speichern
 
-        try {
-            listener.getLogger().println("[CodeQuality] Try to read Configurations.");
-            readFile(configs, maxScore, workspace);
-            listener.getLogger().println("[CodeQuality] -> found the following Configurations");
-            // if config vorhanden dann loggen , außerdem entweder max score von dem abgezogen wird oder es wird bei null begonnen zum hochzählen von pkt.
+        //Defaults lesen und Rechnen
+        DefaultChecks checks = new DefaultChecks();
+        checks.compute(configs, actions, base, score);
 
-            listener.getLogger().println("[CodeQuality] The max Score to achieve is: " + maxScore.get(0) );
-            listener.getLogger().println(configs.toString());
+        //PIT lesen und rechnen
+        PITs pits = new PITs();
+        pits.compute(configs, pitAction, base, score);
 
-        } catch (XMLStreamException e) {
-            e.printStackTrace();
-        }
+        //JUNIT lesen und rechnen
+        JUNITs junitChecks = new JUNITs();
+        junitChecks.compute(configs, testActions, base, score);
 
-        listener.getLogger().println("[CodeQuality] -> found "+actions.size()+" checks");
+        /*//code-coverage lesen und rechnen
+        CoCos cocos = new CoCos();
+        cocos.compute(configs, coverageActions,base, score);
+        */
+        score.addConfigs(configs);
+        score.addBases(base);
+
+        listener.getLogger().println("[CodeQuality] -> found " + actions.size() + " checks");
         listener.getLogger().println("[CodeQuality] Code Quality Results are: ");
 
-        final int finalScore = computeScore(actions, maxScore.get(0), configs, listener);
+        //final int finalScore = computeScore(actions, maxScore.get(0), configs, listener);
 
-        for(ResultAction action : actions){
-            BaseResults baseResult = new BaseResults();
-            baseResult.setId(action.getResult().getId());
-            baseResult.setTotalErrors(action.getResult().getTotalErrorsSize());
-            baseResult.setTotalHighs(action.getResult().getTotalHighPrioritySize());
-            baseResult.setTotalNormals(action.getResult().getTotalNormalPrioritySize());
-            baseResult.setTotalLows(action.getResult().getTotalLowPrioritySize());
-            listener.getLogger().println("[CodeQuality] For "+action.getResult().getId()+ " the following issues where found:");
-            listener.getLogger().println("[CodeQuality] Number of Errors: "+action.getResult().getTotalErrorsSize());
-            listener.getLogger().println("[CodeQuality] Number of High Issues: "+action.getResult().getTotalHighPrioritySize());
-            listener.getLogger().println("[CodeQuality] Number of Normal Issues: "+action.getResult().getTotalNormalPrioritySize());
-            listener.getLogger().println("[CodeQuality] Number of Low Issues: "+action.getResult().getTotalLowPrioritySize());
-            base.add(baseResult);
+        for (ResultAction action : actions) {
+            // BaseResults baseResult = new BaseResults();
+            //baseResult.setId(action.getResult().getId());
+            //baseResult.setTotalErrors(action.getResult().getTotalErrorsSize());
+            //baseResult.setTotalHighs(action.getResult().getTotalHighPrioritySize());
+            //baseResult.setTotalNormals(action.getResult().getTotalNormalPrioritySize());
+            //baseResult.setTotalLows(action.getResult().getTotalLowPrioritySize());
+            listener.getLogger().println("[CodeQuality] For " + action.getResult().getId() + " the following issues where found:");
+            listener.getLogger().println("[CodeQuality] Number of Errors: " + action.getResult().getTotalErrorsSize());
+            listener.getLogger().println("[CodeQuality] Number of High Issues: " + action.getResult().getTotalHighPrioritySize());
+            listener.getLogger().println("[CodeQuality] Number of Normal Issues: " + action.getResult().getTotalNormalPrioritySize());
+            listener.getLogger().println("[CodeQuality] Number of Low Issues: " + action.getResult().getTotalLowPrioritySize());
+            // base.add(baseResult);
         }
 
-        listener.getLogger().println("[CodeQuality] Total score achieved: "+ finalScore +" Points");
+        listener.getLogger().println("[CodeQuality] Total score achieved: Points");
         //listener.getLogger().println(actions.stream().map(ResultAction::getId).collect(Collectors.joining()));
 
-        Score scores = new Score(finalScore, maxScore.get(0), configs, base);
+        //Score scores = new Score(finalScore, maxScore.get(0), configs, base);
 
     }
 
-    private void readFile(List<Configuration> configs, List<Integer>  maxScore, FilePath workspace) throws FileNotFoundException, XMLStreamException {
 
-        XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLEventReader eventReader;
-        eventReader = factory.createXMLEventReader(new FileInputStream(workspace + "\\Config.xml"));
 
-        Configuration some = new Configuration();
-
-        while (eventReader.hasNext()){
-            XMLEvent event = eventReader.nextEvent();
-            if(event.isStartElement()) {
-                StartElement startElement = event.asStartElement();
-                switch (startElement.getName().getLocalPart()) {
-                    case "score":
-                        event = eventReader.nextEvent();
-                        maxScore.add(Integer.parseInt(event.asCharacters().getData()));
-                        break;
-                    case "checks":
-                        some = new Configuration();
-                        break;
-                    case "id":
-                        event = eventReader.nextEvent();
-                        some.setId(event.asCharacters().getData());
-                        break;
-                    case "toCheck":
-                        event = eventReader.nextEvent();
-                        some.setToCheck(Boolean.parseBoolean(event.asCharacters().getData()));
-                        break;
-                    case "kindOfGrading":
-                        event = eventReader.nextEvent();
-                        some.setKindOfGrading(event.asCharacters().getData());
-                        break;
-                    case "weightError":
-                        event = eventReader.nextEvent();
-                        some.setWeightError(Integer.parseInt(event.asCharacters().getData()));
-                        break;
-                    case "weightHigh":
-                        event = eventReader.nextEvent();
-                        some.setWeightHigh(Integer.parseInt(event.asCharacters().getData()));
-                        break;
-                    case "weightNormal":
-                        event = eventReader.nextEvent();
-                        some.setWeightNormal(Integer.parseInt(event.asCharacters().getData()));
-                        break;
-                    case "weightLow":
-                        event = eventReader.nextEvent();
-                        some.setWeightLow(Integer.parseInt(event.asCharacters().getData()));
-                        break;
-                    default:
-                        break;
-                }
-            }
-            if(event.isEndElement()) {
-                EndElement endElement = event.asEndElement();
-                if (endElement.getName().getLocalPart().equals("checks")) {
-                    configs.add(some);
-                }
-            }
-
-        }
-    }
-
-    private int computeScore(List<ResultAction> actions, int maxScore, List<Configuration> configs,  @Nonnull final TaskListener listener) {
-        int score = maxScore;
-        int error = 0;
-        int high = 0;
-        int normal = 0;
-        int low = 0;
-
-        for(Configuration conf : configs) {
-            if(conf.getID() != null && conf.getID().equals("default")) {
-                error = conf.getWeightError();
-                high = conf.getWeightHigh();
-                normal = conf.getWeightNormal();
-                low = conf.getWeightLow();
-            } else if (conf.getID() != null && conf.getID().equals("pit")) {
-
-            } else if (conf.getID() != null && conf.getID().equals("junit")) {
-
-            }
-        }
-
-        for(ResultAction action : actions){
-
-            switch (action.getId()) {
-                case "pit":
-                    break;
-                case "junit":
-                    break;
-                default:
-                    if(action.getResult().getTotalErrorsSize() > 0) {
-                        score = score + (action.getResult().getTotalErrorsSize() * error);
-                    }
-                    if(action.getResult().getTotalHighPrioritySize() > 0) {
-                        score = score + (action.getResult().getTotalHighPrioritySize() * high);
-                    }
-                    if(action.getResult().getTotalNormalPrioritySize() > 0) {
-                        score = score + (action.getResult().getTotalNormalPrioritySize() * normal);
-                    }
-                    if(action.getResult().getTotalLowPrioritySize() > 0) {
-                        score = score + (action.getResult().getTotalLowPrioritySize() * low);
-                    }
-            }
-        }
-        return score;
-    }
-
-    public static boolean tester() {
-        return false;
-    }
 
     /**
      * Descriptor for this step: defines the context and the UI elements.
