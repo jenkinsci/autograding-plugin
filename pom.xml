@@ -27,7 +27,7 @@
     <bootstrap4-api.version>4.4.1-5-beta1-rc139.685fb1720361</bootstrap4-api.version>
     <data-tables-api.version>1.10.20-7-beta1-rc171.6ef0cd8d08cd</data-tables-api.version>
     <echarts-api.version>4.6.0-1-beta1-rc142.e39c8262bc82</echarts-api.version>
-    <plugin-util-api.version>0.1.0-beta5</plugin-util-api.version>
+    <plugin-util-api.version>0.1.0-beta6-rc73.2537a05a4a8e</plugin-util-api.version>
 
   </properties>
 
@@ -184,6 +184,10 @@
   </scm>
 
   <repositories>
+    <repository>
+      <id>incrementals.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/incrementals/</url>
+    </repository>
     <repository>
       <id>repo.jenkins-ci.org</id>
       <url>https://repo.jenkins-ci.org/public/</url>
