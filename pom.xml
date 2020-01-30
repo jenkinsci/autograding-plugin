@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.1</version>
     <relativePath/>
   </parent>
 
@@ -29,6 +29,10 @@
     <echarts-api.version>4.6.0-1-beta1-rc145.b9d22efb27bd</echarts-api.version>
     <plugin-util-api.version>0.1.0-beta6-rc74.807b71f3775a</plugin-util-api.version>
 
+    <code-coverage-api-plugin.version>1.1.3</code-coverage-api-plugin.version>
+    <pitmutation-plugin.version>1.0-17</pitmutation-plugin.version>
+    <junit-plugin.version>1.28</junit-plugin.version>
+    <warnings-ng-plugin.version>7.2.2</warnings-ng-plugin.version>
   </properties>
 
   <licenses>
@@ -46,16 +50,6 @@
     </developer>
   </developers>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.ow2.asm</groupId>
-        <artifactId>asm</artifactId>
-        <version>5.0.4</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
 
     <dependency>
@@ -72,17 +66,17 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>junit</artifactId>
-      <version>1.28</version>
+      <version>${junit-plugin.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>pitmutation</artifactId>
-      <version>1.0-17</version>
+      <version>${pitmutation-plugin.version}</version>
     </dependency>
     <dependency>
       <groupId>io.jenkins.plugins</groupId>
       <artifactId>code-coverage-api</artifactId>
-      <version>1.1.2</version>
+      <version>${code-coverage-api-plugin.version}</version>
       <exclusions>
         <exclusion>
           <groupId>com.fasterxml.jackson.core</groupId>
@@ -120,7 +114,7 @@
     <dependency>
       <groupId>io.jenkins.plugins</groupId>
       <artifactId>warnings-ng</artifactId>
-      <version>7.2.2</version>
+      <version>${warnings-ng-plugin.version}</version>
       <exclusions>
         <exclusion>
           <groupId>org.ow2.asm</groupId>
