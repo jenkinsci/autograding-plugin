@@ -18,6 +18,7 @@ public class ConfigXmlStream extends AbstractXmlStream<Configuration> {
 
     @Override
     protected void configureXStream(final XStream2 xStream) {
+
         xStream.alias("configs", Configuration.class);
     }
 

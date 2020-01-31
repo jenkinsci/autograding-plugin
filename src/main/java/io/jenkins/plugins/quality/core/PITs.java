@@ -14,8 +14,10 @@ public class PITs {
             //read configs from XML File
 
             //save base Results
+            /*action.getReports().forEach();
+            base.put(action.getDisplayName(), new BaseResults(action.getId(), action.total mutations, total uncovered, percent uncovered);
 
-
+            */
             calculate(configs, action, score);
         }
     }

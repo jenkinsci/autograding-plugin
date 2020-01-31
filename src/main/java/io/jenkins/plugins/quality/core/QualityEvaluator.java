@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-
 import hudson.tasks.junit.TestResultAction;
 import io.jenkins.plugins.coverage.CoverageAction;
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
@@ -44,6 +43,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
                         @Nonnull final TaskListener listener) throws InterruptedException, IOException {
 
         listener.getLogger().println("[CodeQuality] Starting extraction of previous performed checks");
+
         List<ResultAction> actions = run.getActions(ResultAction.class);
         List<TestResultAction> testActions = run.getActions(TestResultAction.class);
         List<PitBuildAction> pitAction = run.getActions(PitBuildAction.class);
@@ -57,6 +57,9 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         //read configs from XML File
         ConfigXmlStream configReader = new ConfigXmlStream();
         Configuration configs = configReader.read(Paths.get(workspace +  "\\Config.xml"));
+        listener.getLogger().println("[CodeQuality] Read Configs:");
+        //listener.getLogger().println("[CodeQuality] MaxScore "+configs.getMaxScore());
+
 
         Score score = new Score(configs.getMaxScore());
         score.setMaxScore(configs.getMaxScore());
@@ -64,11 +67,11 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         //Defaults Rechnen
         DefaultChecks checks = new DefaultChecks();
-        checks.compute(configs, actions, base, score);
+        checks.compute(configs, actions, base, score, listener);
 
         //PIT lesen und rechnen
         PITs pits = new PITs();
-        pits.compute(configs, pitAction, base, score);
+       // pits.compute(configs, pitAction, base, score);
 
         //JUNIT lesen und rechnen
         TestRes junitChecks = new TestRes();
@@ -76,7 +79,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         //code-coverage lesen und rechnen
         CoCos cocos = new CoCos();
-        cocos.compute(configs, coverageActions,base, score);
+       // cocos.compute(configs, coverageActions,base, score);
 
 
         score.addBases(base);

@@ -10,10 +10,13 @@ public class CoCos {
     public void compute(Configuration configs, List<CoverageAction> actions, Map<String, BaseResults> base,
                         Score score) {
         for (CoverageAction action : actions) {
-            //read configs from XML File
+            /*
+            base.put(action.getDisplayName(), new BaseResults(action.getDisplayName(),action.getResult().getChildElements().);
+            , new BaseResults(action.getId(), action.getResult().getTotalErrorsSize(),
+                    action.getResult().getTotalHighPrioritySize(), action.getResult().getTotalNormalPrioritySize(),
+                    action.getResult().getTotalLowPrioritySize(), action.getResult().getNewErrorSize()));
 
-            //save base Results
-
+            */
             calculate(configs, action, score);
         }
     }

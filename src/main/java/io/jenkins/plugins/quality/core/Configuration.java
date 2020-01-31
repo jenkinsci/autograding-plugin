@@ -21,15 +21,9 @@ public class Configuration {
     private String pitCheck;
     private boolean ptoCheck;
     private String pkindOfGrading;
-    private int weightNoCoverage;
-    private int weightRunError;
-    private int weightStarted;
-    private int weightNotStarted;
-    private int weightMemoryError;
-    private int weightNonViable;
-    private int weightTimedOut;
-    private int weightSurvived;
-    private int weightKilled;
+    private int weightMutations;
+    private int weightUndetected;
+    private int weightPercentUndetected;
 
     /**
      * code-coverage configs
@@ -51,6 +45,10 @@ public class Configuration {
     private int totalTestsrun;
     private int weightPassed;
 
+
+    public Configuration() {
+        super();
+    }
 
     /*//config for static analysis
     public Configuration(String id, boolean toCheck, String kindOfGrading, int weightError, int weightHigh, int weightNormal, int weightLow) {
@@ -149,40 +147,16 @@ public class Configuration {
         return pkindOfGrading;
     }
 
-    public int getWeightNoCoverage() {
-        return weightNoCoverage;
+    public int getWeightMutations() {
+        return weightMutations;
     }
 
-    public int getWeightRunError() {
-        return weightRunError;
+    public int getWeightUndetected() {
+        return weightUndetected;
     }
 
-    public int getWeightStarted() {
-        return weightStarted;
-    }
-
-    public int getWeightNotStarted() {
-        return weightNotStarted;
-    }
-
-    public int getWeightMemoryError() {
-        return weightMemoryError;
-    }
-
-    public int getWeightNonViable() {
-        return weightNonViable;
-    }
-
-    public int getWeightTimedOut() {
-        return weightTimedOut;
-    }
-
-    public int getWeightSurvived() {
-        return weightSurvived;
-    }
-
-    public int getWeightKilled() {
-        return weightKilled;
+    public int getWeightPercentUndetected() {
+        return weightPercentUndetected;
     }
 
     public String getCocoCheck() {
@@ -231,5 +205,109 @@ public class Configuration {
 
     public int getWeightPassed() {
         return weightPassed;
+    }
+
+    public void setMaxScore(int maxScore) {
+        this.maxScore = maxScore;
+    }
+
+    public void setDefaultCheck(String defaultCheck) {
+        this.defaultCheck = defaultCheck;
+    }
+
+    public void setDtoCheck(boolean dtoCheck) {
+        this.dtoCheck = dtoCheck;
+    }
+
+    public void setDkindOfGrading(String dkindOfGrading) {
+        this.dkindOfGrading = dkindOfGrading;
+    }
+
+    public void setWeightError(int weightError) {
+        this.weightError = weightError;
+    }
+
+    public void setWeightHigh(int weightHigh) {
+        this.weightHigh = weightHigh;
+    }
+
+    public void setWeightNormal(int weightNormal) {
+        this.weightNormal = weightNormal;
+    }
+
+    public void setWeightLow(int weightLow) {
+        this.weightLow = weightLow;
+    }
+
+    public void setPitCheck(String pitCheck) {
+        this.pitCheck = pitCheck;
+    }
+
+    public void setPtoCheck(boolean ptoCheck) {
+        this.ptoCheck = ptoCheck;
+    }
+
+    public void setPkindOfGrading(String pkindOfGrading) {
+        this.pkindOfGrading = pkindOfGrading;
+    }
+
+    public void setWeightMutations(int weightMutations) {
+        this.weightMutations = weightMutations;
+    }
+
+    public void setWeightUndetected(int weightUndetected) {
+        this.weightUndetected = weightUndetected;
+    }
+
+    public void setWeightPercentUndetected(int weightPercentUndetected) {
+        this.weightPercentUndetected = weightPercentUndetected;
+    }
+
+    public void setCocoCheck(String cocoCheck) {
+        this.cocoCheck = cocoCheck;
+    }
+
+    public void setCtoCheck(boolean ctoCheck) {
+        this.ctoCheck = ctoCheck;
+    }
+
+    public void setCkindOfGrading(String ckindOfGrading) {
+        this.ckindOfGrading = ckindOfGrading;
+    }
+
+    public void setWeightCovered(int weightCovered) {
+        this.weightCovered = weightCovered;
+    }
+
+    public void setWeightMissed(int weightMissed) {
+        this.weightMissed = weightMissed;
+    }
+
+    public void setJunitCheck(String junitCheck) {
+        this.junitCheck = junitCheck;
+    }
+
+    public void setJtoCheck(boolean jtoCheck) {
+        this.jtoCheck = jtoCheck;
+    }
+
+    public void setJkindOfGrading(String jkindOfGrading) {
+        this.jkindOfGrading = jkindOfGrading;
+    }
+
+    public void setWeightSkipped(int weightSkipped) {
+        this.weightSkipped = weightSkipped;
+    }
+
+    public void setWeightfailures(int weightfailures) {
+        this.weightfailures = weightfailures;
+    }
+
+    public void setTotalTestsrun(int totalTestsrun) {
+        this.totalTestsrun = totalTestsrun;
+    }
+
+    public void setWeightPassed(int weightPassed) {
+        this.weightPassed = weightPassed;
     }
 }

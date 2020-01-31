@@ -1,45 +1,36 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<gradingConf>
-	<score>100</score>
-	<checks>
-		<!-- default for all static analysis results like checkstyle, pmd -->
-		<id>default</id>
-			<toCheck>true</toCheck>
-			<kindOfGrading>absolute</kindOfGrading>
-			<!-- weight positive or negative values allowed -->
-			<weightError>-4</weightError>
-			<weightHigh>-3</weightHigh>
-			<weightNormal>-2</weightNormal>
-			<weightLow>-1</weightLow>
-	</checks>
-	<checks>
-		<id>pit</id>
-			<toCheck>false</toCheck>
-			<kindOfGrading>relative</kindOfGrading>
-			<weightKilled>2</weightKilled>
-			<weightSurvived>0</weightSurvived>
-			<weightTimedOut>0</weightTimedOut>
-			<weightNonViable>0</weightNonViable>
-			<weightMemoryError>0</weightMemoryError>
-			<weightNotStarted>0</weightNotStarted>
-			<weightStarted>0</weightStarted>#
-			<weightRunError>0</weightRunError>
-			<weightNoCoverage>0</weightNoCoverage>
-	</checks>
-	<checks>
-		<id>junit</id>
-			<toCheck>true</toCheck>
-			<kindOfGrading>relative</kindOfGrading>
-			<totalTestsrun>4</totalTestsrun>
-			<weightfailures>3</weightfailures>
-			<weightError>2</weightError>
-			<weightSkipped>1</weightSkipped>
-	</checks>
-	<checks>
-		<id>code-coverage-api</id>
-			<toCheck>true</toCheck>
-			<kindOfGrading>absolute</kindOfGrading>
-			<weightMissed>-3</weightMissed>
-			<weightCovered>1</weightCovered>
-	</checks>
-</gradingConf>
+<configs plugin="code-quality@0.1.0-SNAPSHOT">
+<!-- default for all static analysis results like checkstyle, pmd -->
+  <maxScore>0</maxScore>
+  <defaultCheck>default</defaultCheck>
+  <dtoCheck>true</dtoCheck>
+  <dkindOfGrading>absolute</dkindOfGrading>
+  <weightError>-4</weightError>
+  <weightHigh>-3</weightHigh>
+  <weightNormal>-2</weightNormal>
+  <weightLow>-1</weightLow>
+
+  <!-- PIT -->
+  <pitCheck>PIT</pitCheck>
+  <ptoCheck>false</ptoCheck>
+  <pkindOfGrading>absolute</pkindOfGrading>
+  <weightMutations>5</weightMutations>
+  <weightUndetected>-2</weightUndetected>
+  <weightPercentUndetected>1</weightPercentUndetected>
+
+  <!--Code Coverage -->
+  <cocoCheck>COCO</cocoCheck>
+  <ctoCheck>false</ctoCheck>
+  <ckindOfGrading>absolute</ckindOfGrading>
+  <weightCovered>1</weightCovered>
+  <weightMissed>-2</weightMissed>
+
+  <!-- JUNIT -->
+  <junitCheck>JUNIT</junitCheck>
+  <jtoCheck>true</jtoCheck>
+  <jkindOfGrading>absolute</jkindOfGrading>
+  <weightSkipped>-1</weightSkipped>
+  <weightfailures>-2</weightfailures>
+  <totalTestsrun>0</totalTestsrun>
+  <weightPassed>1</weightPassed>
+</configs>
