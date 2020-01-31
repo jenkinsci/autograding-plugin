@@ -50,59 +50,6 @@ public class Configuration {
         super();
     }
 
-    /*//config for static analysis
-    public Configuration(String id, boolean toCheck, String kindOfGrading, int weightError, int weightHigh, int weightNormal, int weightLow) {
-        super();
-        this.id = id;
-        this.toCheck = toCheck;
-        this.kindOfGrading = kindOfGrading;
-        this.weightError = weightError;
-        this.weightHigh = weightHigh;
-        this.weightNormal = weightNormal;
-        this.weightLow = weightLow;
-    }
-
-    //config for Junit Tests
-    public Configuration(String id, boolean jtoCheck, String jkindOfGrading, int jtotalTestsrun, int jweightfailures, int jweightPassed, int jweightSkipped, int j) {
-        super();
-        this.id = id;
-        this.toCheck = jtoCheck;
-        this.kindOfGrading = jkindOfGrading;
-        this.jtotalTestsrun = jtotalTestsrun;
-        this.jweightfailures = jweightfailures;
-        this.jweightPassed = jweightPassed;
-        this.jweightSkipped = jweightSkipped;
-    }
-
-    //config for code coverage
-    public Configuration(String id, boolean toCheck, String kindOfGrading, int weightMissed, int weightCovered) {
-        super();
-        this.id = id;
-        this.toCheck = toCheck;
-        this.kindOfGrading = kindOfGrading;
-        this.weightMissed = weightMissed;
-        this.weightCovered = weightCovered;
-    }
-
-    //config for PIT Mutation
-    public Configuration(String id, boolean toCheck, String kindOfGrading, int weightKilled, int weightSurvived,
-                         int weightTimedOut, int weightNonViable, int weightMemoryError, int weightNotStarted,
-                         int weightStarted, int weightRunError, int weightNoCoverage) {
-        super();
-        this.id = id;
-        this.toCheck = toCheck;
-        this.kindOfGrading = kindOfGrading;
-        this.weightKilled = weightKilled;
-        this.weightSurvived = weightSurvived;
-        this.weightTimedOut = weightTimedOut;
-        this.weightNonViable = weightNonViable;
-        this.weightMemoryError = weightMemoryError;
-        this.weightNotStarted = weightNotStarted;
-        this.weightStarted = weightStarted;
-        this.weightRunError = weightRunError;
-        this.weightNoCoverage = weightNoCoverage;
-    }*/
-
     public String getDefaultCheck() {
         return defaultCheck;
     }

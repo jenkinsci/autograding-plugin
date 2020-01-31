@@ -1,6 +1,7 @@
 package io.jenkins.plugins.quality.core;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,7 +16,7 @@ public class Score {
     private Score previousScore;
     private Configuration configs;
     private int maxScore;
-    private Map<String, BaseResults> bases;
+    private Map<String, BaseResults> bases = new HashMap<>();
 
     public Score(int score) {
         super();
@@ -25,23 +26,6 @@ public class Score {
     public Score() {
         super();
     }
-
-    /*
-    public Score(int score, int maxScore, final Configuration config, final Map<String, BaseResults> base) {
-        super();
-        this.score = score;
-        this.maxScore = maxScore;
-        this.configs = config;
-        this.bases.putAll(base);
-    }
-
-    public Score(final Run<?, ?> owner, final int score, Configuration config, final int maxScore, final Score previousScore) {
-        this.score = score;
-        this.configs = config;
-        this.maxScore = maxScore;
-        this.previousScore = previousScore;
-    }*/
-
 
     public int getScore() {
         return score;

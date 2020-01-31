@@ -1,7 +1,9 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <configs plugin="code-quality@0.1.0-SNAPSHOT">
-<!-- default for all static analysis results like checkstyle, pmd -->
-  <maxScore>0</maxScore>
+
+  <maxScore>100</maxScore>
+
+  <!-- default for all static analysis results like checkstyle, pmd -->
   <defaultCheck>default</defaultCheck>
   <dtoCheck>true</dtoCheck>
   <dkindOfGrading>absolute</dkindOfGrading>

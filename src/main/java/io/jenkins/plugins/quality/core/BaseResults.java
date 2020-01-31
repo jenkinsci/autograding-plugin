@@ -1,19 +1,23 @@
 package io.jenkins.plugins.quality.core;
 
 public class BaseResults {
+
     private String id;
     private int totalChange = 0;
+
     //Default
     private int totalErrors = 0;
     private int totalHighs = 0;
     private int totalNormals = 0;
     private int totalLows = 0;
     private int sum = 0;
+
     //Junit
     private int totalPassed = 0;
     private int totalRun = 0;
     private int totalFailed = 0;
     private int totalSkipped = 0;
+
     //PIT
     private int totalMutations = 0;
     private int totalUndetected = 0;

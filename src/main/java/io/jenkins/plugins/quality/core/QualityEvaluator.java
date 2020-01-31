@@ -43,23 +43,17 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
                         @Nonnull final TaskListener listener) throws InterruptedException, IOException {
 
         listener.getLogger().println("[CodeQuality] Starting extraction of previous performed checks");
-
-        List<ResultAction> actions = run.getActions(ResultAction.class);
-        List<TestResultAction> testActions = run.getActions(TestResultAction.class);
-        List<PitBuildAction> pitAction = run.getActions(PitBuildAction.class);
-        List<CoverageAction> coverageActions = run.getActions(CoverageAction.class);
-
-        //Map<String, Configuration> configs = new HashMap<>();
-        //List<Integer> maxScore = new ArrayList<>();
         Map<String, BaseResults> base = new HashMap<>();
-
+        List<ResultAction> actions = run.getActions(ResultAction.class);
+        List<PitBuildAction> pitAction = run.getActions(PitBuildAction.class);
+        List<TestResultAction> testActions = run.getActions(TestResultAction.class);
+        List<CoverageAction> coverageActions = run.getActions(CoverageAction.class);
 
         //read configs from XML File
         ConfigXmlStream configReader = new ConfigXmlStream();
         Configuration configs = configReader.read(Paths.get(workspace +  "\\Config.xml"));
         listener.getLogger().println("[CodeQuality] Read Configs:");
-        //listener.getLogger().println("[CodeQuality] MaxScore "+configs.getMaxScore());
-
+        listener.getLogger().println("[CodeQuality] MaxScore "+configs.getMaxScore());
 
         Score score = new Score(configs.getMaxScore());
         score.setMaxScore(configs.getMaxScore());
@@ -71,7 +65,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         //PIT lesen und rechnen
         PITs pits = new PITs();
-       // pits.compute(configs, pitAction, base, score);
+        // pits.compute(configs, pitAction, base, score);
 
         //JUNIT lesen und rechnen
         TestRes junitChecks = new TestRes();
@@ -79,40 +73,17 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         //code-coverage lesen und rechnen
         CoCos cocos = new CoCos();
-       // cocos.compute(configs, coverageActions,base, score);
-
+        // cocos.compute(configs, coverageActions,base, score);
 
         score.addBases(base);
 
         listener.getLogger().println("[CodeQuality] -> found " + actions.size() + " checks");
         listener.getLogger().println("[CodeQuality] Code Quality Results are: ");
 
-        //final int finalScore = computeScore(actions, maxScore.get(0), configs, listener);
-
-        for (ResultAction action : actions) {
-            // BaseResults baseResult = new BaseResults();
-            //baseResult.setId(action.getResult().getId());
-            //baseResult.setTotalErrors(action.getResult().getTotalErrorsSize());
-            //baseResult.setTotalHighs(action.getResult().getTotalHighPrioritySize());
-            //baseResult.setTotalNormals(action.getResult().getTotalNormalPrioritySize());
-            //baseResult.setTotalLows(action.getResult().getTotalLowPrioritySize());
-            listener.getLogger().println("[CodeQuality] For " + action.getResult().getId() + " the following issues where found:");
-            listener.getLogger().println("[CodeQuality] Number of Errors: " + action.getResult().getTotalErrorsSize());
-            listener.getLogger().println("[CodeQuality] Number of High Issues: " + action.getResult().getTotalHighPrioritySize());
-            listener.getLogger().println("[CodeQuality] Number of Normal Issues: " + action.getResult().getTotalNormalPrioritySize());
-            listener.getLogger().println("[CodeQuality] Number of Low Issues: " + action.getResult().getTotalLowPrioritySize());
-            // base.add(baseResult);
-        }
 
         listener.getLogger().println("[CodeQuality] Total score achieved: "+score.getScore()+"Points");
-        //listener.getLogger().println(actions.stream().map(ResultAction::getId).collect(Collectors.joining()));
-
-        //Score scores = new Score(finalScore, maxScore.get(0), configs, base);
 
     }
-
-
-
 
     /**
      * Descriptor for this step: defines the context and the UI elements.

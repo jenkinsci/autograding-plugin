@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public class DefaultChecks {
-    String configPath;
 
     public void compute(Configuration configs, List<ResultAction> actions, Map<String, BaseResults> base,
                         Score score, @Nonnull final TaskListener listener) {
@@ -33,7 +32,7 @@ public class DefaultChecks {
             change = change + configs.getWeightLow() * action.getResult().getTotalLowPrioritySize();
 
             if(configs.getDkindOfGrading().equals("absolute")) {
-                listener.getLogger().println("[CodeQuality] Score changed by: "+change);
+                listener.getLogger().println("[CodeQuality] "+action.getId()+" changed scored by: "+change);
                 base.get(action.getId()).setTotalChange(change);
                 score.addToScore(change);
             } else if (configs.getDkindOfGrading().equals("relative")) {
