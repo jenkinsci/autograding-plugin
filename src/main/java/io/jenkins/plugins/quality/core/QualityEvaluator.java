@@ -1,7 +1,7 @@
 package io.jenkins.plugins.quality.core;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,11 +10,8 @@ import javax.annotation.Nonnull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import hudson.tasks.junit.TestResultAction;
-import io.jenkins.plugins.analysis.warnings.Pit;
 import io.jenkins.plugins.coverage.CoverageAction;
-import io.jenkins.plugins.coverage.targets.CoverageResult;
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
-import org.jenkinsci.plugins.pitmutation.targets.MutationResult;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.jenkinsci.Symbol;
 import hudson.Extension;
@@ -52,14 +49,20 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         List<PitBuildAction> pitAction = run.getActions(PitBuildAction.class);
         List<CoverageAction> coverageActions = run.getActions(CoverageAction.class);
 
-        Map<String, Configuration> configs = new HashMap<>();
-        List<Integer> maxScore = new ArrayList<>();
+        //Map<String, Configuration> configs = new HashMap<>();
+        //List<Integer> maxScore = new ArrayList<>();
         Map<String, BaseResults> base = new HashMap<>();
-        Score score = new Score();
 
-        //maxScore  holen und in Score speichern
 
-        //Defaults lesen und Rechnen
+        //read configs from XML File
+        ConfigXmlStream configReader = new ConfigXmlStream();
+        Configuration configs = configReader.read(Paths.get(workspace +  "\\Config.xml"));
+
+        Score score = new Score(configs.getMaxScore());
+        score.setMaxScore(configs.getMaxScore());
+        score.addConfigs(configs);
+
+        //Defaults Rechnen
         DefaultChecks checks = new DefaultChecks();
         checks.compute(configs, actions, base, score);
 
@@ -68,14 +71,14 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         pits.compute(configs, pitAction, base, score);
 
         //JUNIT lesen und rechnen
-        JUNITs junitChecks = new JUNITs();
+        TestRes junitChecks = new TestRes();
         junitChecks.compute(configs, testActions, base, score);
 
-        /*//code-coverage lesen und rechnen
+        //code-coverage lesen und rechnen
         CoCos cocos = new CoCos();
         cocos.compute(configs, coverageActions,base, score);
-        */
-        score.addConfigs(configs);
+
+
         score.addBases(base);
 
         listener.getLogger().println("[CodeQuality] -> found " + actions.size() + " checks");
@@ -98,7 +101,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
             // base.add(baseResult);
         }
 
-        listener.getLogger().println("[CodeQuality] Total score achieved: Points");
+        listener.getLogger().println("[CodeQuality] Total score achieved: "+score.getScore()+"Points");
         //listener.getLogger().println(actions.stream().map(ResultAction::getId).collect(Collectors.joining()));
 
         //Score scores = new Score(finalScore, maxScore.get(0), configs, base);

@@ -1,0 +1,24 @@
+package io.jenkins.plugins.quality.core;
+
+import hudson.util.XStream2;
+import io.jenkins.plugins.util.AbstractXmlStream;
+
+public class ConfigXmlStream extends AbstractXmlStream<Configuration> {
+    /**
+     * creates a new {@link ConfigXmlStream}.
+     */
+    public ConfigXmlStream() {
+        super(Configuration.class);
+    }
+
+    @Override
+    protected Configuration createDefaultValue() {
+        return new Configuration();
+    }
+
+    @Override
+    protected void configureXStream(final XStream2 xStream) {
+        xStream.alias("configs", Configuration.class);
+    }
+
+}

@@ -1,7 +1,7 @@
 package io.jenkins.plugins.quality.core;
 
+import edu.hm.hafner.util.VisibleForTesting;
 import hudson.model.Run;
-import io.jenkins.plugins.quality.util.VisibleForTesting;
 import io.jenkins.plugins.util.BuildAction;
 import org.kohsuke.stapler.StaplerProxy;
 
@@ -21,7 +21,7 @@ public class ScoreBuildAction extends BuildAction<Score> implements StaplerProxy
         this(owner, score, true);
     }
 
-    @VisibleForTesting
+   @VisibleForTesting
     ScoreBuildAction(final Run<?, ?> owner, final Score score, final boolean canSerialize) {
         super(owner, score, canSerialize);
     }
@@ -48,7 +48,7 @@ public class ScoreBuildAction extends BuildAction<Score> implements StaplerProxy
 
     @Override
     public String getDisplayName() {
-        return "HI";
+        return "qualityEvaluator";
     }
 
     /**
@@ -66,7 +66,7 @@ public class ScoreBuildAction extends BuildAction<Score> implements StaplerProxy
         return ScoreJobAction.CODEQUALITY_ID;
     }
 
-    public String totalScore() {
-        return "10/100";
+    public String getTotalScore() {
+        return getResult().getScore() + "/"+getResult().getMaxScore();
     }
 }

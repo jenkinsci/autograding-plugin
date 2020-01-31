@@ -1,11 +1,26 @@
 package io.jenkins.plugins.quality.core;
 
 
-import java.io.Serializable;
-
-
 public class Configuration {
 
+    private int maxScore;
+    /**
+     * Default configs
+     */
+    private String defaultCheck;
+    private boolean dtoCheck;
+    private String dkindOfGrading;
+    private int weightError;
+    private int weightHigh;
+    private int weightNormal;
+    private int weightLow;
+
+    /**
+     * PIT configs
+     */
+    private String pitCheck;
+    private boolean ptoCheck;
+    private String pkindOfGrading;
     private int weightNoCoverage;
     private int weightRunError;
     private int weightStarted;
@@ -15,25 +30,29 @@ public class Configuration {
     private int weightTimedOut;
     private int weightSurvived;
     private int weightKilled;
+
+    /**
+     * code-coverage configs
+     */
+    private String cocoCheck;
+    private boolean ctoCheck;
+    private String ckindOfGrading;
     private int weightCovered;
     private int weightMissed;
-    private int jweightSkipped;
-    private int jweightfailures;
-    private int jtotalTestsrun;
-    private int jweightPassed;
-    private String id;
-    private boolean toCheck;
-    private String kindOfGrading;
-    private int weightError;
-    private int weightHigh;
-    private int weightNormal;
-    private int weightLow;
 
-    public Configuration() {
-        super();
-    }
+    /**
+     * junit configs
+     */
+    private String junitCheck;
+    private boolean jtoCheck;
+    private String jkindOfGrading;
+    private int weightSkipped;
+    private int weightfailures;
+    private int totalTestsrun;
+    private int weightPassed;
 
-    //config for static analysis
+
+    /*//config for static analysis
     public Configuration(String id, boolean toCheck, String kindOfGrading, int weightError, int weightHigh, int weightNormal, int weightLow) {
         super();
         this.id = id;
@@ -84,19 +103,22 @@ public class Configuration {
         this.weightStarted = weightStarted;
         this.weightRunError = weightRunError;
         this.weightNoCoverage = weightNoCoverage;
+    }*/
+
+    public String getDefaultCheck() {
+        return defaultCheck;
     }
 
-
-    public String getID() {
-        return id;
+    public int getMaxScore() {
+        return maxScore;
     }
 
-    public boolean isToCheck() {
-        return toCheck;
+    public boolean isDtoCheck() {
+        return dtoCheck;
     }
 
-    public String getKind() {
-        return kindOfGrading;
+    public String getDkindOfGrading() {
+        return dkindOfGrading;
     }
 
     public int getWeightError() {
@@ -115,31 +137,16 @@ public class Configuration {
         return weightLow;
     }
 
-
-    @Override
-    public String toString() {
-        return "ID: " + id + "" + " Will this Check be considered: " + toCheck + " How will be graded: " + kindOfGrading + " In Case of an Error: " + weightError +
-                " In Case of a high Issue: " + weightHigh + " In Case of a Normal Issue: " + weightNormal + " In Case of a Low Issue " + weightLow;
+    public String getPitCheck() {
+        return pitCheck;
     }
 
-    public int getJweightSkipped() {
-        return jweightSkipped;
+    public boolean isPtoCheck() {
+        return ptoCheck;
     }
 
-    public int getJweightfailures() {
-        return jweightfailures;
-    }
-
-    public int getJtotalTestsrun() {
-        return jtotalTestsrun;
-    }
-
-    public int getWeightCovered() {
-        return weightCovered;
-    }
-
-    public int getWeightMissed() {
-        return weightMissed;
+    public String getPkindOfGrading() {
+        return pkindOfGrading;
     }
 
     public int getWeightNoCoverage() {
@@ -178,7 +185,51 @@ public class Configuration {
         return weightKilled;
     }
 
-    public int getJweightPassed() {
-        return jweightPassed;
+    public String getCocoCheck() {
+        return cocoCheck;
+    }
+
+    public boolean isCtoCheck() {
+        return ctoCheck;
+    }
+
+    public String getCkindOfGrading() {
+        return ckindOfGrading;
+    }
+
+    public int getWeightCovered() {
+        return weightCovered;
+    }
+
+    public int getWeightMissed() {
+        return weightMissed;
+    }
+
+    public String getJunitCheck() {
+        return junitCheck;
+    }
+
+    public boolean isJtoCheck() {
+        return jtoCheck;
+    }
+
+    public String getJkindOfGrading() {
+        return jkindOfGrading;
+    }
+
+    public int getWeightSkipped() {
+        return weightSkipped;
+    }
+
+    public int getWeightfailures() {
+        return weightfailures;
+    }
+
+    public int getTotalTestsrun() {
+        return totalTestsrun;
+    }
+
+    public int getWeightPassed() {
+        return weightPassed;
     }
 }

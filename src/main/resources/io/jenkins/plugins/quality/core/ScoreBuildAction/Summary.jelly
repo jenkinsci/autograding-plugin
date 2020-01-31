@@ -1,9 +1,0 @@
-<?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:t="/lib/hudson" xmlns:fa="/font-awesome">
-
-  <t:summary>
-  <fa:svg-icon name="Score" class="fas fa-calculator">
-    ${%title}: <a href="CodeQuality Score">${%summary(size(it.result))}</a>
-  </t:summary>
-
-</j:jelly>

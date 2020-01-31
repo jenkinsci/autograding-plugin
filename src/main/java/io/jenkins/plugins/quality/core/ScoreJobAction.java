@@ -27,7 +27,7 @@ public class ScoreJobAction extends JobAction {
 
     @Override
     public String getDisplayName() {
-        return "HI";
+        return "qualityEvaluator";
     }
 
     /**

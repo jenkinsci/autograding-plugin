@@ -25,7 +25,7 @@ public class ScoreViewModel implements ModelObject {
 
     @Override
     public String getDisplayName() {
-        return "HI";
+        return "qualityEvaluator";
     }
 
 }
