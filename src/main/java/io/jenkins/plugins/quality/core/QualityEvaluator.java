@@ -72,7 +72,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         //code-coverage lesen und rechnen
         CoCos cocos = new CoCos();
-        // cocos.compute(configs, coverageActions,base, score);
+        //cocos.compute(configs, coverageActions,base, score, listener);
 
         score.addBases(base);
 

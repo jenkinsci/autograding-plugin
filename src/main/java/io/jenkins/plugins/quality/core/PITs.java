@@ -17,8 +17,7 @@ public class PITs {
             BaseResults put = base.put(action.getDisplayName(), new BaseResults(action.getDisplayName(),
                     action.getReport().getMutationStats().getTotalMutations(),
                     action.getReport().getMutationStats().getUndetected(),
-                    action.getReport().getMutationStats().getUndetected() *
-                            action.getReport().getMutationStats().getTotalMutations() / 100));
+                    100 - action.getReport().getMutationStats().getKillPercent()));
 
             calculate(configs, action, score, base, listener);
         }
