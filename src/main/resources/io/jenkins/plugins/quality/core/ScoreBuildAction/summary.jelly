@@ -1,11 +1,9 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:t="/lib/hudson" xmlns:fa="/font-awesome">
 
-    <t:summary>
-        <fa:svg-icon name="Score" class="fas fa-calculator">
-            ${%title}:
-            <a href="CodeQuality Score">${%summary it.totalScore}</a>
-        </fa:svg-icon>
+    <t:summary icon="/plugin/code-quality-plugin/icons/quality.png">
+        ${%title}:
+            <a href="CodeQuality Score">${it.totalScore}</a>
     </t:summary>
 
 </j:jelly>

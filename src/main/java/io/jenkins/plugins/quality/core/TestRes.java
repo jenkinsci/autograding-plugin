@@ -2,15 +2,20 @@ package io.jenkins.plugins.quality.core;
 
 import hudson.model.TaskListener;
 import hudson.tasks.junit.TestResultAction;
-
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * takes {@link Configuration} and the results of Junit tests.
+ * Saves default check results into {@link BaseResults}.
+ * Calculates and updates quality score
+ *
+ * @author Eva-Maria Zeintl
+ */
 public class TestRes {
 
     public void compute(Configuration configs, List<TestResultAction> actions, Map<String, BaseResults> base,
-                        Score score, @Nonnull final TaskListener listener) {
+                        Score score,final TaskListener listener) {
         for (TestResultAction action : actions) {
             //save base Results
             base.put(action.getDisplayName(), new BaseResults(action.getDisplayName(), action.getResult().getPassCount(),
@@ -21,7 +26,7 @@ public class TestRes {
     }
 
     public void calculate(Configuration configs, TestResultAction action, Score score,
-                          @Nonnull final TaskListener listener, Map<String, BaseResults> base) {
+                         final TaskListener listener, Map<String, BaseResults> base) {
         int change = 0;
         if (configs.isJtoCheck()) {
             change = change + configs.getWeightPassed() * action.getResult().getPassCount();

@@ -51,9 +51,9 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         //read configs from XML File
         ConfigXmlStream configReader = new ConfigXmlStream();
-        Configuration configs = configReader.read(Paths.get(workspace +  "\\Config.xml"));
+        Configuration configs = configReader.read(Paths.get(workspace + "\\Config.xml"));
         listener.getLogger().println("[CodeQuality] Read Configs:");
-        listener.getLogger().println("[CodeQuality] MaxScore "+configs.getMaxScore());
+        listener.getLogger().println("[CodeQuality] MaxScore " + configs.getMaxScore());
 
         Score score = new Score(configs.getMaxScore());
         score.addConfigs(configs);
@@ -64,7 +64,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         //PIT lesen und rechnen
         PITs pits = new PITs();
-        // pits.compute(configs, pitAction, base, score);
+        pits.compute(configs, pitAction, base, score, listener);
 
         //JUNIT lesen und rechnen
         TestRes junitChecks = new TestRes();
@@ -76,12 +76,10 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         score.addBases(base);
 
-        listener.getLogger().println("[CodeQuality] -> found " + actions.size() + " checks");
         listener.getLogger().println("[CodeQuality] Code Quality Results are: ");
+        listener.getLogger().println("[CodeQuality] Total score achieved: " + score.getScore() + "Points");
 
-
-        listener.getLogger().println("[CodeQuality] Total score achieved: "+score.getScore()+"Points");
-
+        run.addAction(new ScoreBuildAction(run, score));
     }
 
     /**
@@ -94,7 +92,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         @NonNull
         @Override
         public String getDisplayName() {
-            return "Compute code quality";
+            return "Code Quality Score";
         }
 
         @Override

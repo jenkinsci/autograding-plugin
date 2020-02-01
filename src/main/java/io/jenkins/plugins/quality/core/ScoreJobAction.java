@@ -14,7 +14,7 @@ import jline.internal.Nullable;
 
 public class ScoreJobAction extends JobAction {
     static final String SMALL_ICON = "/plugins/quality/icons/quality.png";
-    static final String CODEQUALITY_ID = "Code Quality";
+    static final String CODEQUALITY_ID = "quality";
 
     /**
      * Creates a new instance of {@link ScoreJobAction}.
@@ -27,7 +27,7 @@ public class ScoreJobAction extends JobAction {
 
     @Override
     public String getDisplayName() {
-        return "qualityEvaluator";
+        return "Code Quality Score";
     }
 
     /**

@@ -3,7 +3,11 @@ package io.jenkins.plugins.quality.core;
 import hudson.util.XStream2;
 import io.jenkins.plugins.util.AbstractXmlStream;
 
-//does save buildAction in xml
+/**
+ * Reads {@link Score} from an XML file.
+ *
+ * @author Eva-Maria Zeintl
+ */
 public class ScoreXmlStream extends AbstractXmlStream<Score> {
     /**
      * creates a new {@link ScoreXmlStream}.

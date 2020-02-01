@@ -13,11 +13,14 @@ import java.util.Map;
 public class Score {
 
     private int score;
-    private Score previousScore;
     private Configuration configs;
-    private int maxScore;
     private Map<String, BaseResults> bases = new HashMap<>();
 
+    /**
+     * Creates a new instance of {@link Score}.
+     * @param score
+     *          sets initial score
+     */
     public Score(int score) {
         super();
         this.score = score;
@@ -31,20 +34,12 @@ public class Score {
         return score;
     }
 
-    public void setMaxScore(int maxScore) {
-        this.maxScore = maxScore;
-    }
-
     public void addToScore(int change) {
         this.score = score + change;
     }
 
     public Configuration getConfigs() {
         return configs;
-    }
-
-    public int getMaxScore() {
-        return maxScore;
     }
 
     public Map<String, BaseResults> getBases() {

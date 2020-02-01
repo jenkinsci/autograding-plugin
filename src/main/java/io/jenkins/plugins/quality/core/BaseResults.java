@@ -1,37 +1,57 @@
 package io.jenkins.plugins.quality.core;
 
+/**
+ * Saves all given Check Results in an Object for later use in GUI
+ *
+ * @author Eva-Maria Zeintl
+ */
+
 public class BaseResults {
 
     private String id;
-    private int totalChange = 0;
+    private int totalChange;
 
     //Default
-    private int totalErrors = 0;
-    private int totalHighs = 0;
-    private int totalNormals = 0;
-    private int totalLows = 0;
-    private int sum = 0;
+    private int totalErrors;
+    private int totalHighs;
+    private int totalNormals;
+    private int totalLows;
+    private int sum;
 
     //Junit
-    private int totalPassed = 0;
-    private int totalRun = 0;
-    private int totalFailed = 0;
-    private int totalSkipped = 0;
+    private int totalPassed;
+    private int totalRun;
+    private int totalFailed;
+    private int totalSkipped;
 
     //PIT
-    private int totalMutations = 0;
-    private int totalUndetected = 0;
-    private float percentUndetected = 0;
+    private int totalMutations;
+    private int totalUndetected;
+    private float percentUndetected;
 
     //CodeCoverage
-    private int totalCovered = 0;
-    private int totalMissed = 0;
+    private int totalCovered;
+    private int totalMissed;
 
+
+    /**
+     * Creates a new instance of {@link BaseResults}.
+     */
     public BaseResults() {
         super();
     }
 
-    //Default Constructor
+
+    /**
+     * Creates a new instance of {@link BaseResults} for Default Checks.
+     *
+     * @param id           the name of the check
+     * @param totalErrors  the total number of errors
+     * @param totalHighs   the total number of High issues
+     * @param totalNormals the total number of Normal issues
+     * @param totalLows    the total number of Low issues
+     * @param sum          the total number of all issues
+     */
     public BaseResults(String id, int totalErrors, int totalHighs, int totalNormals, int totalLows, int sum) {
         super();
         this.id = id;
@@ -42,7 +62,15 @@ public class BaseResults {
         this.sum = sum;
     }
 
-    //PIT Constructor
+
+    /**
+     * Creates a new instance of {@link BaseResults} for pitmutation results
+     *
+     * @param id                the name of the check
+     * @param totalMutations    the total number of mutations
+     * @param totalUndetected   the total number of undetected mutations
+     * @param percentUndetected the percent value of undetected mutations
+     */
     public BaseResults(String id, int totalMutations, int totalUndetected, float percentUndetected) {
         super();
         this.id = id;
@@ -51,7 +79,16 @@ public class BaseResults {
         this.percentUndetected = percentUndetected;
     }
 
-    //Junit Constructor
+
+    /**
+     * Creates a new instance of {@link BaseResults} for Junit results
+     *
+     * @param id           the name of the check
+     * @param totalPassed  the total number of passed tests
+     * @param totalRun     the total number of run tests
+     * @param totalFailed  the total number of failed tests
+     * @param totalSkipped the total number of skipped tests
+     */
     public BaseResults(String id, int totalPassed, int totalRun, int totalFailed, int totalSkipped) {
         super();
         this.id = id;
@@ -61,7 +98,13 @@ public class BaseResults {
         this.totalSkipped = totalSkipped;
     }
 
-    //code coverage Constructor
+    /**
+     * Creates a new instance of {@link BaseResults} for code coverage results
+     *
+     * @param id           the name of the check
+     * @param totalCovered the total number of covered code
+     * @param totalMissed  the total number of missed code
+     */
     public BaseResults(String id, int totalCovered, int totalMissed) {
         super();
         this.id = id;
@@ -69,6 +112,11 @@ public class BaseResults {
         this.totalMissed = totalMissed;
     }
 
+    /**
+     * stores how much the issues for the id changes the score
+     *
+     * @param totalChange
+     */
     public void setTotalChange(int totalChange) {
         this.totalChange = totalChange;
     }

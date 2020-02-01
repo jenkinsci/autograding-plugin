@@ -6,6 +6,9 @@ import io.jenkins.plugins.util.BuildAction;
 import org.kohsuke.stapler.StaplerProxy;
 
 /**
+ * Controls the live cycle of the score results in a job. This action persists the results of a build and displays a
+ * summary on the build page. The actual visualization of the results is defined in the matchint {@code summary.jelly}
+ * file.
  * @author Eva-Maria Zeintl
  */
 
@@ -21,7 +24,7 @@ public class ScoreBuildAction extends BuildAction<Score> implements StaplerProxy
         this(owner, score, true);
     }
 
-   @VisibleForTesting
+    @VisibleForTesting
     ScoreBuildAction(final Run<?, ?> owner, final Score score, final boolean canSerialize) {
         super(owner, score, canSerialize);
     }
@@ -48,7 +51,7 @@ public class ScoreBuildAction extends BuildAction<Score> implements StaplerProxy
 
     @Override
     public String getDisplayName() {
-        return "qualityEvaluator";
+        return "Code Quality Score";
     }
 
     /**
@@ -67,6 +70,6 @@ public class ScoreBuildAction extends BuildAction<Score> implements StaplerProxy
     }
 
     public String getTotalScore() {
-        return getResult().getScore() + "/"+getResult().getMaxScore();
+        return getResult().getScore() + "/" + getResult().getConfigs().getMaxScore();
     }
 }

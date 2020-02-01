@@ -1,5 +1,10 @@
 package io.jenkins.plugins.quality.core;
 
+/**
+ * Stores all read Configurations in an object.
+ *
+ * @author Eva-Maria Zeintl
+ */
 
 public class Configuration {
 
@@ -45,7 +50,9 @@ public class Configuration {
     private int totalTestsrun;
     private int weightPassed;
 
-
+    /**
+     * Creates a new instance of {@link Configuration}.
+     */
     public Configuration() {
         super();
     }
@@ -152,109 +159,5 @@ public class Configuration {
 
     public int getWeightPassed() {
         return weightPassed;
-    }
-
-    public void setMaxScore(int maxScore) {
-        this.maxScore = maxScore;
-    }
-
-    public void setDefaultCheck(String defaultCheck) {
-        this.defaultCheck = defaultCheck;
-    }
-
-    public void setDtoCheck(boolean dtoCheck) {
-        this.dtoCheck = dtoCheck;
-    }
-
-    public void setDkindOfGrading(String dkindOfGrading) {
-        this.dkindOfGrading = dkindOfGrading;
-    }
-
-    public void setWeightError(int weightError) {
-        this.weightError = weightError;
-    }
-
-    public void setWeightHigh(int weightHigh) {
-        this.weightHigh = weightHigh;
-    }
-
-    public void setWeightNormal(int weightNormal) {
-        this.weightNormal = weightNormal;
-    }
-
-    public void setWeightLow(int weightLow) {
-        this.weightLow = weightLow;
-    }
-
-    public void setPitCheck(String pitCheck) {
-        this.pitCheck = pitCheck;
-    }
-
-    public void setPtoCheck(boolean ptoCheck) {
-        this.ptoCheck = ptoCheck;
-    }
-
-    public void setPkindOfGrading(String pkindOfGrading) {
-        this.pkindOfGrading = pkindOfGrading;
-    }
-
-    public void setWeightMutations(int weightMutations) {
-        this.weightMutations = weightMutations;
-    }
-
-    public void setWeightUndetected(int weightUndetected) {
-        this.weightUndetected = weightUndetected;
-    }
-
-    public void setWeightPercentUndetected(float weightPercentUndetected) {
-        this.weightPercentUndetected = weightPercentUndetected;
-    }
-
-    public void setCocoCheck(String cocoCheck) {
-        this.cocoCheck = cocoCheck;
-    }
-
-    public void setCtoCheck(boolean ctoCheck) {
-        this.ctoCheck = ctoCheck;
-    }
-
-    public void setCkindOfGrading(String ckindOfGrading) {
-        this.ckindOfGrading = ckindOfGrading;
-    }
-
-    public void setWeightCovered(int weightCovered) {
-        this.weightCovered = weightCovered;
-    }
-
-    public void setWeightMissed(int weightMissed) {
-        this.weightMissed = weightMissed;
-    }
-
-    public void setJunitCheck(String junitCheck) {
-        this.junitCheck = junitCheck;
-    }
-
-    public void setJtoCheck(boolean jtoCheck) {
-        this.jtoCheck = jtoCheck;
-    }
-
-    public void setJkindOfGrading(String jkindOfGrading) {
-        this.jkindOfGrading = jkindOfGrading;
-    }
-
-    public void setWeightSkipped(int weightSkipped) {
-        this.weightSkipped = weightSkipped;
-    }
-
-    public void setWeightfailures(int weightfailures) {
-        this.weightfailures = weightfailures;
-    }
-
-    public void setTotalTestsrun(int totalTestsrun) {
-        this.totalTestsrun = totalTestsrun;
-    }
-
-    public void setWeightPassed(int weightPassed) {
-        this.weightPassed = weightPassed;
     }
 }

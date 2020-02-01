@@ -26,8 +26,8 @@ public class CoCos {
             //change = change + configs.getWeightMissed() * action.getResult().getTotalErrorsSize();
             //change = change + configs.getWeightCovered() *  action.getResult().getTotalHighPrioritySize();
 
-            if(configs.getDkindOfGrading().equals("absolute")) {
-                listener.getLogger().println("[CodeQuality] "+action.getDisplayName()+" changed scored by: "+change);
+            if (configs.getDkindOfGrading().equals("absolute")) {
+                listener.getLogger().println("[CodeQuality] " + action.getDisplayName() + " changed scored by: " + change);
                 base.get(action.getDisplayName()).setTotalChange(change);
                 score.addToScore(change);
             } else if (configs.getDkindOfGrading().equals("relative")) {
