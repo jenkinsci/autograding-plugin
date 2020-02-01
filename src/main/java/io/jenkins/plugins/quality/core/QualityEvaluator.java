@@ -25,6 +25,12 @@ import hudson.tasks.Recorder;
 import jenkins.tasks.SimpleBuildStep;
 import io.jenkins.plugins.analysis.core.model.ResultAction;
 
+/**
+ * This Recorder gathers all the needed results of previous run check in the job.
+ * Inputs are Saved, and Quality Score is computed on base of defined configurations.
+ *
+ * @author Eva-Maria Zeintl
+ */
 public class QualityEvaluator extends Recorder implements SimpleBuildStep {
     @DataBoundConstructor
     /**

@@ -10,7 +10,7 @@ public class Configuration {
 
     private int maxScore;
     /**
-     * Default configs
+     * Default configs.
      */
     private String defaultCheck;
     private boolean dtoCheck;
@@ -21,7 +21,7 @@ public class Configuration {
     private int weightLow;
 
     /**
-     * PIT configs
+     * PIT configs.
      */
     private String pitCheck;
     private boolean ptoCheck;
@@ -31,7 +31,7 @@ public class Configuration {
     private float weightPercentUndetected;
 
     /**
-     * code-coverage configs
+     * code-coverage configs.
      */
     private String cocoCheck;
     private boolean ctoCheck;
@@ -40,7 +40,7 @@ public class Configuration {
     private int weightMissed;
 
     /**
-     * junit configs
+     * junit configs.
      */
     private String junitCheck;
     private boolean jtoCheck;
@@ -50,12 +50,6 @@ public class Configuration {
     private int totalTestsrun;
     private int weightPassed;
 
-    /**
-     * Creates a new instance of {@link Configuration}.
-     */
-    public Configuration() {
-        super();
-    }
 
     public String getDefaultCheck() {
         return defaultCheck;

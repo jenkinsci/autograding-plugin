@@ -26,6 +26,9 @@ public class Score {
         this.score = score;
     }
 
+    /**
+     * Creates a new instance of {@link Score}.
+     */
     public Score() {
         super();
     }
@@ -46,11 +49,11 @@ public class Score {
         return bases;
     }
 
-    public void addConfigs(Configuration configs) {
-        this.configs = configs;
+    public void addConfigs(Configuration inputConfig) {
+        this.configs = inputConfig;
     }
 
-    public void addBases(Map<String, BaseResults> bases) {
-        this.bases.putAll(bases);
+    public void addBases(Map<String, BaseResults> inputBases) {
+        this.bases.putAll(inputBases);
     }
 }

@@ -19,6 +19,7 @@ public class ScoreBuildAction extends BuildAction<Score> implements StaplerProxy
      * Creates a new instance of {@link ScoreBuildAction}.
      *
      * @param owner the associated build that created the scores
+     * @param score Score instance where all results are saved
      */
     public ScoreBuildAction(final Run<?, ?> owner, final Score score) {
         this(owner, score, true);

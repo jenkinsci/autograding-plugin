@@ -1,7 +1,7 @@
 package io.jenkins.plugins.quality.core;
 
 /**
- * Saves all given Check Results in an Object for later use in GUI
+ * Saves all given Check Results in an Object for later use in GUI.
  *
  * @author Eva-Maria Zeintl
  */
@@ -52,7 +52,8 @@ public class BaseResults {
      * @param totalLows    the total number of Low issues
      * @param sum          the total number of all issues
      */
-    public BaseResults(String id, int totalErrors, int totalHighs, int totalNormals, int totalLows, int sum) {
+    public BaseResults(final String id, final  int totalErrors, final int totalHighs, final int totalNormals,
+                       final int totalLows, final int sum) {
         super();
         this.id = id;
         this.totalErrors = totalErrors;
@@ -64,14 +65,15 @@ public class BaseResults {
 
 
     /**
-     * Creates a new instance of {@link BaseResults} for pitmutation results
+     * Creates a new instance of {@link BaseResults} for pitmutation results.
      *
      * @param id                the name of the check
      * @param totalMutations    the total number of mutations
      * @param totalUndetected   the total number of undetected mutations
      * @param percentUndetected the percent value of undetected mutations
      */
-    public BaseResults(String id, int totalMutations, int totalUndetected, float percentUndetected) {
+    public BaseResults(final String id, final int totalMutations, final int totalUndetected,
+                       final float percentUndetected) {
         super();
         this.id = id;
         this.totalMutations = totalMutations;
@@ -81,7 +83,7 @@ public class BaseResults {
 
 
     /**
-     * Creates a new instance of {@link BaseResults} for Junit results
+     * Creates a new instance of {@link BaseResults} for Junit results.
      *
      * @param id           the name of the check
      * @param totalPassed  the total number of passed tests
@@ -89,7 +91,8 @@ public class BaseResults {
      * @param totalFailed  the total number of failed tests
      * @param totalSkipped the total number of skipped tests
      */
-    public BaseResults(String id, int totalPassed, int totalRun, int totalFailed, int totalSkipped) {
+    public BaseResults(final String id, final int totalPassed, final int totalRun, final int totalFailed,
+                       final int totalSkipped) {
         super();
         this.id = id;
         this.totalPassed = totalPassed;
@@ -99,13 +102,13 @@ public class BaseResults {
     }
 
     /**
-     * Creates a new instance of {@link BaseResults} for code coverage results
+     * Creates a new instance of {@link BaseResults} for code coverage results.
      *
      * @param id           the name of the check
      * @param totalCovered the total number of covered code
      * @param totalMissed  the total number of missed code
      */
-    public BaseResults(String id, int totalCovered, int totalMissed) {
+    public BaseResults(final String id, final int totalCovered, final int totalMissed) {
         super();
         this.id = id;
         this.totalCovered = totalCovered;
@@ -113,7 +116,7 @@ public class BaseResults {
     }
 
     /**
-     * stores how much the issues for the id changes the score
+     * stores how much the issues for the id changes the score.
      *
      * @param totalChange
      */

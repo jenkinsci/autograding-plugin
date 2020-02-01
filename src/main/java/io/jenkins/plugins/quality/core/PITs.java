@@ -15,8 +15,20 @@ import java.util.Map;
  */
 public class PITs {
 
-
-    public void compute(Configuration configs, List<PitBuildAction> actions, Map<String, BaseResults> base,
+    /**
+     * Saves {@link BaseResults}.
+     * @param configs
+     *          all Configurations
+     * @param actions
+     *          Input Action
+     * @param base
+     *          All instances of BaseResults
+     * @param score
+     *          Score Object
+     * @param listener
+     *          Console log
+     */
+    public void compute(final Configuration configs, final List<PitBuildAction> actions, Map<String, BaseResults> base,
                         Score score, final TaskListener listener) {
         for (PitBuildAction action : actions) {
 
@@ -29,18 +41,29 @@ public class PITs {
         }
     }
 
-    public void calculate(Configuration configs, PitBuildAction action, Score score, Map<String, BaseResults> base,
-                          final TaskListener listener) {
+    /**
+     * Calculates & saves new {@link Score}.
+     * @param configs
+     *          all Configurations
+     * @param action
+     *          Input Action
+     * @param base
+     *          All instances of BaseResults
+     * @param score
+     *          Score Object
+     * @param listener
+     *          Console log
+     */
+    public void calculate(final Configuration configs, final PitBuildAction action, Score score,
+                          Map<String, BaseResults> base, final TaskListener listener) {
         int change = 0;
         if (configs.isPtoCheck()) {
             change = change + configs.getWeightUndetected() * action.getReport().getMutationStats().getUndetected();
 
             if (configs.getDkindOfGrading().equals("absolute")) {
-                listener.getLogger().println("[CodeQuality] " + action.getDisplayName() + " changed scored by: " + change);
+                listener.getLogger().println("[CodeQuality] " + action.getDisplayName() + " changed score by: " + change);
                 base.get(action.getDisplayName()).setTotalChange(change);
                 score.addToScore(change);
-            } else if (configs.getDkindOfGrading().equals("relative")) {
-
             }
         }
     }

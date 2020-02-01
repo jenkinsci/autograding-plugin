@@ -15,8 +15,21 @@ import java.util.Map;
  */
 public class DefaultChecks {
 
-    public void compute(Configuration configs, List<ResultAction> actions, Map<String, BaseResults> base,
-                        Score score, final TaskListener listener) {
+    /**
+     * Saves {@link BaseResults}.
+     * @param configs
+     *          all Configurations
+     * @param actions
+     *          Input Action
+     * @param base
+     *          All instances of BaseResults
+     * @param score
+     *          Score Object
+     * @param listener
+     *          Console log
+     */
+    public void compute(final Configuration configs, final List<ResultAction> actions,
+                        Map<String, BaseResults> base, Score score, final TaskListener listener) {
 
         for (ResultAction action : actions) {
             //save base Results
@@ -28,8 +41,21 @@ public class DefaultChecks {
         }
     }
 
-    public void calculate(Configuration configs, ResultAction action, Score score, final TaskListener listener,
-                          Map<String, BaseResults> base) {
+    /**
+     * Calculates & saves new {@link Score}.
+     * @param configs
+     *          all Configurations
+     * @param action
+     *          Input Action
+     * @param base
+     *          All instances of BaseResults
+     * @param score
+     *          Score Object
+     * @param listener
+     *          Console log
+     */
+    public void calculate(final Configuration configs, final ResultAction action, Score score,
+                          final TaskListener listener, Map<String, BaseResults> base) {
         int change = 0;
         if (configs.isDtoCheck()) {
             change = change + configs.getWeightError() * action.getResult().getTotalErrorsSize();
@@ -38,11 +64,9 @@ public class DefaultChecks {
             change = change + configs.getWeightLow() * action.getResult().getTotalLowPrioritySize();
 
             if (configs.getDkindOfGrading().equals("absolute")) {
-                listener.getLogger().println("[CodeQuality] " + action.getId() + " changed scored by: " + change);
+                listener.getLogger().println("[CodeQuality] " + action.getId() + " changed score by: " + change);
                 base.get(action.getId()).setTotalChange(change);
                 score.addToScore(change);
-            } else if (configs.getDkindOfGrading().equals("relative")) {
-
             }
         }
     }

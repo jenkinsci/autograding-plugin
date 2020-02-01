@@ -40,11 +40,14 @@ public class ScoreViewModel implements ModelObject {
         for (int i = 0; i < valueList.size(); i++) {
             if (valueList.get(i).getId().equals("pitmutation")) {
                 pits.add(score.getBases().get(valueList.get(i).getId()));
-            } else if (valueList.get(i).getId().equals("Testabdeckung")) {
+            }
+            else if (valueList.get(i).getId().equals("Testabdeckung")) {
                 cocos.add(score.getBases().get(valueList.get(i).getId()));
-            } else if (valueList.get(i).getId().equals("Testergebnis")) {
+            }
+            else if (valueList.get(i).getId().equals("Testergebnis")) {
                 testresults.add(score.getBases().get(valueList.get(i).getId()));
-            } else {
+            }
+            else {
                 defaults.add(score.getBases().get(valueList.get(i).getId()));
             }
         }

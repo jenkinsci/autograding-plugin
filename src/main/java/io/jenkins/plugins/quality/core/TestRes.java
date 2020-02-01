@@ -2,6 +2,7 @@ package io.jenkins.plugins.quality.core;
 
 import hudson.model.TaskListener;
 import hudson.tasks.junit.TestResultAction;
+
 import java.util.List;
 import java.util.Map;
 
@@ -14,8 +15,17 @@ import java.util.Map;
  */
 public class TestRes {
 
-    public void compute(Configuration configs, List<TestResultAction> actions, Map<String, BaseResults> base,
-                        Score score,final TaskListener listener) {
+    /**
+     * Saves {@link BaseResults}.
+     *
+     * @param configs  all Configurations
+     * @param actions  Input Action
+     * @param base     All instances of BaseResults
+     * @param score    Score Object
+     * @param listener Console log
+     */
+    public void compute(final Configuration configs, final List<TestResultAction> actions, Map<String, BaseResults> base,
+                        Score score, final TaskListener listener) {
         for (TestResultAction action : actions) {
             //save base Results
             base.put(action.getDisplayName(), new BaseResults(action.getDisplayName(), action.getResult().getPassCount(),
@@ -25,20 +35,27 @@ public class TestRes {
         }
     }
 
-    public void calculate(Configuration configs, TestResultAction action, Score score,
-                         final TaskListener listener, Map<String, BaseResults> base) {
+    /**
+     * Calculates & saves new {@link Score}.
+     *
+     * @param configs  all Configurations
+     * @param action   Input Action
+     * @param base     All instances of BaseResults
+     * @param score    Score Object
+     * @param listener Console log
+     */
+    public void calculate(final Configuration configs, final TestResultAction action, Score score,
+                          final TaskListener listener, Map<String, BaseResults> base) {
         int change = 0;
         if (configs.isJtoCheck()) {
             change = change + configs.getWeightPassed() * action.getResult().getPassCount();
             change = change + configs.getWeightfailures() * action.getResult().getFailCount();
             change = change + configs.getWeightSkipped() * action.getResult().getSkipCount();
 
-            if(configs.getJkindOfGrading().equals("absolute")) {
-                listener.getLogger().println("[CodeQuality] "+action.getDisplayName()+" changed scored by: "+change);
+            if (configs.getJkindOfGrading().equals("absolute")) {
+                listener.getLogger().println("[CodeQuality] " + action.getDisplayName() + " changed score by: " + change);
                 base.get(action.getDisplayName()).setTotalChange(change);
                 score.addToScore(change);
-            } else if (configs.getJkindOfGrading().equals("relative")) {
-
             }
         }
 
