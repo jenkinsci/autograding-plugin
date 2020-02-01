@@ -119,6 +119,7 @@ public class BaseResults {
      * stores how much the issues for the id changes the score.
      *
      * @param totalChange
+     *              amount of score change
      */
     public void setTotalChange(int totalChange) {
         this.totalChange = totalChange;

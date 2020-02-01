@@ -38,7 +38,7 @@ public class CoCos {
     }
 
     /**
-     * Calculates & saves new {@link Score}.
+     * Calculates and saves new {@link Score}.
      * @param configs
      *          all Configurations
      * @param action
