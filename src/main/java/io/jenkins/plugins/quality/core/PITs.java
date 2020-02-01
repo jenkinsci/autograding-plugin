@@ -1,7 +1,9 @@
 package io.jenkins.plugins.quality.core;
 
+import hudson.model.TaskListener;
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
@@ -9,29 +11,33 @@ public class PITs {
 
 
     public void compute(Configuration configs, List<PitBuildAction> actions, Map<String, BaseResults> base,
-                        Score score) {
+                        Score score, @Nonnull final TaskListener listener) {
         for (PitBuildAction action : actions) {
-            //read configs from XML File
 
-            //save base Results
-            /*action.getReports().forEach();
-            base.put(action.getDisplayName(), new BaseResults(action.getId(), action.total mutations, total uncovered, percent uncovered);
+            BaseResults put = base.put(action.getDisplayName(), new BaseResults(action.getDisplayName(),
+                    action.getReport().getMutationStats().getTotalMutations(),
+                    action.getReport().getMutationStats().getUndetected(),
+                    action.getReport().getMutationStats().getUndetected() *
+                            action.getReport().getMutationStats().getTotalMutations() / 100));
 
-            */
-            calculate(configs, action, score);
+            calculate(configs, action, score, base, listener);
         }
     }
 
-    public void calculate(Configuration configs, PitBuildAction action, Score score) {
+    public void calculate(Configuration configs, PitBuildAction action, Score score, Map<String, BaseResults> base,
+                          @Nonnull final TaskListener listener) {
         int change = 0;
-        /*if (configs.get(action.getId()).isToCheck()) {
-            change = change + configs.get(action.getId()).getWeightError() * action.getResult().getTotalErrorsSize();
-            change = change + configs.get(action.getId()).getWeightHigh() * action.getResult().getTotalHighPrioritySize();
-            change = change + configs.get(action.getId()).getWeightNormal() * action.getResult().getTotalNormalPrioritySize();
-            change = change + configs.get(action.getId()).getWeightLow() * action.getResult().getTotalLowPrioritySize();
+        if (configs.isPtoCheck()) {
+            change = change + configs.getWeightUndetected() * action.getReport().getMutationStats().getUndetected();
 
-        }*/
-        score.addToScore(change);
+            if(configs.getDkindOfGrading().equals("absolute")) {
+                listener.getLogger().println("[CodeQuality] "+action.getDisplayName()+" changed scored by: "+change);
+                base.get(action.getDisplayName()).setTotalChange(change);
+                score.addToScore(change);
+            } else if (configs.getDkindOfGrading().equals("relative")) {
+
+            }
+        }
     }
 
 }

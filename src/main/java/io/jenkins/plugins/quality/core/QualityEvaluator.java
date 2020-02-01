@@ -56,7 +56,6 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         listener.getLogger().println("[CodeQuality] MaxScore "+configs.getMaxScore());
 
         Score score = new Score(configs.getMaxScore());
-        score.setMaxScore(configs.getMaxScore());
         score.addConfigs(configs);
 
         //Defaults Rechnen
@@ -69,7 +68,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         //JUNIT lesen und rechnen
         TestRes junitChecks = new TestRes();
-        junitChecks.compute(configs, testActions, base, score);
+        junitChecks.compute(configs, testActions, base, score, listener);
 
         //code-coverage lesen und rechnen
         CoCos cocos = new CoCos();

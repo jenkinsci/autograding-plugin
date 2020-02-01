@@ -21,7 +21,7 @@ public class BaseResults {
     //PIT
     private int totalMutations = 0;
     private int totalUndetected = 0;
-    private int percentUndetected = 0;
+    private float percentUndetected = 0;
 
     //CodeCoverage
     private int totalCovered = 0;
@@ -43,7 +43,7 @@ public class BaseResults {
     }
 
     //PIT Constructor
-    public BaseResults(String id, int totalMutations, int totalUndetected, int percentUndetected) {
+    public BaseResults(String id, int totalMutations, int totalUndetected, float percentUndetected) {
         super();
         this.id = id;
         this.totalMutations = totalMutations;
@@ -125,7 +125,7 @@ public class BaseResults {
         return totalUndetected;
     }
 
-    public int getPercentUndetected() {
+    public float getPercentUndetected() {
         return percentUndetected;
     }
 

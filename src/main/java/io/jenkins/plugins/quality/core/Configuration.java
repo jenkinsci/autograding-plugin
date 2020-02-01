@@ -23,7 +23,7 @@ public class Configuration {
     private String pkindOfGrading;
     private int weightMutations;
     private int weightUndetected;
-    private int weightPercentUndetected;
+    private float weightPercentUndetected;
 
     /**
      * code-coverage configs
@@ -102,7 +102,7 @@ public class Configuration {
         return weightUndetected;
     }
 
-    public int getWeightPercentUndetected() {
+    public float getWeightPercentUndetected() {
         return weightPercentUndetected;
     }
 
@@ -206,7 +206,7 @@ public class Configuration {
         this.weightUndetected = weightUndetected;
     }
 
-    public void setWeightPercentUndetected(int weightPercentUndetected) {
+    public void setWeightPercentUndetected(float weightPercentUndetected) {
         this.weightPercentUndetected = weightPercentUndetected;
     }
 
