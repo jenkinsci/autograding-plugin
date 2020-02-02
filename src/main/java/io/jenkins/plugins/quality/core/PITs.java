@@ -1,71 +1,85 @@
 package io.jenkins.plugins.quality.core;
 
 import hudson.model.TaskListener;
-import org.jenkinsci.plugins.pitmutation.PitBuildAction;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * takes {@link Configuration} and the results of pitmutations.
- * Saves default check results into {@link BaseResults}.
  * Calculates and updates quality score
  *
  * @author Eva-Maria Zeintl
  */
 public class PITs {
 
+    private String id;
+    private int totalChange;
+
+    //PIT
+    private int totalMutations;
+    private int totalUndetected;
+    private float percentUndetected;
+
     /**
-     * Saves {@link BaseResults}.
-     * @param configs
-     *          all Configurations
-     * @param actions
-     *          Input Action
-     * @param base
-     *          All instances of BaseResults
-     * @param score
-     *          Score Object
-     * @param listener
-     *          Console log
+     * Creates a new instance of {@link PITs} for pitmutation results.
+     *
+     * @param id                the name of the check
+     * @param totalMutations    the total number of mutations
+     * @param totalUndetected   the total number of undetected mutations
+     * @param percentUndetected the percent value of undetected mutations
      */
-    public void compute(final Configuration configs, final List<PitBuildAction> actions, Map<String, BaseResults> base,
-                        Score score, final TaskListener listener) {
-        for (PitBuildAction action : actions) {
-
-            BaseResults put = base.put(action.getDisplayName(), new BaseResults(action.getDisplayName(),
-                    action.getReport().getMutationStats().getTotalMutations(),
-                    action.getReport().getMutationStats().getUndetected(),
-                    100 - action.getReport().getMutationStats().getKillPercent()));
-
-            calculate(configs, action, score, base, listener);
-        }
+    public PITs(final String id, final int totalMutations, final int totalUndetected,
+                       final float percentUndetected) {
+        super();
+        this.id = id;
+        this.totalMutations = totalMutations;
+        this.totalUndetected = totalUndetected;
+        this.percentUndetected = percentUndetected;
     }
+
 
     /**
      * Calculates and saves new {@link Score}.
      * @param configs
      *          all Configurations
-     * @param action
-     *          Input Action
      * @param base
-     *          All instances of BaseResults
+     *          All instances of pitmutation results
      * @param score
      *          Score Object
      * @param listener
      *          Console log
      */
-    public void calculate(final Configuration configs, final PitBuildAction action, Score score,
-                          Map<String, BaseResults> base, final TaskListener listener) {
+    public int calculate(final Configuration configs, PITs base, Score score, TaskListener listener) {
         int change = 0;
         if (configs.isPtoCheck()) {
-            change = change + configs.getWeightUndetected() * action.getReport().getMutationStats().getUndetected();
+            change = change + configs.getWeightUndetected() * base.getTotalUndetected();
 
             if (configs.getDkindOfGrading().equals("absolute")) {
-                listener.getLogger().println("[CodeQuality] " + action.getDisplayName() + " changed score by: " + change);
-                base.get(action.getDisplayName()).setTotalChange(change);
+                listener.getLogger().println("[CodeQuality] " + base.getId() + " changed score by: " + change);
                 score.addToScore(change);
             }
         }
+        return change;
+    }
+    public void setTotalChange(int totalChange) {
+        this.totalChange = totalChange;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public int getTotalChange() {
+        return totalChange;
+    }
+
+    public int getTotalMutations() {
+        return totalMutations;
+    }
+
+    public int getTotalUndetected() {
+        return totalUndetected;
+    }
+
+    public float getPercentUndetected() {
+        return percentUndetected;
+    }
 }

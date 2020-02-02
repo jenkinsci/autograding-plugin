@@ -17,11 +17,6 @@ import static groovy.xml.Entity.divide;
 public class ScoreViewModel implements ModelObject {
     private final Run<?, ?> owner;
     private final Score score;
-    private List<BaseResults> defaults;
-    private List<BaseResults> testresults;
-    private List<BaseResults> pits;
-    private List<BaseResults> cocos;
-
     /**
      * Creates a new instance of {@link ScoreViewModel}.
      *
@@ -32,25 +27,6 @@ public class ScoreViewModel implements ModelObject {
         super();
         this.owner = owner;
         this.score = score;
-        divide();
-    }
-
-    private void divide() {
-        List<BaseResults> valueList = new ArrayList(score.getBases().values());
-        for (int i = 0; i < valueList.size(); i++) {
-            if (valueList.get(i).getId().equals("pitmutation")) {
-                pits.add(score.getBases().get(valueList.get(i).getId()));
-            }
-            else if (valueList.get(i).getId().equals("Testabdeckung")) {
-                cocos.add(score.getBases().get(valueList.get(i).getId()));
-            }
-            else if (valueList.get(i).getId().equals("Testergebnis")) {
-                testresults.add(score.getBases().get(valueList.get(i).getId()));
-            }
-            else {
-                defaults.add(score.getBases().get(valueList.get(i).getId()));
-            }
-        }
     }
 
     public Run<?, ?> getOwner() {
@@ -66,19 +42,4 @@ public class ScoreViewModel implements ModelObject {
         return score;
     }
 
-    public List<BaseResults> getDefaults() {
-        return defaults;
-    }
-
-    public List<BaseResults> getTestresults() {
-        return testresults;
-    }
-
-    public List<BaseResults> getPits() {
-        return pits;
-    }
-
-    public List<BaseResults> getCocos() {
-        return cocos;
-    }
 }

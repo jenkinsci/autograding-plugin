@@ -1,74 +1,105 @@
 package io.jenkins.plugins.quality.core;
 
 import hudson.model.TaskListener;
-import io.jenkins.plugins.analysis.core.model.ResultAction;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * takes {@link Configuration} and the results of default checks.
- * Saves default check results into {@link BaseResults}.
  * Calculates and updates quality score
  *
  * @author Eva-Maria Zeintl
  */
 public class DefaultChecks {
 
+    private String id;
+    private int totalChange;
+
+    //Default
+    private int totalErrors;
+    private int totalHighs;
+    private int totalNormals;
+    private int totalLows;
+    private int sum;
+
+
+
     /**
-     * Saves {@link BaseResults}.
-     * @param configs
-     *          all Configurations
-     * @param actions
-     *          Input Action
-     * @param base
-     *          All instances of BaseResults
-     * @param score
-     *          Score Object
-     * @param listener
-     *          Console log
+     * Creates a new instance of {@link DefaultChecks} for Default Checks.
+     *
+     * @param id           the name of the check
+     * @param totalErrors  the total number of errors
+     * @param totalHighs   the total number of High issues
+     * @param totalNormals the total number of Normal issues
+     * @param totalLows    the total number of Low issues
+     * @param sum          the total number of all issues
      */
-    public void compute(final Configuration configs, final List<ResultAction> actions,
-                        Map<String, BaseResults> base, Score score, final TaskListener listener) {
-
-        for (ResultAction action : actions) {
-            //save base Results
-            base.put(action.getId(), new BaseResults(action.getId(), action.getResult().getTotalErrorsSize(),
-                    action.getResult().getTotalHighPrioritySize(), action.getResult().getTotalNormalPrioritySize(),
-                    action.getResult().getTotalLowPrioritySize(), action.getResult().getTotalSize()));
-
-            calculate(configs, action, score, listener, base);
-        }
+    public DefaultChecks(final String id, final  int totalErrors, final int totalHighs, final int totalNormals,
+                       final int totalLows, final int sum) {
+        super();
+        this.id = id;
+        this.totalErrors = totalErrors;
+        this.totalHighs = totalHighs;
+        this.totalNormals = totalNormals;
+        this.totalLows = totalLows;
+        this.sum = sum;
     }
+
 
     /**
      * Calculates and saves new {@link Score}.
      * @param configs
      *          all Configurations
-     * @param action
-     *          Input Action
      * @param base
-     *          All instances of BaseResults
+     *          base Results of the calculated check
      * @param score
      *          Score Object
      * @param listener
      *          Console log
      */
-    public void calculate(final Configuration configs, final ResultAction action, Score score,
-                          final TaskListener listener, Map<String, BaseResults> base) {
+    public int calculate(Configuration configs, DefaultChecks base, Score score, TaskListener listener) {
         int change = 0;
         if (configs.isDtoCheck()) {
-            change = change + configs.getWeightError() * action.getResult().getTotalErrorsSize();
-            change = change + configs.getWeightHigh() * action.getResult().getTotalHighPrioritySize();
-            change = change + configs.getWeightNormal() * action.getResult().getTotalNormalPrioritySize();
-            change = change + configs.getWeightLow() * action.getResult().getTotalLowPrioritySize();
+            change = change + configs.getWeightError() * base.getTotalErrors();
+            change = change + configs.getWeightHigh() * base.getTotalHighs();
+            change = change + configs.getWeightNormal() * base.getTotalNormals();
+            change = change + configs.getWeightLow() * base.getTotalLows();
 
             if (configs.getDkindOfGrading().equals("absolute")) {
-                listener.getLogger().println("[CodeQuality] " + action.getId() + " changed score by: " + change);
-                base.get(action.getId()).setTotalChange(change);
+                listener.getLogger().println("[CodeQuality] " + base.getId() + " changed score by: " + change);
                 score.addToScore(change);
             }
         }
+        return change;
     }
 
+    public void setTotalChange(int totalChange) {
+        this.totalChange = totalChange;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public int getTotalChange() {
+        return totalChange;
+    }
+
+    public int getTotalErrors() {
+        return totalErrors;
+    }
+
+    public int getTotalHighs() {
+        return totalHighs;
+    }
+
+    public int getTotalNormals() {
+        return totalNormals;
+    }
+
+    public int getTotalLows() {
+        return totalLows;
+    }
+
+    public int getSum() {
+        return sum;
+    }
 }

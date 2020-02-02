@@ -1,64 +1,92 @@
 package io.jenkins.plugins.quality.core;
 
 import hudson.model.TaskListener;
-import hudson.tasks.junit.TestResultAction;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * takes {@link Configuration} and the results of Junit tests.
- * Saves default check results into {@link BaseResults}.
  * Calculates and updates quality score
  *
  * @author Eva-Maria Zeintl
  */
 public class TestRes {
 
-    /**
-     * Saves {@link BaseResults}.
-     *
-     * @param configs  all Configurations
-     * @param actions  Input Action
-     * @param base     All instances of BaseResults
-     * @param score    Score Object
-     * @param listener Console log
-     */
-    public void compute(final Configuration configs, final List<TestResultAction> actions, Map<String, BaseResults> base,
-                        Score score, final TaskListener listener) {
-        for (TestResultAction action : actions) {
-            //save base Results
-            base.put(action.getDisplayName(), new BaseResults(action.getDisplayName(), action.getResult().getPassCount(),
-                    action.getTotalCount(), action.getResult().getFailCount(), action.getResult().getSkipCount()));
+    private String id;
+    private int totalChange;
 
-            calculate(configs, action, score, listener, base);
-        }
+    //Junit
+    private int totalPassed;
+    private int totalRun;
+    private int totalFailed;
+    private int totalSkipped;
+
+    /**
+     * Creates a new instance of {@link TestRes} for Junit results.
+     *
+     * @param id           the name of the check
+     * @param totalPassed  the total number of passed tests
+     * @param totalRun     the total number of run tests
+     * @param totalFailed  the total number of failed tests
+     * @param totalSkipped the total number of skipped tests
+     */
+    public TestRes(final String id, final int totalPassed, final int totalRun, final int totalFailed,
+                       final int totalSkipped) {
+        super();
+        this.id = id;
+        this.totalPassed = totalPassed;
+        this.totalFailed = totalFailed;
+        this.totalRun = totalRun;
+        this.totalSkipped = totalSkipped;
     }
 
     /**
      * Calculates and saves new {@link Score}.
      *
      * @param configs  all Configurations
-     * @param action   Input Action
-     * @param base     All instances of BaseResults
+     * @param base     All instances of test results
      * @param score    Score Object
      * @param listener Console log
      */
-    public void calculate(final Configuration configs, final TestResultAction action, Score score,
-                          final TaskListener listener, Map<String, BaseResults> base) {
+    public int calculate(final Configuration configs, TestRes base, Score score, TaskListener listener) {
         int change = 0;
         if (configs.isJtoCheck()) {
-            change = change + configs.getWeightPassed() * action.getResult().getPassCount();
-            change = change + configs.getWeightfailures() * action.getResult().getFailCount();
-            change = change + configs.getWeightSkipped() * action.getResult().getSkipCount();
+            change = change + configs.getWeightPassed() * base.getTotalPassed();
+            change = change + configs.getWeightfailures() * base.getTotalFailed();
+            change = change + configs.getWeightSkipped() * base.getTotalSkipped();
 
             if (configs.getJkindOfGrading().equals("absolute")) {
-                listener.getLogger().println("[CodeQuality] " + action.getDisplayName() + " changed score by: " + change);
-                base.get(action.getDisplayName()).setTotalChange(change);
+                listener.getLogger().println("[CodeQuality] " + base.getId() + " changed score by: " + change);
                 score.addToScore(change);
             }
         }
+        return change;
+    }
 
+    public void setTotalChange(int totalChange) {
+        this.totalChange = totalChange;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public int getTotalChange() {
+        return totalChange;
+    }
+
+    public int getTotalPassed() {
+        return totalPassed;
+    }
+
+    public int getTotalRun() {
+        return totalRun;
+    }
+
+    public int getTotalFailed() {
+        return totalFailed;
+    }
+
+    public int getTotalSkipped() {
+        return totalSkipped;
     }
 
 }
