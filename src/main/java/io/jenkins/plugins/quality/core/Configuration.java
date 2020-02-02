@@ -46,7 +46,7 @@ public class Configuration {
     private boolean jtoCheck;
     private String jkindOfGrading;
     private int weightSkipped;
-    private int weightfailures;
+    private int weightFailures;
     private int totalTestsrun;
     private int weightPassed;
 
@@ -143,8 +143,8 @@ public class Configuration {
         return weightSkipped;
     }
 
-    public int getWeightfailures() {
-        return weightfailures;
+    public int getWeightFailures() {
+        return weightFailures;
     }
 
     public int getTotalTestsrun() {

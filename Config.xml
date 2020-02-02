@@ -32,7 +32,7 @@
   <jtoCheck>true</jtoCheck>
   <jkindOfGrading>absolute</jkindOfGrading>
   <weightSkipped>-1</weightSkipped>
-  <weightfailures>-2</weightfailures>
+  <weightFailures>-2</weightFailures>
   <totalTestsrun>0</totalTestsrun>
   <weightPassed>1</weightPassed>
 </configs>

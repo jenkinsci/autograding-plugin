@@ -50,7 +50,7 @@ public class TestRes {
         int change = 0;
         if (configs.isJtoCheck()) {
             change = change + configs.getWeightPassed() * base.getTotalPassed();
-            change = change + configs.getWeightfailures() * base.getTotalFailed();
+            change = change + configs.getWeightFailures() * base.getTotalFailed();
             change = change + configs.getWeightSkipped() * base.getTotalSkipped();
 
             if (configs.getJkindOfGrading().equals("absolute")) {

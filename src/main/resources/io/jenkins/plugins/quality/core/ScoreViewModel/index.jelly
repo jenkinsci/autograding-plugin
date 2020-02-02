@@ -15,7 +15,47 @@
 
             <div class="fluid-container">
 
-                <bs:card title="${it.displayName}" fontAwesomeIcon="award">
+                <bs:card title="Code Quality Score">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h5>Your current Score: ${it.score.score} / ${it.score.configs.maxScore}</h5>
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6>Configuration Static</h6>
+                                <p>per issue Score changes by:</p>
+                                <p>Errors ${it.score.configs.weightError}</p>
+                                <p>High ${it.score.configs.weightHigh}</p>
+                                <p>Normal ${it.score.configs.weightNormal}</p>
+                                <p>Low ${it.score.configs.weightLow}</p>
+                            </div>
+                            <div class="col-sm-3">
+                                <h6>Configuration Tests</h6>
+                                <p>per issue Score changes by:</p>
+                                <p>Passed ${it.score.configs.weightPassed}</p>
+                                <p>Failed ${it.score.configs.weightFailures}</p>
+                                <p>Skipped ${it.score.configs.weightSkipped}</p>
+                            </div>
+                            <div class="col-sm-3">
+                                <h6>Configuration PIT mutations</h6>
+                                <p>per issue Score changes by:</p>
+                                <p>Undetected ${it.score.configs.weightUndetected}</p>
+                            </div>
+                            <div class="col-sm-3">
+                                <h6>Configuration code coverage</h6>
+                                <p>per issue Score changes by:</p>
+                                <p>Covered ${it.score.configs.weightCovered}</p>
+                                <p>Missed ${it.score.configs.weightMissed}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </bs:card>
+
+                <bs:card title="Static Checks">
 
                     <div class="table-responsive">
                         <table class="table table-hover table-striped display" id="fixed">
@@ -27,17 +67,148 @@
                                     <th>${%Normal}</th>
                                     <th>${%Low}</th>
                                     <th>${%Sum}</th>
-                                    <th>${%Score}</th>
+                                    <th>${%Score Impact}</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <j:forEach var="checks" items="${it.defaults}">
+                                <j:forEach var="checks" items="${it.score.defaultBases}">
                                     <tr>
                                         <td>
-                                            <j:set var="displayName" value="${checks.getId}"/>
+                                            ${checks.id}
                                         </td>
                                         <td>
-                                        <j:set var="error" value="${checks.getTotalErrors}"/>
+                                           ${checks.totalErrors}
+                                        </td>
+                                        <td>
+                                            ${checks.totalHighs}
+                                        </td>
+                                        <td>
+                                            ${checks.totalNormals}
+                                        </td>
+                                        <td>
+                                            ${checks.totalLows}
+                                        </td>
+                                        <td>
+                                            ${checks.sum}
+                                        </td>
+                                        <td>
+                                            ${checks.totalChange}
+                                        </td>
+                                    </tr>
+                                </j:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </bs:card>
+
+                <bs:card title="Junit Test Results">
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped display" id="fixed">
+                            <thead>
+                                <tr>
+                                    <th>${%Test}</th>
+                                    <th>${%Total}</th>
+                                    <th>${%Passed}</th>
+                                    <th>${%Failed}</th>
+                                    <th>${%Skipped}</th>
+                                    <th>${%Score Impact}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <j:forEach var="checks" items="${it.score.junitBases}">
+                                    <tr>
+                                        <td>
+                                            ${checks.id}
+                                        </td>
+                                        <td>
+                                            ${checks.totalRun}
+                                        </td>
+                                        <td>
+                                            ${checks.totalPassed}
+                                        </td>
+                                        <td>
+                                            ${checks.totalFailed}
+                                        </td>
+                                        <td>
+                                            ${checks.totalSkipped}
+                                        </td>
+                                        <td>
+                                            ${checks.totalChange}
+                                        </td>
+                                    </tr>
+                                </j:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </bs:card>
+                <bs:card title="PIT mutations">
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped display" id="fixed">
+                            <thead>
+                                <tr>
+                                    <th>${%Check}</th>
+                                    <th>${%Mutation}</th>
+                                    <th>${%Undetected}</th>
+                                    <th>${%Proportion}</th>
+                                    <th>${%Score Impact}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <j:forEach var="checks" items="${it.score.pitBases}">
+                                    <tr>
+                                        <td>
+                                            ${checks.id}
+                                        </td>
+                                        <td>
+                                            ${checks.totalMutations}
+                                        </td>
+                                        <td>
+                                            ${checks.totalUndetected}
+                                        </td>
+                                        <td>
+                                            ${checks.percentUndetected}
+                                        </td>
+                                        <td>
+                                            ${checks.totalChange}
+                                        </td>
+                                    </tr>
+                                </j:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </bs:card>
+
+                <bs:card title="Code Coverage">
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped display" id="fixed">
+                            <thead>
+                                <tr>
+                                    <th>${%Check}</th>
+                                    <th>${%Missed}</th>
+                                    <th>${%Covered}</th>
+                                    <th>${%Score Impact}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <j:forEach var="checks" items="${it.score.cocoBases}">
+                                    <tr>
+                                        <td>
+                                            ${checks.id}
+                                        </td>
+                                        <td>
+                                            ${checks.totalMissed}
+                                        </td>
+                                        <td>
+                                            ${checks.totalCovered}
+                                        </td>
+                                        <td>
+                                            ${checks.totalChange}
                                         </td>
                                     </tr>
                                 </j:forEach>
@@ -48,14 +219,6 @@
                 </bs:card>
 
             </div>
-
-            <script type="text/javascript">
-                /* global jQuery3 */
-                jQuery3('#fixed').DataTable({
-                pagingType: 'numbers', // Page number button only
-                order: [[0, 'asc'], [1, 'asc']] // Sort by file name and line number
-                });
-            </script>
 
         </l:main-panel>
     </l:layout>
