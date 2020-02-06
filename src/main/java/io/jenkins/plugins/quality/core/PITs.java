@@ -16,7 +16,8 @@ public class PITs {
     //PIT
     private int totalMutations;
     private int totalUndetected;
-    private float percentUndetected;
+    private int totalDetected;
+    private float ratio;
 
     /**
      * Creates a new instance of {@link PITs} for pitmutation results.
@@ -24,15 +25,15 @@ public class PITs {
      * @param id                the name of the check
      * @param totalMutations    the total number of mutations
      * @param totalUndetected   the total number of undetected mutations
-     * @param percentUndetected the percent value of undetected mutations
+     * @param ratio the percent value of undetected mutations
      */
-    public PITs(final String id, final int totalMutations, final int totalUndetected,
-                       final float percentUndetected) {
+    public PITs(final String id, final int totalMutations, final int totalUndetected, final float ratio) {
         super();
         this.id = id;
         this.totalMutations = totalMutations;
         this.totalUndetected = totalUndetected;
-        this.percentUndetected = percentUndetected;
+        this.totalDetected = totalMutations - totalUndetected;
+        this.ratio = 100 - ratio;
     }
 
 
@@ -51,6 +52,7 @@ public class PITs {
         int change = 0;
         if (configs.isPtoCheck()) {
             change = change + configs.getWeightUndetected() * base.getTotalUndetected();
+            change = change + configs.getWeightDetected() * (base.getTotalMutations() - base.getTotalUndetected());
 
             if (configs.getDkindOfGrading().equals("absolute")) {
                 listener.getLogger().println("[CodeQuality] " + base.getId() + " changed score by: " + change);
@@ -79,7 +81,5 @@ public class PITs {
         return totalUndetected;
     }
 
-    public float getPercentUndetected() {
-        return percentUndetected;
-    }
+    public float getRatio() { return ratio; }
 }

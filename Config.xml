@@ -14,15 +14,15 @@
 
   <!-- PIT -->
   <pitCheck>PIT</pitCheck>
-  <ptoCheck>false</ptoCheck>
+  <ptoCheck>true</ptoCheck>
   <pkindOfGrading>absolute</pkindOfGrading>
   <weightMutations>5</weightMutations>
   <weightUndetected>-2</weightUndetected>
-  <weightPercentUndetected>1</weightPercentUndetected>
+  <weightDetected>1</weightDetected>
 
   <!--Code Coverage -->
   <cocoCheck>COCO</cocoCheck>
-  <ctoCheck>false</ctoCheck>
+  <ctoCheck>true</ctoCheck>
   <ckindOfGrading>absolute</ckindOfGrading>
   <weightCovered>1</weightCovered>
   <weightMissed>-2</weightMissed>

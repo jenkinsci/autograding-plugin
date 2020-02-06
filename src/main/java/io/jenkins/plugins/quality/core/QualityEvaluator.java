@@ -2,16 +2,14 @@ package io.jenkins.plugins.quality.core;
 
 import java.io.*;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.annotation.Nonnull;
 import javax.xml.bind.annotation.XmlType;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.tasks.junit.TestResultAction;
 import io.jenkins.plugins.coverage.CoverageAction;
+import io.jenkins.plugins.coverage.targets.CoverageElement;
 import jenkins.model.DefaultUserCanonicalIdResolver;
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -56,11 +54,6 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         List<PitBuildAction> pitAction = run.getActions(PitBuildAction.class);
         List<TestResultAction> testActions = run.getActions(TestResultAction.class);
         List<CoverageAction> coverageActions = run.getActions(CoverageAction.class);
-        List<DefaultChecks> defaultBase = new ArrayList<>();
-        List<CoCos> cocoBases = new ArrayList<>();
-        List<PITs> pitBases = new ArrayList<>();
-        List<TestRes> junitBases = new ArrayList<>();
-
 
         //read configs from XML File
         ConfigXmlStream configReader = new ConfigXmlStream();
@@ -72,28 +65,28 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         score.addConfigs(configs);
 
         //Defaults Rechnen
-        saveDefaultBase(actions, defaultBase);
+        List<DefaultChecks> defaultBase = createDefaultBase(actions);
         for (DefaultChecks base : defaultBase) {
             base.setTotalChange(base.calculate(configs, base, score, listener));
             score.addDefaultBase(base);
         }
 
         //PIT lesen und rechnen
-        savePitBase(pitAction, pitBases);
+        List<PITs> pitBases = createPitBase(pitAction);
         for (PITs base : pitBases) {
             base.setTotalChange(base.calculate(configs, base, score, listener));
             score.addPitBase(base);
         }
 
         //JUNIT lesen und rechnen
-        saveJunitBase(testActions, junitBases);
+        List<TestRes> junitBases = createJunitBase(testActions);
         for (TestRes base : junitBases) {
             base.setTotalChange(base.calculate(configs, base, score, listener));
             score.addJunitBase(base);
         }
 
         //code-coverage lesen und rechnen
-        saveCocoBase(coverageActions, cocoBases);
+        List<CoCos> cocoBases = createCocoBase(coverageActions);
         for (CoCos base : cocoBases) {
             base.setTotalChange(base.calculate(configs, base, score, listener));
             score.addCocoBase(base);
@@ -126,38 +119,52 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
     }
 
 
-    private void saveDefaultBase(List<ResultAction> actions, List<DefaultChecks> defaultBase) {
+    private List<DefaultChecks> createDefaultBase(List<ResultAction> actions) {
+        List<DefaultChecks> defaultBase = new ArrayList<>();
         for (ResultAction action : actions) {
-            //save base Results
+            //store base Results from static checks
             defaultBase.add(new DefaultChecks(action.getId(), action.getResult().getTotalErrorsSize(),
                     action.getResult().getTotalHighPrioritySize(), action.getResult().getTotalNormalPrioritySize(),
                     action.getResult().getTotalLowPrioritySize(), action.getResult().getTotalSize()));
         }
+        return defaultBase;
     }
 
-    private void savePitBase(List<PitBuildAction> pitAction, List<PITs> pitBases) {
+    private List<PITs> createPitBase(List<PitBuildAction> pitAction) {
+        List<PITs> pitBases = new ArrayList<>();
         for (PitBuildAction action : pitAction) {
-            //save base Results
+            //store base Results from mutation check
             pitBases.add(new PITs(action.getDisplayName(), action.getReport().getMutationStats().getTotalMutations(),
                     action.getReport().getMutationStats().getUndetected(),
-                    100 - action.getReport().getMutationStats().getKillPercent()));
+                    action.getReport().getMutationStats().getKillPercent()));
         }
+        return pitBases;
     }
 
-    private void saveJunitBase(List<TestResultAction> testActions, List<TestRes> junitBases) {
+    private List<TestRes> createJunitBase(List<TestResultAction> testActions) {
+        List<TestRes> junitBases = new ArrayList<>();
         for (TestResultAction action : testActions) {
-            //save base Results
+            //store base Results from junit tests
             junitBases.add(new TestRes(action.getDisplayName(), action.getResult().getPassCount(), action.getTotalCount(),
                     action.getResult().getFailCount(), action.getResult().getSkipCount()));
         }
+        return junitBases;
     }
 
 
-    private void saveCocoBase(List<CoverageAction> coverageActions, List<CoCos> cocoBases) {
+    private List<CoCos> createCocoBase(List<CoverageAction> coverageActions) {
+        List<CoCos> cocoBases = new ArrayList<>();
         for (CoverageAction action : coverageActions) {
-            //save base Results
-            //cocoBases.add(new TestRes((action.getDisplayName(), new CoCos(action.getDisplayName(), action.getResult());
+            //store base Results from code coverage check
+            Set<CoverageElement> elements = action.getResult().getElements();
+            for (CoverageElement element : elements) {
+                cocoBases.add(new CoCos(action.getResult().getName(),
+                        (int) action.getResult().getCoverage(element).numerator,
+                        (int) action.getResult().getCoverage(element).denominator,
+                        (int) action.getResult().getCoverage(element).getPercentage()));
+            }
         }
+        return cocoBases;
     }
 
 }

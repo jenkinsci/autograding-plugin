@@ -28,7 +28,7 @@ public class Configuration {
     private String pkindOfGrading;
     private int weightMutations;
     private int weightUndetected;
-    private float weightPercentUndetected;
+    private int weightDetected;
 
     /**
      * code-coverage configs.
@@ -103,8 +103,8 @@ public class Configuration {
         return weightUndetected;
     }
 
-    public float getWeightPercentUndetected() {
-        return weightPercentUndetected;
+    public int getWeightDetected() {
+        return weightDetected;
     }
 
     public String getCocoCheck() {

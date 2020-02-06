@@ -43,6 +43,7 @@
                                 <h6>Configuration PIT mutations</h6>
                                 <p>per issue Score changes by:</p>
                                 <p>Undetected ${it.score.configs.weightUndetected}</p>
+                                <p>Detected ${it.score.configs.weightDetected}</p>
                             </div>
                             <div class="col-sm-3">
                                 <h6>Configuration code coverage</h6>
@@ -153,7 +154,7 @@
                                     <th>${%Check}</th>
                                     <th>${%Mutation}</th>
                                     <th>${%Undetected}</th>
-                                    <th>${%Proportion}</th>
+                                    <th>${%Ratio}</th>
                                     <th>${%Score Impact}</th>
                                 </tr>
                             </thead>
@@ -190,8 +191,9 @@
                             <thead>
                                 <tr>
                                     <th>${%Check}</th>
+                                    <th>${%Total Lines}</th>
                                     <th>${%Missed}</th>
-                                    <th>${%Covered}</th>
+                                    <th>${%Ratio}</th>
                                     <th>${%Score Impact}</th>
                                 </tr>
                             </thead>
@@ -202,10 +204,13 @@
                                             ${checks.id}
                                         </td>
                                         <td>
+                                            ${checks.totalLines}
+                                        </td>
+                                        <td>
                                             ${checks.totalMissed}
                                         </td>
                                         <td>
-                                            ${checks.totalCovered}
+                                            ${checks.ratio}
                                         </td>
                                         <td>
                                             ${checks.totalChange}

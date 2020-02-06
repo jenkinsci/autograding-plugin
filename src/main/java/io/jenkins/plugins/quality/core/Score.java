@@ -1,13 +1,8 @@
 package io.jenkins.plugins.quality.core;
 
 
-import org.jaxen.pantry.Test;
-
-import java.time.chrono.JapaneseChronology;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Stores the results of a scoring run.
@@ -30,7 +25,6 @@ public class Score {
      *          sets initial score
      */
     public Score(int score) {
-        super();
         this.score = score;
     }
 
@@ -38,7 +32,6 @@ public class Score {
      * Creates a new instance of {@link Score}.
      */
     public Score() {
-        super();
     }
 
     public int getScore() {
