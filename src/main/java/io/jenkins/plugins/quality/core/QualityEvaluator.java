@@ -41,7 +41,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         // empty constructor required for Stapler
     }
 
-    private List<DefaultChecks> createDefaultBase(List<ResultAction> actions) {
+    private List<DefaultChecks> createDefaultBase(final List<ResultAction> actions) {
         List<DefaultChecks> defaultBase = new ArrayList<>();
         for (ResultAction action : actions) {
             //store base Results from static checks
@@ -52,7 +52,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         return defaultBase;
     }
 
-    private List<PITs> createPitBase(List<PitBuildAction> pitAction) {
+    private List<PITs> createPitBase(final List<PitBuildAction> pitAction) {
         List<PITs> pitBases = new ArrayList<>();
         for (PitBuildAction action : pitAction) {
             //store base Results from mutation check
@@ -63,7 +63,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         return pitBases;
     }
 
-    private List<TestRes> createJunitBase(List<TestResultAction> testActions) {
+    private List<TestRes> createJunitBase(final List<TestResultAction> testActions) {
         List<TestRes> junitBases = new ArrayList<>();
         for (TestResultAction action : testActions) {
             //store base Results from junit tests
@@ -74,7 +74,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
     }
 
 
-    private List<CoCos> createCocoBase(List<CoverageAction> coverageActions) {
+    private List<CoCos> createCocoBase(final List<CoverageAction> coverageActions) {
         List<CoCos> cocoBases = new ArrayList<>();
         for (CoverageAction action : coverageActions) {
             //store base Results from code coverage check
@@ -83,7 +83,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
                 cocoBases.add(new CoCos(action.getResult().getName(),
                         (int) action.getResult().getCoverage(element).numerator,
                         (int) action.getResult().getCoverage(element).denominator,
-                        (int) action.getResult().getCoverage(element).getPercentage()));
+                        action.getResult().getCoverage(element).getPercentage()));
             }
         }
         return cocoBases;
@@ -92,7 +92,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
     @Override
     public void perform(@Nonnull final Run<?, ?> run, @Nonnull final FilePath workspace,
                         @Nonnull final Launcher launcher,
-                        @Nonnull final TaskListener listener) throws InterruptedException, IOException {
+                        @Nonnull final TaskListener listener) {
 
         listener.getLogger().println("[CodeQuality] Starting extraction of previous performed checks");
         List<ResultAction> actions = run.getActions(ResultAction.class);

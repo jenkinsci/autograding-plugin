@@ -10,14 +10,14 @@ import hudson.model.TaskListener;
  */
 public class TestRes {
 
-    private String id;
+    private final String id;
     private int totalChange;
 
     //Junit
-    private int totalPassed;
-    private int totalRun;
-    private int totalFailed;
-    private int totalSkipped;
+    private final int totalPassed;
+    private final int totalRun;
+    private final int totalFailed;
+    private final int totalSkipped;
 
     /**
      * Creates a new instance of {@link TestRes} for Junit results.
@@ -47,7 +47,7 @@ public class TestRes {
      * @param listener Console log
      * @return returns the delta that has been changed in score
      */
-    public int calculate(final Configuration configs, TestRes base, Score score, TaskListener listener) {
+    public int calculate(final Configuration configs, final TestRes base, final Score score, final TaskListener listener) {
         int change = 0;
         if (configs.isJtoCheck()) {
             change = change + configs.getWeightPassed() * base.getTotalPassed();
@@ -62,7 +62,7 @@ public class TestRes {
         return change;
     }
 
-    public void setTotalChange(int totalChange) {
+    public void setTotalChange(final int totalChange) {
         this.totalChange = totalChange;
     }
 

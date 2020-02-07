@@ -10,13 +10,13 @@ import hudson.model.TaskListener;
  */
 public class CoCos {
 
-    private String id;
+    private final String id;
     private int totalChange;
 
     //CodeCoverage
-    private int totalCovered;
-    private int totalLines;
-    private int ratio;
+    private final int totalCovered;
+    private final int totalLines;
+    private final int ratio;
 
     /**
      * Creates a new instance of {@link CoCos} for code coverage results.
@@ -43,7 +43,7 @@ public class CoCos {
      * @param listener Console log
      * @return returns the delta that has been changed in score
      */
-    public int calculate(Configuration configs, CoCos base, Score score, TaskListener listener) {
+    public int calculate(final Configuration configs, final CoCos base, final Score score, final TaskListener listener) {
         int change = 0;
         if (configs.isCtoCheck()) {
             change = change + configs.getWeightMissed() * (base.getTotalLines() - base.getTotalCovered());
@@ -57,7 +57,7 @@ public class CoCos {
         return change;
     }
 
-    public void setTotalChange(int totalChange) {
+    public void setTotalChange(final int totalChange) {
         this.totalChange = totalChange;
     }
 
@@ -77,6 +77,8 @@ public class CoCos {
         return totalLines;
     }
 
-    public int getRatio() { return ratio; }
+    public int getRatio() {
+        return ratio;
+    }
 
 }

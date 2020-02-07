@@ -10,15 +10,15 @@ import hudson.model.TaskListener;
  */
 public class DefaultChecks {
 
-    private String id;
+    private final String id;
     private int totalChange;
 
     //Default
-    private int totalErrors;
-    private int totalHighs;
-    private int totalNormals;
-    private int totalLows;
-    private int sum;
+    private final int totalErrors;
+    private final int totalHighs;
+    private final int totalNormals;
+    private final int totalLows;
+    private final int sum;
 
 
 
@@ -56,7 +56,7 @@ public class DefaultChecks {
      *          Console log
      * @return returns the delta that has been changed in score
      */
-    public int calculate(Configuration configs, DefaultChecks base, Score score, TaskListener listener) {
+    public int calculate(final Configuration configs, final DefaultChecks base, final Score score, final TaskListener listener) {
         int change = 0;
         if (configs.isDtoCheck()) {
             change = change + configs.getWeightError() * base.getTotalErrors();
@@ -72,7 +72,7 @@ public class DefaultChecks {
         return change;
     }
 
-    public void setTotalChange(int totalChange) {
+    public void setTotalChange(final int totalChange) {
         this.totalChange = totalChange;
     }
 

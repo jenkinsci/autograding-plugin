@@ -12,20 +12,20 @@ import java.util.List;
  */
 public class Score {
 
-    private int score;
+    private int grade;
     private Configuration configs;
-    private List<DefaultChecks> defaultBases = new ArrayList<>();
-    private List<CoCos> cocoBases = new ArrayList<>();
-    private List<PITs> pitBases = new ArrayList<>();
-    private List<TestRes> junitBases = new ArrayList<>();
+    private final List<DefaultChecks> defaultBases = new ArrayList<>();
+    private final List<CoCos> cocoBases = new ArrayList<>();
+    private final List<PITs> pitBases = new ArrayList<>();
+    private final List<TestRes> junitBases = new ArrayList<>();
 
     /**
      * Creates a new instance of {@link Score}.
      * @param score
      *          sets initial score
      */
-    public Score(int score) {
-        this.score = score;
+    public Score(final int score) {
+        this.grade = score;
     }
 
     /**
@@ -35,15 +35,15 @@ public class Score {
     }
 
     public int getScore() {
-        return score;
+        return grade;
     }
 
     /**
      * increase score by change.
-     * @param change
+     * @param change calculated delta
      */
-    public void addToScore(int change) {
-        this.score = score + change;
+    public void addToScore(final int change) {
+        this.grade = grade + change;
     }
 
     public Configuration getConfigs() {
@@ -67,41 +67,41 @@ public class Score {
 
     /**
      * Save configurations.
-     * @param inputConfig
+     * @param inputConfig configurations read from xml
      */
-    public void addConfigs(Configuration inputConfig) {
+    public void addConfigs(final Configuration inputConfig) {
         this.configs = inputConfig;
     }
 
     /**
      * Save Default results.
-     * @param inputBase
+     * @param inputBase results from static checks
      */
-    public void addDefaultBase(DefaultChecks inputBase) {
+    public void addDefaultBase(final DefaultChecks inputBase) {
         this.defaultBases.add(inputBase);
     }
 
     /**
      * Save PIT results.
-     * @param inputBases
+     * @param inputBases results from pit mutation check
      */
-    public void addPitBase(PITs inputBases) {
+    public void addPitBase(final PITs inputBases) {
         this.pitBases.add(inputBases);
     }
 
     /**
      * Save Coco results.
-     * @param inputBases
+     * @param inputBases results from code coverage check
      */
-    public void addCocoBase(CoCos inputBases) {
+    public void addCocoBase(final CoCos inputBases) {
         this.cocoBases.add(inputBases);
     }
 
     /**
      * Save junit results.
-     * @param inputBases
+     * @param inputBases results from junit tests
      */
-    public void addJunitBase(TestRes inputBases) {
+    public void addJunitBase(final TestRes inputBases) {
         this.junitBases.add(inputBases);
     }
 }

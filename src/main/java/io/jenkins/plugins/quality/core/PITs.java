@@ -10,22 +10,22 @@ import hudson.model.TaskListener;
  */
 public class PITs {
 
-    private String id;
+    private final String id;
     private int totalChange;
 
     //PIT
-    private int totalMutations;
-    private int totalUndetected;
-    private int totalDetected;
-    private float ratio;
+    private final int totalMutations;
+    private final int totalUndetected;
+    private final int totalDetected;
+    private final float ratio;
 
     /**
      * Creates a new instance of {@link PITs} for pitmutation results.
      *
-     * @param id                the name of the check
-     * @param totalMutations    the total number of mutations
-     * @param totalUndetected   the total number of undetected mutations
-     * @param ratio the percent value of undetected mutations
+     * @param id              the name of the check
+     * @param totalMutations  the total number of mutations
+     * @param totalUndetected the total number of undetected mutations
+     * @param ratio           the percent value of undetected mutations
      */
     public PITs(final String id, final int totalMutations, final int totalUndetected, final float ratio) {
         super();
@@ -39,17 +39,14 @@ public class PITs {
 
     /**
      * Calculates and saves new {@link Score}.
-     * @param configs
-     *          all Configurations
-     * @param base
-     *          All instances of pitmutation results
-     * @param score
-     *          Score Object
-     * @param listener
-     *          Console log
+     *
+     * @param configs  all Configurations
+     * @param base     All instances of pitmutation results
+     * @param score    Score Object
+     * @param listener Console log
      * @return returns the delta that has been changed in score
      */
-    public int calculate(final Configuration configs, PITs base, Score score, TaskListener listener) {
+    public int calculate(final Configuration configs, final PITs base, final Score score, final TaskListener listener) {
         int change = 0;
         if (configs.isPtoCheck()) {
             change = change + configs.getWeightUndetected() * base.getTotalUndetected();
@@ -62,7 +59,8 @@ public class PITs {
         }
         return change;
     }
-    public void setTotalChange(int totalChange) {
+
+    public void setTotalChange(final int totalChange) {
         this.totalChange = totalChange;
     }
 
@@ -82,5 +80,11 @@ public class PITs {
         return totalUndetected;
     }
 
-    public float getRatio() { return ratio; }
+    public int getTotalDetected() {
+        return totalDetected;
+    }
+
+    public float getRatio() {
+        return ratio;
+    }
 }
