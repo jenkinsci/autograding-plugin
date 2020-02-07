@@ -1,6 +1,7 @@
 package io.jenkins.plugins.quality.core;
 
 import hudson.model.TaskListener;
+
 /**
  * takes {@link Configuration} and the results of code coverage..
  * Calculates and updates quality score
@@ -22,7 +23,8 @@ public class CoCos {
      *
      * @param id           the name of the check
      * @param totalCovered the total number of covered code
-     * @param totalLines  the total number of missed code
+     * @param totalLines   the total number of missed code
+     * @param ratio        the ratio of covered code
      */
     public CoCos(final String id, final int totalCovered, final int totalLines, final int ratio) {
         super();
@@ -34,14 +36,12 @@ public class CoCos {
 
     /**
      * Calculates and saves new {@link Score}.
-     * @param configs
-     *          all Configurations
-     * @param base
-     *          All instances of BaseResults
-     * @param score
-     *          Score Object
-     * @param listener
-     *          Console log
+     *
+     * @param configs  all Configurations
+     * @param base     All instances of BaseResults
+     * @param score    Score Object
+     * @param listener Console log
+     * @return returns the delta that has been changed in score
      */
     public int calculate(Configuration configs, CoCos base, Score score, TaskListener listener) {
         int change = 0;
@@ -77,6 +77,6 @@ public class CoCos {
         return totalLines;
     }
 
-    public int getRatio() {return ratio; }
+    public int getRatio() { return ratio; }
 
 }

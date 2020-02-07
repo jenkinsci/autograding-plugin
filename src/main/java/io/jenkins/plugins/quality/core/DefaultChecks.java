@@ -54,6 +54,7 @@ public class DefaultChecks {
      *          Score Object
      * @param listener
      *          Console log
+     * @return returns the delta that has been changed in score
      */
     public int calculate(Configuration configs, DefaultChecks base, Score score, TaskListener listener) {
         int change = 0;

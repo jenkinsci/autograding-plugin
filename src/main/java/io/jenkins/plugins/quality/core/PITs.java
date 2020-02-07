@@ -47,6 +47,7 @@ public class PITs {
      *          Score Object
      * @param listener
      *          Console log
+     * @return returns the delta that has been changed in score
      */
     public int calculate(final Configuration configs, PITs base, Score score, TaskListener listener) {
         int change = 0;
