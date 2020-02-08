@@ -3,7 +3,6 @@ package io.jenkins.plugins.quality.core;
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
-import javax.annotation.Nonnull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.tasks.junit.TestResultAction;
 import io.jenkins.plugins.coverage.CoverageAction;
@@ -90,9 +89,9 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
     }
 
     @Override
-    public void perform(@Nonnull final Run<?, ?> run, @Nonnull final FilePath workspace,
-                        @Nonnull final Launcher launcher,
-                        @Nonnull final TaskListener listener) {
+    public void perform(@NonNull final Run<?, ?> run, @NonNull final FilePath workspace,
+                        @NonNull final Launcher launcher,
+                        @NonNull final TaskListener listener) {
 
         listener.getLogger().println("[CodeQuality] Starting extraction of previous performed checks");
         List<ResultAction> actions = run.getActions(ResultAction.class);
@@ -104,7 +103,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         ConfigXmlStream configReader = new ConfigXmlStream();
         Configuration configs = configReader.read(Paths.get(workspace + "\\Config.xml"));
         listener.getLogger().println("[CodeQuality] Read Configs:");
-        listener.getLogger().println("[CodeQuality] MaxScore " + configs.getMaxScore());
+        listener.getLogger().println("[CodeQuality] something " + configs.getdMaxScore());
 
         Score score = new Score(configs.getMaxScore());
         score.addConfigs(configs);
@@ -112,7 +111,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         //Defaults Rechnen
         List<DefaultChecks> defaultBase = createDefaultBase(actions);
         for (DefaultChecks base : defaultBase) {
-            base.setTotalChange(base.calculate(configs, base, score, listener));
+            score.addToScore(base.calculate(configs, listener));
             score.addDefaultBase(base);
         }
 

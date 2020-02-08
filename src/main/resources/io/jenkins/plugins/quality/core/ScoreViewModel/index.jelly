@@ -75,7 +75,7 @@
                                 <j:forEach var="checks" items="${it.score.defaultBases}">
                                     <tr>
                                         <td>
-                                            ${checks.id}
+                                            <a href="${checks.id}">${checks.id}</a>
                                         </td>
                                         <td>
                                            ${checks.totalErrors}

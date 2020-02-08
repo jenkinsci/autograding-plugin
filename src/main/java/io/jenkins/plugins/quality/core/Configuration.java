@@ -8,10 +8,10 @@ package io.jenkins.plugins.quality.core;
 
 public class Configuration {
 
-    private int maxScore;
     /**
      * Default configs.
      */
+    private int dMaxScore;
     private String defaultCheck;
     private boolean dtoCheck;
     private String dkindOfGrading;
@@ -23,6 +23,7 @@ public class Configuration {
     /**
      * PIT configs.
      */
+    private int pMaxScore;
     private String pitCheck;
     private boolean ptoCheck;
     private String pkindOfGrading;
@@ -33,6 +34,7 @@ public class Configuration {
     /**
      * code-coverage configs.
      */
+    private int cMaxScore;
     private String cocoCheck;
     private boolean ctoCheck;
     private String ckindOfGrading;
@@ -42,6 +44,7 @@ public class Configuration {
     /**
      * junit configs.
      */
+    private int jMaxScore;
     private String junitCheck;
     private boolean jtoCheck;
     private String jkindOfGrading;
@@ -50,13 +53,12 @@ public class Configuration {
     private int totalTestsrun;
     private int weightPassed;
 
+    public int getdMaxScore() {
+        return dMaxScore;
+    }
 
     public String getDefaultCheck() {
         return defaultCheck;
-    }
-
-    public int getMaxScore() {
-        return maxScore;
     }
 
     public boolean isDtoCheck() {
@@ -83,6 +85,10 @@ public class Configuration {
         return weightLow;
     }
 
+    public int getpMaxScore() {
+        return pMaxScore;
+    }
+
     public String getPitCheck() {
         return pitCheck;
     }
@@ -107,6 +113,10 @@ public class Configuration {
         return weightDetected;
     }
 
+    public int getcMaxScore() {
+        return cMaxScore;
+    }
+
     public String getCocoCheck() {
         return cocoCheck;
     }
@@ -125,6 +135,10 @@ public class Configuration {
 
     public int getWeightMissed() {
         return weightMissed;
+    }
+
+    public int getjMaxScore() {
+        return jMaxScore;
     }
 
     public String getJunitCheck() {
@@ -153,5 +167,9 @@ public class Configuration {
 
     public int getWeightPassed() {
         return weightPassed;
+    }
+
+    public int getMaxScore() {
+        return dMaxScore + cMaxScore + jMaxScore + pMaxScore;
     }
 }

@@ -48,25 +48,29 @@ public class DefaultChecks {
      * Calculates and saves new {@link Score}.
      * @param configs
      *          all Configurations
-     * @param base
-     *          base Results of the calculated check
-     * @param score
-     *          Score Object
      * @param listener
      *          Console log
      * @return returns the delta that has been changed in score
      */
-    public int calculate(final Configuration configs, final DefaultChecks base, final Score score, final TaskListener listener) {
+    public int calculate(final Configuration configs, final TaskListener listener) {
         int change = 0;
         if (configs.isDtoCheck()) {
-            change = change + configs.getWeightError() * base.getTotalErrors();
-            change = change + configs.getWeightHigh() * base.getTotalHighs();
-            change = change + configs.getWeightNormal() * base.getTotalNormals();
-            change = change + configs.getWeightLow() * base.getTotalLows();
+            change = change + configs.getWeightError() * totalErrors;
+            change = change + configs.getWeightHigh() * totalHighs;
+            change = change + configs.getWeightNormal() * totalNormals;
+            change = change + configs.getWeightLow() * totalLows;
 
-            if (configs.getDkindOfGrading().equals("absolute")) {
-                listener.getLogger().println("[CodeQuality] " + base.getId() + " changed score by: " + change);
-                score.addToScore(change);
+            listener.getLogger().println(configs.getdMaxScore());
+
+            if (configs.getdMaxScore() + change >= 0 && change <= configs.getdMaxScore() ) {
+                listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
+                listener.getLogger().println(configs.getdMaxScore());
+                setTotalChange(change);
+                return change;
+            } else {
+                listener.getLogger().println("[CodeQuality] " + id + " else zweig" + change);
+                setTotalChange(-configs.getdMaxScore());
+                return -configs.getdMaxScore();
             }
         }
         return change;
