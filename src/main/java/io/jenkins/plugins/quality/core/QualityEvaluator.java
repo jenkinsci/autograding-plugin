@@ -142,10 +142,12 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         if (configs.getcMaxScore() + change >= 0 && change <0 ) {
             score.addToScore(change);
+            listener.getLogger().println("[CodeQuality] Updated Score by Code Coverage Delta");
         } else if (configs.getcMaxScore() + change < 0){
             score.addToScore(0-configs.getcMaxScore());
+            listener.getLogger().println("[CodeQuality] Updated Score by Code Coverage Delta");
         }
-        listener.getLogger().println("[CodeQuality] Updated Score by Code Coverage Delta");
+
 
     }
 
@@ -160,11 +162,12 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         if (configs.getdMaxScore() + change >= 0 && change <0 ) {
             score.addToScore(change);
+            listener.getLogger().println("[CodeQuality] Updated Score by Static Analysis Delta");
         } else if (configs.getdMaxScore() + change < 0){
-           // change = - configs.getdMaxScore();
             score.addToScore(- configs.getdMaxScore());
+            listener.getLogger().println("[CodeQuality] Updated Score by Static Analysis Delta");
         }
-        listener.getLogger().println("[CodeQuality] Updated Score by Static Analysis Delta");
+
     }
 
     private void updatePitGrade(final Configuration configs, final Score score,
@@ -177,10 +180,12 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         }
         if (configs.getpMaxScore() + change >= 0 && change <0 ) {
             score.addToScore(change);
+            listener.getLogger().println("[CodeQuality] Updated Score by pitmutation Delta");
         } else if (configs.getpMaxScore() + change < 0 ){
             score.addToScore(-configs.getpMaxScore());
+            listener.getLogger().println("[CodeQuality] Updated Score by pitmutation Delta");
         }
-        listener.getLogger().println("[CodeQuality] Updated Score by pitmutation Delta");
+
     }
 
     private void updateJunitGrade(Configuration configs, Score score, List<TestRes> junitBases, TaskListener listener) {
@@ -192,10 +197,12 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         }
         if(configs.getjMaxScore() + change <= 0 && change < 0) {
             score.addToScore(change);
+            listener.getLogger().println("[CodeQuality] Updated Score by junit Delta");
         } else if (configs.getjMaxScore() + change < 0 ) {
             score.addToScore(-configs.getjMaxScore());
+            listener.getLogger().println("[CodeQuality] Updated Score by junit Delta");
         }
-        listener.getLogger().println("[CodeQuality] Updated Score by junit Delta");
+
     }
 
     /**

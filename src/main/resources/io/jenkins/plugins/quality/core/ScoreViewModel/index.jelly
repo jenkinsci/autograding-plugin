@@ -64,6 +64,11 @@
                 <bs:card title="Static Checks">
 
                     <div class="table-responsive">
+                        <j:if test="${it.score.defaultBases.isEmpty}">
+                            <div class="alert alert-info">
+                                <strong>Info!</strong> This check category did not provide results.
+                            </div>
+                        </j:if>
                         <table class="table table-hover table-striped display" id="fixed">
                             <thead>
                                 <tr>
@@ -77,11 +82,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <j:if test="${it.score.defaultBases.isEmpty}">
-                                <div class="alert alert-info">
-                                    <strong>Info!</strong> This check category did not provide results.
-                                </div>
-                                </j:if>
                                 <j:forEach var="checks" items="${it.score.defaultBases}">
                                     <tr>
                                         <td>
@@ -114,7 +114,11 @@
                 </bs:card>
 
                 <bs:card title="Junit Test Results">
-
+                    <j:if test="${it.score.junitBases.isEmpty}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> This check category did not provide results.
+                        </div>
+                    </j:if>
                     <div class="table-responsive">
                         <table class="table table-hover table-striped display" id="fixed">
                             <thead>
@@ -128,11 +132,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <j:if test="${it.score.junitBases.isEmpty}">
-                                    <div class="alert alert-info">
-                                        <strong>Info!</strong> This check category did not provide results.
-                                    </div>
-                                </j:if>
                                 <j:forEach var="checks" items="${it.score.junitBases}">
                                     <tr>
                                         <td>
@@ -161,7 +160,11 @@
 
                 </bs:card>
                 <bs:card title="PIT mutations">
-
+                    <j:if test="${it.score.pitBases.isEmpty}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> This check category did not provide results.
+                        </div>
+                    </j:if>
                     <div class="table-responsive">
                         <table class="table table-hover table-striped display" id="fixed">
                             <thead>
@@ -174,11 +177,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <j:if test="${it.score.pitBases.isEmpty}">
-                                    <div class="alert alert-info">
-                                        <strong>Info!</strong> This check category did not provide results.
-                                    </div>
-                                </j:if>
                                 <j:forEach var="checks" items="${it.score.pitBases}">
                                     <tr>
                                         <td>
@@ -204,8 +202,12 @@
 
                 </bs:card>
 
+                <j:if test="${it.score.cocoBases.isEmpty}">
+                    <div class="alert alert-info">
+                        <strong>Info!</strong> This check category did not provide results.
+                    </div>
+                </j:if>
                 <bs:card title="Code Coverage">
-
                     <div class="table-responsive">
                         <table class="table table-hover table-striped display" id="fixed">
                             <thead>
@@ -218,11 +220,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <j:if test="${it.score.cocoBases.isEmpty}">
-                                    <div class="alert alert-info">
-                                        <strong>Info!</strong> This check category did not provide results.
-                                    </div>
-                                </j:if>
                                 <j:forEach var="checks" items="${it.score.cocoBases}">
                                     <tr>
                                         <td>
