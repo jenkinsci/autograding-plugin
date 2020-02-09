@@ -21,35 +21,40 @@
                             <div class="col-sm-4">
                                 <h5>Your current Score: ${it.score.score} / ${it.score.configs.maxScore}</h5>
                                 <p></p>
+                                <p>You can receive a maximum of points per category.</p>
+                                <p>You earn a minimum of 0 points per category.</p>
+                                <p></p>
+                                <p></p>
+                                <p></p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-3">
                                 <h6>Configuration Static</h6>
                                 <p>per issue Score changes by:</p>
-                                <p>Errors ${it.score.configs.weightError}</p>
-                                <p>High ${it.score.configs.weightHigh}</p>
-                                <p>Normal ${it.score.configs.weightNormal}</p>
-                                <p>Low ${it.score.configs.weightLow}</p>
+                                <p>Errors cause ${it.score.configs.weightError} points</p>
+                                <p>High issues cause ${it.score.configs.weightHigh} points</p>
+                                <p>Normal issues cause ${it.score.configs.weightNormal} points</p>
+                                <p>Low issues cause ${it.score.configs.weightLow} points</p>
                             </div>
                             <div class="col-sm-3">
                                 <h6>Configuration Tests</h6>
                                 <p>per issue Score changes by:</p>
-                                <p>Passed ${it.score.configs.weightPassed}</p>
-                                <p>Failed ${it.score.configs.weightFailures}</p>
-                                <p>Skipped ${it.score.configs.weightSkipped}</p>
+                                <p>Passed tests cause ${it.score.configs.weightPassed} points</p>
+                                <p>Failed tests cause ${it.score.configs.weightFailures} points</p>
+                                <p>Skipped tests cause ${it.score.configs.weightSkipped} points</p>
                             </div>
                             <div class="col-sm-3">
                                 <h6>Configuration PIT mutations</h6>
                                 <p>per issue Score changes by:</p>
-                                <p>Undetected ${it.score.configs.weightUndetected}</p>
-                                <p>Detected ${it.score.configs.weightDetected}</p>
+                                <p>Undetected mutations cause ${it.score.configs.weightUndetected} points</p>
+                                <p>Detected mutations cause ${it.score.configs.weightDetected} points</p>
                             </div>
                             <div class="col-sm-3">
                                 <h6>Configuration code coverage</h6>
                                 <p>per issue Score changes by:</p>
-                                <p>Covered ${it.score.configs.weightCovered}</p>
-                                <p>Missed ${it.score.configs.weightMissed}</p>
+                                <p>Covered lines cause ${it.score.configs.weightCovered} points</p>
+                                <p>Missed lines cause ${it.score.configs.weightMissed} points</p>
                             </div>
                         </div>
                     </div>
@@ -72,6 +77,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <j:if test="${it.score.defaultBases.isEmpty}">
+                                <div class="alert alert-info">
+                                    <strong>Info!</strong> This check category did not provide results.
+                                </div>
+                                </j:if>
                                 <j:forEach var="checks" items="${it.score.defaultBases}">
                                     <tr>
                                         <td>
@@ -118,6 +128,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <j:if test="${it.score.junitBases.isEmpty}">
+                                    <div class="alert alert-info">
+                                        <strong>Info!</strong> This check category did not provide results.
+                                    </div>
+                                </j:if>
                                 <j:forEach var="checks" items="${it.score.junitBases}">
                                     <tr>
                                         <td>
@@ -159,6 +174,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <j:if test="${it.score.pitBases.isEmpty}">
+                                    <div class="alert alert-info">
+                                        <strong>Info!</strong> This check category did not provide results.
+                                    </div>
+                                </j:if>
                                 <j:forEach var="checks" items="${it.score.pitBases}">
                                     <tr>
                                         <td>
@@ -198,6 +218,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <j:if test="${it.score.cocoBases.isEmpty}">
+                                    <div class="alert alert-info">
+                                        <strong>Info!</strong> This check category did not provide results.
+                                    </div>
+                                </j:if>
                                 <j:forEach var="checks" items="${it.score.cocoBases}">
                                     <tr>
                                         <td>

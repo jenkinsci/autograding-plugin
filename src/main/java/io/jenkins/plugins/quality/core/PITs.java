@@ -41,21 +41,18 @@ public class PITs {
      * Calculates and saves new {@link Score}.
      *
      * @param configs  all Configurations
-     * @param base     All instances of pitmutation results
-     * @param score    Score Object
      * @param listener Console log
      * @return returns the delta that has been changed in score
      */
-    public int calculate(final Configuration configs, final PITs base, final Score score, final TaskListener listener) {
+    public int calculate(final Configuration configs, final TaskListener listener) {
         int change = 0;
         if (configs.isPtoCheck()) {
-            change = change + configs.getWeightUndetected() * base.getTotalUndetected();
-            change = change + configs.getWeightDetected() * (base.getTotalMutations() - base.getTotalUndetected());
+            change = change + configs.getWeightUndetected() * totalUndetected;
+            change = change + configs.getWeightDetected() * (totalMutations - totalUndetected);
 
-            if (configs.getDkindOfGrading().equals("absolute")) {
-                listener.getLogger().println("[CodeQuality] " + base.getId() + " changed score by: " + change);
-                score.addToScore(change);
-            }
+            listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
+            setTotalChange(change);
+            return change;
         }
         return change;
     }

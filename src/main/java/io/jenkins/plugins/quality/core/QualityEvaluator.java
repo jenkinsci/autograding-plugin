@@ -103,44 +103,99 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         ConfigXmlStream configReader = new ConfigXmlStream();
         Configuration configs = configReader.read(Paths.get(workspace + "\\Config.xml"));
         listener.getLogger().println("[CodeQuality] Read Configs:");
-        listener.getLogger().println("[CodeQuality] something " + configs.getdMaxScore());
+        listener.getLogger().println("[CodeQuality] Configs read successfully.");
 
         Score score = new Score(configs.getMaxScore());
         score.addConfigs(configs);
 
         //Defaults Rechnen
         List<DefaultChecks> defaultBase = createDefaultBase(actions);
-        for (DefaultChecks base : defaultBase) {
-            score.addToScore(base.calculate(configs, listener));
-            score.addDefaultBase(base);
-        }
+        updateDefaultGrade(configs, score, defaultBase, listener);
+
 
         //PIT lesen und rechnen
         List<PITs> pitBases = createPitBase(pitAction);
-        for (PITs base : pitBases) {
-            base.setTotalChange(base.calculate(configs, base, score, listener));
-            score.addPitBase(base);
-        }
+        updatePitGrade(configs, score, pitBases, listener);
+
 
         //JUNIT lesen und rechnen
         List<TestRes> junitBases = createJunitBase(testActions);
-        for (TestRes base : junitBases) {
-            base.setTotalChange(base.calculate(configs, base, score, listener));
-            score.addJunitBase(base);
-        }
+        updateJunitGrade(configs, score, junitBases, listener);
 
         //code-coverage lesen und rechnen
         List<CoCos> cocoBases = createCocoBase(coverageActions);
-        for (CoCos base : cocoBases) {
-            base.setTotalChange(base.calculate(configs, base, score, listener));
-            score.addCocoBase(base);
-        }
+        updateCocoGrade(configs, score, cocoBases, listener);
 
 
-        listener.getLogger().println("[CodeQuality] Code Quality Results are: ");
-        listener.getLogger().println("[CodeQuality] Total score achieved: " + score.getScore() + "Points");
+        listener.getLogger().println("[CodeQuality] Code Quality Score calculation completed");
 
         run.addAction(new ScoreBuildAction(run, score));
+    }
+
+    private void updateCocoGrade(Configuration configs, Score score, List<CoCos> cocoBases, TaskListener listener) {
+        int change = 0;
+        for (CoCos base : cocoBases) {
+            change = change + base.calculate(configs, listener);
+            score.addCocoBase(base);
+            listener.getLogger().println("[CodeQuality] Saved Code Coverage Base Results");
+        }
+
+        if (configs.getcMaxScore() + change >= 0 && change <0 ) {
+            score.addToScore(change);
+        } else if (configs.getcMaxScore() + change < 0){
+            score.addToScore(0-configs.getcMaxScore());
+        }
+        listener.getLogger().println("[CodeQuality] Updated Score by Code Coverage Delta");
+
+    }
+
+    private void updateDefaultGrade(final Configuration configs, final Score score,
+                                    final List<DefaultChecks> defaultBase, final TaskListener listener) {
+        int change = 0;
+        for (DefaultChecks base : defaultBase) {
+            change = change + base.calculate(configs, listener);
+            score.addDefaultBase(base);
+            listener.getLogger().println("[CodeQuality] Saved Static Analysis Base Results");
+        }
+
+        if (configs.getdMaxScore() + change >= 0 && change <0 ) {
+            score.addToScore(change);
+        } else if (configs.getdMaxScore() + change < 0){
+           // change = - configs.getdMaxScore();
+            score.addToScore(- configs.getdMaxScore());
+        }
+        listener.getLogger().println("[CodeQuality] Updated Score by Static Analysis Delta");
+    }
+
+    private void updatePitGrade(final Configuration configs, final Score score,
+                                List<PITs> pitBases, final TaskListener listener) {
+        int change = 0;
+        for (PITs base : pitBases) {
+            change = change + base.calculate(configs, listener);
+            score.addPitBase(base);
+            listener.getLogger().println("[CodeQuality] Saved pitmuation Base Results");
+        }
+        if (configs.getpMaxScore() + change >= 0 && change <0 ) {
+            score.addToScore(change);
+        } else if (configs.getpMaxScore() + change < 0 ){
+            score.addToScore(-configs.getpMaxScore());
+        }
+        listener.getLogger().println("[CodeQuality] Updated Score by pitmutation Delta");
+    }
+
+    private void updateJunitGrade(Configuration configs, Score score, List<TestRes> junitBases, TaskListener listener) {
+        int change = 0;
+        for (TestRes base : junitBases) {
+            change = change + base.calculate(configs, listener);
+            score.addJunitBase(base);
+            listener.getLogger().println("[CodeQuality] Saved Junit Base Results");
+        }
+        if(configs.getjMaxScore() + change <= 0 && change < 0) {
+            score.addToScore(change);
+        } else if (configs.getjMaxScore() + change < 0 ) {
+            score.addToScore(-configs.getjMaxScore());
+        }
+        listener.getLogger().println("[CodeQuality] Updated Score by junit Delta");
     }
 
     /**

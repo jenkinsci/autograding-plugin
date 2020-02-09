@@ -62,16 +62,9 @@ public class DefaultChecks {
 
             listener.getLogger().println(configs.getdMaxScore());
 
-            if (configs.getdMaxScore() + change >= 0 && change <= configs.getdMaxScore() ) {
-                listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
-                listener.getLogger().println(configs.getdMaxScore());
-                setTotalChange(change);
-                return change;
-            } else {
-                listener.getLogger().println("[CodeQuality] " + id + " else zweig" + change);
-                setTotalChange(-configs.getdMaxScore());
-                return -configs.getdMaxScore();
-            }
+            listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
+            setTotalChange(change);
+            return change;
         }
         return change;
     }

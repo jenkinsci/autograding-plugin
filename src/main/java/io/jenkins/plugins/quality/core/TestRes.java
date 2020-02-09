@@ -42,22 +42,19 @@ public class TestRes {
      * Calculates and saves new {@link Score}.
      *
      * @param configs  all Configurations
-     * @param base     All instances of test results
-     * @param score    Score Object
      * @param listener Console log
      * @return returns the delta that has been changed in score
      */
-    public int calculate(final Configuration configs, final TestRes base, final Score score, final TaskListener listener) {
+    public int calculate(final Configuration configs, final TaskListener listener) {
         int change = 0;
         if (configs.isJtoCheck()) {
-            change = change + configs.getWeightPassed() * base.getTotalPassed();
-            change = change + configs.getWeightFailures() * base.getTotalFailed();
-            change = change + configs.getWeightSkipped() * base.getTotalSkipped();
+            change = change + configs.getWeightPassed() * totalPassed;
+            change = change + configs.getWeightFailures() * totalFailed;
+            change = change + configs.getWeightSkipped() * totalSkipped;
 
-            if (configs.getJkindOfGrading().equals("absolute")) {
-                listener.getLogger().println("[CodeQuality] " + base.getId() + " changed score by: " + change);
-                score.addToScore(change);
-            }
+            listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
+            setTotalChange(change);
+            return change;
         }
         return change;
     }

@@ -38,21 +38,18 @@ public class CoCos {
      * Calculates and saves new {@link Score}.
      *
      * @param configs  all Configurations
-     * @param base     All instances of BaseResults
-     * @param score    Score Object
      * @param listener Console log
      * @return returns the delta that has been changed in score
      */
-    public int calculate(final Configuration configs, final CoCos base, final Score score, final TaskListener listener) {
+    public int calculate(final Configuration configs, final TaskListener listener) {
         int change = 0;
         if (configs.isCtoCheck()) {
-            change = change + configs.getWeightMissed() * (base.getTotalLines() - base.getTotalCovered());
-            change = change + configs.getWeightCovered() * base.getTotalCovered();
+            change = change + configs.getWeightMissed() * (totalLines - totalCovered);
+            change = change + configs.getWeightCovered() * totalCovered;
 
-            if (configs.getDkindOfGrading().equals("absolute")) {
-                listener.getLogger().println("[CodeQuality] " + base.getId() + " changed score by: " + change);
-                score.addToScore(change);
-            }
+            listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
+            setTotalChange(change);
+            return change;
         }
         return change;
     }

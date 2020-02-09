@@ -21,11 +21,11 @@ public class Score {
 
     /**
      * Creates a new instance of {@link Score}.
-     * @param score
+     * @param maxScore
      *          sets initial score
      */
-    public Score(final int score) {
-        this.grade = score;
+    public Score(final int maxScore) {
+        this.grade = maxScore;
     }
 
     /**
@@ -43,7 +43,7 @@ public class Score {
      * @param change calculated delta
      */
     public void addToScore(final int change) {
-        this.grade = grade + change;
+        this.grade = this.grade + change;
     }
 
     public Configuration getConfigs() {
