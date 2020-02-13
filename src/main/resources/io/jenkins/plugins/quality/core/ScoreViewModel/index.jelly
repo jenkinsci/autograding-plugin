@@ -51,8 +51,8 @@
                             <div class="col-sm-3">
                                 <h6>Configuration code coverage</h6>
                                 <p>per issue Score changes by:</p>
-                                <p>Covered lines cause ${it.score.configs.weightCovered} points</p>
-                                <p>Missed lines cause ${it.score.configs.weightMissed} points</p>
+                                <p>per % Covered lines ${it.score.configs.weightCovered} points</p>
+                                <p>per % Missed lines ${it.score.configs.weightMissed} points</p>
                             </div>
                         </div>
                     </div>
@@ -215,7 +215,8 @@
                                     <th>${%Check}</th>
                                     <th>${%Total Lines}</th>
                                     <th>${%Missed}</th>
-                                    <th>${%Ratio}</th>
+                                    <th>${%Covered}</th>
+                                    <th>${%Covered Percentage}</th>
                                     <th>${%Score Impact}</th>
                                 </tr>
                             </thead>
@@ -230,6 +231,9 @@
                                         </td>
                                         <td>
                                             ${checks.totalMissed}
+                                        </td>
+                                        <td>
+                                            ${checks.totalCovered}
                                         </td>
                                         <td>
                                             ${checks.ratio}

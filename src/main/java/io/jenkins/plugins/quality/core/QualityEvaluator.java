@@ -80,7 +80,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
             //store base Results from code coverage check
             Set<CoverageElement> elements = action.getResult().getElements();
             for (CoverageElement element : elements) {
-                cocoBases.add(new CoCos(action.getResult().getName(),
+                cocoBases.add(new CoCos(element.getName(),
                         (int) action.getResult().getCoverage(element).numerator,
                         (int) action.getResult().getCoverage(element).denominator,
                         action.getResult().getCoverage(element).getPercentage()));

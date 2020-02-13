@@ -18,6 +18,7 @@ public class CoCos {
     private final int totalCovered;
     private final int totalLines;
     private final int ratio;
+    private final int totalMissed;
 
     /**
      * Creates a new instance of {@link CoCos} for code coverage results.
@@ -32,6 +33,7 @@ public class CoCos {
         this.id = id;
         this.totalCovered = totalCovered;
         this.totalLines = totalLines;
+        this.totalMissed = totalLines - totalCovered;
         this.ratio = ratio;
     }
 
@@ -45,8 +47,7 @@ public class CoCos {
     public int calculate(final Configuration configs, @NonNull final TaskListener listener) {
         int change = 0;
         if (configs.isCtoCheck()) {
-            change = change + configs.getWeightMissed() * (totalLines - totalCovered);
-            change = change + configs.getWeightCovered() * totalCovered;
+            change = change + configs.getWeightMissed() * (100-ratio);
 
             listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
             setTotalChange(change);
@@ -69,6 +70,10 @@ public class CoCos {
 
     public int getTotalCovered() {
         return totalCovered;
+    }
+
+    public int getTotalMissed() {
+        return totalMissed;
     }
 
     public int getTotalLines() {
