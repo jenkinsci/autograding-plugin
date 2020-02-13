@@ -110,23 +110,28 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         score.addConfigs(configs);
 
         //Defaults Rechnen
-        List<DefaultChecks> defaultBase = createDefaultBase(actions);
-        updateDefaultGrade(configs, score, defaultBase, listener);
-
+        if(!actions.isEmpty()) {
+            List<DefaultChecks> defaultBase = createDefaultBase(actions);
+            updateDefaultGrade(configs, score, defaultBase, listener);
+        }
 
         //PIT lesen und rechnen
-        List<PITs> pitBases = createPitBase(pitAction);
-        updatePitGrade(configs, score, pitBases, listener);
-
+        if(!pitAction.isEmpty()) {
+            List<PITs> pitBases = createPitBase(pitAction);
+            updatePitGrade(configs, score, pitBases, listener);
+        }
 
         //JUNIT lesen und rechnen
-        List<TestRes> junitBases = createJunitBase(testActions);
-        updateJunitGrade(configs, score, junitBases, listener);
+        if(!testActions.isEmpty()) {
+            List<TestRes> junitBases = createJunitBase(testActions);
+            updateJunitGrade(configs, score, junitBases, listener);
+        }
 
         //code-coverage lesen und rechnen
-        List<CoCos> cocoBases = createCocoBase(coverageActions);
-        updateCocoGrade(configs, score, cocoBases, listener);
-
+        if(!coverageActions.isEmpty()) {
+            List<CoCos> cocoBases = createCocoBase(coverageActions);
+            updateCocoGrade(configs, score, cocoBases, listener);
+        }
 
         listener.getLogger().println("[CodeQuality] Code Quality Score calculation completed");
 
@@ -174,7 +179,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
     }
 
     private void updatePitGrade(final Configuration configs, final Score score,
-                                List<PITs> pitBases, final @NonNull TaskListener listener) {
+                                final List<PITs> pitBases, final @NonNull TaskListener listener) {
         int change = 0;
         for (PITs base : pitBases) {
             change = change + base.calculate(configs, listener);

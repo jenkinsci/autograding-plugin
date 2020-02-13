@@ -11,8 +11,6 @@
             <st:adjunct includes="io.jenkins.plugins.bootstrap4"/>
             <st:adjunct includes="io.jenkins.plugins.data-tables"/>
 
-            <!--<link rel="stylesheet" href="${resURL}/plugin/warnings-ng/css/custom-style.css"/>-->
-
             <div class="fluid-container">
 
                 <bs:card title="Code Quality Score">
