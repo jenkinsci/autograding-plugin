@@ -53,6 +53,10 @@ public class Configuration {
     private int totalTestsrun;
     private int weightPassed;
 
+    /**
+     * The maximal achievable score for static checks.
+     * @return dMaxScore Maximum for DefaultChecks
+      */
     public int getdMaxScore() {
         return dMaxScore;
     }
@@ -85,6 +89,10 @@ public class Configuration {
         return weightLow;
     }
 
+    /**
+     * The maximal achievable score for pitmutation checks.
+     * @return pMaxScore Maximum for pitmutations
+     */
     public int getpMaxScore() {
         return pMaxScore;
     }
@@ -113,6 +121,10 @@ public class Configuration {
         return weightDetected;
     }
 
+    /**
+     * The maximal achievable score for code coverage checks.
+     * @return cMaxScore Maximum for Code Coverage
+     */
     public int getcMaxScore() {
         return cMaxScore;
     }
@@ -137,6 +149,10 @@ public class Configuration {
         return weightMissed;
     }
 
+    /**
+     * The maximal achievable score for junit tests.
+     * @return jMaxScore Maximum of JUNIT tests
+     */
     public int getjMaxScore() {
         return jMaxScore;
     }
