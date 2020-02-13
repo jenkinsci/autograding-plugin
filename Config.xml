@@ -5,7 +5,6 @@
   <dMaxScore>25</dMaxScore>
   <defaultCheck>default</defaultCheck>
   <dtoCheck>true</dtoCheck>
-  <dkindOfGrading>absolute</dkindOfGrading>
   <weightError>-4</weightError>
   <weightHigh>-3</weightHigh>
   <weightNormal>-2</weightNormal>
@@ -15,8 +14,6 @@
   <pMaxScore>25</pMaxScore>
   <pitCheck>PIT</pitCheck>
   <ptoCheck>true</ptoCheck>
-  <pkindOfGrading>absolute</pkindOfGrading>
-  <weightMutations>5</weightMutations>
   <weightUndetected>-2</weightUndetected>
   <weightDetected>1</weightDetected>
 
@@ -24,7 +21,6 @@
   <cMaxScore>25</cMaxScore>
   <cocoCheck>COCO</cocoCheck>
   <ctoCheck>true</ctoCheck>
-  <ckindOfGrading>absolute</ckindOfGrading>
   <weightCovered>1</weightCovered>
   <weightMissed>-2</weightMissed>
 
@@ -32,10 +28,8 @@
   <jMaxScore>25</jMaxScore>
   <junitCheck>JUNIT</junitCheck>
   <jtoCheck>true</jtoCheck>
-  <jkindOfGrading>absolute</jkindOfGrading>
   <weightSkipped>-1</weightSkipped>
   <weightFailures>-2</weightFailures>
-  <totalTestsrun>0</totalTestsrun>
   <weightPassed>1</weightPassed>
 
 </configs>

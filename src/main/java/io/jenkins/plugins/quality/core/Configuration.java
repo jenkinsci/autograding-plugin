@@ -14,7 +14,6 @@ public class Configuration {
     private int dMaxScore;
     private String defaultCheck;
     private boolean dtoCheck;
-    private String dkindOfGrading;
     private int weightError;
     private int weightHigh;
     private int weightNormal;
@@ -26,8 +25,6 @@ public class Configuration {
     private int pMaxScore;
     private String pitCheck;
     private boolean ptoCheck;
-    private String pkindOfGrading;
-    private int weightMutations;
     private int weightUndetected;
     private int weightDetected;
 
@@ -37,7 +34,6 @@ public class Configuration {
     private int cMaxScore;
     private String cocoCheck;
     private boolean ctoCheck;
-    private String ckindOfGrading;
     private int weightCovered;
     private int weightMissed;
 
@@ -47,11 +43,19 @@ public class Configuration {
     private int jMaxScore;
     private String junitCheck;
     private boolean jtoCheck;
-    private String jkindOfGrading;
     private int weightSkipped;
     private int weightFailures;
-    private int totalTestsrun;
     private int weightPassed;
+
+    public Configuration(final int dMaxScore, final String aDefault, final boolean dtoCheck,
+                         final int weightError, final int weightHigh, final int weightNormal, final int weightLow,
+                         final int pMaxScore, final String pit, final boolean ptoCheck,
+                         final int weightUndetected, final int weightDetected,
+                         final int cMaxScore, final String coco, final boolean ctoCheck,
+                         final int weightCovered, final int weightMissed,
+                         final int jMaxScore, final String junit, final boolean jtoCheck,
+                         final int weightSkipped, final int weightFailures, final int weightPassed) {
+    }
 
     /**
      * The maximal achievable score for static checks.
@@ -67,10 +71,6 @@ public class Configuration {
 
     public boolean isDtoCheck() {
         return dtoCheck;
-    }
-
-    public String getDkindOfGrading() {
-        return dkindOfGrading;
     }
 
     public int getWeightError() {
@@ -105,14 +105,6 @@ public class Configuration {
         return ptoCheck;
     }
 
-    public String getPkindOfGrading() {
-        return pkindOfGrading;
-    }
-
-    public int getWeightMutations() {
-        return weightMutations;
-    }
-
     public int getWeightUndetected() {
         return weightUndetected;
     }
@@ -135,10 +127,6 @@ public class Configuration {
 
     public boolean isCtoCheck() {
         return ctoCheck;
-    }
-
-    public String getCkindOfGrading() {
-        return ckindOfGrading;
     }
 
     public int getWeightCovered() {
@@ -165,20 +153,12 @@ public class Configuration {
         return jtoCheck;
     }
 
-    public String getJkindOfGrading() {
-        return jkindOfGrading;
-    }
-
     public int getWeightSkipped() {
         return weightSkipped;
     }
 
     public int getWeightFailures() {
         return weightFailures;
-    }
-
-    public int getTotalTestsrun() {
-        return totalTestsrun;
     }
 
     public int getWeightPassed() {
