@@ -20,12 +20,12 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <h5>Your current Score: ${it.score.score} / ${it.score.configs.maxScore}</h5>
-                                <p></p>
+                                <p> </p>
                                 <p>You can receive a maximum of points per category.</p>
                                 <p>You earn a minimum of 0 points per category.</p>
-                                <p></p>
-                                <p></p>
-                                <p></p>
+                                <p> </p>
+                                <p> </p>
+                                <p> </p>
                             </div>
                         </div>
                         <div class="row">
@@ -61,14 +61,14 @@
 
                 </bs:card>
 
-                <bs:card title="Static Checks">
 
+                <bs:card title="Static Checks">
+                    <j:if test="${it.score.getDefaultBases().isEmpty()}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> This check category did not provide results.
+                        </div>
+                    </j:if>
                     <div class="table-responsive">
-                        <j:if test="${it.score.defaultBases.isEmpty}">
-                            <div class="alert alert-info">
-                                <strong>Info!</strong> This check category did not provide results.
-                            </div>
-                        </j:if>
                         <table class="table table-hover table-striped display" id="fixed">
                             <thead>
                                 <tr>
@@ -113,8 +113,9 @@
 
                 </bs:card>
 
+
                 <bs:card title="Junit Test Results">
-                    <j:if test="${it.score.junitBases.isEmpty}">
+                    <j:if test="${it.score.getJunitBases().isEmpty()}">
                         <div class="alert alert-info">
                             <strong>Info!</strong> This check category did not provide results.
                         </div>
@@ -159,8 +160,9 @@
                     </div>
 
                 </bs:card>
+
                 <bs:card title="PIT mutations">
-                    <j:if test="${it.score.pitBases.isEmpty}">
+                    <j:if test="${it.score.getPitBases().isEmpty()}">
                         <div class="alert alert-info">
                             <strong>Info!</strong> This check category did not provide results.
                         </div>
@@ -202,12 +204,12 @@
 
                 </bs:card>
 
-                <j:if test="${it.score.cocoBases.isEmpty}">
+                <bs:card title="Code Coverage">
+                    <j:if test="${it.score.getCocoBases().isEmpty()}">
                     <div class="alert alert-info">
                         <strong>Info!</strong> This check category did not provide results.
                     </div>
                 </j:if>
-                <bs:card title="Code Coverage">
                     <div class="table-responsive">
                         <table class="table table-hover table-striped display" id="fixed">
                             <thead>

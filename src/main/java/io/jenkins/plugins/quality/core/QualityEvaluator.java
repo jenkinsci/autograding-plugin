@@ -3,6 +3,7 @@ package io.jenkins.plugins.quality.core;
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.tasks.junit.TestResultAction;
 import io.jenkins.plugins.coverage.CoverageAction;
@@ -132,7 +133,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         run.addAction(new ScoreBuildAction(run, score));
     }
 
-    private void updateCocoGrade(Configuration configs, Score score, List<CoCos> cocoBases, TaskListener listener) {
+    private void updateCocoGrade(final Configuration configs, Score score, final List<CoCos> cocoBases, @NonNull final TaskListener listener) {
         int change = 0;
         for (CoCos base : cocoBases) {
             change = change + base.calculate(configs, listener);
@@ -140,11 +141,11 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
             listener.getLogger().println("[CodeQuality] Saved Code Coverage Base Results");
         }
 
-        if (configs.getcMaxScore() + change >= 0 && change <0 ) {
+        if (configs.getcMaxScore() + change >= 0 && change < 0) {
             score.addToScore(change);
             listener.getLogger().println("[CodeQuality] Updated Score by Code Coverage Delta");
-        } else if (configs.getcMaxScore() + change < 0){
-            score.addToScore(0-configs.getcMaxScore());
+        } else if (configs.getcMaxScore() + change < 0) {
+            score.addToScore(- configs.getcMaxScore());
             listener.getLogger().println("[CodeQuality] Updated Score by Code Coverage Delta");
         }
 
@@ -152,7 +153,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
     }
 
     private void updateDefaultGrade(final Configuration configs, final Score score,
-                                    final List<DefaultChecks> defaultBase, final TaskListener listener) {
+                                    final List<DefaultChecks> defaultBase, @NonNull final TaskListener listener) {
         int change = 0;
         for (DefaultChecks base : defaultBase) {
             change = change + base.calculate(configs, listener);
@@ -160,45 +161,45 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
             listener.getLogger().println("[CodeQuality] Saved Static Analysis Base Results");
         }
 
-        if (configs.getdMaxScore() + change >= 0 && change <0 ) {
+        if (configs.getdMaxScore() + change >= 0 && change < 0) {
             score.addToScore(change);
             listener.getLogger().println("[CodeQuality] Updated Score by Static Analysis Delta");
-        } else if (configs.getdMaxScore() + change < 0){
-            score.addToScore(- configs.getdMaxScore());
+        } else if (configs.getdMaxScore() + change < 0) {
+            score.addToScore(-configs.getdMaxScore());
             listener.getLogger().println("[CodeQuality] Updated Score by Static Analysis Delta");
         }
 
     }
 
     private void updatePitGrade(final Configuration configs, final Score score,
-                                List<PITs> pitBases, final TaskListener listener) {
+                                List<PITs> pitBases, final @NonNull TaskListener listener) {
         int change = 0;
         for (PITs base : pitBases) {
             change = change + base.calculate(configs, listener);
             score.addPitBase(base);
             listener.getLogger().println("[CodeQuality] Saved pitmuation Base Results");
         }
-        if (configs.getpMaxScore() + change >= 0 && change <0 ) {
+        if (configs.getpMaxScore() + change >= 0 && change < 0) {
             score.addToScore(change);
             listener.getLogger().println("[CodeQuality] Updated Score by pitmutation Delta");
-        } else if (configs.getpMaxScore() + change < 0 ){
+        } else if (configs.getpMaxScore() + change < 0) {
             score.addToScore(-configs.getpMaxScore());
             listener.getLogger().println("[CodeQuality] Updated Score by pitmutation Delta");
         }
 
     }
 
-    private void updateJunitGrade(Configuration configs, Score score, List<TestRes> junitBases, TaskListener listener) {
+    private void updateJunitGrade(final Configuration configs, Score score, final List<TestRes> junitBases, @NonNull final TaskListener listener) {
         int change = 0;
         for (TestRes base : junitBases) {
             change = change + base.calculate(configs, listener);
             score.addJunitBase(base);
             listener.getLogger().println("[CodeQuality] Saved Junit Base Results");
         }
-        if(configs.getjMaxScore() + change <= 0 && change < 0) {
+        if (configs.getjMaxScore() + change <= 0 && change < 0) {
             score.addToScore(change);
             listener.getLogger().println("[CodeQuality] Updated Score by junit Delta");
-        } else if (configs.getjMaxScore() + change < 0 ) {
+        } else if (configs.getjMaxScore() + change < 0) {
             score.addToScore(-configs.getjMaxScore());
             listener.getLogger().println("[CodeQuality] Updated Score by junit Delta");
         }

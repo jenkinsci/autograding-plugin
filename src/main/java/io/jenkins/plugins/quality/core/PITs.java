@@ -1,5 +1,6 @@
 package io.jenkins.plugins.quality.core;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.model.TaskListener;
 
 /**
@@ -44,7 +45,7 @@ public class PITs {
      * @param listener Console log
      * @return returns the delta that has been changed in score
      */
-    public int calculate(final Configuration configs, final TaskListener listener) {
+    public int calculate(final Configuration configs, @NonNull final TaskListener listener) {
         int change = 0;
         if (configs.isPtoCheck()) {
             change = change + configs.getWeightUndetected() * totalUndetected;
