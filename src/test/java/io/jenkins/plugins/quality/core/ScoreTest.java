@@ -1,32 +1,15 @@
 package io.jenkins.plugins.quality.core;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ScoreTest {
 
     @Test
     void addToScore() {
+        Score score = new Score(100);
+        score.addToScore(-5);
+        Assertions.assertThat(score.getScore()).isEqualTo(95);
     }
 
-    @Test
-    void addConfigs() {
-    }
-
-    @Test
-    void addDefaultBase() {
-    }
-
-    @Test
-    void addPitBase() {
-    }
-
-    @Test
-    void addCocoBase() {
-    }
-
-    @Test
-    void addJunitBase() {
-    }
 }

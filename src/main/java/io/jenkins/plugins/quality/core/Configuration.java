@@ -1,5 +1,7 @@
 package io.jenkins.plugins.quality.core;
 
+import edu.hm.hafner.util.VisibleForTesting;
+
 /**
  * Stores all read Configurations in an object.
  *
@@ -47,7 +49,10 @@ public class Configuration {
     private int weightFailures;
     private int weightPassed;
 
-    public Configuration(final int dMaxScore, final String aDefault, final boolean dtoCheck,
+    public Configuration(){};
+
+    @VisibleForTesting
+    Configuration(final int dMaxScore, final String aDefault, final boolean dtoCheck,
                          final int weightError, final int weightHigh, final int weightNormal, final int weightLow,
                          final int pMaxScore, final String pit, final boolean ptoCheck,
                          final int weightUndetected, final int weightDetected,
@@ -55,6 +60,29 @@ public class Configuration {
                          final int weightCovered, final int weightMissed,
                          final int jMaxScore, final String junit, final boolean jtoCheck,
                          final int weightSkipped, final int weightFailures, final int weightPassed) {
+        this.dMaxScore = dMaxScore;
+        this.defaultCheck = aDefault;
+        this.dtoCheck = dtoCheck;
+        this.weightError = weightError;
+        this.weightHigh = weightHigh;
+        this.weightNormal = weightNormal;
+        this.weightLow = weightLow;
+        this.pMaxScore = pMaxScore;
+        this.pitCheck = pit;
+        this.ptoCheck = ptoCheck;
+        this.weightUndetected = weightUndetected;
+        this.weightDetected = weightDetected;
+        this.cMaxScore = cMaxScore;
+        this.cocoCheck = coco;
+        this.ctoCheck = ctoCheck;
+        this.weightCovered = weightCovered;
+        this.weightMissed = weightMissed;
+        this.jMaxScore = jMaxScore;
+        this.junitCheck = junit;
+        this.jtoCheck = jtoCheck;
+        this.weightSkipped = weightSkipped;
+        this.weightFailures = weightFailures;
+        this.weightPassed = weightPassed;
     }
 
     /**
