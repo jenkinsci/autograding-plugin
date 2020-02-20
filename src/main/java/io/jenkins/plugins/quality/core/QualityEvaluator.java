@@ -103,7 +103,6 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         //read configs from XML File
         ConfigXmlStream configReader = new ConfigXmlStream();
         Configuration configs = configReader.read(Paths.get(workspace + "\\Config.xml"));
-        listener.getLogger().println("[CodeQuality] filepath:"+Paths.get(workspace + "\\Config.xml"));
         listener.getLogger().println("[CodeQuality] Read Configs:");
         listener.getLogger().println("[CodeQuality] Configs read successfully.");
 
