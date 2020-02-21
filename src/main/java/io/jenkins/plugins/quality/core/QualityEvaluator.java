@@ -110,39 +110,39 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         score.addConfigs(configs);
 
         //Defaults Rechnen
-        if (!actions.isEmpty()) {
+        if (actions.isEmpty()) {
+            score.addToScore(-configs.getdMaxScore());
+        }
+        else {
             List<DefaultChecks> defaultBase = createDefaultBase(actions);
             updateDefaultGrade(configs, score, defaultBase, listener);
         }
-        else {
-            score.addToScore(-configs.getdMaxScore());
-        }
 
         //PIT lesen und rechnen
-        if (!pitAction.isEmpty()) {
+        if (pitAction.isEmpty()) {
+            score.addToScore(-configs.getpMaxScore());
+        }
+        else {
             List<PITs> pitBases = createPitBase(pitAction);
             updatePitGrade(configs, score, pitBases, listener);
         }
-        else {
-            score.addToScore(-configs.getpMaxScore());
-        }
 
         //JUNIT lesen und rechnen
-        if (!testActions.isEmpty()) {
+        if (testActions.isEmpty()) {
+            score.addToScore(-configs.getjMaxScore());
+        }
+        else {
             List<TestRes> junitBases = createJunitBase(testActions);
             updateJunitGrade(configs, score, junitBases, listener);
         }
-        else {
-            score.addToScore(-configs.getjMaxScore());
-        }
 
         //code-coverage lesen und rechnen
-        if (!coverageActions.isEmpty()) {
-            List<CoCos> cocoBases = createCocoBase(coverageActions);
-            updateCocoGrade(configs, score, cocoBases, listener);
+        if (coverageActions.isEmpty()) {
+            score.addToScore(-configs.getcMaxScore());
         }
         else {
-            score.addToScore(-configs.getcMaxScore());
+            List<CoCos> cocoBases = createCocoBase(coverageActions);
+            updateCocoGrade(configs, score, cocoBases, listener);
         }
 
         listener.getLogger().println("[CodeQuality] Code Quality Score calculation completed");
