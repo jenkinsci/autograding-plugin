@@ -1,6 +1,6 @@
 package io.jenkins.plugins.quality.core;
 
-import org.assertj.core.api.Assertions;
+import static io.jenkins.plugins.quality.assertions.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 class ScoreTest {
@@ -9,7 +9,7 @@ class ScoreTest {
     void addToScore() {
         Score score = new Score(100);
         score.addToScore(-5);
-        Assertions.assertThat(score.getScore()).isEqualTo(95);
+        assertThat(score.getScore()).isEqualTo(95);
     }
 
 }

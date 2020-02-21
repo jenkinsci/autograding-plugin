@@ -1,7 +1,7 @@
 package io.jenkins.plugins.quality.core;
 
 import hudson.model.TaskListener;
-import org.assertj.core.api.Assertions;
+import static io.jenkins.plugins.quality.assertions.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 class DefaultChecksTest {
@@ -14,7 +14,7 @@ class DefaultChecksTest {
 
         DefaultChecks defaultChecks = new DefaultChecks("default", 1, 1, 1, 1, 4);
 
-        Assertions.assertThat(defaultChecks.calculate(configs, TaskListener.NULL)).isEqualTo(-10);
+        assertThat(defaultChecks.calculate(configs, TaskListener.NULL)).isEqualTo(-10);
     }
 
 
@@ -26,6 +26,6 @@ class DefaultChecksTest {
 
         DefaultChecks defaultChecks = new DefaultChecks("default", 1, 1, 1, 1, 4);
 
-        Assertions.assertThat(defaultChecks.calculate(configs, TaskListener.NULL)).isEqualTo(0);
+        assertThat(defaultChecks.calculate(configs, TaskListener.NULL)).isEqualTo(0);
     }
 }

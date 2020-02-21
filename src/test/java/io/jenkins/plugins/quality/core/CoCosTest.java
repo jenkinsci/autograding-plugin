@@ -1,10 +1,8 @@
 package io.jenkins.plugins.quality.core;
 
 import hudson.model.TaskListener;
-import org.assertj.core.api.Assertions;
+import static io.jenkins.plugins.quality.assertions.Assertions.*;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CoCosTest {
 
@@ -16,7 +14,7 @@ class CoCosTest {
 
         CoCos coCos = new CoCos("coverage", 99, 100, 99);
 
-        Assertions.assertThat(coCos.calculate(configs, TaskListener.NULL)).isEqualTo(-2);
+        assertThat(coCos.calculate(configs, TaskListener.NULL)).isEqualTo(-2);
     }
 
     @Test
@@ -27,6 +25,6 @@ class CoCosTest {
 
         CoCos coCos = new CoCos("coverage", 99, 100, 99);
 
-        Assertions.assertThat(coCos.calculate(configs, TaskListener.NULL)).isEqualTo(0);
+        assertThat(coCos.calculate(configs, TaskListener.NULL)).isEqualTo(0);
     }
 }

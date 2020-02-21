@@ -2,7 +2,7 @@ package io.jenkins.plugins.quality.core;
 
 
 import hudson.model.TaskListener;
-import org.assertj.core.api.Assertions;
+import static io.jenkins.plugins.quality.assertions.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 class PITsTest {
@@ -15,7 +15,7 @@ class PITsTest {
 
         PITs pits = new PITs("pitmutation", 30, 5, 16);
 
-        Assertions.assertThat(pits.calculate(configs, TaskListener.NULL)).isEqualTo(15);
+        assertThat(pits.calculate(configs, TaskListener.NULL)).isEqualTo(15);
     }
 
 
@@ -27,7 +27,7 @@ class PITsTest {
 
         PITs pits = new PITs("pitmutation", 30, 20, 33);
 
-        Assertions.assertThat(pits.calculate(configs, TaskListener.NULL)).isEqualTo(-30);
+        assertThat(pits.calculate(configs, TaskListener.NULL)).isEqualTo(-30);
 
     }
 
@@ -40,6 +40,6 @@ class PITsTest {
 
         PITs pits = new PITs("pitmutation", 30, 5, 16);
 
-        Assertions.assertThat(pits.calculate(configs, TaskListener.NULL)).isEqualTo(0);
+        assertThat(pits.calculate(configs, TaskListener.NULL)).isEqualTo(0);
     }
 }

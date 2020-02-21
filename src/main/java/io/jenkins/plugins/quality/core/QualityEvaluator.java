@@ -4,6 +4,7 @@ import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
 
+import edu.hm.hafner.util.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.tasks.junit.TestResultAction;
 import io.jenkins.plugins.coverage.CoverageAction;
@@ -216,7 +217,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
             score.addJunitBase(base);
             listener.getLogger().println("[CodeQuality] Saved Junit Base Results");
         }
-        if (configs.getjMaxScore() + change <= 0 && change < 0) {
+        if (configs.getjMaxScore() + change >= 0 && change < 0) {
             score.addToScore(change);
             listener.getLogger().println("[CodeQuality] Updated Score by junit Delta");
         }
@@ -225,6 +226,28 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
             listener.getLogger().println("[CodeQuality] Updated Score by junit Delta");
         }
 
+    }
+
+    @VisibleForTesting
+    void updateCocoGrade(final Configuration configs, final List<CoCos> cocoBases, final Score score) {
+        updateCocoGrade(configs, score, cocoBases, TaskListener.NULL);
+    }
+
+    @VisibleForTesting
+    void updateDefaultGrade(final Configuration configs, final Score score,
+                            final List<DefaultChecks> defaultBase) {
+        updateDefaultGrade(configs, score, defaultBase, TaskListener.NULL);
+    }
+
+    @VisibleForTesting
+    void updatePitGrade(final Configuration configs, final Score score,
+                        final List<PITs> pitBases) {
+        updatePitGrade(configs, score, pitBases, TaskListener.NULL);
+    }
+
+    @VisibleForTesting
+    void updateJunitGrade(final Configuration configs, final Score score, final List<TestRes> junitBases) {
+        updateJunitGrade(configs, score, junitBases, TaskListener.NULL);
     }
 
     /**
