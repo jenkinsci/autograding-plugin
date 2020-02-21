@@ -113,7 +113,8 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         if (!actions.isEmpty()) {
             List<DefaultChecks> defaultBase = createDefaultBase(actions);
             updateDefaultGrade(configs, score, defaultBase, listener);
-        } else {
+        }
+        else {
             score.addToScore(-configs.getdMaxScore());
         }
 
@@ -121,7 +122,8 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         if (!pitAction.isEmpty()) {
             List<PITs> pitBases = createPitBase(pitAction);
             updatePitGrade(configs, score, pitBases, listener);
-        } else {
+        }
+        else {
             score.addToScore(-configs.getpMaxScore());
         }
 
@@ -129,7 +131,8 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         if (!testActions.isEmpty()) {
             List<TestRes> junitBases = createJunitBase(testActions);
             updateJunitGrade(configs, score, junitBases, listener);
-        } else {
+        }
+        else {
             score.addToScore(-configs.getjMaxScore());
         }
 
@@ -137,7 +140,8 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         if (!coverageActions.isEmpty()) {
             List<CoCos> cocoBases = createCocoBase(coverageActions);
             updateCocoGrade(configs, score, cocoBases, listener);
-        } else {
+        }
+        else {
             score.addToScore(-configs.getcMaxScore());
         }
 

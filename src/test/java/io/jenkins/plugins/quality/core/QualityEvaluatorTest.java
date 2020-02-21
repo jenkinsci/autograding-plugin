@@ -16,7 +16,7 @@ class QualityEvaluatorTest {
     }
 
     @Test
-    void shouldUpdateCocoGrade(){
+    void shouldUpdateCocoGrade() {
         Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
                 "PIT", false, -2, 1, 25, "COCO", false, 1, -2, 25, "JUNIT", false, -1, -2, 1);
         List<CoCos> cocoBases = new ArrayList<>();
@@ -26,12 +26,12 @@ class QualityEvaluatorTest {
     }
 
     @Test
-    void shouldSetMinCocoGrade(){
+    void shouldSetMinCocoGrade() {
 
     }
 
     @Test
-    void shouldSetMaxCocoGrade(){
+    void shouldSetMaxCocoGrade() {
 
     }
 }
