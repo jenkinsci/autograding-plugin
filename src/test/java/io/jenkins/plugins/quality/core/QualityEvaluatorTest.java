@@ -17,10 +17,8 @@ class QualityEvaluatorTest {
 
     @Test
     void shouldUpdateCocoGrade(){
-        Configuration configs = new Configuration(25, "default", true, -4,
-                -3,-2, -1, 25, "PIT", false, -2,
-                1, 25, "COCO",false, 1,-2, 25, "JUNIT", false,
-                -1, -2, 1);
+        Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
+                "PIT", false, -2, 1, 25, "COCO", false, 1, -2, 25, "JUNIT", false, -1, -2, 1);
         List<CoCos> cocoBases = new ArrayList<>();
         cocoBases.add(new CoCos("coverage", 99, 100, 99));
         Score score = new Score(configs.getMaxScore());

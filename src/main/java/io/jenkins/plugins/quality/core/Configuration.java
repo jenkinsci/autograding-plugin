@@ -49,7 +49,10 @@ public class Configuration {
     private int weightFailures;
     private int weightPassed;
 
-    public Configuration(){};
+    /**
+     * Default Constructor.
+     */
+    public Configuration() { }
 
     @VisibleForTesting
     Configuration(final int dMaxScore, final String aDefault, final boolean dtoCheck,

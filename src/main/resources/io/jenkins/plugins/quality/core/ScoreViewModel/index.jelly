@@ -83,7 +83,7 @@
                                 <j:forEach var="checks" items="${it.score.defaultBases}">
                                     <tr>
                                         <td>
-                                            <a href="${checks.id}">${checks.id}</a>
+                                            <a href="../${checks.id}">${checks.id}</a>
                                         </td>
                                         <td>
                                            ${checks.totalErrors}
@@ -134,7 +134,7 @@
                                 <j:forEach var="checks" items="${it.score.junitBases}">
                                     <tr>
                                         <td>
-                                            ${checks.id}
+                                            <a href="../testReport">${checks.id}</a>
                                         </td>
                                         <td>
                                             ${checks.totalRun}
@@ -180,7 +180,7 @@
                                 <j:forEach var="checks" items="${it.score.pitBases}">
                                     <tr>
                                         <td>
-                                            ${checks.id}
+                                            <a href="../pitmutation">${checks.id}</a>
                                         </td>
                                         <td>
                                             ${checks.totalMutations}
@@ -224,7 +224,7 @@
                                 <j:forEach var="checks" items="${it.score.cocoBases}">
                                     <tr>
                                         <td>
-                                            ${checks.id}
+                                            <a href="../coverage">${checks.id}</a>
                                         </td>
                                         <td>
                                             ${checks.totalLines}

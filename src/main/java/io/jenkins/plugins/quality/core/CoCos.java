@@ -47,7 +47,7 @@ public class CoCos {
     public int calculate(final Configuration configs, @NonNull final TaskListener listener) {
         int change = 0;
         if (configs.isCtoCheck()) {
-            change = change + configs.getWeightMissed() * (100-ratio);
+            change = change + configs.getWeightMissed() * (100 - ratio);
 
             listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
             setTotalChange(change);
