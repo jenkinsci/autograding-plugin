@@ -54,14 +54,10 @@ public class TestRes {
             change = change + configs.getWeightSkipped() * totalSkipped;
 
             listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
-            setTotalChange(change);
+            totalChange = change;
             return change;
         }
         return change;
-    }
-
-    public void setTotalChange(final int totalChange) {
-        this.totalChange = totalChange;
     }
 
     public String getId() {

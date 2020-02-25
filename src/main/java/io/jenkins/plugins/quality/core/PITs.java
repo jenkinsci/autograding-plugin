@@ -49,17 +49,13 @@ public class PITs {
         int change = 0;
         if (configs.isPtoCheck()) {
             change = change + configs.getWeightUndetected() * totalUndetected;
-            change = change + configs.getWeightDetected() * (totalMutations - totalUndetected);
+            change = change + configs.getWeightDetected() * totalDetected;
 
             listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
-            setTotalChange(change);
+            totalChange = change;
             return change;
         }
         return change;
-    }
-
-    public void setTotalChange(final int totalChange) {
-        this.totalChange = totalChange;
     }
 
     public String getId() {

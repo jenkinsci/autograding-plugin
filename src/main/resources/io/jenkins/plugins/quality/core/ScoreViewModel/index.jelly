@@ -213,7 +213,7 @@
                             <thead>
                                 <tr>
                                     <th>${%Check}</th>
-                                    <th>${%Total}</th>
+                                    <th>${%Total           }</th>
                                     <th>${%Missed}</th>
                                     <th>${%Covered}</th>
                                     <th>${%Covered Percentage}</th>

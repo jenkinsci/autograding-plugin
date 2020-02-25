@@ -3,11 +3,6 @@ package io.jenkins.plugins.quality.core;
 import hudson.model.ModelObject;
 import hudson.model.Run;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static groovy.xml.Entity.divide;
-
 /**
  * Server side model that provides the data for the details view of the score.
  * The layout of the associated view is defined in the corresponding jelly view 'index.jelly'.

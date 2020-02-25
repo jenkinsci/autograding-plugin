@@ -26,7 +26,7 @@ public class CoCos {
      * @param id           the name of the check
      * @param totalCovered the total number of covered code
      * @param totalLines   the total number of missed code
-     * @param ratio        the ratio of covered code
+     * @param ratio        the ratio of missed code
      */
     public CoCos(final String id, final int totalCovered, final int totalLines, final int ratio) {
         super();
@@ -34,7 +34,7 @@ public class CoCos {
         this.totalCovered = totalCovered;
         this.totalLines = totalLines;
         this.totalMissed = totalLines - totalCovered;
-        this.ratio = ratio;
+        this.ratio = 100 - ratio;
     }
 
     /**
@@ -47,17 +47,13 @@ public class CoCos {
     public int calculate(final Configuration configs, @NonNull final TaskListener listener) {
         int change = 0;
         if (configs.isCtoCheck()) {
-            change = change + configs.getWeightMissed() * (100 - ratio);
+            change = change + configs.getWeightMissed() * ratio;
 
             listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
-            setTotalChange(change);
+            totalChange = change;
             return change;
         }
         return change;
-    }
-
-    public void setTotalChange(final int totalChange) {
-        this.totalChange = totalChange;
     }
 
     public String getId() {
