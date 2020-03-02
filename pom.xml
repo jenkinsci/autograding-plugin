@@ -26,8 +26,7 @@
     <bootstrap4-api.version>4.4.1-10</bootstrap4-api.version>
     <data-tables-api.version>1.10.20-13</data-tables-api.version>
     <echarts-api.version>4.6.0-7</echarts-api.version>
-    <plugin-util-api.version>1.0.0</plugin-util-api.version>
-    <codingstyle.library.version>1.0.0</codingstyle.library.version>
+    <plugin-util-api.version>1.0.1</plugin-util-api.version>
 
     <code-coverage-api-plugin.version>1.1.3</code-coverage-api-plugin.version>
     <pitmutation-plugin.version>1.0-17</pitmutation-plugin.version>
@@ -142,13 +141,6 @@
       <groupId>io.jenkins.plugins</groupId>
       <artifactId>plugin-util-api</artifactId>
       <version>${plugin-util-api.version}</version>
-      <scope>test</scope>
-      <type>test-jar</type>
-    </dependency>
-    <dependency>
-      <groupId>edu.hm.hafner</groupId>
-      <artifactId>codingstyle</artifactId>
-      <version>${codingstyle.library.version}</version>
       <scope>test</scope>
       <type>test-jar</type>
     </dependency>
