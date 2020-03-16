@@ -13,7 +13,7 @@ import jline.internal.Nullable;
  */
 
 public class ScoreJobAction extends JobAction {
-    static final String SMALL_ICON = "/plugins/code-quality/icons/quality.png";
+    static final String SMALL_ICON = "/plugin/code-quality/icons/quality.png";
     static final String CODEQUALITY_ID = "quality";
 
     /**
