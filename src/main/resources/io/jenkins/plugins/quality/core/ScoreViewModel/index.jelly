@@ -2,7 +2,7 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:bs="/bootstrap">
 
     <st:header name="Content-Type" value="text/html;charset=UTF-8"/>
-    <bs:layout title="${it.displayName}" norefresh="true">
+    <l:layout title="${it.displayName}" norefresh="true">
 
         <st:include it="${it.owner}" page="sidepanel.jelly"/>
 
@@ -51,7 +51,6 @@
                             <div class="col-sm-3">
                                 <h6>Configuration code coverage</h6>
                                 <p>per issue Score changes by:</p>
-                                <p>per % Covered lines ${it.score.configs.weightCovered} points</p>
                                 <p>per % Missed lines ${it.score.configs.weightMissed} points</p>
                             </div>
                         </div>
