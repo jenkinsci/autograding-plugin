@@ -62,7 +62,7 @@ public class ScoreBuildAction extends BuildAction<Score> implements StaplerProxy
      */
     @Override
     public Object getTarget() {
-        return new ScoreViewModel(getOwner(), (Score) getResult());
+        return new ScoreViewModel(getOwner(), getResult());
     }
 
     @Override
