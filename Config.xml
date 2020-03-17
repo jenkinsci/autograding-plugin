@@ -1,0 +1,35 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<configs plugin="code-quality@0.1.0-SNAPSHOT">
+
+  <!-- default for all static analysis results like checkstyle, pmd -->
+  <dMaxScore>25</dMaxScore>
+  <defaultCheck>default</defaultCheck>
+  <dtoCheck>true</dtoCheck>
+  <weightError>-4</weightError>
+  <weightHigh>-3</weightHigh>
+  <weightNormal>-2</weightNormal>
+  <weightLow>-1</weightLow>
+
+  <!-- PIT -->
+  <pMaxScore>25</pMaxScore>
+  <pitCheck>PIT</pitCheck>
+  <ptoCheck>true</ptoCheck>
+  <weightUndetected>-2</weightUndetected>
+  <weightDetected>1</weightDetected>
+
+  <!--Code Coverage -->
+  <cMaxScore>25</cMaxScore>
+  <cocoCheck>COCO</cocoCheck>
+  <ctoCheck>true</ctoCheck>
+  <weightCovered>1</weightCovered>
+  <weightMissed>-2</weightMissed>
+
+  <!-- JUNIT -->
+  <jMaxScore>25</jMaxScore>
+  <junitCheck>JUNIT</junitCheck>
+  <jtoCheck>true</jtoCheck>
+  <weightSkipped>-1</weightSkipped>
+  <weightFailures>-2</weightFailures>
+  <weightPassed>1</weightPassed>
+
+</configs>

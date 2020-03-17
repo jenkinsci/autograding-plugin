@@ -1,0 +1,255 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:bs="/bootstrap">
+
+    <st:header name="Content-Type" value="text/html;charset=UTF-8"/>
+    <bs:layout title="${it.displayName}" norefresh="true">
+
+        <st:include it="${it.owner}" page="sidepanel.jelly"/>
+
+        <l:main-panel>
+
+            <st:adjunct includes="io.jenkins.plugins.bootstrap4"/>
+            <st:adjunct includes="io.jenkins.plugins.data-tables"/>
+
+            <div class="fluid-container">
+
+                <bs:card title="Code Quality Score">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5>Your current Score: ${it.score.score} / ${it.score.configs.maxScore}</h5>
+                                <p> </p>
+                                <p>You can receive a maximum of points per category.</p>
+                                <p>You earn a minimum of 0 points per category.</p>
+                                <p> </p>
+                                <p> </p>
+                                <p> </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6>Configuration Static</h6>
+                                <p>per issue Score changes by:</p>
+                                <p>Errors cause ${it.score.configs.weightError} points</p>
+                                <p>High issues cause ${it.score.configs.weightHigh} points</p>
+                                <p>Normal issues cause ${it.score.configs.weightNormal} points</p>
+                                <p>Low issues cause ${it.score.configs.weightLow} points</p>
+                            </div>
+                            <div class="col-sm-3">
+                                <h6>Configuration Tests</h6>
+                                <p>per issue Score changes by:</p>
+                                <p>Passed tests cause ${it.score.configs.weightPassed} points</p>
+                                <p>Failed tests cause ${it.score.configs.weightFailures} points</p>
+                                <p>Skipped tests cause ${it.score.configs.weightSkipped} points</p>
+                            </div>
+                            <div class="col-sm-3">
+                                <h6>Configuration PIT mutations</h6>
+                                <p>per issue Score changes by:</p>
+                                <p>Undetected mutations cause ${it.score.configs.weightUndetected} points</p>
+                                <p>Detected mutations cause ${it.score.configs.weightDetected} points</p>
+                            </div>
+                            <div class="col-sm-3">
+                                <h6>Configuration code coverage</h6>
+                                <p>per issue Score changes by:</p>
+                                <p>per % Missed lines ${it.score.configs.weightMissed} points</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </bs:card>
+
+
+                <bs:card title="Static Checks">
+                    <j:if test="${it.score.getDefaultBases().isEmpty()}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> This check category did not provide results.
+                        </div>
+                    </j:if>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped display" id="fixed">
+                            <thead>
+                                <tr>
+                                    <th>${%Check}</th>
+                                    <th>${%Errors}</th>
+                                    <th>${%High}</th>
+                                    <th>${%Normal}</th>
+                                    <th>${%Low}</th>
+                                    <th>${%Sum}</th>
+                                    <th>${%Score Impact}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <j:forEach var="checks" items="${it.score.defaultBases}">
+                                    <tr>
+                                        <td>
+                                            <a href="../${checks.id}">${checks.id}</a>
+                                        </td>
+                                        <td>
+                                           ${checks.totalErrors}
+                                        </td>
+                                        <td>
+                                            ${checks.totalHighs}
+                                        </td>
+                                        <td>
+                                            ${checks.totalNormals}
+                                        </td>
+                                        <td>
+                                            ${checks.totalLows}
+                                        </td>
+                                        <td>
+                                            ${checks.sum}
+                                        </td>
+                                        <td>
+                                            ${checks.totalChange}
+                                        </td>
+                                    </tr>
+                                </j:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </bs:card>
+
+
+                <bs:card title="Junit Test Results">
+                    <j:if test="${it.score.getJunitBases().isEmpty()}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> This check category did not provide results.
+                        </div>
+                    </j:if>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped display" id="fixed">
+                            <thead>
+                                <tr>
+                                    <th>${%Test}</th>
+                                    <th>${%Total}</th>
+                                    <th>${%Passed}</th>
+                                    <th>${%Failed}</th>
+                                    <th>${%Skipped}</th>
+                                    <th>${%Score Impact}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <j:forEach var="checks" items="${it.score.junitBases}">
+                                    <tr>
+                                        <td>
+                                            <a href="../testReport">${checks.id}</a>
+                                        </td>
+                                        <td>
+                                            ${checks.totalRun}
+                                        </td>
+                                        <td>
+                                            ${checks.totalPassed}
+                                        </td>
+                                        <td>
+                                            ${checks.totalFailed}
+                                        </td>
+                                        <td>
+                                            ${checks.totalSkipped}
+                                        </td>
+                                        <td>
+                                            ${checks.totalChange}
+                                        </td>
+                                    </tr>
+                                </j:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </bs:card>
+
+                <bs:card title="PIT mutations">
+                    <j:if test="${it.score.getPitBases().isEmpty()}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> This check category did not provide results.
+                        </div>
+                    </j:if>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped display" id="fixed">
+                            <thead>
+                                <tr>
+                                    <th>${%Check}</th>
+                                    <th>${%Mutation}</th>
+                                    <th>${%Undetected}</th>
+                                    <th>${%Ratio}</th>
+                                    <th>${%Score Impact}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <j:forEach var="checks" items="${it.score.pitBases}">
+                                    <tr>
+                                        <td>
+                                            <a href="../pitmutation">${checks.id}</a>
+                                        </td>
+                                        <td>
+                                            ${checks.totalMutations}
+                                        </td>
+                                        <td>
+                                            ${checks.totalUndetected}
+                                        </td>
+                                        <td>
+                                            ${checks.percentUndetected}
+                                        </td>
+                                        <td>
+                                            ${checks.totalChange}
+                                        </td>
+                                    </tr>
+                                </j:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </bs:card>
+
+                <bs:card title="Code Coverage">
+                    <j:if test="${it.score.getCocoBases().isEmpty()}">
+                    <div class="alert alert-info">
+                        <strong>Info!</strong> This check category did not provide results.
+                    </div>
+                </j:if>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped display" id="fixed">
+                            <thead>
+                                <tr>
+                                    <th>${%Check}</th>
+                                    <th>${%Total           }</th>
+                                    <th>${%Missed}</th>
+                                    <th>${%Covered}</th>
+                                    <th>${%Covered Percentage}</th>
+                                    <th>${%Score Impact}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <j:forEach var="checks" items="${it.score.cocoBases}">
+                                    <tr>
+                                        <td>
+                                            <a href="../coverage">${checks.id}</a>
+                                        </td>
+                                        <td>
+                                            ${checks.totalLines}
+                                        </td>
+                                        <td>
+                                            ${checks.totalMissed}
+                                        </td>
+                                        <td>
+                                            ${checks.totalCovered}
+                                        </td>
+                                        <td>
+                                            ${checks.ratio}
+                                        </td>
+                                        <td>
+                                            ${checks.totalChange}
+                                        </td>
+                                    </tr>
+                                </j:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </bs:card>
+
+            </div>
+
+        </l:main-panel>
+    </bs:layout>
+</j:jelly>

@@ -1,0 +1,9 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:t="/lib/hudson" xmlns:fa="/font-awesome">
+
+    <t:summary icon="/plugin/code-quality/icons/quality.png">
+        ${%title}:
+            <a href="quality">${it.totalScore}</a>
+    </t:summary>
+
+</j:jelly>

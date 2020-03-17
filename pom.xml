@@ -1,5 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
@@ -8,18 +9,18 @@
     <relativePath/>
   </parent>
 
-  <artifactId>code-quality</artifactId>
-  <groupId>io.jenkins.plugins</groupId>
-  <packaging>hpi</packaging>
-  <name>Code Quality Plugin</name>
-  <version>0.1.0-SNAPSHOT</version>
+    <artifactId>code-quality</artifactId>
+    <groupId>io.jenkins.plugins</groupId>
+    <packaging>hpi</packaging>
+    <name>Code Quality Plugin</name>
+    <version>0.1.0-SNAPSHOT</version>
 
-  <description>Jenkins plug-that defines an API to mine and analyze the overall code quality.</description>
+    <description>Jenkins plug-that defines an API to mine and analyze the overall code quality.</description>
 
-  <properties>
-    <module.name>${project.groupId}.code.quality</module.name>
+    <properties>
+        <module.name>${project.groupId}.code.quality</module.name>
 
-    <commons.lang.version>3.9</commons.lang.version>
+        <commons.lang.version>3.9</commons.lang.version>
 
     <font-awesome-api.version>5.12.0-7</font-awesome-api.version>
     <jquery3-api.version>3.4.1-10</jquery3-api.version>
@@ -172,20 +173,21 @@
   <repositories>
     <repository>
       <id>incrementals.jenkins-ci.org</id>
+        
       <url>https://repo.jenkins-ci.org/incrementals/</url>
     </repository>
     <repository>
       <id>repo.jenkins-ci.org</id>
-      <url>https://repo.jenkins-ci.org/public/</url>
-    </repository>
-  </repositories>
+            <url>https://repo.jenkins-ci.org/public/</url>
+        </repository>
+    </repositories>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>repo.jenkins-ci.org</id>
-      <url>https://repo.jenkins-ci.org/public/</url>
-    </pluginRepository>
-  </pluginRepositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repo.jenkins-ci.org</id>
+            <url>https://repo.jenkins-ci.org/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>
 
