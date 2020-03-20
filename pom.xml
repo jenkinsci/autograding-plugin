@@ -15,7 +15,7 @@
   <name>Autograding Plugin</name>
   <version>1.0.0-SNAPSHOT</version>
 
-  <description>Jenkins plugin that autogrades projects based on a configurable set of metrics.</description>
+  <description>This plugin autogrades projects based on a configurable set of metrics.</description>
 <!-- TODO: enable if forked to jenkinsci <url>https://github.com/jenkinsci/autograde-plugin</url>-->
 
   <properties>
