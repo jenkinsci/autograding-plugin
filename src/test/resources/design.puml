@@ -6,6 +6,6 @@ skinparam component {
   BackgroundColor #f8f8f8
 }
 
-[Core] <<..core>>
+[Autograding] <<..grading>>
 
 @enduml

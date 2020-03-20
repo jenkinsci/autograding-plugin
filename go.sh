@@ -6,8 +6,8 @@ mvn clean install || { echo "Build failed"; exit 1; }
 
 echo "Installing plugin in $JENKINS_HOME"
 
-rm -rf $JENKINS_HOME/plugins/code-quality-plugin*
-cp -fv target/code-quality.hpi $JENKINS_HOME/plugins/code-quality.jpi
+rm -rf $JENKINS_HOME/plugins/autograding-plugin*
+cp -fv target/autograding.hpi $JENKINS_HOME/plugins/autograding.jpi
 
 CURRENT_UID="$(id -u):$(id -g)"
 export CURRENT_UID

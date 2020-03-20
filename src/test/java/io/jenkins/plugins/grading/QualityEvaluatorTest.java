@@ -1,7 +1,5 @@
-package io.jenkins.plugins.quality.core;
+package io.jenkins.plugins.grading;
 
-import hudson.model.TaskListener;
-import static io.jenkins.plugins.quality.assertions.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;

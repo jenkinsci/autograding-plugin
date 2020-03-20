@@ -1,6 +1,5 @@
-package io.jenkins.plugins.quality.core;
+package io.jenkins.plugins.grading;
 
-import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
 

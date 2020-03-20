@@ -21,9 +21,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uhafner/code-quality-plugin.git"
+    "url": "git+https://github.com/uhafner/autograding-plugin.git"
   },
   "author": "Ullrich Hafner",
   "license": "MIT",
-  "homepage": "https://github.com/uhafner/code-quality-plugin#readme"
+  "homepage": "https://github.com/uhafner/autograding-plugin#readme"
 }

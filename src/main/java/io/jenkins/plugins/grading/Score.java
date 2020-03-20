@@ -1,4 +1,4 @@
-package io.jenkins.plugins.quality.core;
+package io.jenkins.plugins.grading;
 
 
 import java.util.ArrayList;
