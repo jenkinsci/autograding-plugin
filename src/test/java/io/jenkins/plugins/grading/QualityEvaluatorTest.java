@@ -17,7 +17,7 @@ class QualityEvaluatorTest {
         cocoBases.add(new CoCos("coverage", 99, 100, 99));
         Score score = new Score(configs.getMaxScore());
         score.addCocoBase(cocoBases.get(0));
-        QualityEvaluator test = new QualityEvaluator();
+        AutoGrader test = new AutoGrader();
         test.updateCocoGrade(configs, cocoBases, score);
         assertThat(score.getScore()).isEqualTo(98);
     }
@@ -29,7 +29,7 @@ class QualityEvaluatorTest {
         List<CoCos> cocoBases = new ArrayList<>();
         cocoBases.add(new CoCos("coverage", 50, 100, 50));
         Score score = new Score(configs.getMaxScore());
-        QualityEvaluator test = new QualityEvaluator();
+        AutoGrader test = new AutoGrader();
         test.updateCocoGrade(configs, cocoBases, score);
         assertThat(score.getScore()).isEqualTo(75);
     }
@@ -41,7 +41,7 @@ class QualityEvaluatorTest {
         List<CoCos> cocoBases = new ArrayList<>();
         cocoBases.add(new CoCos("coverage", 101, 100, 101));
         Score score = new Score(configs.getMaxScore());
-        QualityEvaluator test = new QualityEvaluator();
+        AutoGrader test = new AutoGrader();
         test.updateCocoGrade(configs, cocoBases, score);
         assertThat(score.getScore()).isEqualTo(100);
     }
@@ -54,7 +54,7 @@ class QualityEvaluatorTest {
         defaultBases.add(new DefaultChecks("default", 1, 0, 0, 2, 3));
         Score score = new Score(configs.getMaxScore());
         score.addDefaultBase(defaultBases.get(0));
-        QualityEvaluator test = new QualityEvaluator();
+        AutoGrader test = new AutoGrader();
         test.updateDefaultGrade(configs, score, defaultBases);
         assertThat(score.getScore()).isEqualTo(94);
     }
@@ -67,7 +67,7 @@ class QualityEvaluatorTest {
         defaultBases.add(new DefaultChecks("default", 10, 10, 0, 2, 20));
         Score score = new Score(configs.getMaxScore());
         score.addDefaultBase(defaultBases.get(0));
-        QualityEvaluator test = new QualityEvaluator();
+        AutoGrader test = new AutoGrader();
         test.updateDefaultGrade(configs, score, defaultBases);
         assertThat(score.getScore()).isEqualTo(75);
     }
@@ -80,7 +80,7 @@ class QualityEvaluatorTest {
         defaultBases.add(new DefaultChecks("default", -1, 0, 0, 0, -1));
         Score score = new Score(configs.getMaxScore());
         score.addDefaultBase(defaultBases.get(0));
-        QualityEvaluator test = new QualityEvaluator();
+        AutoGrader test = new AutoGrader();
         test.updateDefaultGrade(configs, score, defaultBases);
         assertThat(score.getScore()).isEqualTo(100);
     }
@@ -93,7 +93,7 @@ class QualityEvaluatorTest {
         pitBases.add(new PITs("pitmutation", 30, 12, 60));
         Score score = new Score(configs.getMaxScore());
         score.addPitBase(pitBases.get(0));
-        QualityEvaluator test = new QualityEvaluator();
+        AutoGrader test = new AutoGrader();
         test.updatePitGrade(configs, score, pitBases);
         assertThat(score.getScore()).isEqualTo(94);
     }
@@ -106,7 +106,7 @@ class QualityEvaluatorTest {
         pitBases.add(new PITs("pitmutation", 30, 25, 95));
         Score score = new Score(configs.getMaxScore());
         score.addPitBase(pitBases.get(0));
-        QualityEvaluator test = new QualityEvaluator();
+        AutoGrader test = new AutoGrader();
         test.updatePitGrade(configs, score, pitBases);
         assertThat(score.getScore()).isEqualTo(75);
     }
@@ -119,7 +119,7 @@ class QualityEvaluatorTest {
         pitBases.add(new PITs("pitmutation", 30, 5, 5));
         Score score = new Score(configs.getMaxScore());
         score.addPitBase(pitBases.get(0));
-        QualityEvaluator test = new QualityEvaluator();
+        AutoGrader test = new AutoGrader();
         test.updatePitGrade(configs, score, pitBases);
         assertThat(score.getScore()).isEqualTo(100);
     }
@@ -132,7 +132,7 @@ class QualityEvaluatorTest {
         junitBases.add(new TestRes("Testergebnis", 0, 8, 7, 1));
         Score score = new Score(configs.getMaxScore());
         score.addJunitBase(junitBases.get(0));
-        QualityEvaluator test = new QualityEvaluator();
+        AutoGrader test = new AutoGrader();
         test.updateJunitGrade(configs, score, junitBases);
         assertThat(score.getScore()).isEqualTo(85);
     }
@@ -145,7 +145,7 @@ class QualityEvaluatorTest {
         junitBases.add(new TestRes("Testergebnis", 0, 16, 16, 0));
         Score score = new Score(configs.getMaxScore());
         score.addJunitBase(junitBases.get(0));
-        QualityEvaluator test = new QualityEvaluator();
+        AutoGrader test = new AutoGrader();
         test.updateJunitGrade(configs, score, junitBases);
         assertThat(score.getScore()).isEqualTo(75);
     }
@@ -158,7 +158,7 @@ class QualityEvaluatorTest {
         junitBases.add(new TestRes("Testergebnis", 62, 62, 0, 0));
         Score score = new Score(configs.getMaxScore());
         score.addJunitBase(junitBases.get(0));
-        QualityEvaluator test = new QualityEvaluator();
+        AutoGrader test = new AutoGrader();
         test.updateJunitGrade(configs, score, junitBases);
         assertThat(score.getScore()).isEqualTo(100);
     }

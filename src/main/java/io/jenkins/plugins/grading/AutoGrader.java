@@ -24,18 +24,17 @@ import jenkins.tasks.SimpleBuildStep;
 import io.jenkins.plugins.analysis.core.model.ResultAction;
 
 /**
- * This Recorder gathers all the needed results of previous run check in the job.
+ * This recorder gathers all the needed results of previous run check in the job.
  * Inputs are Saved, and Quality Score is computed on base of defined configurations.
  *
  * @author Eva-Maria Zeintl
  */
-public class QualityEvaluator extends Recorder implements SimpleBuildStep {
-
+public class AutoGrader extends Recorder implements SimpleBuildStep {
     /**
-     * Creates a new instance of {@link  QualityEvaluator}.
+     * Creates a new instance of {@link  AutoGrader}.
      */
     @DataBoundConstructor
-    public QualityEvaluator() {
+    public AutoGrader() {
         super();
 
         // empty constructor required for Stapler
@@ -102,7 +101,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         //read configs from XML File
         ConfigXmlStream configReader = new ConfigXmlStream();
-        Configuration configs = configReader.read(Paths.get(workspace + "\\Config.xml"));
+        Configuration configs = configReader.read(Paths.get(workspace.child("auto-grading.xml").getRemote()));
         listener.getLogger().println("[CodeQuality] Read Configs:");
         listener.getLogger().println("[CodeQuality] Configs read successfully.");
 
@@ -147,7 +146,7 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
 
         listener.getLogger().println("[CodeQuality] Code Quality Score calculation completed");
 
-        run.addAction(new ScoreBuildAction(run, score));
+        run.addAction(new AutoGradingBuildAction(run, score));
     }
 
     private void updateCocoGrade(final Configuration configs, final Score score, final List<CoCos> cocoBases, @NonNull final TaskListener listener) {
@@ -249,17 +248,15 @@ public class QualityEvaluator extends Recorder implements SimpleBuildStep {
         updateJunitGrade(configs, score, junitBases, TaskListener.NULL);
     }
 
-    /**
-     * Descriptor for this step: defines the context and the UI elements.
-     */
+    /** Descriptor for this step. */
     @Extension(ordinal = -100_000)
-    @Symbol("computeQuality")
+    @Symbol("autoGrade")
     @SuppressWarnings("unused") // most methods are used by the corresponding jelly view
     public static class Descriptor extends BuildStepDescriptor<Publisher> {
         @NonNull
         @Override
         public String getDisplayName() {
-            return "Code Quality Score";
+            return Messages.Action_Name();
         }
 
         @Override
