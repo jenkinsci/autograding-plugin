@@ -13,13 +13,15 @@
   <artifactId>autograding</artifactId>
   <packaging>hpi</packaging>
   <name>Autograding Plugin</name>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>${revision}${changelist}</version>
 
   <description>This plugin autogrades projects based on a configurable set of metrics.</description>
   <url>https://github.com/jenkinsci/autograde-plugin</url>
 
   <properties>
-    <module.name>${project.groupId}.code.quality</module.name>
+    <revision>1.0.0</revision>
+    <changelist>-SNAPSHOT</changelist>
+    <module.name>${project.groupId}.autograding</module.name>
 
     <commons.lang.version>3.9</commons.lang.version>
 
