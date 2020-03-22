@@ -16,7 +16,7 @@
   <version>1.0.0-SNAPSHOT</version>
 
   <description>This plugin autogrades projects based on a configurable set of metrics.</description>
-<!-- TODO: enable if forked to jenkinsci <url>https://github.com/jenkinsci/autograde-plugin</url>-->
+  <url>https://github.com/jenkinsci/autograde-plugin</url>
 
   <properties>
     <module.name>${project.groupId}.code.quality</module.name>

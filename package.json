@@ -1,7 +1,7 @@
 {
-  "name": "code-quality",
+  "name": "autograding",
   "version": "0.1.0",
-  "description": "Commit Quality Jenkins Plugin",
+  "description": "Autograding Jenkins Plugin",
   "directories": {
     "doc": "doc"
   },
@@ -21,9 +21,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uhafner/autograding-plugin.git"
+    "url": "git+https://github.com/jenkinsci/autograding-plugin.git"
   },
   "author": "Ullrich Hafner",
   "license": "MIT",
-  "homepage": "https://github.com/uhafner/autograding-plugin#readme"
+  "homepage": "https://github.com/jenkinsci/autograding-plugin#readme"
 }
