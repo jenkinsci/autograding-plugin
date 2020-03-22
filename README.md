@@ -6,10 +6,9 @@
 
 Jenkins plugin that autogrades projects based on a configurable set of metrics.
  
- <!--- TODO:  enable if forked to jenkinsci
-[![GitHub Actions](https://github.com/jenkinsci/autograding-plugin/workflows/GitHub%20Actions/badge.svg)](https://github.com/jenkinsci/autograding-plugin/actions)
+[![Jenkins](https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/)
+![CI on all platforms](https://github.com/jenkinsci/autograding-plugin/workflows/CI%20on%20all%20platforms/badge.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1be7bb5b899446968e411e6e59c8ea6c)](https://www.codacy.com/app/jenkinsci/autograding-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jenkinsci/autograding-plugin&amp;utm_campaign=Badge_Grade)
-[![Codecov](https://img.shields.io/codecov/c/github/jenkinsci/autograding-plugin.svg)](https://codecov.io/gh/jenkinsci/autograding-plugin)
+[![codecov](https://codecov.io/gh/jenkinsci/autograding-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/jenkinsci/autograding-plugin)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/jenkinsci/autograding-plugin.svg)](https://github.com/jenkinsci/autograding-plugin/pulls)
- -->
 
