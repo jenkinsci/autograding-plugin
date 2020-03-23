@@ -14,7 +14,7 @@ public class Score {
 
     private int grade;
     private Configuration configs;
-    private final List<DefaultChecks> defaultBases = new ArrayList<>();
+    private final List<AnalysisScore> defaultBases = new ArrayList<>();
     private final List<CoCos> cocoBases = new ArrayList<>();
     private final List<PITs> pitBases = new ArrayList<>();
     private final List<TestRes> junitBases = new ArrayList<>();
@@ -50,7 +50,7 @@ public class Score {
         return configs;
     }
 
-    public List<DefaultChecks> getDefaultBases() {
+    public List<AnalysisScore> getDefaultBases() {
         return defaultBases;
     }
     public List<PITs> getPitBases() {
@@ -77,7 +77,7 @@ public class Score {
      * Save Default results.
      * @param inputBase results from static checks
      */
-    public void addDefaultBase(final DefaultChecks inputBase) {
+    public void addAnalysisScore(final AnalysisScore inputBase) {
         this.defaultBases.add(inputBase);
     }
 
@@ -103,5 +103,24 @@ public class Score {
      */
     public void addJunitBase(final TestRes inputBases) {
         this.junitBases.add(inputBases);
+    }
+
+    public int addAnalysisTotal(final int subTotal, final List<AnalysisScore> scores) {
+        defaultBases.addAll(scores);
+
+        int delta = 0;
+        for (AnalysisScore score : scores) {
+            delta = delta + score.getTotalChange();
+        }
+        int actual;
+        if (delta <= 0) {
+            actual = Math.max(0, subTotal + delta);
+        }
+        else {
+            actual = Math.min(subTotal, delta);
+        }
+
+        grade += actual;
+        return actual;
     }
 }

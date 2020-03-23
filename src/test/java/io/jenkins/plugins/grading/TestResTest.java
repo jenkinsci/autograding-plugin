@@ -31,7 +31,6 @@ class TestResTest {
                 5, 1);
 
         assertThat(test.calculate(configs, TaskListener.NULL)).isEqualTo(-9);
-
     }
 
     @Test

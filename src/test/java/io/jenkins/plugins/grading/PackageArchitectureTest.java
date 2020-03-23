@@ -1,4 +1,4 @@
-package io.jenkins.plugins.quality;
+package io.jenkins.plugins.grading;
 
 import java.net.URL;
 

@@ -1,4 +1,4 @@
-package io.jenkins.plugins.quality;
+package io.jenkins.plugins.grading;
 
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
