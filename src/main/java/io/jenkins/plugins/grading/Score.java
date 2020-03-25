@@ -14,10 +14,13 @@ public class Score {
 
     private int grade;
     private Configuration configs;
-    private final List<AnalysisScore> defaultBases = new ArrayList<>();
+    private final List<AnalysisScore> analysisScores = new ArrayList<>();
     private final List<CoCos> cocoBases = new ArrayList<>();
     private final List<PITs> pitBases = new ArrayList<>();
     private final List<TestRes> junitBases = new ArrayList<>();
+    private AnalysisConfiguration analysisConfiguration;
+    private TestRes testScore;
+    private TestsConfiguration testConfiguration;
 
     /**
      * Creates a new instance of {@link Score}.
@@ -50,8 +53,8 @@ public class Score {
         return configs;
     }
 
-    public List<AnalysisScore> getDefaultBases() {
-        return defaultBases;
+    public List<AnalysisScore> getAnalysisScores() {
+        return analysisScores;
     }
     public List<PITs> getPitBases() {
         return pitBases;
@@ -63,7 +66,9 @@ public class Score {
         return cocoBases;
     }
 
-
+    public AnalysisConfiguration getAnalysisConfiguration() {
+        return analysisConfiguration;
+    }
 
     /**
      * Save configurations.
@@ -78,7 +83,7 @@ public class Score {
      * @param inputBase results from static checks
      */
     public void addAnalysisScore(final AnalysisScore inputBase) {
-        this.defaultBases.add(inputBase);
+        this.analysisScores.add(inputBase);
     }
 
     /**
@@ -105,19 +110,37 @@ public class Score {
         this.junitBases.add(inputBases);
     }
 
-    public int addAnalysisTotal(final int subTotal, final List<AnalysisScore> scores) {
-        defaultBases.addAll(scores);
+    public int addAnalysisTotal(final AnalysisConfiguration configuration, final List<AnalysisScore> scores) {
+        analysisScores.addAll(scores);
+        analysisConfiguration = configuration;
 
         int delta = 0;
         for (AnalysisScore score : scores) {
             delta = delta + score.getTotalChange();
         }
+
         int actual;
         if (delta <= 0) {
-            actual = Math.max(0, subTotal + delta);
+            actual = Math.max(0, configuration.getMaxScore() + delta);
         }
         else {
-            actual = Math.min(subTotal, delta);
+            actual = Math.min(configuration.getMaxScore(), delta);
+        }
+
+        grade += actual;
+        return actual;
+    }
+
+    public int addTestsTotal(final TestsConfiguration configuration, final TestRes scores) {
+        testScore = scores;
+        testConfiguration = configuration;
+
+        int actual;
+        if (testScore.getTotalChange() <= 0) {
+            actual = Math.max(0, configuration.getMaxScore() + testScore.getTotalChange());
+        }
+        else {
+            actual = Math.min(configuration.getMaxScore(), testScore.getTotalChange());
         }
 
         grade += actual;

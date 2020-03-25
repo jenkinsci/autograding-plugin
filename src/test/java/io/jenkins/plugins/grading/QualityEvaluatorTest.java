@@ -141,8 +141,16 @@ class QualityEvaluatorTest {
         Score score = new Score(configs.getMaxScore());
         score.addJunitBase(junitBases.get(0));
         AutoGrader test = createAutoGrader();
-        test.updateJunitGrade(configs, score, junitBases);
+        test.updateJunitGrade(createTestsConfiguration(), score, junitBases);
         assertThat(score.getScore()).isEqualTo(85);
+    }
+
+    private TestsConfiguration createTestsConfiguration() {
+        return new TestsConfigurationBuilder().setMaxScore(25)
+                .setWeightSkipped(-1)
+                .setWeightFailures(-2)
+                .setWeightPassed(1)
+                .build();
     }
 
     private AutoGrader createAutoGrader() {
@@ -158,7 +166,7 @@ class QualityEvaluatorTest {
         Score score = new Score(configs.getMaxScore());
         score.addJunitBase(junitBases.get(0));
         AutoGrader test = createAutoGrader();
-        test.updateJunitGrade(configs, score, junitBases);
+        test.updateJunitGrade(createTestsConfiguration(), score, junitBases);
         assertThat(score.getScore()).isEqualTo(75);
     }
 
@@ -171,7 +179,7 @@ class QualityEvaluatorTest {
         Score score = new Score(configs.getMaxScore());
         score.addJunitBase(junitBases.get(0));
         AutoGrader test = createAutoGrader();
-        test.updateJunitGrade(configs, score, junitBases);
+        test.updateJunitGrade(createTestsConfiguration(), score, junitBases);
         assertThat(score.getScore()).isEqualTo(100);
     }
 }

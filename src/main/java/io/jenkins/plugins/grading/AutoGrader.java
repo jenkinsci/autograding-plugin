@@ -114,20 +114,34 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         try {
             Score actualScore = new Score();
             JSONObject gradingConfiguration = JSONObject.fromObject(configuration);
+
             JSONObject analysis = (JSONObject) gradingConfiguration.get("analysis");
             if (analysis != null) {
                 AnalysisConfiguration analysisConfiguration = AnalysisConfiguration.from(analysis);
-                List<AnalysisScore> scores = new ArrayList<>();
+                List<AnalysisScore> analysisScores = new ArrayList<>();
                 for (ResultAction action : run.getActions(ResultAction.class)) {
                     logHandler.log("Grading static analysis results for " + action.getLabelProvider().getName());
-                    scores.add(new AnalysisScore(analysisConfiguration, action.getResult(), logHandler));
+                    analysisScores.add(new AnalysisScore(analysisConfiguration, action.getResult(), logHandler));
                 }
-                int total = actualScore.addAnalysisTotal(analysisConfiguration.getMaxScore(), scores);
+                int total = actualScore.addAnalysisTotal(analysisConfiguration, analysisScores);
                 logHandler.log("Total score for static analysis results: " + total);
             }
             else {
                 logHandler.log("Skipping static analysis results");
             }
+
+            JSONObject tests = (JSONObject) gradingConfiguration.get("tests");
+            if (tests != null) {
+                TestsConfiguration testsConfiguration = TestsConfiguration.from(tests);
+                TestResultAction action = run.getAction(TestResultAction.class);
+                logHandler.log("Grading test results " + action.getDisplayName());
+                int total = actualScore.addTestsTotal(testsConfiguration, new TestRes(testsConfiguration, action, logHandler));
+                logHandler.log("Total score for test results: " + total);
+            }
+            else {
+                logHandler.log("Skipping test results");
+            }
+
             run.addAction(new AutoGradingBuildAction(run, actualScore));
         }
         catch (JSONException exception) {
@@ -138,9 +152,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 //
 //        listener.getLogger().println("[CodeQuality] Starting extraction of previous performed checks");
 //        List<PitBuildAction> pitAction = run.getActions(PitBuildAction.class);
-//        List<TestResultAction> testActions = run.getActions(TestResultAction.class);
 //        List<CoverageAction> coverageActions = run.getActions(CoverageAction.class);
-//
 //        // read configs from XML File
 //        ConfigXmlStream configReader = new ConfigXmlStream();
 //        Configuration configs = configReader.read(Paths.get(workspace.child("auto-grading.xml").getRemote()));
@@ -251,7 +263,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
     }
 
-    private void updateJunitGrade(final Configuration configs, final Score score, final List<TestRes> junitBases,
+    private void updateJunitGrade(final TestsConfiguration configs, final Score score, final List<TestRes> junitBases,
             @NonNull final TaskListener listener) {
         int change = 0;
         for (TestRes base : junitBases) {
@@ -259,12 +271,12 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
             score.addJunitBase(base);
             listener.getLogger().println("[CodeQuality] Saved Junit Base Results");
         }
-        if (configs.getjMaxScore() + change >= 0 && change < 0) {
+        if (configs.getMaxScore() + change >= 0 && change < 0) {
             score.addToScore(change);
             listener.getLogger().println("[CodeQuality] Updated Score by junit Delta");
         }
-        else if (configs.getjMaxScore() + change < 0) {
-            score.addToScore(-configs.getjMaxScore());
+        else if (configs.getMaxScore() + change < 0) {
+            score.addToScore(-configs.getMaxScore());
             listener.getLogger().println("[CodeQuality] Updated Score by junit Delta");
         }
 
@@ -288,7 +300,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
     }
 
     @VisibleForTesting
-    void updateJunitGrade(final Configuration configs, final Score score, final List<TestRes> junitBases) {
+    void updateJunitGrade(final TestsConfiguration configs, final Score score, final List<TestRes> junitBases) {
         updateJunitGrade(configs, score, junitBases, TaskListener.NULL);
     }
 

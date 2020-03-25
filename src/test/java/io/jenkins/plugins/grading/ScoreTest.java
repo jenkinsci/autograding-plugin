@@ -28,13 +28,14 @@ class ScoreTest {
 
         assertThat(score).hasScore(0);
 
-        score.addAnalysisTotal(20, Collections.emptyList());
+        AnalysisConfiguration configuration = new AnalysisConfigurationBuilder().setMaxScore(20).build();
+        score.addAnalysisTotal(configuration, Collections.emptyList());
         assertThat(score).hasScore(20);
 
-        score.addAnalysisTotal(20, Collections.singletonList(createAnalysisScore(-10)));
+        score.addAnalysisTotal(configuration, Collections.singletonList(createAnalysisScore(-10)));
         assertThat(score).hasScore(30);
 
-        score.addAnalysisTotal(20, Arrays.asList(createAnalysisScore(-10), createAnalysisScore(-5)));
+        score.addAnalysisTotal(configuration, Arrays.asList(createAnalysisScore(-10), createAnalysisScore(-5)));
         assertThat(score).hasScore(35);
     }
 

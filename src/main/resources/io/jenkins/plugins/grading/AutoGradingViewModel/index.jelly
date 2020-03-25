@@ -28,12 +28,12 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-3">
-                                <h6>Configuration Static</h6>
+                                <h6>Configuration Static Analysis</h6>
                                 <p>per issue Score changes by:</p>
-                                <p>Errors cause ${it.score.configs.weightError} points</p>
-                                <p>High issues cause ${it.score.configs.weightHigh} points</p>
-                                <p>Normal issues cause ${it.score.configs.weightNormal} points</p>
-                                <p>Low issues cause ${it.score.configs.weightLow} points</p>
+                                <p>Errors cause ${it.score.analysisConfiguration.weightError} points</p>
+                                <p>High issues cause ${it.score.analysisConfiguration.weightHigh} points</p>
+                                <p>Normal issues cause ${it.score.analysisConfiguration.weightNormal} points</p>
+                                <p>Low issues cause ${it.score.analysisConfiguration.weightLow} points</p>
                             </div>
                             <div class="col-sm-3">
                                 <h6>Configuration Tests</h6>
@@ -59,8 +59,9 @@
                 </bs:card>
 
 
-                <bs:card title="Static Checks">
-                    <j:if test="${it.score.getDefaultBases().isEmpty()}">
+                <bs:card title="Static Analysis Checks">
+                    <j:set var="analysisScores" value="${it.score.analysisScores}"/>
+                    <j:if test="${analysisScores.isEmpty()}">
                         <div class="alert alert-info">
                             <strong>Info!</strong> This check category did not provide results.
                         </div>
@@ -79,7 +80,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <j:forEach var="checks" items="${it.score.defaultBases}">
+                                <j:forEach var="checks" items="${analysisScores}">
                                     <tr>
                                         <td>
                                             <a href="../${checks.id}">${checks.id}</a>
