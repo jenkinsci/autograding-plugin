@@ -12,7 +12,7 @@ import io.jenkins.plugins.util.LogHandler;
  *
  * @author Eva-Maria Zeintl
  */
-public class TestRes {
+public class TestsScore {
 
     private final String id;
     private int totalChange;
@@ -24,7 +24,7 @@ public class TestRes {
     private final int totalSkipped;
 
     /**
-     * Creates a new instance of {@link TestRes} for Junit results.
+     * Creates a new instance of {@link TestsScore} for Junit results.
      *
      * @param id
      *         the name of the check
@@ -37,7 +37,7 @@ public class TestRes {
      * @param totalSkipped
      *         the total number of skipped tests
      */
-    public TestRes(final String id, final int totalPassed, final int totalRun, final int totalFailed,
+    public TestsScore(final String id, final int totalPassed, final int totalRun, final int totalFailed,
             final int totalSkipped) {
         super();
         this.id = id;
@@ -47,7 +47,7 @@ public class TestRes {
         this.totalSkipped = totalSkipped;
     }
 
-    public TestRes(final TestsConfiguration testsConfiguration, final TestResultAction action,
+    public TestsScore(final TestsConfiguration testsConfiguration, final TestResultAction action,
             final LogHandler logHandler) {
         this(action.getDisplayName(), action.getResult().getPassCount(), action.getTotalCount(),
                 action.getResult().getFailCount(), action.getResult().getSkipCount());

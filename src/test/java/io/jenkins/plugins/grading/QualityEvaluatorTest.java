@@ -12,24 +12,28 @@ class QualityEvaluatorTest {
     void shouldUpdateCocoGrade() {
         Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
                 "PIT", false, -2, 1, 25, "COCO", true, 1, -2, 25, "JUNIT", false, -1, -2, 1);
-        List<CoCos> cocoBases = new ArrayList<>();
-        cocoBases.add(new CoCos("coverage", 99, 100, 99));
+        List<CoverageScore> cocoBases = new ArrayList<>();
+        cocoBases.add(new CoverageScore("coverage", 99, 100, 99));
         Score score = new Score(configs.getMaxScore());
         score.addCocoBase(cocoBases.get(0));
         AutoGrader test = createAutoGrader();
-        test.updateCocoGrade(configs, cocoBases, score);
+        test.updateCocoGrade(createCoverageConfiguration(), cocoBases, score);
         assertThat(score.getScore()).isEqualTo(98);
+    }
+
+    private CoverageConfiguration createCoverageConfiguration() {
+        return new CoverageConfigurationBuilder().setMaxScore(25).setWeightMissed(-2).setWeightCovered(1).build();
     }
 
     @Test
     void shouldSetMinCocoGrade() {
         Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
                 "PIT", false, -2, 1, 25, "COCO", true, 1, -2, 25, "JUNIT", false, -1, -2, 1);
-        List<CoCos> cocoBases = new ArrayList<>();
-        cocoBases.add(new CoCos("coverage", 50, 100, 50));
+        List<CoverageScore> cocoBases = new ArrayList<>();
+        cocoBases.add(new CoverageScore("coverage", 50, 100, 50));
         Score score = new Score(configs.getMaxScore());
         AutoGrader test = createAutoGrader();
-        test.updateCocoGrade(configs, cocoBases, score);
+        test.updateCocoGrade(createCoverageConfiguration(), cocoBases, score);
         assertThat(score.getScore()).isEqualTo(75);
     }
 
@@ -37,11 +41,11 @@ class QualityEvaluatorTest {
     void shouldSetMaxCocoGrade() {
         Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
                 "PIT", false, -2, 1, 25, "COCO", true, 1, -2, 25, "JUNIT", false, -1, -2, 1);
-        List<CoCos> cocoBases = new ArrayList<>();
-        cocoBases.add(new CoCos("coverage", 101, 100, 101));
+        List<CoverageScore> cocoBases = new ArrayList<>();
+        cocoBases.add(new CoverageScore("coverage", 101, 100, 101));
         Score score = new Score(configs.getMaxScore());
         AutoGrader test = createAutoGrader();
-        test.updateCocoGrade(configs, cocoBases, score);
+        test.updateCocoGrade(createCoverageConfiguration(), cocoBases, score);
         assertThat(score.getScore()).isEqualTo(100);
     }
 
@@ -97,12 +101,12 @@ class QualityEvaluatorTest {
     void shouldUpdatePITGrade() {
         Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
                 "PIT", true, -2, 1, 25, "COCO", true, 1, -2, 25, "JUNIT", false, -1, -2, 1);
-        List<PITs> pitBases = new ArrayList<>();
-        pitBases.add(new PITs("pitmutation", 30, 12, 60));
+        List<PitScore> pitBases = new ArrayList<>();
+        pitBases.add(new PitScore("pitmutation", 30, 12, 60));
         Score score = new Score(configs.getMaxScore());
         score.addPitBase(pitBases.get(0));
         AutoGrader test = createAutoGrader();
-        test.updatePitGrade(configs, score, pitBases);
+        test.updatePitGrade(createPitConfiguration(), score, pitBases);
         assertThat(score.getScore()).isEqualTo(94);
     }
 
@@ -110,12 +114,12 @@ class QualityEvaluatorTest {
     void shouldSetMinPITGrade() {
         Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
                 "PIT", true, -2, 1, 25, "COCO", true, 1, -2, 25, "JUNIT", false, -1, -2, 1);
-        List<PITs> pitBases = new ArrayList<>();
-        pitBases.add(new PITs("pitmutation", 30, 25, 95));
+        List<PitScore> pitBases = new ArrayList<>();
+        pitBases.add(new PitScore("pitmutation", 30, 25, 95));
         Score score = new Score(configs.getMaxScore());
         score.addPitBase(pitBases.get(0));
         AutoGrader test = createAutoGrader();
-        test.updatePitGrade(configs, score, pitBases);
+        test.updatePitGrade(createPitConfiguration(), score, pitBases);
         assertThat(score.getScore()).isEqualTo(75);
     }
 
@@ -123,21 +127,25 @@ class QualityEvaluatorTest {
     void shouldSetMaxPITGrade() {
         Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
                 "PIT", true, -2, 1, 25, "COCO", true, 1, -2, 25, "JUNIT", false, -1, -2, 1);
-        List<PITs> pitBases = new ArrayList<>();
-        pitBases.add(new PITs("pitmutation", 30, 5, 5));
+        List<PitScore> pitBases = new ArrayList<>();
+        pitBases.add(new PitScore("pitmutation", 30, 5, 5));
         Score score = new Score(configs.getMaxScore());
         score.addPitBase(pitBases.get(0));
         AutoGrader test = createAutoGrader();
-        test.updatePitGrade(configs, score, pitBases);
+        test.updatePitGrade(createPitConfiguration(), score, pitBases);
         assertThat(score.getScore()).isEqualTo(100);
+    }
+
+    private PitConfiguration createPitConfiguration() {
+        return new PitConfigurationBuilder().setMaxScore(25).setWeightDetected(1).setWeightUndetected(-2).build();
     }
 
     @Test
     void shouldUpdateJUnitGrade() {
         Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
                 "PIT", true, -2, 1, 25, "COCO", true, 1, -2, 25, "JUNIT", true, -1, -2, 1);
-        List<TestRes> junitBases = new ArrayList<>();
-        junitBases.add(new TestRes("Testergebnis", 0, 8, 7, 1));
+        List<TestsScore> junitBases = new ArrayList<>();
+        junitBases.add(new TestsScore("Testergebnis", 0, 8, 7, 1));
         Score score = new Score(configs.getMaxScore());
         score.addJunitBase(junitBases.get(0));
         AutoGrader test = createAutoGrader();
@@ -161,8 +169,8 @@ class QualityEvaluatorTest {
     void shouldSetMinJUnitGrade() {
         Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
                 "PIT", true, -2, 1, 25, "COCO", true, 1, -2, 25, "JUNIT", true, -1, -2, 1);
-        List<TestRes> junitBases = new ArrayList<>();
-        junitBases.add(new TestRes("Testergebnis", 0, 16, 16, 0));
+        List<TestsScore> junitBases = new ArrayList<>();
+        junitBases.add(new TestsScore("Testergebnis", 0, 16, 16, 0));
         Score score = new Score(configs.getMaxScore());
         score.addJunitBase(junitBases.get(0));
         AutoGrader test = createAutoGrader();
@@ -174,8 +182,8 @@ class QualityEvaluatorTest {
     void shouldSetMaxJUnitGrade() {
         Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
                 "PIT", true, -2, 1, 25, "COCO", true, 1, -2, 25, "JUNIT", true, -1, -2, 1);
-        List<TestRes> junitBases = new ArrayList<>();
-        junitBases.add(new TestRes("Testergebnis", 62, 62, 0, 0));
+        List<TestsScore> junitBases = new ArrayList<>();
+        junitBases.add(new TestsScore("Testergebnis", 62, 62, 0, 0));
         Score score = new Score(configs.getMaxScore());
         score.addJunitBase(junitBases.get(0));
         AutoGrader test = createAutoGrader();

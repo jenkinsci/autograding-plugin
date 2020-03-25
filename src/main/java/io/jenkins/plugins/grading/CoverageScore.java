@@ -1,7 +1,18 @@
 package io.jenkins.plugins.grading;
 
+import java.util.Set;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
+
+import sun.tools.asm.Cover;
+
 import hudson.model.TaskListener;
+import hudson.tasks.junit.TestResultAction;
+
+import io.jenkins.plugins.coverage.CoverageAction;
+import io.jenkins.plugins.coverage.targets.CoverageElement;
+import io.jenkins.plugins.coverage.targets.Ratio;
+import io.jenkins.plugins.util.LogHandler;
 
 /**
  * takes {@link Configuration} and the results of code coverage..
@@ -9,7 +20,7 @@ import hudson.model.TaskListener;
  *
  * @author Eva-Maria Zeintl
  */
-public class CoCos {
+public class CoverageScore {
 
     private final String id;
     private int totalChange;
@@ -21,14 +32,14 @@ public class CoCos {
     private final int totalMissed;
 
     /**
-     * Creates a new instance of {@link CoCos} for code coverage results.
+     * Creates a new instance of {@link CoverageScore} for code coverage results.
      *
      * @param id           the name of the check
      * @param totalCovered the total number of covered code
      * @param totalLines   the total number of missed code
      * @param ratio        the ratio of missed code
      */
-    public CoCos(final String id, final int totalCovered, final int totalLines, final int ratio) {
+    public CoverageScore(final String id, final int totalCovered, final int totalLines, final int ratio) {
         super();
         this.id = id;
         this.totalCovered = totalCovered;
@@ -37,6 +48,17 @@ public class CoCos {
         this.ratio = 100 - ratio;
     }
 
+    public CoverageScore(final CoverageConfiguration coverageConfiguration, final Ratio action,
+            final LogHandler logHandler) {
+        this("PIT", (int)action.numerator, (int)action.denominator, action.getPercentage());
+
+        totalChange = calc(coverageConfiguration);
+
+        logHandler.log("-> Score %d - from recorded coverage results: %d, %d, %d, %d",
+                totalChange, totalCovered, totalLines, totalMissed, ratio);
+    }
+
+
     /**
      * Calculates and saves new {@link Score}.
      *
@@ -44,15 +66,17 @@ public class CoCos {
      * @param listener Console log
      * @return returns the delta that has been changed in score
      */
-    public int calculate(final Configuration configs, @NonNull final TaskListener listener) {
-        int change = 0;
-        if (configs.isCtoCheck()) {
-            change = change + configs.getWeightMissed() * ratio;
+    public int calculate(final CoverageConfiguration configs, @NonNull final TaskListener listener) {
+        int change = calc(configs);
+        listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
+        return change;
+    }
 
-            listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
-            totalChange = change;
-            return change;
-        }
+    private int calc(final CoverageConfiguration configs) {
+        int change = 0;
+        change = change + configs.getWeightMissed() * ratio;
+
+        totalChange = change;
         return change;
     }
 

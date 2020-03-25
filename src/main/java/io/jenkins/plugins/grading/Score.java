@@ -15,12 +15,16 @@ public class Score {
     private int grade;
     private Configuration configs;
     private final List<AnalysisScore> analysisScores = new ArrayList<>();
-    private final List<CoCos> cocoBases = new ArrayList<>();
-    private final List<PITs> pitBases = new ArrayList<>();
-    private final List<TestRes> junitBases = new ArrayList<>();
+    private final List<CoverageScore> cocoBases = new ArrayList<>();
+    private final List<PitScore> pitBases = new ArrayList<>();
+    private final List<TestsScore> junitBases = new ArrayList<>();
     private AnalysisConfiguration analysisConfiguration;
-    private TestRes testScore;
+    private TestsScore testScore;
     private TestsConfiguration testConfiguration;
+    private CoverageScore coverageScore;
+    private CoverageConfiguration coverageConfiguration;
+    private PitConfiguration pitConfiguration;
+    private PitConfiguration pitScore;
 
     /**
      * Creates a new instance of {@link Score}.
@@ -56,13 +60,13 @@ public class Score {
     public List<AnalysisScore> getAnalysisScores() {
         return analysisScores;
     }
-    public List<PITs> getPitBases() {
+    public List<PitScore> getPitBases() {
         return pitBases;
     }
-    public List<TestRes> getJunitBases() {
+    public List<TestsScore> getJunitBases() {
         return junitBases;
     }
-    public List<CoCos> getCocoBases() {
+    public List<CoverageScore> getCocoBases() {
         return cocoBases;
     }
 
@@ -90,7 +94,7 @@ public class Score {
      * Save PIT results.
      * @param inputBases results from pit mutation check
      */
-    public void addPitBase(final PITs inputBases) {
+    public void addPitBase(final PitScore inputBases) {
         this.pitBases.add(inputBases);
     }
 
@@ -98,7 +102,7 @@ public class Score {
      * Save Coco results.
      * @param inputBases results from code coverage check
      */
-    public void addCocoBase(final CoCos inputBases) {
+    public void addCocoBase(final CoverageScore inputBases) {
         this.cocoBases.add(inputBases);
     }
 
@@ -106,7 +110,7 @@ public class Score {
      * Save junit results.
      * @param inputBases results from junit tests
      */
-    public void addJunitBase(final TestRes inputBases) {
+    public void addJunitBase(final TestsScore inputBases) {
         this.junitBases.add(inputBases);
     }
 
@@ -131,7 +135,7 @@ public class Score {
         return actual;
     }
 
-    public int addTestsTotal(final TestsConfiguration configuration, final TestRes scores) {
+    public int addTestsTotal(final TestsConfiguration configuration, final TestsScore scores) {
         testScore = scores;
         testConfiguration = configuration;
 
@@ -141,6 +145,38 @@ public class Score {
         }
         else {
             actual = Math.min(configuration.getMaxScore(), testScore.getTotalChange());
+        }
+
+        grade += actual;
+        return actual;
+    }
+
+    public int addCoverageTotal(final CoverageConfiguration coverageConfiguration, final CoverageScore coverageScore) {
+        this.coverageScore = coverageScore;
+        this.coverageConfiguration = coverageConfiguration;
+
+        int actual;
+        if (testScore.getTotalChange() <= 0) {
+            actual = Math.max(0, coverageConfiguration.getMaxScore() + testScore.getTotalChange());
+        }
+        else {
+            actual = Math.min(coverageConfiguration.getMaxScore(), testScore.getTotalChange());
+        }
+
+        grade += actual;
+        return actual;
+    }
+
+    public int addPitTotal(final PitConfiguration pitConfiguration, final PitScore pitScore) {
+        this.pitScore = pitConfiguration;
+        this.pitConfiguration = pitConfiguration;
+
+        int actual;
+        if (testScore.getTotalChange() <= 0) {
+            actual = Math.max(0, coverageConfiguration.getMaxScore() + testScore.getTotalChange());
+        }
+        else {
+            actual = Math.min(coverageConfiguration.getMaxScore(), testScore.getTotalChange());
         }
 
         grade += actual;
