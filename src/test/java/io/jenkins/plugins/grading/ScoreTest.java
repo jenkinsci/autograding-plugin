@@ -47,13 +47,12 @@ class ScoreTest {
     void shouldUpdateCoverage() {
         CoverageConfiguration coverageConfiguration = new CoverageConfigurationBuilder()
                 .setMaxScore(100)
-                .setWeightMissed(-2)
-                .setWeightCovered(1)
+                .setMissedImpact(-2)
                 .build();
 
         Score score = new Score();
         score.addCoverageTotal(coverageConfiguration,
-                new CoverageScore(coverageConfiguration, Ratio.create(99, 100), mock(LogHandler.class)));
+                new CoverageScore(coverageConfiguration, Ratio.create(198, 200)));
 
         assertThat(score.getScore()).isEqualTo(98);
     }

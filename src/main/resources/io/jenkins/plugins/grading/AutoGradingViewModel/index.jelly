@@ -90,19 +90,19 @@
                                             <a href="../${checks.id}">${checks.name}</a>
                                         </td>
                                         <td>
-                                           ${checks.totalErrors}
+                                           ${checks.errorsSize}
                                         </td>
                                         <td>
-                                            ${checks.totalHighs}
+                                            ${checks.highPrioritySize}
                                         </td>
                                         <td>
-                                            ${checks.totalNormals}
+                                            ${checks.normalPrioritySize}
                                         </td>
                                         <td>
-                                            ${checks.totalLows}
+                                            ${checks.lowPrioritySize}
                                         </td>
                                         <td>
-                                            ${checks.sum}
+                                            ${checks.totalSize}
                                         </td>
                                         <td>
                                             ${checks.totalChange}

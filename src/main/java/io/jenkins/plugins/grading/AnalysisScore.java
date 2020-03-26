@@ -1,7 +1,6 @@
 package io.jenkins.plugins.grading;
 
 import io.jenkins.plugins.analysis.core.model.AnalysisResult;
-import io.jenkins.plugins.util.LogHandler;
 
 /**
  * Computes the {@link Score} impact of static analysis results. These results are obtained by inspecting a
@@ -21,10 +20,7 @@ public class AnalysisScore {
     private final int lowPrioritySize;
     private final int totalSize;
 
-    public AnalysisScore(final String name, final AnalysisConfiguration analysisConfiguration,
-            final AnalysisResult result, final LogHandler logHandler) {
-        super();
-
+    public AnalysisScore(final String name, final AnalysisConfiguration configuration, final AnalysisResult result) {
         this.name = name;
         this.id = result.getId();
 
@@ -34,18 +30,16 @@ public class AnalysisScore {
         this.lowPrioritySize = result.getTotalLowPrioritySize();
         this.totalSize = result.getTotalSize();
 
-        totalImpact = computeImpact(analysisConfiguration);
-
-        logHandler.log("-> Score %d - from recorded warnings distribution of %d, %d, %d, %d",
-                totalImpact, errorsSize, highPrioritySize, normalPrioritySize, lowPrioritySize);
+        totalImpact = computeImpact(configuration);
     }
 
-    private int computeImpact(final AnalysisConfiguration configs) {
+    private int computeImpact(final AnalysisConfiguration configuration) {
         int change = 0;
-        change = change + configs.getWeightError() * errorsSize;
-        change = change + configs.getWeightHigh() * highPrioritySize;
-        change = change + configs.getWeightNormal() * normalPrioritySize;
-        change = change + configs.getWeightLow() * lowPrioritySize;
+
+        change = change + configuration.getErrorImpact() * errorsSize;
+        change = change + configuration.getHighImpact() * highPrioritySize;
+        change = change + configuration.getNormalImpact() * normalPrioritySize;
+        change = change + configuration.getLowImpact() * lowPrioritySize;
 
         return change;
     }

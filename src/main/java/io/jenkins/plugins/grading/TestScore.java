@@ -1,87 +1,40 @@
 package io.jenkins.plugins.grading;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-
-import hudson.model.TaskListener;
 import hudson.tasks.junit.TestResultAction;
 
-import io.jenkins.plugins.analysis.core.model.AnalysisResult;
-import io.jenkins.plugins.util.LogHandler;
-
 /**
- * Computes the {@link Score} impact of test results. These results are obtained by inspecting a
- * {@link TestResultAction} instance of the JUnit plugin.
+ * Computes the {@link Score} impact of test results. These results are obtained by inspecting a {@link
+ * TestResultAction} instance of the JUnit plugin.
  *
  * @author Eva-Maria Zeintl
  */
 public class TestScore {
-
     private final String id;
-    private int totalChange;
 
-    //Junit
-    private final int totalPassed;
-    private final int totalRun;
-    private final int totalFailed;
-    private final int totalSkipped;
+    private final int totalImpact;
 
-    /**
-     * Creates a new instance of {@link TestScore} for Junit results.
-     *
-     * @param id
-     *         the name of the check
-     * @param totalPassed
-     *         the total number of passed tests
-     * @param totalRun
-     *         the total number of run tests
-     * @param totalFailed
-     *         the total number of failed tests
-     * @param totalSkipped
-     *         the total number of skipped tests
-     */
-    public TestScore(final String id, final int totalPassed, final int totalRun, final int totalFailed,
-            final int totalSkipped) {
-        super();
-        this.id = id;
-        this.totalPassed = totalPassed;
-        this.totalFailed = totalFailed;
-        this.totalRun = totalRun;
-        this.totalSkipped = totalSkipped;
+    private final int passedSize;
+    private final int totalSize;
+    private final int failedSize;
+    private final int skippedSize;
+
+    public TestScore(final TestConfiguration testsConfiguration, final TestResultAction action) {
+        id = action.getDisplayName();
+
+        failedSize = action.getFailCount();
+        skippedSize = action.getSkipCount();
+        totalSize = action.getTotalCount();
+        passedSize = totalSize - failedSize - skippedSize;
+
+        totalImpact = computeImpact(testsConfiguration);
     }
 
-    public TestScore(final TestConfiguration testsConfiguration, final TestResultAction action,
-            final LogHandler logHandler) {
-        this(action.getDisplayName(), action.getResult().getPassCount(), action.getTotalCount(),
-                action.getResult().getFailCount(), action.getResult().getSkipCount());
-        totalChange = calc(testsConfiguration);
-
-        logHandler.log("-> Score %d - from recorded test results: %d, %d, %d, %d",
-                totalChange, totalRun, totalPassed, totalFailed, totalSkipped);
-    }
-
-    /**
-     * Calculates and saves new {@link Score}.
-     *
-     * @param configs
-     *         all Configurations
-     * @param listener
-     *         Console log
-     *
-     * @return returns the delta that has been changed in score
-     */
-    public int calculate(final TestConfiguration configs, @NonNull final TaskListener listener) {
-        int change = calc(configs);
-        listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
-        return change;
-    }
-
-    private int calc(final TestConfiguration configs) {
+    private int computeImpact(final TestConfiguration configs) {
         int change = 0;
-        change = change + configs.getWeightPassed() * totalPassed;
-        change = change + configs.getWeightFailures() * totalFailed;
-        change = change + configs.getWeightSkipped() * totalSkipped;
+        change = change + configs.getPassedImpact() * passedSize;
+        change = change + configs.getFailureImpact() * failedSize;
+        change = change + configs.getSkippedImpact() * skippedSize;
 
-        totalChange = change;
         return change;
     }
 
@@ -89,24 +42,23 @@ public class TestScore {
         return id;
     }
 
-    public int getTotalChange() {
-        return totalChange;
+    public int getTotalImpact() {
+        return totalImpact;
     }
 
-    public int getTotalPassed() {
-        return totalPassed;
+    public int getPassedSize() {
+        return passedSize;
     }
 
-    public int getTotalRun() {
-        return totalRun;
+    public int getTotalSize() {
+        return totalSize;
     }
 
-    public int getTotalFailed() {
-        return totalFailed;
+    public int getFailedSize() {
+        return failedSize;
     }
 
-    public int getTotalSkipped() {
-        return totalSkipped;
+    public int getSkippedSize() {
+        return skippedSize;
     }
-
 }

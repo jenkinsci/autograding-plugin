@@ -7,107 +7,101 @@ import net.sf.json.JSONObject;
  *
  * @author Ullrich Hafner
  */
-public class AnalysisConfiguration {
-    private int maxScore;
-
-    private int weightError;
-    private int weightHigh;
-    private int weightNormal;
-    private int weightLow;
+public class AnalysisConfiguration extends Configuration {
+    private int errorImpact;
+    private int highImpact;
+    private int normalImpact;
+    private int lowImpact;
 
     public static AnalysisConfiguration from(final JSONObject json) {
         return (AnalysisConfiguration) JSONObject.toBean(json, AnalysisConfiguration.class);
     }
 
     public AnalysisConfiguration() {
-        // empty constructor required for automatic Json conversion
+        this(0, 0, 0, 0, 0);
     }
 
     public AnalysisConfiguration(final int maxScore,
-            final int weightError, final int weightHigh, final int weightNormal, final int weightLow) {
-        this();
+            final int errorImpact, final int highImpact, final int normalImpact, final int lowImpact) {
+        super(maxScore);
 
-        this.maxScore = maxScore;
-        this.weightError = weightError;
-        this.weightHigh = weightHigh;
-        this.weightNormal = weightNormal;
-        this.weightLow = weightLow;
+        this.errorImpact = errorImpact;
+        this.highImpact = highImpact;
+        this.normalImpact = normalImpact;
+        this.lowImpact = lowImpact;
     }
 
-    public void setMaxScore(final int maxScore) {
-        this.maxScore = maxScore;
+    public int getErrorImpact() {
+        return errorImpact;
     }
 
-    public void setWeightError(final int weightError) {
-        this.weightError = weightError;
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setErrorImpact(final int errorImpact) {
+        this.errorImpact = errorImpact;
     }
 
-    public void setWeightHigh(final int weightHigh) {
-        this.weightHigh = weightHigh;
+    public int getHighImpact() {
+        return highImpact;
     }
 
-    public void setWeightNormal(final int weightNormal) {
-        this.weightNormal = weightNormal;
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setHighImpact(final int highImpact) {
+        this.highImpact = highImpact;
     }
 
-    public void setWeightLow(final int weightLow) {
-        this.weightLow = weightLow;
+    public int getNormalImpact() {
+        return normalImpact;
     }
 
-    public int getMaxScore() {
-        return maxScore;
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setNormalImpact(final int weightNormal) {
+        this.normalImpact = weightNormal;
     }
 
-    public int getWeightError() {
-        return weightError;
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setLowImpact(final int lowImpact) {
+        this.lowImpact = lowImpact;
     }
 
-    public int getWeightHigh() {
-        return weightHigh;
-    }
-
-    public int getWeightNormal() {
-        return weightNormal;
-    }
-
-    public int getWeightLow() {
-        return weightLow;
+    public int getLowImpact() {
+        return lowImpact;
     }
 
     public static class AnalysisConfigurationBuilder {
         private int maxScore;
-        private int weightError;
-        private int weightHigh;
-        private int weightNormal;
-        private int weightLow;
+
+        private int errorImpact;
+        private int highImpact;
+        private int normalImpact;
+        private int lowImpact;
 
         public AnalysisConfigurationBuilder setMaxScore(final int maxScore) {
             this.maxScore = maxScore;
             return this;
         }
 
-        public AnalysisConfigurationBuilder setWeightError(final int weightError) {
-            this.weightError = weightError;
+        public AnalysisConfigurationBuilder setErrorImpact(final int errorImpact) {
+            this.errorImpact = errorImpact;
             return this;
         }
 
-        public AnalysisConfigurationBuilder setWeightHigh(final int weightHigh) {
-            this.weightHigh = weightHigh;
+        public AnalysisConfigurationBuilder setHighImpact(final int highImpact) {
+            this.highImpact = highImpact;
             return this;
         }
 
-        public AnalysisConfigurationBuilder setWeightNormal(final int weightNormal) {
-            this.weightNormal = weightNormal;
+        public AnalysisConfigurationBuilder setNormalImpact(final int normalImpact) {
+            this.normalImpact = normalImpact;
             return this;
         }
 
         public AnalysisConfigurationBuilder setWeightLow(final int weightLow) {
-            this.weightLow = weightLow;
+            this.lowImpact = weightLow;
             return this;
         }
 
         public AnalysisConfiguration build() {
-            return new AnalysisConfiguration(maxScore, weightError, weightHigh, weightNormal, weightLow);
+            return new AnalysisConfiguration(maxScore, errorImpact, highImpact, normalImpact, lowImpact);
         }
     }
 }

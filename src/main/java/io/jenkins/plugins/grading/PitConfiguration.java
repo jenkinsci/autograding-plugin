@@ -3,78 +3,88 @@ package io.jenkins.plugins.grading;
 import net.sf.json.JSONObject;
 
 /**
- * Configuration to grade static analysis results.
+ * Configuration to grade mutation test results.
  *
  * @author Ullrich Hafner
  */
-public class PitConfiguration {
-    private int maxScore;
-
-    private int weightUndetected;
-    private int weightDetected;
+public class PitConfiguration extends Configuration {
+    private int ratioImpact;
+    private int detectedImpact;
+    private int undetectedImpact;
 
     public static PitConfiguration from(final JSONObject json) {
         return (PitConfiguration) JSONObject.toBean(json, PitConfiguration.class);
     }
 
+    public PitConfiguration(final int maxScore,
+            final int undetectedImpact, final int detectedImpact, final int ratioImpact) {
+        super(maxScore);
+
+        this.undetectedImpact = undetectedImpact;
+        this.detectedImpact = detectedImpact;
+        this.ratioImpact = ratioImpact;
+    }
+
+    @SuppressWarnings("unused") // Required for JSON conversion
     public PitConfiguration() {
-        // empty constructor required for automatic Json conversion
+        this(0, 0, 0, 0);
     }
 
-    public PitConfiguration(final int maxScore, final int weightUndetected, final int weightDetected) {
-        this();
-
-        this.maxScore = maxScore;
-        this.weightUndetected = weightUndetected;
-        this.weightDetected = weightDetected;
+    public int getUndetectedImpact() {
+        return undetectedImpact;
     }
 
-    public void setMaxScore(final int maxScore) {
-        this.maxScore = maxScore;
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setUndetectedImpact(final int undetectedImpact) {
+        this.undetectedImpact = undetectedImpact;
     }
 
-    public int getMaxScore() {
-        return maxScore;
+    public int getDetectedImpact() {
+        return detectedImpact;
     }
 
-    public int getWeightUndetected() {
-        return weightUndetected;
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setDetectedImpact(final int detectedImpact) {
+        this.detectedImpact = detectedImpact;
     }
 
-    public void setWeightUndetected(final int weightUndetected) {
-        this.weightUndetected = weightUndetected;
+    public int getRatioImpact() {
+        return ratioImpact;
     }
 
-    public int getWeightDetected() {
-        return weightDetected;
-    }
-
-    public void setWeightDetected(final int weightDetected) {
-        this.weightDetected = weightDetected;
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setRatioImpact(final int ratioImpact) {
+        this.ratioImpact = ratioImpact;
     }
 
     public static class PitConfigurationBuilder {
-        private int maxScore;
-        private int weightUndetected;
-        private int weightDetected;
+        private int maxScore = 0;
+        private int undetectedImpact = 0;
+        private int detectedImpact = 0;
+        private int ratioImpact = 0;
 
         public PitConfigurationBuilder setMaxScore(final int maxScore) {
             this.maxScore = maxScore;
             return this;
         }
 
-        public PitConfigurationBuilder setWeightUndetected(final int weightUndetected) {
-            this.weightUndetected = weightUndetected;
+        public PitConfigurationBuilder setUndetectedImpact(final int undetectedImpact) {
+            this.undetectedImpact = undetectedImpact;
             return this;
         }
 
-        public PitConfigurationBuilder setWeightDetected(final int weightDetected) {
-            this.weightDetected = weightDetected;
+        public PitConfigurationBuilder setDetectedImpact(final int detectedImpact) {
+            this.detectedImpact = detectedImpact;
+            return this;
+        }
+
+        public PitConfigurationBuilder setRatioImpact(final int ratioImpact) {
+            this.ratioImpact = ratioImpact;
             return this;
         }
 
         public PitConfiguration build() {
-            return new PitConfiguration(maxScore, weightUndetected, weightDetected);
+            return new PitConfiguration(maxScore, undetectedImpact, detectedImpact, ratioImpact);
         }
     }
 }

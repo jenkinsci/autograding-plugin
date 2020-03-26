@@ -3,78 +3,70 @@ package io.jenkins.plugins.grading;
 import net.sf.json.JSONObject;
 
 /**
- * Configuration to grade static analysis results.
+ * Configuration to grade code coverage results.
  *
  * @author Ullrich Hafner
  */
-public class CoverageConfiguration {
-    private int maxScore;
-
-    private int weightCovered;
-    private int weightMissed;
+public class CoverageConfiguration extends Configuration {
+    private int coveredImpact;
+    private int missedImpact;
 
     public static CoverageConfiguration from(final JSONObject json) {
         return (CoverageConfiguration) JSONObject.toBean(json, CoverageConfiguration.class);
     }
 
     public CoverageConfiguration() {
-        // empty constructor required for automatic Json conversion
+        this(0, 0, 0);
     }
 
-    public CoverageConfiguration(final int maxScore, final int weightCovered, final int weightMissed) {
-        this();
+    public CoverageConfiguration(final int maxScore,
+            final int coveredImpact, final int missedImpact) {
+        super(maxScore);
 
-        this.maxScore = maxScore;
-        this.weightCovered = weightCovered;
-        this.weightMissed = weightMissed;
+        this.coveredImpact = coveredImpact;
+        this.missedImpact = missedImpact;
     }
 
-    public void setMaxScore(final int maxScore) {
-        this.maxScore = maxScore;
+    public int getCoveredImpact() {
+        return coveredImpact;
     }
 
-    public int getMaxScore() {
-        return maxScore;
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setCoveredImpact(final int coveredImpact) {
+        this.coveredImpact = coveredImpact;
     }
 
-    public int getWeightCovered() {
-        return weightCovered;
+    public int getMissedImpact() {
+        return missedImpact;
     }
 
-    public void setWeightCovered(final int weightCovered) {
-        this.weightCovered = weightCovered;
-    }
-
-    public int getWeightMissed() {
-        return weightMissed;
-    }
-
-    public void setWeightMissed(final int weightMissed) {
-        this.weightMissed = weightMissed;
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setMissedImpact(final int missedImpact) {
+        this.missedImpact = missedImpact;
     }
 
     public static class CoverageConfigurationBuilder {
-        private int maxScore;
-        private int weightCovered;
-        private int weightMissed;
+        private int maxScore = 0;
+        private int coveredImpact = 0;
+        private int missedImpact = 0;
 
         public CoverageConfigurationBuilder setMaxScore(final int maxScore) {
             this.maxScore = maxScore;
             return this;
         }
 
-        public CoverageConfigurationBuilder setWeightCovered(final int weightCovered) {
-            this.weightCovered = weightCovered;
+        public CoverageConfigurationBuilder setCoveredImpact(final int coveredImpact) {
+            this.coveredImpact = coveredImpact;
             return this;
         }
 
-        public CoverageConfigurationBuilder setWeightMissed(final int weightMissed) {
-            this.weightMissed = weightMissed;
+        public CoverageConfigurationBuilder setMissedImpact(final int missedImpact) {
+            this.missedImpact = missedImpact;
             return this;
         }
 
         public CoverageConfiguration build() {
-            return new CoverageConfiguration(maxScore, weightCovered, weightMissed);
+            return new CoverageConfiguration(maxScore, coveredImpact, missedImpact);
         }
     }
 }

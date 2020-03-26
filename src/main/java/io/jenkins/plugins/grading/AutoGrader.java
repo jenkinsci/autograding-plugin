@@ -2,9 +2,7 @@ package io.jenkins.plugins.grading;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import edu.hm.hafner.util.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import net.sf.json.JSONException;
@@ -74,7 +72,11 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
                 for (ResultAction action : run.getActions(ResultAction.class)) {
                     String name = action.getLabelProvider().getName();
                     logHandler.log("Grading static analysis results for " + name);
-                    analysisScores.add(new AnalysisScore(name, analysisConfiguration, action.getResult(), logHandler));
+                    AnalysisScore score = new AnalysisScore(name, analysisConfiguration, action.getResult());
+                    analysisScores.add(score);
+                    logHandler.log("-> Score %d - from recorded warnings distribution of %d, %d, %d, %d",
+                            score.getTotalImpact(), score.getErrorsSize(), score.getHighPrioritySize(),
+                            score.getNormalPrioritySize(), score.getLowPrioritySize());
                 }
                 int total = actualScore.addAnalysisTotal(analysisConfiguration, analysisScores);
                 logHandler.log("Total score for static analysis results: " + total);
@@ -92,8 +94,12 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
                 }
                 TestConfiguration testsConfiguration = TestConfiguration.from(tests);
                 logHandler.log("Grading test results " + action.getDisplayName());
-                int total = actualScore.addTestsTotal(testsConfiguration,
-                        new TestScore(testsConfiguration, action, logHandler));
+                TestScore score = new TestScore(testsConfiguration, action);
+                int total = actualScore.addTestsTotal(testsConfiguration, score);
+
+                logHandler.log("-> Score %d - from recorded test results: %d, %d, %d, %d",
+                        score.getTotalImpact(), score.getTotalSize(), score.getPassedSize(),
+                        score.getFailedSize(), score.getSkippedSize());
                 logHandler.log("Total score for test results: " + total);
             }
             else {
@@ -109,10 +115,13 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
                             "Coverage scoring has been enabled, but no coverage results have been found.");
                 }
                 logHandler.log("Grading coverage results " + action.getDisplayName());
-                int total = actualScore.addCoverageTotal(coverageConfiguration,
-                        new CoverageScore(coverageConfiguration, action.getResult().getCoverage(CoverageElement.LINE),
-                                logHandler));
-                logHandler.log("Total score for test results: " + total);
+                CoverageScore score = new CoverageScore(coverageConfiguration,
+                        action.getResult().getCoverage(CoverageElement.LINE));
+                int total = actualScore.addCoverageTotal(coverageConfiguration, score);
+
+                logHandler.log("-> Score %d - from recorded coverage results: %d%%",
+                        score.getTotalImpact(), score.getCoveredSize());
+                logHandler.log("Total score for coverage results: " + total);
             }
             else {
                 logHandler.log("Skipping test results");
@@ -127,8 +136,11 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
                             "Mutation coverage scoring has been enabled, but no PIT results have been found.");
                 }
                 logHandler.log("Grading PIT mutation results " + action.getDisplayName());
-                int total = actualScore.addPitTotal(pitConfiguration,
-                        new PitScore(pitConfiguration, action, logHandler));
+                PitScore score = new PitScore(pitConfiguration, action);
+                int total = actualScore.addPitTotal(pitConfiguration, score);
+                logHandler.log("-> Score %d - from recorded PIT mutation results: %d, %d, %d, %d",
+                        score.getTotalImpact(), score.getMutationsSize(), score.getUndetectedSize(),
+                        score.getDetectedSize(), score.getRatio());
                 logHandler.log("Total score for mutation coverage results: " + total);
             }
             else {

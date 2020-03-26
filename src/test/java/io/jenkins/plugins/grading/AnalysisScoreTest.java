@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import net.sf.json.JSONObject;
 
 import io.jenkins.plugins.analysis.core.model.AnalysisResult;
-import io.jenkins.plugins.util.LogHandler;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -27,12 +26,12 @@ class AnalysisScoreTest {
 
         AnalysisConfiguration analysisConfiguration = new AnalysisConfiguration.AnalysisConfigurationBuilder()
                 .setMaxScore(25)
-                .setWeightError(-4)
-                .setWeightHigh(-3)
-                .setWeightNormal(-2)
+                .setErrorImpact(-4)
+                .setHighImpact(-3)
+                .setNormalImpact(-2)
                 .setWeightLow(-1)
                 .build();
-        AnalysisScore analysisScore = new AnalysisScore("Analysis Results", analysisConfiguration, result, mock(LogHandler.class));
+        AnalysisScore analysisScore = new AnalysisScore("Analysis Results", analysisConfiguration, result);
         assertThat(analysisScore.getTotalImpact()).isEqualTo(-4 - 3 - 2 - 1);
     }
 

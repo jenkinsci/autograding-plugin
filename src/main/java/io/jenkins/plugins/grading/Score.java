@@ -6,8 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Stores the results of a scoring run.
- * Provides support for persisting the results of the build and loading.
+ * Stores the scores of an autograding run. Persists the configuration and the scores for each metric.
  *
  * @author Eva-Maria Zeintl
  * @author Ullrich Hafner
@@ -68,72 +67,48 @@ public class Score {
     public int addAnalysisTotal(final AnalysisConfiguration configuration, final List<AnalysisScore> scores) {
         analysisScores.addAll(scores);
         analysisConfiguration = configuration;
-        total += analysisConfiguration.getMaxScore();
 
         int delta = 0;
         for (AnalysisScore score : scores) {
             delta = delta + score.getTotalImpact();
         }
 
-        int actual;
-        if (delta <= 0) {
-            actual = Math.max(0, configuration.getMaxScore() + delta);
-        }
-        else {
-            actual = Math.min(configuration.getMaxScore(), delta);
-        }
-
-        grade += actual;
-        return actual;
+        return updateScore(analysisConfiguration.getMaxScore(), delta);
     }
 
     public int addTestsTotal(final TestConfiguration configuration, final TestScore scores) {
         testsScore = scores;
         testsConfiguration = configuration;
-        total += configuration.getMaxScore();
 
-        int actual;
-        if (testsScore.getTotalChange() <= 0) {
-            actual = Math.max(0, configuration.getMaxScore() + testsScore.getTotalChange());
-        }
-        else {
-            actual = Math.min(configuration.getMaxScore(), testsScore.getTotalChange());
-        }
-
-        grade += actual;
-        return actual;
+        return updateScore(configuration.getMaxScore(), testsScore.getTotalImpact());
     }
 
     public int addCoverageTotal(final CoverageConfiguration configuration, final CoverageScore score) {
         this.coverageScore = score;
         this.coverageConfiguration = configuration;
-        total += configuration.getMaxScore();
 
-        int actual;
-        if (score.getTotalChange() <= 0) {
-            actual = Math.max(0, configuration.getMaxScore() + score.getTotalChange());
-        }
-        else {
-            actual = Math.min(configuration.getMaxScore(), score.getTotalChange());
-        }
-
-        grade += actual;
-        return actual;
+        return updateScore(configuration.getMaxScore(), score.getTotalImpact());
     }
 
     public int addPitTotal(final PitConfiguration configuration, final PitScore score) {
         this.pitConfiguration = configuration;
         this.pitScore = score;
 
+        return updateScore(configuration.getMaxScore(), score.getTotalImpact());
+    }
+
+    private int updateScore(final int maxScore, final int totalChange) {
+        total += maxScore;
+
         int actual;
-        if (score.getTotalChange() <= 0) {
-            actual = Math.max(0, configuration.getMaxScore() + score.getTotalChange());
+        if (totalChange <= 0) {
+            actual = Math.max(0, maxScore + totalChange);
         }
         else {
-            actual = Math.min(configuration.getMaxScore(), score.getTotalChange());
+            actual = Math.min(maxScore, totalChange);
         }
-
         grade += actual;
+
         return actual;
     }
 }

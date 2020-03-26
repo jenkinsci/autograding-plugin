@@ -3,93 +3,89 @@ package io.jenkins.plugins.grading;
 import net.sf.json.JSONObject;
 
 /**
- * FIXME: comment class.
+ * Configuration to grade test results.
  *
  * @author Ullrich Hafner
  */
-public class TestConfiguration {
-    private int maxScore;
-    private int weightSkipped;
-    private int weightFailures;
-    private int weightPassed;
+public class TestConfiguration extends Configuration {
+    private int failureImpact;
+    private int passedImpact;
+    private int skippedImpact;
 
     public static TestConfiguration from(final JSONObject json) {
         return (TestConfiguration) JSONObject.toBean(json, TestConfiguration.class);
     }
 
+    @SuppressWarnings("unused") // Required for JSON conversion
     public TestConfiguration() {
-        // empty constructor required for automatic Json conversion
+        this(0, 0, 0, 0);
     }
 
-    public TestConfiguration(final int maxScore, final int weightSkipped, final int weightFailures,
-            final int weightPassed) {
-        this();
-        this.maxScore = maxScore;
-        this.weightSkipped = weightSkipped;
-        this.weightFailures = weightFailures;
-        this.weightPassed = weightPassed;
+    public TestConfiguration(final int maxScore, final int skippedImpact, final int failureImpact,
+            final int passedImpact) {
+        super(maxScore);
+
+        this.failureImpact = failureImpact;
+        this.passedImpact = passedImpact;
+        this.skippedImpact = skippedImpact;
     }
 
-    public int getMaxScore() {
-        return maxScore;
+    public int getSkippedImpact() {
+        return skippedImpact;
     }
 
-    public void setMaxScore(final int maxScore) {
-        this.maxScore = maxScore;
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setSkippedImpact(final int skippedImpact) {
+        this.skippedImpact = skippedImpact;
     }
 
-    public int getWeightSkipped() {
-        return weightSkipped;
+    public int getFailureImpact() {
+        return failureImpact;
     }
 
-    public void setWeightSkipped(final int weightSkipped) {
-        this.weightSkipped = weightSkipped;
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setFailureImpact(final int failureImpact) {
+        this.failureImpact = failureImpact;
     }
 
-    public int getWeightFailures() {
-        return weightFailures;
+    public int getPassedImpact() {
+        return passedImpact;
     }
 
-    public void setWeightFailures(final int weightFailures) {
-        this.weightFailures = weightFailures;
-    }
-
-    public int getWeightPassed() {
-        return weightPassed;
-    }
-
-    public void setWeightPassed(final int weightPassed) {
-        this.weightPassed = weightPassed;
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setPassedImpact(final int passedImpact) {
+        this.passedImpact = passedImpact;
     }
 
     public static class TestConfigurationBuilder {
         private int maxScore;
-        private int weightSkipped;
-        private int weightFailures;
-        private int weightPassed;
+
+        private int failureImpact;
+        private int passedImpact;
+        private int skippedImpact;
 
         public TestConfigurationBuilder setMaxScore(final int maxScore) {
             this.maxScore = maxScore;
             return this;
         }
 
-        public TestConfigurationBuilder setWeightSkipped(final int weightSkipped) {
-            this.weightSkipped = weightSkipped;
+        public TestConfigurationBuilder setSkippedImpact(final int skippedImpact) {
+            this.skippedImpact = skippedImpact;
             return this;
         }
 
-        public TestConfigurationBuilder setWeightFailures(final int weightFailures) {
-            this.weightFailures = weightFailures;
+        public TestConfigurationBuilder setFailureImpact(final int failureImpact) {
+            this.failureImpact = failureImpact;
             return this;
         }
 
-        public TestConfigurationBuilder setWeightPassed(final int weightPassed) {
-            this.weightPassed = weightPassed;
+        public TestConfigurationBuilder setPassedImpact(final int passedImpact) {
+            this.passedImpact = passedImpact;
             return this;
         }
 
         public TestConfiguration build() {
-            return new TestConfiguration(maxScore, weightSkipped, weightFailures, weightPassed);
+            return new TestConfiguration(maxScore, skippedImpact, failureImpact, passedImpact);
         }
     }
 }

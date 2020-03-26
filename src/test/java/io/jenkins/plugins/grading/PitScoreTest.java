@@ -2,9 +2,12 @@ package io.jenkins.plugins.grading;
 
 import org.junit.jupiter.api.Test;
 
-import hudson.model.TaskListener;
+import org.jenkinsci.plugins.pitmutation.PitBuildAction;
+import org.jenkinsci.plugins.pitmutation.targets.MutationStatsImpl;
+import org.jenkinsci.plugins.pitmutation.targets.ProjectMutations;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
+import static org.mockito.Mockito.*;
 
 /**
  * Tests the class {@link PitScore}.
@@ -13,29 +16,50 @@ import static io.jenkins.plugins.grading.assertions.Assertions.*;
  * @author Ullrich Hafner
  */
 class PitScoreTest {
+    @Test
+    void shouldCalculateSizeImpacts() {
+        PitConfiguration pitConfiguration = createConfiguration();
+
+        PitScore pits = new PitScore(pitConfiguration, createAction(30, 5));
+
+        assertThat(pits.getTotalImpact()).isEqualTo(15);
+    }
 
     @Test
-    void shouldCalculate() {
-        PitConfiguration pitConfiguration = new PitConfiguration.PitConfigurationBuilder().setMaxScore(25)
-                .setWeightUndetected(-2)
-                .setWeightDetected(1)
+    void shouldCalculateRatioImpacts() {
+        PitConfiguration pitConfiguration = new PitConfiguration.PitConfigurationBuilder().setMaxScore(20)
+                .setRatioImpact(-2)
                 .build();
 
-        PitScore pits = new PitScore("pitmutation", 30, 5, 16);
+        PitScore pits = new PitScore(pitConfiguration, createAction(30, 3));
 
-        assertThat(pits.calculate(pitConfiguration, TaskListener.NULL)).isEqualTo(15);
+        assertThat(pits.getTotalImpact()).isEqualTo(-20);
     }
 
     @Test
     void shouldCalculateNegativeResult() {
-        PitConfiguration pitConfiguration = new PitConfiguration.PitConfigurationBuilder().setMaxScore(25)
-                .setWeightUndetected(-2)
-                .setWeightDetected(1)
+        PitConfiguration pitConfiguration = createConfiguration();
+
+        PitScore pits = new PitScore(pitConfiguration, createAction(30, 20));
+
+        assertThat(pits.getTotalImpact()).isEqualTo(-30);
+    }
+
+    private PitConfiguration createConfiguration() {
+        return new PitConfiguration.PitConfigurationBuilder().setMaxScore(25)
+                .setUndetectedImpact(-2)
+                .setDetectedImpact(1)
                 .build();
+    }
 
-        PitScore pits = new PitScore("pitmutation", 30, 20, 33);
-
-        assertThat(pits.calculate(pitConfiguration, TaskListener.NULL)).isEqualTo(-30);
-
+    private PitBuildAction createAction(final int mutationsSize, final int undetectedSize) {
+        PitBuildAction action = mock(PitBuildAction.class);
+        ProjectMutations mutations = mock(ProjectMutations.class);
+        MutationStatsImpl stats = mock(MutationStatsImpl.class);
+        when(stats.getTotalMutations()).thenReturn(mutationsSize);
+        when(stats.getUndetected()).thenReturn(undetectedSize);
+        when(mutations.getMutationStats()).thenReturn(stats);
+        when(action.getReport()).thenReturn(mutations);
+        return action;
     }
 }
