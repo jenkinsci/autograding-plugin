@@ -12,7 +12,7 @@ import io.jenkins.plugins.util.LogHandler;
  *
  * @author Eva-Maria Zeintl
  */
-public class TestsScore {
+public class TestScore {
 
     private final String id;
     private int totalChange;
@@ -24,7 +24,7 @@ public class TestsScore {
     private final int totalSkipped;
 
     /**
-     * Creates a new instance of {@link TestsScore} for Junit results.
+     * Creates a new instance of {@link TestScore} for Junit results.
      *
      * @param id
      *         the name of the check
@@ -37,7 +37,7 @@ public class TestsScore {
      * @param totalSkipped
      *         the total number of skipped tests
      */
-    public TestsScore(final String id, final int totalPassed, final int totalRun, final int totalFailed,
+    public TestScore(final String id, final int totalPassed, final int totalRun, final int totalFailed,
             final int totalSkipped) {
         super();
         this.id = id;
@@ -47,7 +47,7 @@ public class TestsScore {
         this.totalSkipped = totalSkipped;
     }
 
-    public TestsScore(final TestsConfiguration testsConfiguration, final TestResultAction action,
+    public TestScore(final TestConfiguration testsConfiguration, final TestResultAction action,
             final LogHandler logHandler) {
         this(action.getDisplayName(), action.getResult().getPassCount(), action.getTotalCount(),
                 action.getResult().getFailCount(), action.getResult().getSkipCount());
@@ -67,13 +67,13 @@ public class TestsScore {
      *
      * @return returns the delta that has been changed in score
      */
-    public int calculate(final TestsConfiguration configs, @NonNull final TaskListener listener) {
+    public int calculate(final TestConfiguration configs, @NonNull final TaskListener listener) {
         int change = calc(configs);
         listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
         return change;
     }
 
-    private int calc(final TestsConfiguration configs) {
+    private int calc(final TestConfiguration configs) {
         int change = 0;
         change = change + configs.getWeightPassed() * totalPassed;
         change = change + configs.getWeightFailures() * totalFailed;

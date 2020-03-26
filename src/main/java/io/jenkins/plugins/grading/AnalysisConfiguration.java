@@ -9,6 +9,7 @@ import net.sf.json.JSONObject;
  */
 public class AnalysisConfiguration {
     private int maxScore;
+
     private int weightError;
     private int weightHigh;
     private int weightNormal;
@@ -19,10 +20,11 @@ public class AnalysisConfiguration {
     }
 
     public AnalysisConfiguration() {
+        // empty constructor required for automatic Json conversion
     }
 
-    public AnalysisConfiguration(final int maxScore, final int weightError, final int weightHigh,
-            final int weightNormal, final int weightLow) {
+    public AnalysisConfiguration(final int maxScore,
+            final int weightError, final int weightHigh, final int weightNormal, final int weightLow) {
         this();
 
         this.maxScore = maxScore;
@@ -70,5 +72,42 @@ public class AnalysisConfiguration {
 
     public int getWeightLow() {
         return weightLow;
+    }
+
+    public static class AnalysisConfigurationBuilder {
+        private int maxScore;
+        private int weightError;
+        private int weightHigh;
+        private int weightNormal;
+        private int weightLow;
+
+        public AnalysisConfigurationBuilder setMaxScore(final int maxScore) {
+            this.maxScore = maxScore;
+            return this;
+        }
+
+        public AnalysisConfigurationBuilder setWeightError(final int weightError) {
+            this.weightError = weightError;
+            return this;
+        }
+
+        public AnalysisConfigurationBuilder setWeightHigh(final int weightHigh) {
+            this.weightHigh = weightHigh;
+            return this;
+        }
+
+        public AnalysisConfigurationBuilder setWeightNormal(final int weightNormal) {
+            this.weightNormal = weightNormal;
+            return this;
+        }
+
+        public AnalysisConfigurationBuilder setWeightLow(final int weightLow) {
+            this.weightLow = weightLow;
+            return this;
+        }
+
+        public AnalysisConfiguration build() {
+            return new AnalysisConfiguration(maxScore, weightError, weightHigh, weightNormal, weightLow);
+        }
     }
 }

@@ -21,7 +21,7 @@ public class PitScore {
     private final int totalMutations;
     private final int totalUndetected;
     private final int totalDetected;
-    private final float ratio;
+    private final int ratio;
 
     /**
      * Creates a new instance of {@link PitScore} for pitmutation results.
@@ -41,7 +41,7 @@ public class PitScore {
         this.totalMutations = totalMutations;
         this.totalUndetected = totalUndetected;
         this.totalDetected = totalMutations - totalUndetected;
-        this.ratio = 100 - ratio;
+        this.ratio = (int) (100 - ratio);
     }
 
     public PitScore(final PitConfiguration pitConfiguration, final PitBuildAction action,
@@ -100,7 +100,7 @@ public class PitScore {
         return totalDetected;
     }
 
-    public float getRatio() {
+    public int getRatio() {
         return ratio;
     }
 }

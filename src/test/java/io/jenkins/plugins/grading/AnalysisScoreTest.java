@@ -18,7 +18,7 @@ class AnalysisScoreTest {
     @Test
     void shouldCalculate() {
         AnalysisScore analysisScore = new AnalysisScore("default", 1, 1, 1, 1, 4);
-        AnalysisConfiguration analysisConfiguration = new AnalysisConfigurationBuilder().setMaxScore(25)
+        AnalysisConfiguration analysisConfiguration = new AnalysisConfiguration.AnalysisConfigurationBuilder().setMaxScore(25)
                 .setWeightError(-4)
                 .setWeightHigh(-3)
                 .setWeightNormal(-2)

@@ -9,7 +9,7 @@ class PitScoreTest {
 
     @Test
     void shouldCalculate() {
-        PitConfiguration pitConfiguration = new PitConfigurationBuilder().setMaxScore(25)
+        PitConfiguration pitConfiguration = new PitConfiguration.PitConfigurationBuilder().setMaxScore(25)
                 .setWeightUndetected(-2)
                 .setWeightDetected(1)
                 .build();
@@ -22,7 +22,7 @@ class PitScoreTest {
 
     @Test
     void shouldCalculateNegativeResult() {
-        PitConfiguration pitConfiguration = new PitConfigurationBuilder().setMaxScore(25)
+        PitConfiguration pitConfiguration = new PitConfiguration.PitConfigurationBuilder().setMaxScore(25)
                 .setWeightUndetected(-2)
                 .setWeightDetected(1)
                 .build();

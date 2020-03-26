@@ -1,22 +1,14 @@
 package io.jenkins.plugins.grading;
 
-import java.util.Set;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 
-import sun.tools.asm.Cover;
-
 import hudson.model.TaskListener;
-import hudson.tasks.junit.TestResultAction;
 
-import io.jenkins.plugins.coverage.CoverageAction;
-import io.jenkins.plugins.coverage.targets.CoverageElement;
 import io.jenkins.plugins.coverage.targets.Ratio;
 import io.jenkins.plugins.util.LogHandler;
 
 /**
- * takes {@link Configuration} and the results of code coverage..
- * Calculates and updates quality score
+ * takes {@link Configuration} and the results of code coverage.. Calculates and updates quality score
  *
  * @author Eva-Maria Zeintl
  */
@@ -34,10 +26,14 @@ public class CoverageScore {
     /**
      * Creates a new instance of {@link CoverageScore} for code coverage results.
      *
-     * @param id           the name of the check
-     * @param totalCovered the total number of covered code
-     * @param totalLines   the total number of missed code
-     * @param ratio        the ratio of missed code
+     * @param id
+     *         the name of the check
+     * @param totalCovered
+     *         the total number of covered code
+     * @param totalLines
+     *         the total number of missed code
+     * @param ratio
+     *         the ratio of missed code
      */
     public CoverageScore(final String id, final int totalCovered, final int totalLines, final int ratio) {
         super();
@@ -50,7 +46,7 @@ public class CoverageScore {
 
     public CoverageScore(final CoverageConfiguration coverageConfiguration, final Ratio action,
             final LogHandler logHandler) {
-        this("PIT", (int)action.numerator, (int)action.denominator, action.getPercentage());
+        this("Line", (int) action.numerator, (int) action.denominator, action.getPercentage());
 
         totalChange = calc(coverageConfiguration);
 
@@ -58,12 +54,14 @@ public class CoverageScore {
                 totalChange, totalCovered, totalLines, totalMissed, ratio);
     }
 
-
     /**
      * Calculates and saves new {@link Score}.
      *
-     * @param configs  all Configurations
-     * @param listener Console log
+     * @param configs
+     *         all Configurations
+     * @param listener
+     *         Console log
+     *
      * @return returns the delta that has been changed in score
      */
     public int calculate(final CoverageConfiguration configs, @NonNull final TaskListener listener) {

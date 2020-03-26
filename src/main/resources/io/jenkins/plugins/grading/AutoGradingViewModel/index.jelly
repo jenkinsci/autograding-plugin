@@ -28,30 +28,34 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-3">
-                                <h6>Configuration Static Analysis</h6>
+                                <h6>Static Analysis Configuration</h6>
                                 <p>per issue Score changes by:</p>
-                                <p>Errors cause ${it.score.analysisConfiguration.weightError} points</p>
-                                <p>High issues cause ${it.score.analysisConfiguration.weightHigh} points</p>
-                                <p>Normal issues cause ${it.score.analysisConfiguration.weightNormal} points</p>
-                                <p>Low issues cause ${it.score.analysisConfiguration.weightLow} points</p>
+                                <j:set var="analysisConfig" value="${it.score.analysisConfiguration}"/>
+                                <p>Errors cause ${analysisConfig.weightError} points</p>
+                                <p>High issues cause ${analysisConfig.weightHigh} points</p>
+                                <p>Normal issues cause ${analysisConfig.weightNormal} points</p>
+                                <p>Low issues cause ${analysisConfig.weightLow} points</p>
                             </div>
                             <div class="col-sm-3">
-                                <h6>Configuration Tests</h6>
+                                <h6>Tests Configuration</h6>
                                 <p>per issue Score changes by:</p>
-                                <p>Passed tests cause ${it.score.configs.weightPassed} points</p>
-                                <p>Failed tests cause ${it.score.configs.weightFailures} points</p>
-                                <p>Skipped tests cause ${it.score.configs.weightSkipped} points</p>
+                                <j:set var="testsConfig" value="${it.score.testsConfiguration}"/>
+                                <p>Passed tests cause ${testsConfig.weightPassed} points</p>
+                                <p>Failed tests cause ${testsConfig.weightFailures} points</p>
+                                <p>Skipped tests cause ${testsConfig.weightSkipped} points</p>
                             </div>
                             <div class="col-sm-3">
-                                <h6>Configuration PIT mutations</h6>
+                                <h6>Mutation Coverage Configuration</h6>
                                 <p>per issue Score changes by:</p>
-                                <p>Undetected mutations cause ${it.score.configs.weightUndetected} points</p>
-                                <p>Detected mutations cause ${it.score.configs.weightDetected} points</p>
+                                <j:set var="pitConfig" value="${it.score.pitConfiguration}"/>
+                                <p>Undetected mutations cause ${pitConfig.weightUndetected} points</p>
+                                <p>Detected mutations cause ${pitConfig.weightDetected} points</p>
                             </div>
                             <div class="col-sm-3">
-                                <h6>Configuration code coverage</h6>
+                                <h6>Code Coverage Configuration</h6>
                                 <p>per issue Score changes by:</p>
-                                <p>per % Missed lines ${it.score.configs.weightMissed} points</p>
+                                <j:set var="coverageConfig" value="${it.score.coverageConfiguration}"/>
+                                <p>per % Missed lines ${coverageConfig.weightMissed} points</p>
                             </div>
                         </div>
                     </div>
@@ -67,7 +71,7 @@
                         </div>
                     </j:if>
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped display" id="fixed">
+                        <table class="table table-hover table-striped display" id="analysis">
                             <thead>
                                 <tr>
                                     <th>${%Check}</th>
@@ -112,14 +116,14 @@
                 </bs:card>
 
 
-                <bs:card title="Junit Test Results">
-                    <j:if test="${it.score.getJunitBases().isEmpty()}">
+                <bs:card title="Unit Test Results">
+                    <j:if test="${it.score.testsScores.isEmpty()}">
                         <div class="alert alert-info">
                             <strong>Info!</strong> This check category did not provide results.
                         </div>
                     </j:if>
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped display" id="fixed">
+                        <table class="table table-hover table-striped display" id="test">
                             <thead>
                                 <tr>
                                     <th>${%Test}</th>
@@ -131,7 +135,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <j:forEach var="checks" items="${it.score.junitBases}">
+                                <j:forEach var="checks" items="${it.score.testsScores}">
                                     <tr>
                                         <td>
                                             <a href="../testReport">${checks.id}</a>
@@ -159,61 +163,18 @@
 
                 </bs:card>
 
-                <bs:card title="PIT mutations">
-                    <j:if test="${it.score.getPitBases().isEmpty()}">
+                <bs:card title="Code Coverage">
+                    <j:if test="${it.score.coverageScores.isEmpty()}">
                         <div class="alert alert-info">
                             <strong>Info!</strong> This check category did not provide results.
                         </div>
                     </j:if>
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped display" id="fixed">
+                        <table class="table table-hover table-striped display" id="coverage">
                             <thead>
                                 <tr>
                                     <th>${%Check}</th>
-                                    <th>${%Mutation}</th>
-                                    <th>${%Undetected}</th>
-                                    <th>${%Ratio}</th>
-                                    <th>${%Score Impact}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <j:forEach var="checks" items="${it.score.pitBases}">
-                                    <tr>
-                                        <td>
-                                            <a href="../pitmutation">${checks.id}</a>
-                                        </td>
-                                        <td>
-                                            ${checks.totalMutations}
-                                        </td>
-                                        <td>
-                                            ${checks.totalUndetected}
-                                        </td>
-                                        <td>
-                                            ${checks.percentUndetected}
-                                        </td>
-                                        <td>
-                                            ${checks.totalChange}
-                                        </td>
-                                    </tr>
-                                </j:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </bs:card>
-
-                <bs:card title="Code Coverage">
-                    <j:if test="${it.score.getCocoBases().isEmpty()}">
-                    <div class="alert alert-info">
-                        <strong>Info!</strong> This check category did not provide results.
-                    </div>
-                </j:if>
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped display" id="fixed">
-                            <thead>
-                                <tr>
-                                    <th>${%Check}</th>
-                                    <th>${%Total           }</th>
+                                    <th>${%Total}</th>
                                     <th>${%Missed}</th>
                                     <th>${%Covered}</th>
                                     <th>${%Covered Percentage}</th>
@@ -221,7 +182,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <j:forEach var="checks" items="${it.score.cocoBases}">
+                                <j:forEach var="checks" items="${it.score.coverageScores}">
                                     <tr>
                                         <td>
                                             <a href="../coverage">${checks.id}</a>
@@ -248,6 +209,50 @@
                     </div>
 
                 </bs:card>
+
+                <bs:card title="PIT mutations">
+                    <j:if test="${it.score.pitScores.isEmpty()}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> This check category did not provide results.
+                        </div>
+                    </j:if>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped display" id="pit">
+                            <thead>
+                                <tr>
+                                    <th>${%Check}</th>
+                                    <th>${%Mutation}</th>
+                                    <th>${%Undetected}</th>
+                                    <th>${%Ratio}</th>
+                                    <th>${%Score Impact}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <j:forEach var="checks" items="${it.score.pitScores}">
+                                    <tr>
+                                        <td>
+                                            <a href="../pitmutation">${checks.id}</a>
+                                        </td>
+                                        <td>
+                                            ${checks.totalMutations}
+                                        </td>
+                                        <td>
+                                            ${checks.totalUndetected}
+                                        </td>
+                                        <td>
+                                            ${checks.percentUndetected}
+                                        </td>
+                                        <td>
+                                            ${checks.ratio}
+                                        </td>
+                                    </tr>
+                                </j:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </bs:card>
+
 
             </div>
 

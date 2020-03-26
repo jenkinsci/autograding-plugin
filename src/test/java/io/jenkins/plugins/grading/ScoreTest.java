@@ -28,7 +28,7 @@ class ScoreTest {
 
         assertThat(score).hasScore(0);
 
-        AnalysisConfiguration configuration = new AnalysisConfigurationBuilder().setMaxScore(20).build();
+        AnalysisConfiguration configuration = new AnalysisConfiguration.AnalysisConfigurationBuilder().setMaxScore(20).build();
         score.addAnalysisTotal(configuration, Collections.emptyList());
         assertThat(score).hasScore(20);
 

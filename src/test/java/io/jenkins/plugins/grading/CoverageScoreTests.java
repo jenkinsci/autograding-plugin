@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class CoverageScoreTests {
     @Test
     void shouldCalculate() {
-        CoverageConfiguration coverageConfiguration = new CoverageConfigurationBuilder().setWeightCovered(1)
+        CoverageConfiguration coverageConfiguration = new CoverageConfiguration.CoverageConfigurationBuilder().setWeightCovered(1)
                 .setWeightMissed(-2)
                 .build();
         CoverageScore coCos = new CoverageScore("coverage", 99, 100, 99);

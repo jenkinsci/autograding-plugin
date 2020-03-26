@@ -9,7 +9,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
-import sun.tools.asm.Cover;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.jenkinsci.Symbol;
@@ -72,19 +71,20 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         List<PitScore> pitBases = new ArrayList<>();
         for (PitBuildAction action : pitAction) {
             //store base Results from mutation check
-            pitBases.add(new PitScore(action.getDisplayName(), action.getReport().getMutationStats().getTotalMutations(),
-                    action.getReport().getMutationStats().getUndetected(),
-                    action.getReport().getMutationStats().getKillPercent()));
+            pitBases.add(
+                    new PitScore(action.getDisplayName(), action.getReport().getMutationStats().getTotalMutations(),
+                            action.getReport().getMutationStats().getUndetected(),
+                            action.getReport().getMutationStats().getKillPercent()));
         }
         return pitBases;
     }
 
-    private List<TestsScore> createJunitBase(final List<TestResultAction> testActions) {
-        List<TestsScore> junitBases = new ArrayList<>();
+    private List<TestScore> createJunitBase(final List<TestResultAction> testActions) {
+        List<TestScore> junitBases = new ArrayList<>();
         for (TestResultAction action : testActions) {
             //store base Results from junit tests
             junitBases.add(
-                    new TestsScore(action.getDisplayName(), action.getResult().getPassCount(), action.getTotalCount(),
+                    new TestScore(action.getDisplayName(), action.getResult().getPassCount(), action.getTotalCount(),
                             action.getResult().getFailCount(), action.getResult().getSkipCount()));
         }
         return junitBases;
@@ -135,11 +135,13 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
             if (tests != null) {
                 TestResultAction action = run.getAction(TestResultAction.class);
                 if (action == null) {
-                    throw new IllegalArgumentException("Test scoring has been enabled, but no test results have been found.");
+                    throw new IllegalArgumentException(
+                            "Test scoring has been enabled, but no test results have been found.");
                 }
-                TestsConfiguration testsConfiguration = TestsConfiguration.from(tests);
+                TestConfiguration testsConfiguration = TestConfiguration.from(tests);
                 logHandler.log("Grading test results " + action.getDisplayName());
-                int total = actualScore.addTestsTotal(testsConfiguration, new TestsScore(testsConfiguration, action, logHandler));
+                int total = actualScore.addTestsTotal(testsConfiguration,
+                        new TestScore(testsConfiguration, action, logHandler));
                 logHandler.log("Total score for test results: " + total);
             }
             else {
@@ -151,11 +153,13 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
                 CoverageConfiguration coverageConfiguration = CoverageConfiguration.from(coverage);
                 CoverageAction action = run.getAction(CoverageAction.class);
                 if (action == null) {
-                    throw new IllegalArgumentException("Coverage scoring has been enabled, but no coverage results have been found.");
+                    throw new IllegalArgumentException(
+                            "Coverage scoring has been enabled, but no coverage results have been found.");
                 }
                 logHandler.log("Grading coverage results " + action.getDisplayName());
                 int total = actualScore.addCoverageTotal(coverageConfiguration,
-                        new CoverageScore(coverageConfiguration, action.getResult().getCoverage(CoverageElement.LINE), logHandler));
+                        new CoverageScore(coverageConfiguration, action.getResult().getCoverage(CoverageElement.LINE),
+                                logHandler));
                 logHandler.log("Total score for test results: " + total);
             }
             else {
@@ -167,10 +171,12 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
                 PitConfiguration pitConfiguration = PitConfiguration.from(pit);
                 PitBuildAction action = run.getAction(PitBuildAction.class);
                 if (action == null) {
-                    throw new IllegalArgumentException("Mutation coverage scoring has been enabled, but no PIT results have been found.");
+                    throw new IllegalArgumentException(
+                            "Mutation coverage scoring has been enabled, but no PIT results have been found.");
                 }
                 logHandler.log("Grading PIT mutation results " + action.getDisplayName());
-                int total = actualScore.addPitTotal(pitConfiguration, new PitScore(pitConfiguration, action, logHandler));
+                int total = actualScore.addPitTotal(pitConfiguration,
+                        new PitScore(pitConfiguration, action, logHandler));
                 logHandler.log("Total score for mutation coverage results: " + total);
             }
             else {
@@ -238,7 +244,8 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 //        run.addAction(new AutoGradingBuildAction(run, score));
     }
 
-    private void updateCocoGrade(final CoverageConfiguration configs, final Score score, final List<CoverageScore> cocoBases,
+    private void updateCocoGrade(final CoverageConfiguration configs, final Score score,
+            final List<CoverageScore> cocoBases,
             @NonNull final TaskListener listener) {
         int change = 0;
         for (CoverageScore base : cocoBases) {
@@ -298,10 +305,11 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
     }
 
-    private void updateJunitGrade(final TestsConfiguration configs, final Score score, final List<TestsScore> junitBases,
+    private void updateJunitGrade(final TestConfiguration configs, final Score score,
+            final List<TestScore> junitBases,
             @NonNull final TaskListener listener) {
         int change = 0;
-        for (TestsScore base : junitBases) {
+        for (TestScore base : junitBases) {
             change = change + base.calculate(configs, listener);
             score.addJunitBase(base);
             listener.getLogger().println("[CodeQuality] Saved Junit Base Results");
@@ -335,7 +343,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
     }
 
     @VisibleForTesting
-    void updateJunitGrade(final TestsConfiguration configs, final Score score, final List<TestsScore> junitBases) {
+    void updateJunitGrade(final TestConfiguration configs, final Score score, final List<TestScore> junitBases) {
         updateJunitGrade(configs, score, junitBases, TaskListener.NULL);
     }
 

@@ -22,7 +22,7 @@ class QualityEvaluatorTest {
     }
 
     private CoverageConfiguration createCoverageConfiguration() {
-        return new CoverageConfigurationBuilder().setMaxScore(25).setWeightMissed(-2).setWeightCovered(1).build();
+        return new CoverageConfiguration.CoverageConfigurationBuilder().setMaxScore(25).setWeightMissed(-2).setWeightCovered(1).build();
     }
 
     @Test
@@ -63,7 +63,7 @@ class QualityEvaluatorTest {
     }
 
     private AnalysisConfiguration createAnalysisConfiguration() {
-        return new AnalysisConfigurationBuilder().setMaxScore(25)
+        return new AnalysisConfiguration.AnalysisConfigurationBuilder().setMaxScore(25)
                 .setWeightError(-4)
                 .setWeightHigh(-3)
                 .setWeightNormal(-2)
@@ -137,15 +137,15 @@ class QualityEvaluatorTest {
     }
 
     private PitConfiguration createPitConfiguration() {
-        return new PitConfigurationBuilder().setMaxScore(25).setWeightDetected(1).setWeightUndetected(-2).build();
+        return new PitConfiguration.PitConfigurationBuilder().setMaxScore(25).setWeightDetected(1).setWeightUndetected(-2).build();
     }
 
     @Test
     void shouldUpdateJUnitGrade() {
         Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
                 "PIT", true, -2, 1, 25, "COCO", true, 1, -2, 25, "JUNIT", true, -1, -2, 1);
-        List<TestsScore> junitBases = new ArrayList<>();
-        junitBases.add(new TestsScore("Testergebnis", 0, 8, 7, 1));
+        List<TestScore> junitBases = new ArrayList<>();
+        junitBases.add(new TestScore("Testergebnis", 0, 8, 7, 1));
         Score score = new Score(configs.getMaxScore());
         score.addJunitBase(junitBases.get(0));
         AutoGrader test = createAutoGrader();
@@ -153,8 +153,8 @@ class QualityEvaluatorTest {
         assertThat(score.getScore()).isEqualTo(85);
     }
 
-    private TestsConfiguration createTestsConfiguration() {
-        return new TestsConfigurationBuilder().setMaxScore(25)
+    private TestConfiguration createTestsConfiguration() {
+        return new TestConfiguration.TestConfigurationBuilder().setMaxScore(25)
                 .setWeightSkipped(-1)
                 .setWeightFailures(-2)
                 .setWeightPassed(1)
@@ -169,8 +169,8 @@ class QualityEvaluatorTest {
     void shouldSetMinJUnitGrade() {
         Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
                 "PIT", true, -2, 1, 25, "COCO", true, 1, -2, 25, "JUNIT", true, -1, -2, 1);
-        List<TestsScore> junitBases = new ArrayList<>();
-        junitBases.add(new TestsScore("Testergebnis", 0, 16, 16, 0));
+        List<TestScore> junitBases = new ArrayList<>();
+        junitBases.add(new TestScore("Testergebnis", 0, 16, 16, 0));
         Score score = new Score(configs.getMaxScore());
         score.addJunitBase(junitBases.get(0));
         AutoGrader test = createAutoGrader();
@@ -182,8 +182,8 @@ class QualityEvaluatorTest {
     void shouldSetMaxJUnitGrade() {
         Configuration configs = new Configuration(25, "default", true, -4, -3, -2, -1, 25,
                 "PIT", true, -2, 1, 25, "COCO", true, 1, -2, 25, "JUNIT", true, -1, -2, 1);
-        List<TestsScore> junitBases = new ArrayList<>();
-        junitBases.add(new TestsScore("Testergebnis", 62, 62, 0, 0));
+        List<TestScore> junitBases = new ArrayList<>();
+        junitBases.add(new TestScore("Testergebnis", 62, 62, 0, 0));
         Score score = new Score(configs.getMaxScore());
         score.addJunitBase(junitBases.get(0));
         AutoGrader test = createAutoGrader();

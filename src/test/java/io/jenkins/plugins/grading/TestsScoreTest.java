@@ -10,12 +10,12 @@ class TestsScoreTest {
 
     @Test
     void shouldCalculate() {
-        TestsConfiguration testsConfiguration = new TestsConfigurationBuilder().setMaxScore(25)
+        TestConfiguration testsConfiguration = new TestConfiguration.TestConfigurationBuilder().setMaxScore(25)
                 .setWeightSkipped(-1)
                 .setWeightFailures(-2)
                 .setWeightPassed(1)
                 .build();
-        TestsScore test = new TestsScore("Testergebnis", 6, 8, 1, 1);
+        TestScore test = new TestScore("Testergebnis", 6, 8, 1, 1);
 
         assertThat(test.calculate(testsConfiguration, TaskListener.NULL)).isEqualTo(3);
     }
@@ -24,13 +24,13 @@ class TestsScoreTest {
     @Test
     void shouldCalculateNegativeResult() {
 
-        TestsConfiguration testsConfiguration = new TestsConfigurationBuilder().setMaxScore(25)
+        TestConfiguration testsConfiguration = new TestConfiguration.TestConfigurationBuilder().setMaxScore(25)
                 .setWeightSkipped(-1)
                 .setWeightFailures(-2)
                 .setWeightPassed(1)
                 .build();
 
-        TestsScore test = new TestsScore("Testergebnis", 2, 8, 5, 1);
+        TestScore test = new TestScore("Testergebnis", 2, 8, 5, 1);
 
         assertThat(test.calculate(testsConfiguration, TaskListener.NULL)).isEqualTo(-9);
     }
