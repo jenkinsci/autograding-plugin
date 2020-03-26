@@ -5,10 +5,12 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
 import hudson.model.TaskListener;
 
+import io.jenkins.plugins.analysis.core.model.AnalysisResult;
 import io.jenkins.plugins.util.LogHandler;
 
 /**
- * takes {@link Configuration} and the results of pitmutations. Calculates and updates quality score
+ * Computes the {@link Score} impact of PIT mutation test results. These results are obtained by inspecting a
+ * {@link PitBuildAction} instance of the PIT plugin.
  *
  * @author Eva-Maria Zeintl
  */

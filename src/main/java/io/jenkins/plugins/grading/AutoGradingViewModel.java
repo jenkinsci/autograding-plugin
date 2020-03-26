@@ -34,7 +34,7 @@ public class AutoGradingViewModel implements ModelObject {
 
     @Override
     public String getDisplayName() {
-        return "Code Quality Score";
+        return Messages.Action_Name();
     }
 
     public Score getScore() {

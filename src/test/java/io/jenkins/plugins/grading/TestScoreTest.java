@@ -1,13 +1,18 @@
 package io.jenkins.plugins.grading;
 
-import hudson.model.TaskListener;
 import org.junit.jupiter.api.Test;
+
+import hudson.model.TaskListener;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
 
-
-class TestsScoreTest {
-
+/**
+ * Tests the class {@link TestScore}.
+ *
+ * @author Eva-Maria Zeintl
+ * @author Ullrich Hafner
+ */
+class TestScoreTest {
     @Test
     void shouldCalculate() {
         TestConfiguration testsConfiguration = new TestConfiguration.TestConfigurationBuilder().setMaxScore(25)
@@ -20,10 +25,8 @@ class TestsScoreTest {
         assertThat(test.calculate(testsConfiguration, TaskListener.NULL)).isEqualTo(3);
     }
 
-
     @Test
     void shouldCalculateNegativeResult() {
-
         TestConfiguration testsConfiguration = new TestConfiguration.TestConfigurationBuilder().setMaxScore(25)
                 .setWeightSkipped(-1)
                 .setWeightFailures(-2)

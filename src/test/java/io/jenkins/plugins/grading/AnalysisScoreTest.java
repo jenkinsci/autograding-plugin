@@ -4,9 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import net.sf.json.JSONObject;
 
-import hudson.model.TaskListener;
+import io.jenkins.plugins.analysis.core.model.AnalysisResult;
+import io.jenkins.plugins.util.LogHandler;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
+import static org.mockito.Mockito.*;
 
 /**
  * Tests the class {@link AnalysisScore}.
@@ -17,14 +19,21 @@ import static io.jenkins.plugins.grading.assertions.Assertions.*;
 class AnalysisScoreTest {
     @Test
     void shouldCalculate() {
-        AnalysisScore analysisScore = new AnalysisScore("default", 1, 1, 1, 1, 4);
-        AnalysisConfiguration analysisConfiguration = new AnalysisConfiguration.AnalysisConfigurationBuilder().setMaxScore(25)
+        AnalysisResult result = mock(AnalysisResult.class);
+        when(result.getTotalErrorsSize()).thenReturn(1);
+        when(result.getTotalHighPrioritySize()).thenReturn(1);
+        when(result.getTotalNormalPrioritySize()).thenReturn(1);
+        when(result.getTotalLowPrioritySize()).thenReturn(1);
+
+        AnalysisConfiguration analysisConfiguration = new AnalysisConfiguration.AnalysisConfigurationBuilder()
+                .setMaxScore(25)
                 .setWeightError(-4)
                 .setWeightHigh(-3)
                 .setWeightNormal(-2)
                 .setWeightLow(-1)
                 .build();
-        assertThat(analysisScore.calculate(analysisConfiguration, TaskListener.NULL)).isEqualTo(-4 - 3 - 2 - 1);
+        AnalysisScore analysisScore = new AnalysisScore("Analysis Results", analysisConfiguration, result, mock(LogHandler.class));
+        assertThat(analysisScore.getTotalImpact()).isEqualTo(-4 - 3 - 2 - 1);
     }
 
     @Test

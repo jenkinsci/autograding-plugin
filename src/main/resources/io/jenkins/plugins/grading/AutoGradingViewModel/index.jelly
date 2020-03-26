@@ -37,12 +37,12 @@
                                 <p>Low issues cause ${analysisConfig.weightLow} points</p>
                             </div>
                             <div class="col-sm-3">
-                                <h6>Tests Configuration</h6>
+                                <h6>Test Configuration</h6>
                                 <p>per issue Score changes by:</p>
-                                <j:set var="testsConfig" value="${it.score.testsConfiguration}"/>
-                                <p>Passed tests cause ${testsConfig.weightPassed} points</p>
-                                <p>Failed tests cause ${testsConfig.weightFailures} points</p>
-                                <p>Skipped tests cause ${testsConfig.weightSkipped} points</p>
+                                <j:set var="testConfig" value="${it.score.testConfiguration}"/>
+                                <p>Passed tests cause ${testConfig.weightPassed} points</p>
+                                <p>Failed tests cause ${testConfig.weightFailures} points</p>
+                                <p>Skipped tests cause ${testConfig.weightSkipped} points</p>
                             </div>
                             <div class="col-sm-3">
                                 <h6>Mutation Coverage Configuration</h6>
@@ -74,7 +74,7 @@
                         <table class="table table-hover table-striped display" id="analysis">
                             <thead>
                                 <tr>
-                                    <th>${%Check}</th>
+                                    <th>${%Tool}</th>
                                     <th>${%Errors}</th>
                                     <th>${%High}</th>
                                     <th>${%Normal}</th>
@@ -87,7 +87,7 @@
                                 <j:forEach var="checks" items="${analysisScores}">
                                     <tr>
                                         <td>
-                                            <a href="../${checks.id}">${checks.id}</a>
+                                            <a href="../${checks.id}">${checks.name}</a>
                                         </td>
                                         <td>
                                            ${checks.totalErrors}
@@ -117,7 +117,7 @@
 
 
                 <bs:card title="Unit Test Results">
-                    <j:if test="${it.score.testsScores.isEmpty()}">
+                    <j:if test="${it.score.testScores.isEmpty()}">
                         <div class="alert alert-info">
                             <strong>Info!</strong> This check category did not provide results.
                         </div>
@@ -135,7 +135,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <j:forEach var="checks" items="${it.score.testsScores}">
+                                <j:forEach var="checks" items="${it.score.testScores}">
                                     <tr>
                                         <td>
                                             <a href="../testReport">${checks.id}</a>
@@ -221,9 +221,10 @@
                             <thead>
                                 <tr>
                                     <th>${%Check}</th>
-                                    <th>${%Mutation}</th>
+                                    <th>${%Mutations}</th>
+                                    <th>${%Detected}</th>
                                     <th>${%Undetected}</th>
-                                    <th>${%Ratio}</th>
+                                    <th>${%Missing Ratio}</th>
                                     <th>${%Score Impact}</th>
                                 </tr>
                             </thead>
@@ -237,13 +238,16 @@
                                             ${checks.totalMutations}
                                         </td>
                                         <td>
+                                            ${checks.totalDetected}
+                                        </td>
+                                        <td>
                                             ${checks.totalUndetected}
                                         </td>
                                         <td>
-                                            ${checks.percentUndetected}
+                                            ${checks.ratio}
                                         </td>
                                         <td>
-                                            ${checks.ratio}
+                                            ${checks.totalChange}
                                         </td>
                                     </tr>
                                 </j:forEach>

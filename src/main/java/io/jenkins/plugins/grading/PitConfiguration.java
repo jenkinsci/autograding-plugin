@@ -18,6 +18,7 @@ public class PitConfiguration {
     }
 
     public PitConfiguration() {
+        // empty constructor required for automatic Json conversion
     }
 
     public PitConfiguration(final int maxScore, final int weightUndetected, final int weightDetected) {

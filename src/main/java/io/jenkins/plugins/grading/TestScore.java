@@ -5,10 +5,12 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.model.TaskListener;
 import hudson.tasks.junit.TestResultAction;
 
+import io.jenkins.plugins.analysis.core.model.AnalysisResult;
 import io.jenkins.plugins.util.LogHandler;
 
 /**
- * takes {@link Configuration} and the results of Junit tests. Calculates and updates quality score
+ * Computes the {@link Score} impact of test results. These results are obtained by inspecting a
+ * {@link TestResultAction} instance of the JUnit plugin.
  *
  * @author Eva-Maria Zeintl
  */

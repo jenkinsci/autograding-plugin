@@ -1,94 +1,52 @@
 package io.jenkins.plugins.grading;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-
-import hudson.model.TaskListener;
-
 import io.jenkins.plugins.analysis.core.model.AnalysisResult;
 import io.jenkins.plugins.util.LogHandler;
 
 /**
- * takes {@link Configuration} and the results of default checks. Calculates and updates quality score
+ * Computes the {@link Score} impact of static analysis results. These results are obtained by inspecting a
+ * {@link AnalysisResult} instance of the Warnings Next Generation plugin.
  *
  * @author Eva-Maria Zeintl
  */
 public class AnalysisScore {
     private final String id;
-    private int totalChange;
+    private final String name;
 
-    private final int totalErrors;
-    private final int totalHighs;
-    private final int totalNormals;
-    private final int totalLows;
-    private final int sum;
+    private final int totalImpact;
 
-    /**
-     * Creates a new instance of {@link AnalysisScore} for Default Checks.
-     *
-     * @param id
-     *         the name of the check
-     * @param totalErrors
-     *         the total number of errors
-     * @param totalHighs
-     *         the total number of High issues
-     * @param totalNormals
-     *         the total number of Normal issues
-     * @param totalLows
-     *         the total number of Low issues
-     * @param sum
-     *         the total number of all issues
-     */
-    public AnalysisScore(final String id, final int totalErrors, final int totalHighs, final int totalNormals,
-            final int totalLows, final int sum) {
+    private final int errorsSize;
+    private final int highPrioritySize;
+    private final int normalPrioritySize;
+    private final int lowPrioritySize;
+    private final int totalSize;
+
+    public AnalysisScore(final String name, final AnalysisConfiguration analysisConfiguration,
+            final AnalysisResult result, final LogHandler logHandler) {
         super();
 
-        this.id = id;
-        this.totalErrors = totalErrors;
-        this.totalHighs = totalHighs;
-        this.totalNormals = totalNormals;
-        this.totalLows = totalLows;
-        this.sum = sum;
-    }
+        this.name = name;
+        this.id = result.getId();
 
-    public AnalysisScore(final String id, final int totalErrors, final int totalHighs, final int totalNormals,
-            final int totalLows) {
-        this(id, totalErrors, totalHighs, totalNormals, totalLows, totalLows + totalErrors + totalHighs + totalNormals + totalLows);
-    }
+        this.errorsSize = result.getTotalErrorsSize();
+        this.highPrioritySize = result.getTotalHighPrioritySize();
+        this.normalPrioritySize = result.getTotalNormalPrioritySize();
+        this.lowPrioritySize = result.getTotalLowPrioritySize();
+        this.totalSize = result.getTotalSize();
 
-    public AnalysisScore(final AnalysisConfiguration analysisConfiguration, final AnalysisResult result,
-            final LogHandler logHandler) {
-        this(result.getId(), result.getTotalErrorsSize(), result.getTotalHighPrioritySize(), result.getTotalNormalPrioritySize(), result.getTotalLowPrioritySize());
-
-        totalChange = calc(analysisConfiguration);
+        totalImpact = computeImpact(analysisConfiguration);
 
         logHandler.log("-> Score %d - from recorded warnings distribution of %d, %d, %d, %d",
-                totalChange, totalErrors, totalHighs, totalNormals, totalLows);
+                totalImpact, errorsSize, highPrioritySize, normalPrioritySize, lowPrioritySize);
     }
 
-    /**
-     * Calculates and saves new {@link Score}.
-     *
-     * @param configs
-     *         all Configurations
-     * @param listener
-     *         Console log
-     *
-     * @return returns the delta that has been changed in score
-     */
-    public int calculate(final AnalysisConfiguration configs, @NonNull final TaskListener listener) {
-        int change = calc(configs);
-        listener.getLogger().println("[CodeQuality] " + id + " changed score by: " + change);
-        return change;
-    }
-
-    private int calc(final AnalysisConfiguration configs) {
+    private int computeImpact(final AnalysisConfiguration configs) {
         int change = 0;
-        change = change + configs.getWeightError() * totalErrors;
-        change = change + configs.getWeightHigh() * totalHighs;
-        change = change + configs.getWeightNormal() * totalNormals;
-        change = change + configs.getWeightLow() * totalLows;
+        change = change + configs.getWeightError() * errorsSize;
+        change = change + configs.getWeightHigh() * highPrioritySize;
+        change = change + configs.getWeightNormal() * normalPrioritySize;
+        change = change + configs.getWeightLow() * lowPrioritySize;
 
-        totalChange = change;
         return change;
     }
 
@@ -96,27 +54,31 @@ public class AnalysisScore {
         return id;
     }
 
-    public int getTotalChange() {
-        return totalChange;
+    public String getName() {
+        return name;
     }
 
-    public int getTotalErrors() {
-        return totalErrors;
+    public int getTotalImpact() {
+        return totalImpact;
     }
 
-    public int getTotalHighs() {
-        return totalHighs;
+    public int getErrorsSize() {
+        return errorsSize;
     }
 
-    public int getTotalNormals() {
-        return totalNormals;
+    public int getHighPrioritySize() {
+        return highPrioritySize;
     }
 
-    public int getTotalLows() {
-        return totalLows;
+    public int getNormalPrioritySize() {
+        return normalPrioritySize;
     }
 
-    public int getSum() {
-        return sum;
+    public int getLowPrioritySize() {
+        return lowPrioritySize;
+    }
+
+    public int getTotalSize() {
+        return totalSize;
     }
 }

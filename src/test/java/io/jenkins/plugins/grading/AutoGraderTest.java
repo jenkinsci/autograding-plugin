@@ -22,6 +22,7 @@ class AutoGraderTest {
         AutoGrader autoGrader = new AutoGrader("broken");
 
         Assertions.assertThatIllegalArgumentException().isThrownBy(() ->
-                autoGrader.perform(mock(Run.class), new FilePath((VirtualChannel)null, "/"), mock(Launcher.class), TaskListener.NULL));
+                autoGrader.perform(mock(Run.class), new FilePath((VirtualChannel) null, "/"), mock(Launcher.class),
+                        TaskListener.NULL));
     }
 }

@@ -43,8 +43,9 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
      * Creates a new instance of {@link AutoGrader}.
      *
      * @param configuration
-     *         the configuration to use
+     *         the configuration to use, must be in JSON format
      */
+    // TODO: Create JSON schema
     @DataBoundConstructor
     public AutoGrader(final String configuration) {
         super();
@@ -56,59 +57,9 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         return configuration;
     }
 
-    private List<AnalysisScore> createDefaultBase(final List<ResultAction> actions) {
-        List<AnalysisScore> defaultBase = new ArrayList<>();
-        for (ResultAction action : actions) {
-            //store base Results from static checks
-            defaultBase.add(new AnalysisScore(action.getId(), action.getResult().getTotalErrorsSize(),
-                    action.getResult().getTotalHighPrioritySize(), action.getResult().getTotalNormalPrioritySize(),
-                    action.getResult().getTotalLowPrioritySize(), action.getResult().getTotalSize()));
-        }
-        return defaultBase;
-    }
-
-    private List<PitScore> createPitBase(final List<PitBuildAction> pitAction) {
-        List<PitScore> pitBases = new ArrayList<>();
-        for (PitBuildAction action : pitAction) {
-            //store base Results from mutation check
-            pitBases.add(
-                    new PitScore(action.getDisplayName(), action.getReport().getMutationStats().getTotalMutations(),
-                            action.getReport().getMutationStats().getUndetected(),
-                            action.getReport().getMutationStats().getKillPercent()));
-        }
-        return pitBases;
-    }
-
-    private List<TestScore> createJunitBase(final List<TestResultAction> testActions) {
-        List<TestScore> junitBases = new ArrayList<>();
-        for (TestResultAction action : testActions) {
-            //store base Results from junit tests
-            junitBases.add(
-                    new TestScore(action.getDisplayName(), action.getResult().getPassCount(), action.getTotalCount(),
-                            action.getResult().getFailCount(), action.getResult().getSkipCount()));
-        }
-        return junitBases;
-    }
-
-    private List<CoverageScore> createCocoBase(final List<CoverageAction> coverageActions) {
-        List<CoverageScore> cocoBases = new ArrayList<>();
-        for (CoverageAction action : coverageActions) {
-            //store base Results from code coverage check
-            Set<CoverageElement> elements = action.getResult().getElements();
-            for (CoverageElement element : elements) {
-                cocoBases.add(new CoverageScore(element.getName(),
-                        (int) action.getResult().getCoverage(element).numerator,
-                        (int) action.getResult().getCoverage(element).denominator,
-                        action.getResult().getCoverage(element).getPercentage()));
-            }
-        }
-        return cocoBases;
-    }
-
     @Override
     public void perform(@NonNull final Run<?, ?> run, @NonNull final FilePath workspace,
-            @NonNull final Launcher launcher,
-            @NonNull final TaskListener listener) {
+            @NonNull final Launcher launcher, @NonNull final TaskListener listener) {
         LogHandler logHandler = new LogHandler(listener, "Autograding");
         logHandler.log("Using configuration '%s'", configuration);
 
@@ -121,8 +72,9 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
                 AnalysisConfiguration analysisConfiguration = AnalysisConfiguration.from(analysis);
                 List<AnalysisScore> analysisScores = new ArrayList<>();
                 for (ResultAction action : run.getActions(ResultAction.class)) {
-                    logHandler.log("Grading static analysis results for " + action.getLabelProvider().getName());
-                    analysisScores.add(new AnalysisScore(analysisConfiguration, action.getResult(), logHandler));
+                    String name = action.getLabelProvider().getName();
+                    logHandler.log("Grading static analysis results for " + name);
+                    analysisScores.add(new AnalysisScore(name, analysisConfiguration, action.getResult(), logHandler));
                 }
                 int total = actualScore.addAnalysisTotal(analysisConfiguration, analysisScores);
                 logHandler.log("Total score for static analysis results: " + total);
@@ -188,164 +140,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         catch (JSONException exception) {
             throw new IllegalArgumentException("Invalid configuration: " + configuration);
         }
-
-//        List<ResultAction> actions = run.getActions(ResultAction.class);
-//
-//        listener.getLogger().println("[CodeQuality] Starting extraction of previous performed checks");
-//        List<PitBuildAction> pitAction = run.getActions(PitBuildAction.class);
-//        List<CoverageAction> coverageActions = run.getActions(CoverageAction.class);
-//        // read configs from XML File
-//        ConfigXmlStream configReader = new ConfigXmlStream();
-//        Configuration configs = configReader.read(Paths.get(workspace.child("auto-grading.xml").getRemote()));
-//        listener.getLogger().println("[CodeQuality] Read Configs:");
-//        listener.getLogger().println("[CodeQuality] Configs read successfully.");
-//
-//        Score score = new Score(configs.getMaxScore());
-//        score.addConfigs(configs);
-//
-//        //Defaults Rechnen
-//        if (actions.isEmpty()) {
-//            score.addToScore(-configs.getdMaxScore());
-//        }
-//        else {
-//            List<AnalysisScore> defaultBase = createDefaultBase(actions);
-//            updateAnalysisGrade(new AnalysisConfigurationBuilder().build(), score, defaultBase, listener);
-//        }
-//
-////        PIT lesen und rechnen
-//        if (pitAction.isEmpty()) {
-//            score.addToScore(-configs.getpMaxScore());
-//        }
-//        else {
-//            List<PITs> pitBases = createPitBase(pitAction);
-//            updatePitGrade(configs, score, pitBases, listener);
-//        }
-//
-//        //JUNIT lesen und rechnen
-//        if (testActions.isEmpty()) {
-//            score.addToScore(-configs.getjMaxScore());
-//        }
-//        else {
-//            List<TestRes> junitBases = createJunitBase(testActions);
-//            updateJunitGrade(configs, score, junitBases, listener);
-//        }
-//
-//        //code-coverage lesen und rechnen
-//        if (coverageActions.isEmpty()) {
-//            score.addToScore(-configs.getcMaxScore());
-//        }
-//        else {
-//            List<CoCos> cocoBases = createCocoBase(coverageActions);
-//            updateCocoGrade(configs, score, cocoBases, listener);
-//        }
-//
-//        listener.getLogger().println("[CodeQuality] Code Quality Score calculation completed");
-//
-//        run.addAction(new AutoGradingBuildAction(run, score));
-    }
-
-    private void updateCocoGrade(final CoverageConfiguration configs, final Score score,
-            final List<CoverageScore> cocoBases,
-            @NonNull final TaskListener listener) {
-        int change = 0;
-        for (CoverageScore base : cocoBases) {
-            change = change + base.calculate(configs, listener);
-
-            score.addCocoBase(base);
-            listener.getLogger().println("[CodeQuality] Saved Code Coverage Base Results");
-        }
-
-        if (configs.getMaxScore() + change >= 0 && change < 0) {
-            score.addToScore(change);
-            listener.getLogger().println("[CodeQuality] Updated Score by Code Coverage Delta");
-        }
-        else if (configs.getMaxScore() + change < 0) {
-            score.addToScore(-configs.getMaxScore());
-            listener.getLogger().println("[CodeQuality] Updated Score by Code Coverage Delta");
-        }
-
-    }
-
-    private void updateAnalysisGrade(final AnalysisConfiguration configs, final Score score,
-            final List<AnalysisScore> defaultBase, @NonNull final TaskListener listener) {
-        int change = 0;
-        for (AnalysisScore base : defaultBase) {
-            change = change + base.calculate(configs, listener);
-            score.addAnalysisScore(base);
-            listener.getLogger().println("[CodeQuality] Saved Static Analysis Base Results");
-        }
-
-        if (configs.getMaxScore() + change >= 0 && change < 0) {
-            score.addToScore(change);
-            listener.getLogger().println("[CodeQuality] Updated Score by Static Analysis Delta");
-        }
-        else if (configs.getMaxScore() + change < 0) {
-            score.addToScore(-configs.getMaxScore());
-            listener.getLogger().println("[CodeQuality] Updated Score by Static Analysis Delta");
-        }
-
-    }
-
-    private void updatePitGrade(final PitConfiguration configs, final Score score,
-            final List<PitScore> pitBases, final @NonNull TaskListener listener) {
-        int change = 0;
-        for (PitScore base : pitBases) {
-            change = change + base.calculate(configs, listener);
-            score.addPitBase(base);
-            listener.getLogger().println("[CodeQuality] Saved pitmuation Base Results");
-        }
-        if (configs.getMaxScore() + change >= 0 && change < 0) {
-            score.addToScore(change);
-            listener.getLogger().println("[CodeQuality] Updated Score by pitmutation Delta");
-        }
-        else if (configs.getMaxScore() + change < 0) {
-            score.addToScore(-configs.getMaxScore());
-            listener.getLogger().println("[CodeQuality] Updated Score by pitmutation Delta");
-        }
-
-    }
-
-    private void updateJunitGrade(final TestConfiguration configs, final Score score,
-            final List<TestScore> junitBases,
-            @NonNull final TaskListener listener) {
-        int change = 0;
-        for (TestScore base : junitBases) {
-            change = change + base.calculate(configs, listener);
-            score.addJunitBase(base);
-            listener.getLogger().println("[CodeQuality] Saved Junit Base Results");
-        }
-        if (configs.getMaxScore() + change >= 0 && change < 0) {
-            score.addToScore(change);
-            listener.getLogger().println("[CodeQuality] Updated Score by junit Delta");
-        }
-        else if (configs.getMaxScore() + change < 0) {
-            score.addToScore(-configs.getMaxScore());
-            listener.getLogger().println("[CodeQuality] Updated Score by junit Delta");
-        }
-
-    }
-
-    @VisibleForTesting
-    void updateCocoGrade(final CoverageConfiguration configs, final List<CoverageScore> cocoBases, final Score score) {
-        updateCocoGrade(configs, score, cocoBases, TaskListener.NULL);
-    }
-
-    @VisibleForTesting
-    void updateAnalysisGrade(final AnalysisConfiguration configs, final Score score,
-            final List<AnalysisScore> defaultBase) {
-        updateAnalysisGrade(configs, score, defaultBase, TaskListener.NULL);
-    }
-
-    @VisibleForTesting
-    void updatePitGrade(final PitConfiguration configs, final Score score,
-            final List<PitScore> pitBases) {
-        updatePitGrade(configs, score, pitBases, TaskListener.NULL);
-    }
-
-    @VisibleForTesting
-    void updateJunitGrade(final TestConfiguration configs, final Score score, final List<TestScore> junitBases) {
-        updateJunitGrade(configs, score, junitBases, TaskListener.NULL);
-    }
+   }
 
     /** Descriptor for this step. */
     @Extension(ordinal = -100_000)

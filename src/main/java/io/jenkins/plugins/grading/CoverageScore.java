@@ -4,11 +4,13 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 import hudson.model.TaskListener;
 
+import io.jenkins.plugins.analysis.core.model.AnalysisResult;
 import io.jenkins.plugins.coverage.targets.Ratio;
 import io.jenkins.plugins.util.LogHandler;
 
 /**
- * takes {@link Configuration} and the results of code coverage.. Calculates and updates quality score
+ * Computes the {@link Score} impact of code coverage results. These results are obtained by inspecting a
+ * {@link CoverageConfiguration} instance of the Code Coverage API plugin.
  *
  * @author Eva-Maria Zeintl
  */

@@ -1,10 +1,17 @@
 package io.jenkins.plugins.grading;
 
-
-import hudson.model.TaskListener;
-import static io.jenkins.plugins.grading.assertions.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import hudson.model.TaskListener;
+
+import static io.jenkins.plugins.grading.assertions.Assertions.*;
+
+/**
+ * Tests the class {@link PitScore}.
+ *
+ * @author Eva-Maria Zeintl
+ * @author Ullrich Hafner
+ */
 class PitScoreTest {
 
     @Test
@@ -18,7 +25,6 @@ class PitScoreTest {
 
         assertThat(pits.calculate(pitConfiguration, TaskListener.NULL)).isEqualTo(15);
     }
-
 
     @Test
     void shouldCalculateNegativeResult() {

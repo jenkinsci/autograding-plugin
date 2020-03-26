@@ -13,73 +13,39 @@ import java.util.List;
  * @author Ullrich Hafner
  */
 public class Score {
+    private int total;
     private int grade;
-    private Configuration configs;
-    private final List<AnalysisScore> analysisScores = new ArrayList<>();
-    private final List<CoverageScore> cocoBases = new ArrayList<>();
-    private final List<PitScore> pitBases = new ArrayList<>();
-    private final List<TestScore> junitBases = new ArrayList<>();
+
     private AnalysisConfiguration analysisConfiguration;
-    private TestScore testsScore;
+    private final List<AnalysisScore> analysisScores = new ArrayList<>();
     private TestConfiguration testsConfiguration;
-    private CoverageScore coverageScore;
+    private TestScore testsScore;
     private CoverageConfiguration coverageConfiguration;
+    private CoverageScore coverageScore;
     private PitConfiguration pitConfiguration;
     private PitScore pitScore;
-
-    /**
-     * Creates a new instance of {@link Score}.
-     * @param maxScore
-     *          sets initial score
-     */
-    public Score(final int maxScore) {
-        this.grade = maxScore;
-    }
-
-    /**
-     * Creates a new instance of {@link Score}.
-     */
-    public Score() {
-    }
 
     public int getScore() {
         return grade;
     }
 
-    /**
-     * increase score by change.
-     * @param change calculated delta
-     */
-    public void addToScore(final int change) {
-        this.grade = this.grade + change;
-    }
-
-    public Configuration getConfigs() {
-        return configs;
-    }
-
-    public List<AnalysisScore> getAnalysisScores() {
-        return analysisScores;
-    }
-    public List<PitScore> getPitBases() {
-        return pitBases;
-    }
-    public List<TestScore> getJunitBases() {
-        return junitBases;
-    }
-    public List<CoverageScore> getCocoBases() {
-        return cocoBases;
+    public int getTotal() {
+        return total;
     }
 
     public AnalysisConfiguration getAnalysisConfiguration() {
         return analysisConfiguration;
     }
 
-    public TestConfiguration getTestsConfiguration() {
+    public List<AnalysisScore> getAnalysisScores() {
+        return analysisScores;
+    }
+
+    public TestConfiguration getTestConfiguration() {
         return testsConfiguration;
     }
 
-    public List<TestScore> getTestsScores() {
+    public List<TestScore> getTestScores() {
         return Collections.singletonList(testsScore);
     }
 
@@ -99,53 +65,14 @@ public class Score {
         return Collections.singletonList(pitScore);
     }
 
-    /**
-     * Save configurations.
-     * @param inputConfig configurations read from xml
-     */
-    public void addConfigs(final Configuration inputConfig) {
-        this.configs = inputConfig;
-    }
-
-    /**
-     * Save Default results.
-     * @param inputBase results from static checks
-     */
-    public void addAnalysisScore(final AnalysisScore inputBase) {
-        this.analysisScores.add(inputBase);
-    }
-
-    /**
-     * Save PIT results.
-     * @param inputBases results from pit mutation check
-     */
-    public void addPitBase(final PitScore inputBases) {
-        this.pitBases.add(inputBases);
-    }
-
-    /**
-     * Save Coco results.
-     * @param inputBases results from code coverage check
-     */
-    public void addCocoBase(final CoverageScore inputBases) {
-        this.cocoBases.add(inputBases);
-    }
-
-    /**
-     * Save junit results.
-     * @param inputBases results from junit tests
-     */
-    public void addJunitBase(final TestScore inputBases) {
-        this.junitBases.add(inputBases);
-    }
-
     public int addAnalysisTotal(final AnalysisConfiguration configuration, final List<AnalysisScore> scores) {
         analysisScores.addAll(scores);
         analysisConfiguration = configuration;
+        total += analysisConfiguration.getMaxScore();
 
         int delta = 0;
         for (AnalysisScore score : scores) {
-            delta = delta + score.getTotalChange();
+            delta = delta + score.getTotalImpact();
         }
 
         int actual;
@@ -163,6 +90,7 @@ public class Score {
     public int addTestsTotal(final TestConfiguration configuration, final TestScore scores) {
         testsScore = scores;
         testsConfiguration = configuration;
+        total += configuration.getMaxScore();
 
         int actual;
         if (testsScore.getTotalChange() <= 0) {
@@ -176,32 +104,33 @@ public class Score {
         return actual;
     }
 
-    public int addCoverageTotal(final CoverageConfiguration coverageConfiguration, final CoverageScore coverageScore) {
-        this.coverageScore = coverageScore;
-        this.coverageConfiguration = coverageConfiguration;
+    public int addCoverageTotal(final CoverageConfiguration configuration, final CoverageScore score) {
+        this.coverageScore = score;
+        this.coverageConfiguration = configuration;
+        total += configuration.getMaxScore();
 
         int actual;
-        if (testsScore.getTotalChange() <= 0) {
-            actual = Math.max(0, coverageConfiguration.getMaxScore() + testsScore.getTotalChange());
+        if (score.getTotalChange() <= 0) {
+            actual = Math.max(0, configuration.getMaxScore() + score.getTotalChange());
         }
         else {
-            actual = Math.min(coverageConfiguration.getMaxScore(), testsScore.getTotalChange());
+            actual = Math.min(configuration.getMaxScore(), score.getTotalChange());
         }
 
         grade += actual;
         return actual;
     }
 
-    public int addPitTotal(final PitConfiguration pitConfiguration, final PitScore pitScore) {
-        this.pitConfiguration = pitConfiguration;
-        this.pitScore = pitScore;
+    public int addPitTotal(final PitConfiguration configuration, final PitScore score) {
+        this.pitConfiguration = configuration;
+        this.pitScore = score;
 
         int actual;
-        if (testsScore.getTotalChange() <= 0) {
-            actual = Math.max(0, coverageConfiguration.getMaxScore() + testsScore.getTotalChange());
+        if (score.getTotalChange() <= 0) {
+            actual = Math.max(0, configuration.getMaxScore() + score.getTotalChange());
         }
         else {
-            actual = Math.min(coverageConfiguration.getMaxScore(), testsScore.getTotalChange());
+            actual = Math.min(configuration.getMaxScore(), score.getTotalChange());
         }
 
         grade += actual;

@@ -3,10 +3,15 @@ package io.jenkins.plugins.grading;
 import java.util.Arrays;
 import java.util.Collections;
 
+import org.junit.jupiter.api.Test;
+
+import io.jenkins.plugins.coverage.targets.Ratio;
+import io.jenkins.plugins.grading.AnalysisConfiguration.AnalysisConfigurationBuilder;
+import io.jenkins.plugins.grading.CoverageConfiguration.CoverageConfigurationBuilder;
+import io.jenkins.plugins.util.LogHandler;
+
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
-
-import org.junit.jupiter.api.Test;
 
 /**
  * Tests the class {@link Score}.
@@ -14,21 +19,13 @@ import org.junit.jupiter.api.Test;
  * @author Ullrich Hafner
  */
 class ScoreTest {
-
-    @Test
-    void addToScore() {
-        Score score = new Score(100);
-        score.addToScore(-5);
-        assertThat(score.getScore()).isEqualTo(95);
-    }
-
     @Test
     void shouldSumAnalysisConfiguration() {
         Score score = new Score();
 
         assertThat(score).hasScore(0);
 
-        AnalysisConfiguration configuration = new AnalysisConfiguration.AnalysisConfigurationBuilder().setMaxScore(20).build();
+        AnalysisConfiguration configuration = new AnalysisConfigurationBuilder().setMaxScore(20).build();
         score.addAnalysisTotal(configuration, Collections.emptyList());
         assertThat(score).hasScore(20);
 
@@ -41,8 +38,23 @@ class ScoreTest {
 
     private AnalysisScore createAnalysisScore(final int total) {
         AnalysisScore analysisScore = mock(AnalysisScore.class);
-        when(analysisScore.getTotalChange()).thenReturn(total);
+        when(analysisScore.getTotalImpact()).thenReturn(total);
 
         return analysisScore;
+    }
+
+    @Test
+    void shouldUpdateCoverage() {
+        CoverageConfiguration coverageConfiguration = new CoverageConfigurationBuilder()
+                .setMaxScore(100)
+                .setWeightMissed(-2)
+                .setWeightCovered(1)
+                .build();
+
+        Score score = new Score();
+        score.addCoverageTotal(coverageConfiguration,
+                new CoverageScore(coverageConfiguration, Ratio.create(99, 100), mock(LogHandler.class)));
+
+        assertThat(score.getScore()).isEqualTo(98);
     }
 }

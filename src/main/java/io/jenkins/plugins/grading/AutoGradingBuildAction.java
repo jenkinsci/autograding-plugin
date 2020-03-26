@@ -75,7 +75,12 @@ public class AutoGradingBuildAction extends BuildAction<Score> implements Staple
     }
 
     @SuppressWarnings("unused")
-    public String getTotalScore() {
-        return getResult().getScore() + "/" + getResult().getConfigs().getMaxScore();
+    public int getScore() {
+        return getResult().getScore();
+    }
+
+    @SuppressWarnings("unused")
+    public int getTotal() {
+        return getResult().getTotal();
     }
 }

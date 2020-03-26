@@ -18,6 +18,7 @@ public class CoverageConfiguration {
     }
 
     public CoverageConfiguration() {
+        // empty constructor required for automatic Json conversion
     }
 
     public CoverageConfiguration(final int maxScore, final int weightCovered, final int weightMissed) {

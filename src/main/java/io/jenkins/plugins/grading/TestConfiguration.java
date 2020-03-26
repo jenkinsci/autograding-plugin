@@ -18,7 +18,7 @@ public class TestConfiguration {
     }
 
     public TestConfiguration() {
-
+        // empty constructor required for automatic Json conversion
     }
 
     public TestConfiguration(final int maxScore, final int weightSkipped, final int weightFailures,
