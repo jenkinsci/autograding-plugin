@@ -3,6 +3,7 @@ package io.jenkins.plugins.grading;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.hm.hafner.util.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import net.sf.json.JSONException;
@@ -62,97 +63,123 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         logHandler.log("Using configuration '%s'", configuration);
 
         try {
-            Score actualScore = new Score();
             JSONObject gradingConfiguration = JSONObject.fromObject(configuration);
 
-            JSONObject analysis = (JSONObject) gradingConfiguration.get("analysis");
-            if (analysis != null) {
-                AnalysisConfiguration analysisConfiguration = AnalysisConfiguration.from(analysis);
-                List<AnalysisScore> analysisScores = new ArrayList<>();
-                for (ResultAction action : run.getActions(ResultAction.class)) {
-                    String name = action.getLabelProvider().getName();
-                    logHandler.log("Grading static analysis results for " + name);
-                    AnalysisScore score = new AnalysisScore(name, analysisConfiguration, action.getResult());
-                    analysisScores.add(score);
-                    logHandler.log("-> Score %d - from recorded warnings distribution of %d, %d, %d, %d",
-                            score.getTotalImpact(), score.getErrorsSize(), score.getHighPrioritySize(),
-                            score.getNormalPrioritySize(), score.getLowPrioritySize());
-                }
-                int total = actualScore.addAnalysisTotal(analysisConfiguration, analysisScores);
-                logHandler.log("Total score for static analysis results: " + total);
+            Score score = new Score();
+            JSONObject analysisConfiguration = (JSONObject) gradingConfiguration.get("analysis");
+            if (analysisConfiguration != null) {
+                gradeAnalysisResults(run, score, analysisConfiguration, logHandler);
             }
             else {
                 logHandler.log("Skipping static analysis results");
             }
 
-            JSONObject tests = (JSONObject) gradingConfiguration.get("tests");
-            if (tests != null) {
-                TestResultAction action = run.getAction(TestResultAction.class);
-                if (action == null) {
-                    throw new IllegalArgumentException(
-                            "Test scoring has been enabled, but no test results have been found.");
-                }
-                TestConfiguration testsConfiguration = TestConfiguration.from(tests);
-                logHandler.log("Grading test results " + action.getDisplayName());
-                TestScore score = new TestScore(testsConfiguration, action);
-                int total = actualScore.addTestsTotal(testsConfiguration, score);
-
-                logHandler.log("-> Score %d - from recorded test results: %d, %d, %d, %d",
-                        score.getTotalImpact(), score.getTotalSize(), score.getPassedSize(),
-                        score.getFailedSize(), score.getSkippedSize());
-                logHandler.log("Total score for test results: " + total);
+            JSONObject testConfiguration = (JSONObject) gradingConfiguration.get("tests");
+            if (testConfiguration != null) {
+                gradeTestResults(run, score, testConfiguration, logHandler);
             }
             else {
                 logHandler.log("Skipping test results");
             }
 
-            JSONObject coverage = (JSONObject) gradingConfiguration.get("coverage");
-            if (coverage != null) {
-                CoverageConfiguration coverageConfiguration = CoverageConfiguration.from(coverage);
-                CoverageAction action = run.getAction(CoverageAction.class);
-                if (action == null) {
-                    throw new IllegalArgumentException(
-                            "Coverage scoring has been enabled, but no coverage results have been found.");
-                }
-                logHandler.log("Grading coverage results " + action.getDisplayName());
-                CoverageScore score = new CoverageScore(coverageConfiguration,
-                        action.getResult().getCoverage(CoverageElement.LINE));
-                int total = actualScore.addCoverageTotal(coverageConfiguration, score);
-
-                logHandler.log("-> Score %d - from recorded coverage results: %d%%",
-                        score.getTotalImpact(), score.getCoveredSize());
-                logHandler.log("Total score for coverage results: " + total);
+            JSONObject coverageConfiguration = (JSONObject) gradingConfiguration.get("coverage");
+            if (coverageConfiguration != null) {
+                gradeCoverageResults(run, score, coverageConfiguration, logHandler);
             }
             else {
-                logHandler.log("Skipping test results");
+                logHandler.log("Skipping coverage results");
             }
 
-            JSONObject pit = (JSONObject) gradingConfiguration.get("pit");
-            if (pit != null) {
-                PitConfiguration pitConfiguration = PitConfiguration.from(pit);
-                PitBuildAction action = run.getAction(PitBuildAction.class);
-                if (action == null) {
-                    throw new IllegalArgumentException(
-                            "Mutation coverage scoring has been enabled, but no PIT results have been found.");
-                }
-                logHandler.log("Grading PIT mutation results " + action.getDisplayName());
-                PitScore score = new PitScore(pitConfiguration, action);
-                int total = actualScore.addPitTotal(pitConfiguration, score);
-                logHandler.log("-> Score %d - from recorded PIT mutation results: %d, %d, %d, %d",
-                        score.getTotalImpact(), score.getMutationsSize(), score.getUndetectedSize(),
-                        score.getDetectedSize(), score.getRatio());
-                logHandler.log("Total score for mutation coverage results: " + total);
+            JSONObject pitConfiguration = (JSONObject) gradingConfiguration.get("pit");
+            if (pitConfiguration != null) {
+                gradePitResults(run, score, pitConfiguration, logHandler);
             }
             else {
-                logHandler.log("Skipping test results");
+                logHandler.log("Skipping mutation coverage results");
             }
 
-            run.addAction(new AutoGradingBuildAction(run, actualScore));
+            run.addAction(new AutoGradingBuildAction(run, score));
         }
         catch (JSONException exception) {
             throw new IllegalArgumentException("Invalid configuration: " + configuration);
         }
    }
+
+    @VisibleForTesting
+    private void gradePitResults(@NonNull final Run<?, ?> run,
+            final Score actualScore, final JSONObject jsonConfiguration, final LogHandler logHandler) {
+        PitConfiguration pitConfiguration = PitConfiguration.from(jsonConfiguration);
+        PitBuildAction action = run.getAction(PitBuildAction.class);
+        if (action == null) {
+            throw new IllegalArgumentException(
+                    "Mutation coverage scoring has been enabled, but no PIT results have been found.");
+        }
+        logHandler.log("Grading PIT mutation results " + action.getDisplayName());
+        PitScore score = new PitScore(pitConfiguration, action);
+        int total = actualScore.addPitTotal(pitConfiguration, score);
+        logHandler.log("-> Score %d - from recorded PIT mutation results: %d, %d, %d, %d",
+                score.getTotalImpact(), score.getMutationsSize(), score.getUndetectedSize(),
+                score.getDetectedSize(), score.getRatio());
+        logHandler.log("Total score for mutation coverage results: " + total);
+    }
+
+    @VisibleForTesting
+    private void gradeCoverageResults(@NonNull final Run<?, ?> run,
+            final Score actualScore, final JSONObject jsonConfiguration, final LogHandler logHandler) {
+        CoverageConfiguration coverageConfiguration = CoverageConfiguration.from(jsonConfiguration);
+        CoverageAction action = run.getAction(CoverageAction.class);
+        if (action == null) {
+            throw new IllegalArgumentException(
+                    "Coverage scoring has been enabled, but no coverage results have been found.");
+        }
+        logHandler.log("Grading coverage results " + action.getDisplayName());
+        CoverageScore score = new CoverageScore(coverageConfiguration,
+                action.getResult().getCoverage(CoverageElement.LINE));
+        int total = actualScore.addCoverageTotal(coverageConfiguration, score);
+
+        logHandler.log("-> Score %d - from recorded coverage results: %d%%",
+                score.getTotalImpact(), score.getCoveredSize());
+        logHandler.log("Total score for coverage results: " + total);
+    }
+
+    @VisibleForTesting
+    private void gradeTestResults(@NonNull final Run<?, ?> run,
+            final Score actualScore, final JSONObject testConfiguration, final LogHandler logHandler) {
+        TestResultAction action = run.getAction(TestResultAction.class);
+        if (action == null) {
+            throw new IllegalArgumentException(
+                    "Test scoring has been enabled, but no test results have been found.");
+        }
+        TestConfiguration testsConfiguration = TestConfiguration.from(testConfiguration);
+        logHandler.log("Grading test results " + action.getDisplayName());
+        TestScore score = new TestScore(testsConfiguration, action);
+        int total = actualScore.addTestsTotal(testsConfiguration, score);
+
+        logHandler.log("-> Score %d - from recorded test results: %d, %d, %d, %d",
+                score.getTotalImpact(), score.getTotalSize(), score.getPassedSize(),
+                score.getFailedSize(), score.getSkippedSize());
+        logHandler.log("Total score for test results: " + total);
+    }
+
+    @VisibleForTesting
+    void gradeAnalysisResults(final Run<?, ?> run,
+            final Score actualScore, final JSONObject jsonConfiguration, final LogHandler logHandler) {
+        List<ResultAction> actions = run.getActions(ResultAction.class);
+        AnalysisConfiguration analysisConfiguration = AnalysisConfiguration.from(jsonConfiguration);
+        List<AnalysisScore> analysisScores = new ArrayList<>();
+        for (ResultAction action : actions) {
+            String name = action.getLabelProvider().getName();
+            logHandler.log("Grading static analysis results for " + name);
+            AnalysisScore score = new AnalysisScore(name, analysisConfiguration, action.getResult());
+            analysisScores.add(score);
+            logHandler.log("-> Score %d (warnings distribution err:%d, high:%d, normal:%d, low:%d)",
+                    score.getTotalImpact(), score.getErrorsSize(), score.getHighPrioritySize(),
+                    score.getNormalPrioritySize(), score.getLowPrioritySize());
+        }
+        int total = actualScore.addAnalysisTotal(analysisConfiguration, analysisScores);
+        logHandler.log("Total score for static analysis results: %d of %d",
+                total, analysisConfiguration.getMaxScore());
+    }
 
     /** Descriptor for this step. */
     @Extension(ordinal = -100_000)

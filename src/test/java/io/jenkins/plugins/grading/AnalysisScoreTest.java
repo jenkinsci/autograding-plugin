@@ -38,7 +38,11 @@ class AnalysisScoreTest {
     @Test
     void shouldConvertFromJson() {
         AnalysisConfiguration configuration = AnalysisConfiguration.from(JSONObject.fromObject(
-                "{\"maxScore\":25,\"weightError\":0,\"weightHigh\":0,\"weightNormal\":0,\"weightLow\":0}"));
-        assertThat(configuration).hasMaxScore(25);
+                "{\"maxScore\":5,\"errorImpact\":1,\"highImpact\":2,\"normalImpact\":3,\"lowImpact\":4}"));
+        assertThat(configuration).hasErrorImpact(1);
+        assertThat(configuration).hasHighImpact(2);
+        assertThat(configuration).hasNormalImpact(3);
+        assertThat(configuration).hasLowImpact(4);
+        assertThat(configuration).hasMaxScore(5);
     }
 }
