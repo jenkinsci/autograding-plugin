@@ -9,6 +9,7 @@ import org.jvnet.hudson.test.JenkinsRule;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 
+import hudson.model.Result;
 import hudson.model.Run;
 
 import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
@@ -32,6 +33,16 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     @Test
+    public void shouldAbortBuildSinceNoTestActionHasBeenRegistered() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
+
+        configureScanner(job, "checkstyle", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}, \"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}, \"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}, \"pit\":{\"maxScore\":100,\"detectedImpact\":1,\"undetectedImpact\":-1,\"ratioImpact\":0}}");
+        Run<?, ?> baseline = buildWithResult(job, Result.FAILURE);
+
+        assertThat(getConsoleLog(baseline)).contains("java.lang.IllegalArgumentException: Test scoring has been enabled, but no test results have been found.");
+    }
+
+    @Test
     public void shouldCountCheckStyleWarnings() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
@@ -46,7 +57,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(actions).hasSize(1);
         Score score = actions.get(0).getResult();
 
-        assertThat(score).hasScore(40);
+        assertThat(score).hasAchieved(40);
     }
 
     /**

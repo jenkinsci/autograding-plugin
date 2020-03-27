@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import io.jenkins.plugins.coverage.targets.Ratio;
 import io.jenkins.plugins.grading.AnalysisConfiguration.AnalysisConfigurationBuilder;
 import io.jenkins.plugins.grading.CoverageConfiguration.CoverageConfigurationBuilder;
-import io.jenkins.plugins.util.LogHandler;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -23,17 +22,17 @@ class ScoreTest {
     void shouldSumAnalysisConfiguration() {
         Score score = new Score();
 
-        assertThat(score).hasScore(0);
+        assertThat(score).hasAchieved(0);
 
         AnalysisConfiguration configuration = new AnalysisConfigurationBuilder().setMaxScore(20).build();
         score.addAnalysisTotal(configuration, Collections.emptyList());
-        assertThat(score).hasScore(20);
+        assertThat(score).hasAchieved(20);
 
         score.addAnalysisTotal(configuration, Collections.singletonList(createAnalysisScore(-10)));
-        assertThat(score).hasScore(30);
+        assertThat(score).hasAchieved(30);
 
         score.addAnalysisTotal(configuration, Arrays.asList(createAnalysisScore(-10), createAnalysisScore(-5)));
-        assertThat(score).hasScore(35);
+        assertThat(score).hasAchieved(35);
     }
 
     private AnalysisScore createAnalysisScore(final int total) {
@@ -54,6 +53,6 @@ class ScoreTest {
         score.addCoverageTotal(coverageConfiguration,
                 new CoverageScore(coverageConfiguration, Ratio.create(198, 200)));
 
-        assertThat(score.getScore()).isEqualTo(98);
+        assertThat(score.getAchieved()).isEqualTo(98);
     }
 }

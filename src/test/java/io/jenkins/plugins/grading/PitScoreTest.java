@@ -22,7 +22,7 @@ class PitScoreTest {
 
         PitScore pits = new PitScore(pitConfiguration, createAction(30, 5));
 
-        assertThat(pits.getTotalImpact()).isEqualTo(15);
+        assertThat(pits).hasTotalImpact(15);
     }
 
     @Test
@@ -33,7 +33,7 @@ class PitScoreTest {
 
         PitScore pits = new PitScore(pitConfiguration, createAction(30, 3));
 
-        assertThat(pits.getTotalImpact()).isEqualTo(-20);
+        assertThat(pits).hasTotalImpact(-20);
     }
 
     @Test

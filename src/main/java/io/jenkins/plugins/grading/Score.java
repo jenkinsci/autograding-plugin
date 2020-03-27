@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Score {
     private int total;
-    private int grade;
+    private int achieved;
 
     private AnalysisConfiguration analysisConfiguration;
     private final List<AnalysisScore> analysisScores = new ArrayList<>();
@@ -24,8 +24,8 @@ public class Score {
     private PitConfiguration pitConfiguration;
     private PitScore pitScore;
 
-    public int getScore() {
-        return grade;
+    public int getAchieved() {
+        return achieved;
     }
 
     public int getTotal() {
@@ -107,7 +107,7 @@ public class Score {
         else {
             actual = Math.min(maxScore, totalChange);
         }
-        grade += actual;
+        achieved += actual;
 
         return actual;
     }

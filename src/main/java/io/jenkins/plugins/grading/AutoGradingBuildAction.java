@@ -76,7 +76,7 @@ public class AutoGradingBuildAction extends BuildAction<Score> implements Staple
 
     @SuppressWarnings("unused")
     public int getScore() {
-        return getResult().getScore();
+        return getResult().getAchieved();
     }
 
     @SuppressWarnings("unused")

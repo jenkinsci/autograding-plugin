@@ -32,13 +32,13 @@ class AnalysisScoreTest {
                 .setWeightLow(-1)
                 .build();
         AnalysisScore analysisScore = new AnalysisScore("Analysis Results", analysisConfiguration, result);
-        assertThat(analysisScore.getTotalImpact()).isEqualTo(-4 - 3 - 2 - 1);
+        assertThat(analysisScore).hasTotalImpact(-4 - 3 - 2 - 1);
     }
 
     @Test
     void shouldConvertFromJson() {
         AnalysisConfiguration configuration = AnalysisConfiguration.from(JSONObject.fromObject(
                 "{\"maxScore\":25,\"weightError\":0,\"weightHigh\":0,\"weightNormal\":0,\"weightLow\":0}"));
-        assertThat(configuration.getMaxScore()).isEqualTo(25);
+        assertThat(configuration).hasMaxScore(25);
     }
 }

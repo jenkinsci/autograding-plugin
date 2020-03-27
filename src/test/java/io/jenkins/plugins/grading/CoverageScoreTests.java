@@ -23,6 +23,6 @@ class CoverageScoreTests {
                 .build();
         CoverageScore coverageScore = new CoverageScore(coverageConfiguration, Ratio.create(99, 100));
 
-        assertThat(coverageScore.getTotalImpact()).isEqualTo(-2);
+        assertThat(coverageScore).hasTotalImpact(-2);
     }
 }

@@ -17,7 +17,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
-                                <h5>Your current Score: ${it.score.score} / ${it.score.configs.maxScore}</h5>
+                                <h5>Your current score: ${it.score.achieved} / ${it.score.total}</h5>
                                 <p> </p>
                                 <p>You can receive a maximum of points per category.</p>
                                 <p>You earn a minimum of 0 points per category.</p>
@@ -31,31 +31,33 @@
                                 <h6>Static Analysis Configuration</h6>
                                 <p>per issue Score changes by:</p>
                                 <j:set var="analysisConfig" value="${it.score.analysisConfiguration}"/>
-                                <p>Errors cause ${analysisConfig.weightError} points</p>
-                                <p>High issues cause ${analysisConfig.weightHigh} points</p>
-                                <p>Normal issues cause ${analysisConfig.weightNormal} points</p>
-                                <p>Low issues cause ${analysisConfig.weightLow} points</p>
+                                <p>Errors cause ${analysisConfig.errorImpact} points</p>
+                                <p>High issues cause ${analysisConfig.highImpact} points</p>
+                                <p>Normal issues cause ${analysisConfig.normalImpact} points</p>
+                                <p>Low issues cause ${analysisConfig.lowImpact} points</p>
                             </div>
                             <div class="col-sm-3">
                                 <h6>Test Configuration</h6>
                                 <p>per issue Score changes by:</p>
                                 <j:set var="testConfig" value="${it.score.testConfiguration}"/>
-                                <p>Passed tests cause ${testConfig.weightPassed} points</p>
-                                <p>Failed tests cause ${testConfig.weightFailures} points</p>
-                                <p>Skipped tests cause ${testConfig.weightSkipped} points</p>
+                                <p>Passed tests cause ${testConfig.passedImpact} points</p>
+                                <p>Failed tests cause ${testConfig.failureImpact} points</p>
+                                <p>Skipped tests cause ${testConfig.skippedImpact} points</p>
                             </div>
                             <div class="col-sm-3">
                                 <h6>Mutation Coverage Configuration</h6>
                                 <p>per issue Score changes by:</p>
                                 <j:set var="pitConfig" value="${it.score.pitConfiguration}"/>
-                                <p>Undetected mutations cause ${pitConfig.weightUndetected} points</p>
-                                <p>Detected mutations cause ${pitConfig.weightDetected} points</p>
+                                <p>Undetected mutations cause ${pitConfig.undetectedImpact} points</p>
+                                <p>Detected mutations cause ${pitConfig.detectedImpact} points</p>
+                                <p>Undetected mutations percentage ${pitConfig.ratioImpact} points</p>
                             </div>
                             <div class="col-sm-3">
                                 <h6>Code Coverage Configuration</h6>
                                 <p>per issue Score changes by:</p>
                                 <j:set var="coverageConfig" value="${it.score.coverageConfiguration}"/>
-                                <p>per % Missed lines ${coverageConfig.weightMissed} points</p>
+                                <p>per % Missed percentage ${coverageConfig.missedImpact} points</p>
+                                <p>per % Covered percentage ${coverageConfig.coveredImpact} points</p>
                             </div>
                         </div>
                     </div>
@@ -79,7 +81,7 @@
                                     <th>${%High}</th>
                                     <th>${%Normal}</th>
                                     <th>${%Low}</th>
-                                    <th>${%Sum}</th>
+                                    <th>${%Total}</th>
                                     <th>${%Score Impact}</th>
                                 </tr>
                             </thead>
@@ -105,7 +107,7 @@
                                             ${checks.totalSize}
                                         </td>
                                         <td>
-                                            ${checks.totalChange}
+                                            ${checks.totalImpact}
                                         </td>
                                     </tr>
                                 </j:forEach>
@@ -141,19 +143,19 @@
                                             <a href="../testReport">${checks.id}</a>
                                         </td>
                                         <td>
-                                            ${checks.totalRun}
+                                            ${checks.totalSize}
                                         </td>
                                         <td>
-                                            ${checks.totalPassed}
+                                            ${checks.passedSize}
                                         </td>
                                         <td>
-                                            ${checks.totalFailed}
+                                            ${checks.failedSize}
                                         </td>
                                         <td>
-                                            ${checks.totalSkipped}
+                                            ${checks.skippedSize}
                                         </td>
                                         <td>
-                                            ${checks.totalChange}
+                                            ${checks.totalImpact}
                                         </td>
                                     </tr>
                                 </j:forEach>
@@ -173,11 +175,9 @@
                         <table class="table table-hover table-striped display" id="coverage">
                             <thead>
                                 <tr>
-                                    <th>${%Check}</th>
-                                    <th>${%Total}</th>
-                                    <th>${%Missed}</th>
-                                    <th>${%Covered}</th>
+                                    <th>${%Type}</th>
                                     <th>${%Covered Percentage}</th>
+                                    <th>${%Missed Percentage}</th>
                                     <th>${%Score Impact}</th>
                                 </tr>
                             </thead>
@@ -188,19 +188,13 @@
                                             <a href="../coverage">${checks.id}</a>
                                         </td>
                                         <td>
-                                            ${checks.totalLines}
+                                            ${checks.coveredSize}
                                         </td>
                                         <td>
-                                            ${checks.totalMissed}
+                                            ${checks.missedSize}
                                         </td>
                                         <td>
-                                            ${checks.totalCovered}
-                                        </td>
-                                        <td>
-                                            ${checks.ratio}
-                                        </td>
-                                        <td>
-                                            ${checks.totalChange}
+                                            ${checks.totalImpact}
                                         </td>
                                     </tr>
                                 </j:forEach>
@@ -220,7 +214,7 @@
                         <table class="table table-hover table-striped display" id="pit">
                             <thead>
                                 <tr>
-                                    <th>${%Check}</th>
+                                    <th>${%Type}</th>
                                     <th>${%Mutations}</th>
                                     <th>${%Detected}</th>
                                     <th>${%Undetected}</th>
@@ -235,19 +229,19 @@
                                             <a href="../pitmutation">${checks.id}</a>
                                         </td>
                                         <td>
-                                            ${checks.totalMutations}
+                                            ${checks.mutationsSize}
                                         </td>
                                         <td>
-                                            ${checks.totalDetected}
+                                            ${checks.detectedSize}
                                         </td>
                                         <td>
-                                            ${checks.totalUndetected}
+                                            ${checks.undetectedSize}
                                         </td>
                                         <td>
                                             ${checks.ratio}
                                         </td>
                                         <td>
-                                            ${checks.totalChange}
+                                            ${checks.totalImpact}
                                         </td>
                                     </tr>
                                 </j:forEach>
