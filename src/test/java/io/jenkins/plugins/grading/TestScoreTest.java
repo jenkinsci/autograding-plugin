@@ -33,7 +33,7 @@ public class TestScoreTest {
     public TestResultAction resultAction;
 
     @Parameter(2)
-    public int expect;
+    public int expectedTotalImpact;
 
     @Parameters
     public static Collection<Object[]> data() {
@@ -48,13 +48,38 @@ public class TestScoreTest {
                 createAction(8, 5, 1),
                 -9
             },
+            {
+                createTestConfiguration(25,-1, -2, -1),
+                createAction(8, 5, 1),
+                -13
+            },
+            {
+                createTestConfiguration(25,0, 0, 0),
+                createAction(0, 0, 0),
+                0
+            },
+            {
+                createTestConfiguration(25,99, 99, 99),
+                createAction(0, 0, 0),
+                0
+            },
+            {
+                createTestConfiguration(25,1, 1, 1),
+                createAction(3, 3, 0),
+                3
+            },
         });
     }
 
     @Test
     public void test() {
         TestScore test = new TestScore(configuration, resultAction);
-        assertThat(test.getTotalImpact()).isEqualTo(expect);
+        assertThat(test.getTotalSize()).isEqualTo(resultAction.getTotalCount());
+        assertThat(test.getPassedSize()).isEqualTo(resultAction.getTotalCount() - resultAction.getFailCount() - resultAction.getSkipCount());
+        assertThat(test.getFailedSize()).isEqualTo(resultAction.getFailCount());
+        assertThat(test.getSkippedSize()).isEqualTo(resultAction.getSkipCount());
+        assertThat(test.getId()).isEqualTo(resultAction.getDisplayName());
+        assertThat(test.getTotalImpact()).isEqualTo(expectedTotalImpact);
     }
 
     private static TestConfiguration createTestConfiguration(
