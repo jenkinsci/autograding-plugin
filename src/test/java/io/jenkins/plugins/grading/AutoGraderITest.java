@@ -50,7 +50,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CheckStyle");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -60 - from recorded warnings distribution of 6, 0, 0, 0");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 40");
 
         List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
