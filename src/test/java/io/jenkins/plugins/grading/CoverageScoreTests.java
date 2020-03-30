@@ -2,6 +2,8 @@ package io.jenkins.plugins.grading;
 
 import org.junit.jupiter.api.Test;
 
+import net.sf.json.JSONObject;
+
 import hudson.model.TaskListener;
 
 import io.jenkins.plugins.coverage.targets.Ratio;
@@ -25,4 +27,12 @@ class CoverageScoreTests {
 
         assertThat(coverageScore).hasTotalImpact(-2);
     }
+    @Test
+    void shouldConvertFromJson() {
+        CoverageConfiguration configuration = CoverageConfiguration.from(JSONObject.fromObject("{\"maxScore\": 4, \"coveredImpact\":5, \"missedImpact\":3}"));
+        assertThat(configuration).hasMaxScore(4);
+        assertThat(configuration).hasCoveredImpact(5);
+        assertThat(configuration).hasMissedImpact(3);
+    }
+
 }
