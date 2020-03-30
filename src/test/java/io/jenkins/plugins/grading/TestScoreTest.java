@@ -2,9 +2,12 @@ package io.jenkins.plugins.grading;
 
 import org.junit.jupiter.api.Test;
 
+import net.sf.json.JSONObject;
+
 import hudson.tasks.junit.TestResultAction;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
@@ -47,5 +50,16 @@ class TestScoreTest {
         TestScore test = new TestScore(testsConfiguration, createAction(8, 5, 1));
 
         assertThat(test.getTotalImpact()).isEqualTo(-9);
+    }
+
+    @Test
+    void shouldConvertFromJson() {
+        TestConfiguration configuration = TestConfiguration.from(JSONObject.fromObject(
+                "{\"maxScore\":5,\"failureImpact\":1,\"passedImpact\":2,\"skippedImpact\":3}"));
+
+        assertThat(configuration.getMaxScore()).isEqualTo(5);
+        assertThat(configuration.getFailureImpact()).isEqualTo(1);
+        assertThat(configuration.getPassedImpact()).isEqualTo(2);
+        assertThat(configuration.getSkippedImpact()).isEqualTo(3);
     }
 }
