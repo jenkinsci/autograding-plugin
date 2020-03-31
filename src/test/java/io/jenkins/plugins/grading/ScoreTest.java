@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import io.jenkins.plugins.coverage.targets.Ratio;
 import io.jenkins.plugins.grading.AnalysisConfiguration.AnalysisConfigurationBuilder;
 import io.jenkins.plugins.grading.CoverageConfiguration.CoverageConfigurationBuilder;
+import io.jenkins.plugins.grading.TestConfiguration.TestConfigurationBuilder;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -16,6 +17,7 @@ import static org.mockito.Mockito.*;
  * Tests the class {@link Score}.
  *
  * @author Ullrich Hafner
+ * @author Oliver Scholz
  */
 class ScoreTest {
     @Test
@@ -52,6 +54,38 @@ class ScoreTest {
         Score score = new Score();
         score.addCoverageTotal(coverageConfiguration,
                 new CoverageScore(coverageConfiguration, Ratio.create(198, 200)));
+
+        assertThat(score.getAchieved()).isEqualTo(98);
+    }
+
+    @Test
+    void shouldUpdateTests() {
+        TestConfiguration testConfiguration = new TestConfigurationBuilder()
+                .setMaxScore(100)
+                .setFailureImpact(-3)
+                .build();
+
+        TestScore testScore = mock(TestScore.class);
+        when(testScore.getTotalImpact()).thenReturn(-3);
+
+        Score score = new Score();
+        score.addTestsTotal(testConfiguration, testScore);
+
+        assertThat(score.getAchieved()).isEqualTo(97);
+    }
+
+    @Test
+    void shouldUpdatePit() {
+        PitConfiguration pitConfiguration = new PitConfiguration.PitConfigurationBuilder()
+                .setMaxScore(100)
+                .setDetectedImpact(2)
+                .build();
+
+        PitScore pitScore = mock(PitScore.class);
+        when(pitScore.getTotalImpact()).thenReturn(-2);
+
+        Score score = new Score();
+        score.addPitTotal(pitConfiguration, pitScore);
 
         assertThat(score.getAchieved()).isEqualTo(98);
     }
