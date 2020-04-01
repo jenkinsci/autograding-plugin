@@ -53,6 +53,28 @@ class TestScoreTest {
     }
 
     @Test
+    void shouldInitialiseWithDefaultValues() {
+        TestConfiguration configuration = TestConfiguration.from(JSONObject.fromObject(
+                "{}"));
+
+        assertThat(configuration.getMaxScore()).isEqualTo(0);
+        assertThat(configuration.getFailureImpact()).isEqualTo(0);
+        assertThat(configuration.getPassedImpact()).isEqualTo(0);
+        assertThat(configuration.getSkippedImpact()).isEqualTo(0);
+    }
+
+    @Test
+    void shouldIgnoresAdditionalAttributes() {
+        TestConfiguration configuration = TestConfiguration.from(JSONObject.fromObject(
+                "{\"additionalAttribute\":5}"));
+
+        assertThat(configuration.getMaxScore()).isEqualTo(0);
+        assertThat(configuration.getFailureImpact()).isEqualTo(0);
+        assertThat(configuration.getPassedImpact()).isEqualTo(0);
+        assertThat(configuration.getSkippedImpact()).isEqualTo(0);
+    }
+
+    @Test
     void shouldConvertFromJson() {
         TestConfiguration configuration = TestConfiguration.from(JSONObject.fromObject(
                 "{\"maxScore\":5,\"failureImpact\":1,\"passedImpact\":2,\"skippedImpact\":3}"));
