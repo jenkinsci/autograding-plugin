@@ -71,7 +71,8 @@ class ScoreTest {
         Score score = new Score();
         score.addTestsTotal(testConfiguration, testScore);
 
-        assertThat(score.getAchieved()).isEqualTo(97);
+        assertThat(score).hasAchieved(97);
+        assertThat(score).hasTotal(100);
     }
 
     @Test
