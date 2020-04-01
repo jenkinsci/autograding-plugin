@@ -189,7 +189,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         @NonNull
         @Override
         public String getDisplayName() {
-            return Messages.Action_Name();
+            return Messages.Step_Name();
         }
 
         @Override
