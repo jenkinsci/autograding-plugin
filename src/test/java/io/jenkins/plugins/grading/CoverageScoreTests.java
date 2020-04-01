@@ -44,7 +44,7 @@ class CoverageScoreTests {
     void shouldGetProperties() {
         Ratio codeCoverageRatio = Ratio.create(99, 100);
         CoverageConfiguration coverageConfiguration = createCoverageConfiguration(1, 1);
-        CoverageScore coverageScore = new CoverageScore(coverageConfiguration, Ratio.create(99, 100));
+        CoverageScore coverageScore = new CoverageScore(coverageConfiguration, codeCoverageRatio);
 
         assertThat(coverageScore).hasId("Line");
         assertThat(coverageScore).hasCoveredSize(codeCoverageRatio.getPercentage());
