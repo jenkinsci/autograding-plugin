@@ -55,7 +55,11 @@ class ScoreTest {
         score.addCoverageTotal(coverageConfiguration,
                 new CoverageScore(coverageConfiguration, Ratio.create(198, 200)));
 
-        assertThat(score.getAchieved()).isEqualTo(98);
+        assertThat(score).hasAchieved(98);
+        assertThat(score).hasTotal(100);
+
+        assertThat(score.getCoverageConfiguration()).hasMaxScore(100);
+        assertThat(score.getCoverageConfiguration()).hasMissedImpact(-2);
     }
 
     @Test
@@ -73,6 +77,9 @@ class ScoreTest {
 
         assertThat(score).hasAchieved(97);
         assertThat(score).hasTotal(100);
+
+        assertThat(score.getTestConfiguration()).hasMaxScore(100);
+        assertThat(score.getTestConfiguration()).hasFailureImpact(-3);
     }
 
     @Test
@@ -88,6 +95,10 @@ class ScoreTest {
         Score score = new Score();
         score.addPitTotal(pitConfiguration, pitScore);
 
-        assertThat(score.getAchieved()).isEqualTo(98);
+        assertThat(score).hasAchieved(98);
+        assertThat(score).hasTotal(100);
+
+        assertThat(score.getPitConfiguration()).hasMaxScore(100);
+        assertThat(score.getPitConfiguration()).hasDetectedImpact(2);
     }
 }
