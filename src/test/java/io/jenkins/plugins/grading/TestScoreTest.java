@@ -3,15 +3,13 @@ package io.jenkins.plugins.grading;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runners.Parameterized.Parameters;
 
 import hudson.tasks.junit.TestResultAction;
 
-import static io.jenkins.plugins.grading.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -23,17 +21,7 @@ import static org.mockito.Mockito.when;
  * @author Lukas Kirner
  */
 
-@RunWith(Parameterized.class)
 public class TestScoreTest {
-
-    @Parameter
-    public TestConfiguration configuration;
-
-    @Parameter(1)
-    public TestResultAction resultAction;
-
-    @Parameter(2)
-    public int expectedTotalImpact;
 
     @Parameters
     public static Collection<Object[]> data() {
@@ -71,8 +59,9 @@ public class TestScoreTest {
         });
     }
 
-    @Test
-    public void test() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void test(TestConfiguration configuration, TestResultAction resultAction, int expectedTotalImpact) {
         TestScore test = new TestScore(configuration, resultAction);
         assertThat(test.getTotalSize()).isEqualTo(resultAction.getTotalCount());
         assertThat(test.getPassedSize()).isEqualTo(resultAction.getTotalCount() - resultAction.getFailCount() - resultAction.getSkipCount());
