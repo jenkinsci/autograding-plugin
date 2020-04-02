@@ -2,6 +2,8 @@ package io.jenkins.plugins.grading;
 
 import org.junit.jupiter.api.Test;
 
+import net.sf.json.JSONObject;
+
 import hudson.tasks.junit.TestResultAction;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
@@ -47,5 +49,38 @@ class TestScoreTest {
         TestScore test = new TestScore(testsConfiguration, createAction(8, 5, 1));
 
         assertThat(test.getTotalImpact()).isEqualTo(-9);
+    }
+
+    @Test
+    void shouldInitialiseWithDefaultValues() {
+        TestConfiguration configuration = TestConfiguration.from(JSONObject.fromObject(
+                "{}"));
+
+        assertThat(configuration).hasMaxScore(0);
+        assertThat(configuration).hasFailureImpact((0));
+        assertThat(configuration).hasPassedImpact(0);
+        assertThat(configuration).hasSkippedImpact(0);
+    }
+
+    @Test
+    void shouldIgnoresAdditionalAttributes() {
+        TestConfiguration configuration = TestConfiguration.from(JSONObject.fromObject(
+                "{\"additionalAttribute\":5}"));
+
+        assertThat(configuration).hasMaxScore(0);
+        assertThat(configuration).hasFailureImpact((0));
+        assertThat(configuration).hasPassedImpact(0);
+        assertThat(configuration).hasSkippedImpact(0);
+    }
+
+    @Test
+    void shouldConvertFromJson() {
+        TestConfiguration configuration = TestConfiguration.from(JSONObject.fromObject(
+                "{\"maxScore\":5,\"failureImpact\":1,\"passedImpact\":2,\"skippedImpact\":3}"));
+
+        assertThat(configuration).hasMaxScore(5);
+        assertThat(configuration).hasFailureImpact((1));
+        assertThat(configuration).hasPassedImpact(2);
+        assertThat(configuration).hasSkippedImpact(3);
     }
 }
