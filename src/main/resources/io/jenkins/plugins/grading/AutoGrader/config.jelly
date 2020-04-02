@@ -1,0 +1,7 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:f="/lib/form" xmlns:i="/issues">
+  <f:entry title="${%title.configuration}" description="${%description.configuration}" field="configuration">
+    <f:textarea codemirror-mode="json"
+                codemirror-config="mode: 'text/json', matchBrackets: true"/>
+  </f:entry>
+</j:jelly>
