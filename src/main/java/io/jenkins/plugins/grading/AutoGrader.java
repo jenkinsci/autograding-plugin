@@ -25,6 +25,8 @@ import hudson.tasks.junit.TestResultAction;
 import jenkins.tasks.SimpleBuildStep;
 
 import io.jenkins.plugins.analysis.core.model.ResultAction;
+import io.jenkins.plugins.analysis.core.steps.IssuesRecorder;
+import io.jenkins.plugins.analysis.core.steps.IssuesRecorder.Descriptor;
 import io.jenkins.plugins.coverage.CoverageAction;
 import io.jenkins.plugins.coverage.targets.CoverageElement;
 import io.jenkins.plugins.util.LogHandler;
@@ -179,6 +181,11 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         int total = actualScore.addAnalysisTotal(analysisConfiguration, analysisScores);
         logHandler.log("Total score for static analysis results: %d of %d",
                 total, analysisConfiguration.getMaxScore());
+    }
+
+    @Override
+    public AutoGrader.Descriptor getDescriptor() {
+        return (AutoGrader.Descriptor) super.getDescriptor();
     }
 
     /** Descriptor for this step. */
