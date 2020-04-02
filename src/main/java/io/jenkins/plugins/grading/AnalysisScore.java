@@ -1,5 +1,6 @@
 package io.jenkins.plugins.grading;
 
+import edu.hm.hafner.util.Ensure;
 import io.jenkins.plugins.analysis.core.model.AnalysisResult;
 
 /**
@@ -21,6 +22,9 @@ public class AnalysisScore {
     private final int totalSize;
 
     public AnalysisScore(final String name, final AnalysisConfiguration configuration, final AnalysisResult result) {
+        Ensure.that(name).isNotEmpty();
+        Ensure.that(result.getId()).isNotEmpty();
+
         this.name = name;
         this.id = result.getId();
 

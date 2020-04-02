@@ -1,5 +1,6 @@
 package io.jenkins.plugins.grading;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import net.sf.json.JSONObject;
@@ -27,6 +28,7 @@ class AnalysisScoreTest {
         when(result.getTotalHighPrioritySize()).thenReturn(1);
         when(result.getTotalNormalPrioritySize()).thenReturn(1);
         when(result.getTotalLowPrioritySize()).thenReturn(1);
+        when(result.getId()).thenReturn(ID);
 
         AnalysisConfiguration analysisConfiguration = new AnalysisConfiguration.AnalysisConfigurationBuilder()
                 .setMaxScore(25)
@@ -35,7 +37,7 @@ class AnalysisScoreTest {
                 .setNormalImpact(-2)
                 .setWeightLow(-1)
                 .build();
-        AnalysisScore analysisScore = new AnalysisScore("Analysis Results", analysisConfiguration, result);
+        AnalysisScore analysisScore = new AnalysisScore(NAME, analysisConfiguration, result);
         assertThat(analysisScore).hasTotalImpact(-4 - 3 - 2 - 1);
     }
 
@@ -105,7 +107,26 @@ class AnalysisScoreTest {
     }
 
     @Test
-    void shouldReturnNullParams() {
+    void shouldThrowExceptionWhenNameIsNull() {
+        AnalysisResult result = mock(AnalysisResult.class);
+        when(result.getTotalErrorsSize()).thenReturn(0);
+        when(result.getTotalHighPrioritySize()).thenReturn(0);
+        when(result.getTotalNormalPrioritySize()).thenReturn(0);
+        when(result.getTotalLowPrioritySize()).thenReturn(0);
+        when(result.getId()).thenReturn(ID);
+
+        AnalysisConfiguration configuration = new AnalysisConfiguration.AnalysisConfigurationBuilder()
+                .setErrorImpact(0)
+                .setHighImpact(0)
+                .setNormalImpact(0)
+                .setWeightLow(0)
+                .build();
+
+        Assertions.assertThrows(NullPointerException.class, () -> new AnalysisScore(null, configuration, result));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenIdIsNull() {
         AnalysisResult result = mock(AnalysisResult.class);
         when(result.getTotalErrorsSize()).thenReturn(0);
         when(result.getTotalHighPrioritySize()).thenReturn(0);
@@ -113,16 +134,13 @@ class AnalysisScoreTest {
         when(result.getTotalLowPrioritySize()).thenReturn(0);
         when(result.getId()).thenReturn(null);
 
-        AnalysisConfiguration configuration = mock(AnalysisConfiguration.class);
-        when(configuration.getErrorImpact()).thenReturn(0);
-        when(configuration.getHighImpact()).thenReturn(0);
-        when(configuration.getLowImpact()).thenReturn(0);
-        when(configuration.getNormalImpact()).thenReturn(0);
+        AnalysisConfiguration configuration = new AnalysisConfiguration.AnalysisConfigurationBuilder()
+                .setErrorImpact(0)
+                .setHighImpact(0)
+                .setNormalImpact(0)
+                .setWeightLow(0)
+                .build();
 
-        AnalysisScore analysisScore = new AnalysisScore(null, configuration, result);
-
-        assertThat(analysisScore).hasName(null);
-        assertThat(analysisScore).hasId(null);
+        Assertions.assertThrows(NullPointerException.class, () -> new AnalysisScore(NAME, configuration, result));
     }
-
 }
