@@ -7,7 +7,6 @@ import net.sf.json.JSONObject;
 import hudson.tasks.junit.TestResultAction;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
@@ -57,10 +56,10 @@ class TestScoreTest {
         TestConfiguration configuration = TestConfiguration.from(JSONObject.fromObject(
                 "{}"));
 
-        assertThat(configuration.getMaxScore()).isEqualTo(0);
-        assertThat(configuration.getFailureImpact()).isEqualTo(0);
-        assertThat(configuration.getPassedImpact()).isEqualTo(0);
-        assertThat(configuration.getSkippedImpact()).isEqualTo(0);
+        assertThat(configuration).hasMaxScore(0);
+        assertThat(configuration).hasFailureImpact((0));
+        assertThat(configuration).hasPassedImpact(0);
+        assertThat(configuration).hasSkippedImpact(0);
     }
 
     @Test
@@ -68,10 +67,10 @@ class TestScoreTest {
         TestConfiguration configuration = TestConfiguration.from(JSONObject.fromObject(
                 "{\"additionalAttribute\":5}"));
 
-        assertThat(configuration.getMaxScore()).isEqualTo(0);
-        assertThat(configuration.getFailureImpact()).isEqualTo(0);
-        assertThat(configuration.getPassedImpact()).isEqualTo(0);
-        assertThat(configuration.getSkippedImpact()).isEqualTo(0);
+        assertThat(configuration).hasMaxScore(0);
+        assertThat(configuration).hasFailureImpact((0));
+        assertThat(configuration).hasPassedImpact(0);
+        assertThat(configuration).hasSkippedImpact(0);
     }
 
     @Test
@@ -79,9 +78,9 @@ class TestScoreTest {
         TestConfiguration configuration = TestConfiguration.from(JSONObject.fromObject(
                 "{\"maxScore\":5,\"failureImpact\":1,\"passedImpact\":2,\"skippedImpact\":3}"));
 
-        assertThat(configuration.getMaxScore()).isEqualTo(5);
-        assertThat(configuration.getFailureImpact()).isEqualTo(1);
-        assertThat(configuration.getPassedImpact()).isEqualTo(2);
-        assertThat(configuration.getSkippedImpact()).isEqualTo(3);
+        assertThat(configuration).hasMaxScore(5);
+        assertThat(configuration).hasFailureImpact((1));
+        assertThat(configuration).hasPassedImpact(2);
+        assertThat(configuration).hasSkippedImpact(3);
     }
 }
