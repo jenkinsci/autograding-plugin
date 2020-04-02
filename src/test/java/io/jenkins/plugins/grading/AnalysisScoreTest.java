@@ -1,6 +1,5 @@
 package io.jenkins.plugins.grading;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import net.sf.json.JSONObject;
@@ -18,9 +17,9 @@ import static org.mockito.Mockito.*;
  * @author Andreas Stiglmeier
  */
 class AnalysisScoreTest {
-
     private static final String NAME = "Results";
     private static final String ID = "result-id";
+
     @Test
     void shouldCalculate() {
         AnalysisResult result = mock(AnalysisResult.class);
@@ -122,25 +121,7 @@ class AnalysisScoreTest {
                 .setWeightLow(0)
                 .build();
 
-        Assertions.assertThrows(NullPointerException.class, () -> new AnalysisScore(null, configuration, result));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenIdIsNull() {
-        AnalysisResult result = mock(AnalysisResult.class);
-        when(result.getTotalErrorsSize()).thenReturn(0);
-        when(result.getTotalHighPrioritySize()).thenReturn(0);
-        when(result.getTotalNormalPrioritySize()).thenReturn(0);
-        when(result.getTotalLowPrioritySize()).thenReturn(0);
-        when(result.getId()).thenReturn(null);
-
-        AnalysisConfiguration configuration = new AnalysisConfiguration.AnalysisConfigurationBuilder()
-                .setErrorImpact(0)
-                .setHighImpact(0)
-                .setNormalImpact(0)
-                .setWeightLow(0)
-                .build();
-
-        Assertions.assertThrows(NullPointerException.class, () -> new AnalysisScore(NAME, configuration, result));
+        assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(null, configuration, result));
+        assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(NAME, configuration, result));
     }
 }

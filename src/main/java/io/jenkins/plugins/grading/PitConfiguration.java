@@ -7,6 +7,7 @@ import net.sf.json.JSONObject;
  *
  * @author Ullrich Hafner
  */
+@SuppressWarnings("PMD.DataClass")
 public class PitConfiguration extends Configuration {
     private int ratioImpact;
     private int detectedImpact;

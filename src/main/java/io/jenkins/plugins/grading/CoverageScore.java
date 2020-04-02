@@ -8,6 +8,7 @@ import io.jenkins.plugins.coverage.targets.Ratio;
  *
  * @author Eva-Maria Zeintl
  */
+@SuppressWarnings("PMD.DataClass")
 public class CoverageScore {
     private final String id;
 

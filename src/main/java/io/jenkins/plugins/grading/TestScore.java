@@ -8,6 +8,7 @@ import hudson.tasks.junit.TestResultAction;
  *
  * @author Eva-Maria Zeintl
  */
+@SuppressWarnings("PMD.DataClass")
 public class TestScore {
     private final String id;
 

@@ -8,6 +8,7 @@ import org.jenkinsci.plugins.pitmutation.PitBuildAction;
  *
  * @author Eva-Maria Zeintl
  */
+@SuppressWarnings("PMD.DataClass")
 public class PitScore {
     private final String id;
 

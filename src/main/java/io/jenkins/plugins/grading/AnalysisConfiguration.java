@@ -7,6 +7,7 @@ import net.sf.json.JSONObject;
  *
  * @author Ullrich Hafner
  */
+@SuppressWarnings("PMD.DataClass")
 public class AnalysisConfiguration extends Configuration {
     private int errorImpact;
     private int highImpact;

@@ -7,6 +7,7 @@ import net.sf.json.JSONObject;
  *
  * @author Ullrich Hafner
  */
+@SuppressWarnings("PMD.DataClass")
 public class CoverageConfiguration extends Configuration {
     private int coveredImpact;
     private int missedImpact;
