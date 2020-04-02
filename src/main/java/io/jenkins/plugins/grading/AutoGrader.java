@@ -25,8 +25,6 @@ import hudson.tasks.junit.TestResultAction;
 import jenkins.tasks.SimpleBuildStep;
 
 import io.jenkins.plugins.analysis.core.model.ResultAction;
-import io.jenkins.plugins.analysis.core.steps.IssuesRecorder;
-import io.jenkins.plugins.analysis.core.steps.IssuesRecorder.Descriptor;
 import io.jenkins.plugins.coverage.CoverageAction;
 import io.jenkins.plugins.coverage.targets.CoverageElement;
 import io.jenkins.plugins.util.LogHandler;
@@ -69,35 +67,35 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
             Score score = new Score();
             JSONObject analysisConfiguration = (JSONObject) gradingConfiguration.get("analysis");
-            if (analysisConfiguration != null) {
-                gradeAnalysisResults(run, score, analysisConfiguration, logHandler);
+            if (analysisConfiguration == null) {
+                logHandler.log("Skipping static analysis results");
             }
             else {
-                logHandler.log("Skipping static analysis results");
+                gradeAnalysisResults(run, score, analysisConfiguration, logHandler);
             }
 
             JSONObject testConfiguration = (JSONObject) gradingConfiguration.get("tests");
-            if (testConfiguration != null) {
-                gradeTestResults(run, score, testConfiguration, logHandler);
+            if (testConfiguration == null) {
+                logHandler.log("Skipping test results");
             }
             else {
-                logHandler.log("Skipping test results");
+                gradeTestResults(run, score, testConfiguration, logHandler);
             }
 
             JSONObject coverageConfiguration = (JSONObject) gradingConfiguration.get("coverage");
-            if (coverageConfiguration != null) {
-                gradeCoverageResults(run, score, coverageConfiguration, logHandler);
+            if (coverageConfiguration == null) {
+                logHandler.log("Skipping coverage results");
             }
             else {
-                logHandler.log("Skipping coverage results");
+                gradeCoverageResults(run, score, coverageConfiguration, logHandler);
             }
 
             JSONObject pitConfiguration = (JSONObject) gradingConfiguration.get("pit");
-            if (pitConfiguration != null) {
-                gradePitResults(run, score, pitConfiguration, logHandler);
+            if (pitConfiguration == null) {
+                logHandler.log("Skipping mutation coverage results");
             }
             else {
-                logHandler.log("Skipping mutation coverage results");
+                gradePitResults(run, score, pitConfiguration, logHandler);
             }
 
             run.addAction(new AutoGradingBuildAction(run, score));
