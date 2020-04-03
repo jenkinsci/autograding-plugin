@@ -19,4 +19,31 @@ class Configuration {
     public int getMaxScore() {
         return maxScore;
     }
+
+    /**
+     * Base class for builders of {@link Configuration} instances.
+     *
+     * @author Ullrich Hafner
+     */
+    static class ConfigurationBuilder {
+        private int maxScore;
+
+        /**
+         * Sets the maximum score to achieve for the test results.
+         *
+         * @param maxScore
+         *         maximum score to achieve for the test results.
+         *
+         * @return this
+         */
+        public ConfigurationBuilder setMaxScore(final int maxScore) {
+            this.maxScore = maxScore;
+
+            return this;
+        }
+
+        int getMaxScore() {
+            return maxScore;
+        }
+    }
 }

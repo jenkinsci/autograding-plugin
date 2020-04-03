@@ -57,7 +57,7 @@ class TestScoreTest {
                 "{}"));
 
         assertThat(configuration).hasMaxScore(0);
-        assertThat(configuration).hasFailureImpact((0));
+        assertThat(configuration).hasFailureImpact(0);
         assertThat(configuration).hasPassedImpact(0);
         assertThat(configuration).hasSkippedImpact(0);
     }
@@ -68,7 +68,7 @@ class TestScoreTest {
                 "{\"additionalAttribute\":5}"));
 
         assertThat(configuration).hasMaxScore(0);
-        assertThat(configuration).hasFailureImpact((0));
+        assertThat(configuration).hasFailureImpact(0);
         assertThat(configuration).hasPassedImpact(0);
         assertThat(configuration).hasSkippedImpact(0);
     }
@@ -79,7 +79,7 @@ class TestScoreTest {
                 "{\"maxScore\":5,\"failureImpact\":1,\"passedImpact\":2,\"skippedImpact\":3}"));
 
         assertThat(configuration).hasMaxScore(5);
-        assertThat(configuration).hasFailureImpact((1));
+        assertThat(configuration).hasFailureImpact(1);
         assertThat(configuration).hasPassedImpact(2);
         assertThat(configuration).hasSkippedImpact(3);
     }
