@@ -112,7 +112,6 @@ class AnalysisScoreTest {
         when(result.getTotalHighPrioritySize()).thenReturn(0);
         when(result.getTotalNormalPrioritySize()).thenReturn(0);
         when(result.getTotalLowPrioritySize()).thenReturn(0);
-        when(result.getId()).thenReturn(ID);
 
         AnalysisConfiguration configuration = new AnalysisConfiguration.AnalysisConfigurationBuilder()
                 .setErrorImpact(0)
@@ -121,7 +120,10 @@ class AnalysisScoreTest {
                 .setWeightLow(0)
                 .build();
 
+        when(result.getId()).thenReturn(ID);
         assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(null, configuration, result));
+
+        when(result.getId()).thenReturn(null);
         assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(NAME, configuration, result));
     }
 }
