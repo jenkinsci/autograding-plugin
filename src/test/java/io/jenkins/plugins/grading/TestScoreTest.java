@@ -60,7 +60,7 @@ class TestScoreTest {
     }
 
     @ParameterizedTest
-    @MethodSource("data")
+    @MethodSource("createTestConfigurationParameters")
     void shouldComputeTestScoreWith(final TestConfiguration configuration, 
             final TestResultAction resultAction,  final int expectedTotalImpact) {
         TestScore test = new TestScore(configuration, resultAction);
