@@ -67,56 +67,58 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
             Score score = new Score();
             JSONObject analysisConfiguration = (JSONObject) gradingConfiguration.get("analysis");
-            if (analysisConfiguration != null) {
-                gradeAnalysisResults(run, score, analysisConfiguration, logHandler);
+            if (analysisConfiguration == null) {
+                logHandler.log("Skipping static analysis results");
             }
             else {
-                logHandler.log("Skipping static analysis results");
+                gradeAnalysisResults(run, score, analysisConfiguration, logHandler);
             }
 
             JSONObject testConfiguration = (JSONObject) gradingConfiguration.get("tests");
-            if (testConfiguration != null) {
-                gradeTestResults(run, score, testConfiguration, logHandler);
+            if (testConfiguration == null) {
+                logHandler.log("Skipping test results");
             }
             else {
-                logHandler.log("Skipping test results");
+                gradeTestResults(run, score, testConfiguration, logHandler);
             }
 
             JSONObject coverageConfiguration = (JSONObject) gradingConfiguration.get("coverage");
-            if (coverageConfiguration != null) {
-                gradeCoverageResults(run, score, coverageConfiguration, logHandler);
+            if (coverageConfiguration == null) {
+                logHandler.log("Skipping coverage results");
             }
             else {
-                logHandler.log("Skipping coverage results");
+                gradeCoverageResults(run, score, coverageConfiguration, logHandler);
             }
 
             JSONObject pitConfiguration = (JSONObject) gradingConfiguration.get("pit");
-            if (pitConfiguration != null) {
-                gradePitResults(run, score, pitConfiguration, logHandler);
+            if (pitConfiguration == null) {
+                logHandler.log("Skipping mutation coverage results");
             }
             else {
-                logHandler.log("Skipping mutation coverage results");
+                gradePitResults(run, score, pitConfiguration, logHandler);
             }
 
             run.addAction(new AutoGradingBuildAction(run, score));
         }
         catch (JSONException exception) {
-            throw new IllegalArgumentException("Invalid configuration: " + configuration);
+            throw new IllegalArgumentException("Invalid configuration: " + configuration, exception);
         }
    }
 
     @VisibleForTesting
     private void gradePitResults(@NonNull final Run<?, ?> run,
             final Score actualScore, final JSONObject jsonConfiguration, final LogHandler logHandler) {
-        PitConfiguration pitConfiguration = PitConfiguration.from(jsonConfiguration);
         PitBuildAction action = run.getAction(PitBuildAction.class);
         if (action == null) {
             throw new IllegalArgumentException(
                     "Mutation coverage scoring has been enabled, but no PIT results have been found.");
         }
+
         logHandler.log("Grading PIT mutation results " + action.getDisplayName());
+        PitConfiguration pitConfiguration = PitConfiguration.from(jsonConfiguration);
         PitScore score = new PitScore(pitConfiguration, action);
         int total = actualScore.addPitTotal(pitConfiguration, score);
+
         logHandler.log("-> Score %d - from recorded PIT mutation results: %d, %d, %d, %d",
                 score.getTotalImpact(), score.getMutationsSize(), score.getUndetectedSize(),
                 score.getDetectedSize(), score.getRatio());
@@ -126,13 +128,14 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
     @VisibleForTesting
     private void gradeCoverageResults(@NonNull final Run<?, ?> run,
             final Score actualScore, final JSONObject jsonConfiguration, final LogHandler logHandler) {
-        CoverageConfiguration coverageConfiguration = CoverageConfiguration.from(jsonConfiguration);
         CoverageAction action = run.getAction(CoverageAction.class);
         if (action == null) {
             throw new IllegalArgumentException(
                     "Coverage scoring has been enabled, but no coverage results have been found.");
         }
+
         logHandler.log("Grading coverage results " + action.getDisplayName());
+        CoverageConfiguration coverageConfiguration = CoverageConfiguration.from(jsonConfiguration);
         CoverageScore score = new CoverageScore(coverageConfiguration,
                 action.getResult().getCoverage(CoverageElement.LINE));
         int total = actualScore.addCoverageTotal(coverageConfiguration, score);
@@ -150,8 +153,9 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
             throw new IllegalArgumentException(
                     "Test scoring has been enabled, but no test results have been found.");
         }
-        TestConfiguration testsConfiguration = TestConfiguration.from(testConfiguration);
+
         logHandler.log("Grading test results " + action.getDisplayName());
+        TestConfiguration testsConfiguration = TestConfiguration.from(testConfiguration);
         TestScore score = new TestScore(testsConfiguration, action);
         int total = actualScore.addTestsTotal(testsConfiguration, score);
 
@@ -179,6 +183,11 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         int total = actualScore.addAnalysisTotal(analysisConfiguration, analysisScores);
         logHandler.log("Total score for static analysis results: %d of %d",
                 total, analysisConfiguration.getMaxScore());
+    }
+
+    @Override
+    public AutoGrader.Descriptor getDescriptor() {
+        return (AutoGrader.Descriptor) super.getDescriptor();
     }
 
     /** Descriptor for this step. */

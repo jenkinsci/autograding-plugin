@@ -8,6 +8,7 @@ import org.jenkinsci.plugins.pitmutation.PitBuildAction;
  *
  * @author Eva-Maria Zeintl
  */
+@SuppressWarnings("PMD.DataClass")
 public class PitScore {
     private final String id;
 
@@ -21,7 +22,7 @@ public class PitScore {
     private final int ratio;
 
     public PitScore(final PitConfiguration configuration, final PitBuildAction action) {
-        this.id = action.getDisplayName();
+        id = action.getDisplayName();
 
         mutationsSize = action.getReport().getMutationStats().getTotalMutations();
         undetectedSize = action.getReport().getMutationStats().getUndetected();
@@ -29,7 +30,6 @@ public class PitScore {
         ratio = 100 - detectedSize * 100 / mutationsSize;
 
         totalImpact = computeImpact(configuration);
-
     }
 
     private int computeImpact(final PitConfiguration configs) {

@@ -1,11 +1,11 @@
 package io.jenkins.plugins.grading;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import net.sf.json.JSONObject;
 
 import io.jenkins.plugins.analysis.core.model.AnalysisResult;
+import io.jenkins.plugins.grading.AnalysisConfiguration.AnalysisConfigurationBuilder;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -18,9 +18,9 @@ import static org.mockito.Mockito.*;
  * @author Andreas Stiglmeier
  */
 class AnalysisScoreTest {
-
     private static final String NAME = "Results";
     private static final String ID = "result-id";
+
     @Test
     void shouldCalculate() {
         AnalysisResult result = mock(AnalysisResult.class);
@@ -30,12 +30,12 @@ class AnalysisScoreTest {
         when(result.getTotalLowPrioritySize()).thenReturn(1);
         when(result.getId()).thenReturn(ID);
 
-        AnalysisConfiguration analysisConfiguration = new AnalysisConfiguration.AnalysisConfigurationBuilder()
+        AnalysisConfiguration analysisConfiguration = new AnalysisConfigurationBuilder()
                 .setMaxScore(25)
                 .setErrorImpact(-4)
                 .setHighImpact(-3)
                 .setNormalImpact(-2)
-                .setWeightLow(-1)
+                .setLowImpact(-1)
                 .build();
         AnalysisScore analysisScore = new AnalysisScore(NAME, analysisConfiguration, result);
         assertThat(analysisScore).hasTotalImpact(-4 - 3 - 2 - 1);
@@ -61,11 +61,11 @@ class AnalysisScoreTest {
         when(result.getTotalLowPrioritySize()).thenReturn(4);
         when(result.getId()).thenReturn(ID);
 
-        AnalysisConfiguration configuration = new AnalysisConfiguration.AnalysisConfigurationBuilder()
+        AnalysisConfiguration configuration = new AnalysisConfigurationBuilder()
                 .setErrorImpact(1)
                 .setHighImpact(1)
                 .setNormalImpact(1)
-                .setWeightLow(1)
+                .setLowImpact(1)
                 .build();
 
         AnalysisScore analysisScore = new AnalysisScore(NAME, configuration, result);
@@ -88,11 +88,11 @@ class AnalysisScoreTest {
         when(result.getTotalLowPrioritySize()).thenReturn(-4);
         when(result.getId()).thenReturn(ID);
 
-        AnalysisConfiguration configuration = new AnalysisConfiguration.AnalysisConfigurationBuilder()
+        AnalysisConfiguration configuration = new AnalysisConfigurationBuilder()
                 .setErrorImpact(1)
                 .setHighImpact(1)
                 .setNormalImpact(1)
-                .setWeightLow(1)
+                .setLowImpact(1)
                 .build();
 
         AnalysisScore analysisScore = new AnalysisScore(NAME, configuration, result);
@@ -113,34 +113,18 @@ class AnalysisScoreTest {
         when(result.getTotalHighPrioritySize()).thenReturn(0);
         when(result.getTotalNormalPrioritySize()).thenReturn(0);
         when(result.getTotalLowPrioritySize()).thenReturn(0);
+
+        AnalysisConfiguration configuration = new AnalysisConfigurationBuilder()
+                .setErrorImpact(0)
+                .setHighImpact(0)
+                .setNormalImpact(0)
+                .setLowImpact(0)
+                .build();
+
         when(result.getId()).thenReturn(ID);
+        assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(null, configuration, result));
 
-        AnalysisConfiguration configuration = new AnalysisConfiguration.AnalysisConfigurationBuilder()
-                .setErrorImpact(0)
-                .setHighImpact(0)
-                .setNormalImpact(0)
-                .setWeightLow(0)
-                .build();
-
-        Assertions.assertThrows(NullPointerException.class, () -> new AnalysisScore(null, configuration, result));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenIdIsNull() {
-        AnalysisResult result = mock(AnalysisResult.class);
-        when(result.getTotalErrorsSize()).thenReturn(0);
-        when(result.getTotalHighPrioritySize()).thenReturn(0);
-        when(result.getTotalNormalPrioritySize()).thenReturn(0);
-        when(result.getTotalLowPrioritySize()).thenReturn(0);
         when(result.getId()).thenReturn(null);
-
-        AnalysisConfiguration configuration = new AnalysisConfiguration.AnalysisConfigurationBuilder()
-                .setErrorImpact(0)
-                .setHighImpact(0)
-                .setNormalImpact(0)
-                .setWeightLow(0)
-                .build();
-
-        Assertions.assertThrows(NullPointerException.class, () -> new AnalysisScore(NAME, configuration, result));
+        assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(NAME, configuration, result));
     }
 }

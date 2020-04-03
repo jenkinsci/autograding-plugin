@@ -1,6 +1,7 @@
 package io.jenkins.plugins.grading;
 
 import edu.hm.hafner.util.Ensure;
+
 import io.jenkins.plugins.analysis.core.model.AnalysisResult;
 
 /**
@@ -9,6 +10,7 @@ import io.jenkins.plugins.analysis.core.model.AnalysisResult;
  *
  * @author Eva-Maria Zeintl
  */
+@SuppressWarnings("PMD.DataClass")
 public class AnalysisScore {
     private final String id;
     private final String name;
