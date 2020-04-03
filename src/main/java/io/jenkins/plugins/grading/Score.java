@@ -1,6 +1,5 @@
 package io.jenkins.plugins.grading;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -64,6 +63,16 @@ public class Score {
         return Collections.singletonList(pitScore);
     }
 
+    /**
+     * Adds the specified collection of analysis grading scores.
+     *
+     * @param configuration
+     *         the grading configuration
+     * @param scores
+     *         the scores to take into account
+     *
+     * @return the total score impact (limited by the {@code maxScore} parameter of the configuration)
+     */
     public int addAnalysisTotal(final AnalysisConfiguration configuration, final List<AnalysisScore> scores) {
         analysisScores.addAll(scores);
         analysisConfiguration = configuration;
@@ -76,13 +85,34 @@ public class Score {
         return updateScore(analysisConfiguration.getMaxScore(), delta);
     }
 
-    public int addTestsTotal(final TestConfiguration configuration, final TestScore scores) {
-        testsScore = scores;
+    /**
+     * Adds a test grading score.
+     *
+     * @param configuration
+     *         the grading configuration
+     * @param score
+     *         the score to take into account
+     *
+     * @return the total score impact (limited by the {@code maxScore} parameter of the configuration)
+     */
+    public int addTestsTotal(final TestConfiguration configuration, final TestScore score) {
+        testsScore = score;
         testsConfiguration = configuration;
 
         return updateScore(configuration.getMaxScore(), testsScore.getTotalImpact());
     }
 
+    /**
+     * Adds a coverage grading score.
+     *
+     * @param configuration
+     *         the grading configuration
+     * @param score
+     *         the score to take into account
+     *
+     * @return the total score impact (limited by the {@code maxScore} parameter of the configuration)
+     */
+    // TODO: replace with a concept similar to the analysis configuration (line and branch coverage)
     public int addCoverageTotal(final CoverageConfiguration configuration, final CoverageScore score) {
         this.coverageScore = score;
         this.coverageConfiguration = configuration;
@@ -90,6 +120,16 @@ public class Score {
         return updateScore(configuration.getMaxScore(), score.getTotalImpact());
     }
 
+    /**
+     * Adds a PIT mutation testing grading score.
+     *
+     * @param configuration
+     *         the grading configuration
+     * @param score
+     *         the score to take into account
+     *
+     * @return the total score impact (limited by the {@code maxScore} parameter of the configuration)
+     */
     public int addPitTotal(final PitConfiguration configuration, final PitScore score) {
         this.pitConfiguration = configuration;
         this.pitScore = score;

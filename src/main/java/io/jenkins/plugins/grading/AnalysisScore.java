@@ -5,8 +5,8 @@ import edu.hm.hafner.util.Ensure;
 import io.jenkins.plugins.analysis.core.model.AnalysisResult;
 
 /**
- * Computes the {@link Score} impact of static analysis results. These results are obtained by inspecting a
- * {@link AnalysisResult} instance of the Warnings Next Generation plugin.
+ * Computes the {@link Score} impact of static analysis results. These results are obtained by inspecting a {@link
+ * AnalysisResult} instance of the Warnings Next Generation plugin.
  *
  * @author Eva-Maria Zeintl
  */
@@ -23,6 +23,16 @@ public class AnalysisScore {
     private final int lowPrioritySize;
     private final int totalSize;
 
+    /**
+     * Creates a new {@link AnalysisScore} instance.
+     *
+     * @param name
+     *         the human readable name of the analysis tool
+     * @param configuration
+     *         the grading configuration
+     * @param result
+     *         the static analysis result
+     */
     public AnalysisScore(final String name, final AnalysisConfiguration configuration, final AnalysisResult result) {
         Ensure.that(name).isNotEmpty();
         Ensure.that(result.getId()).isNotEmpty();

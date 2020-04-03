@@ -22,26 +22,36 @@ import static io.jenkins.plugins.grading.assertions.Assertions.*;
  * @author Ullrich Hafner
  */
 public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
+    /** Verifies that the step skips all autograding parts if the configuration is empty. */
     @Test
-    public void shouldSkipGradingSinceConfigurationIsEmpty() {
+    public void shouldSkipGradingIfConfigurationIsEmpty() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
         configureScanner(job, "checkstyle", "{}");
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping static analysis results");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping test results");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping coverage results");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping mutation coverage results");
     }
 
+    /**
+     * Verifies that an {@link IllegalArgumentException} is thrown if testing has been requested, but no testing action has been recorded.
+     */
     @Test
     public void shouldAbortBuildSinceNoTestActionHasBeenRegistered() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
-        configureScanner(job, "checkstyle", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}, \"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}, \"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}, \"pit\":{\"maxScore\":100,\"detectedImpact\":1,\"undetectedImpact\":-1,\"ratioImpact\":0}}");
+        configureScanner(job, "checkstyle", "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
         Run<?, ?> baseline = buildWithResult(job, Result.FAILURE);
 
         assertThat(getConsoleLog(baseline)).contains("java.lang.IllegalArgumentException: Test scoring has been enabled, but no test results have been found.");
     }
 
+    /**
+     * Verifies that CheckStyle results are correctly graded.
+     */
     @Test
     public void shouldCountCheckStyleWarnings() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");

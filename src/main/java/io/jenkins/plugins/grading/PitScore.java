@@ -3,8 +3,8 @@ package io.jenkins.plugins.grading;
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
 
 /**
- * Computes the {@link Score} impact of PIT mutation test results. These results are obtained by inspecting a
- * {@link PitBuildAction} instance of the PIT plugin.
+ * Computes the {@link Score} impact of PIT mutation test results. These results are obtained by inspecting a {@link
+ * PitBuildAction} instance of the PIT plugin.
  *
  * @author Eva-Maria Zeintl
  */
@@ -21,6 +21,14 @@ public class PitScore {
 
     private final int ratio;
 
+    /**
+     * Creates a new {@link PitScore} instance.
+     *
+     * @param configuration
+     *         the grading configuration
+     * @param action
+     *         the action that contains the PIT results
+     */
     public PitScore(final PitConfiguration configuration, final PitBuildAction action) {
         id = action.getDisplayName();
 

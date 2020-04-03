@@ -35,6 +35,7 @@ import io.jenkins.plugins.util.LogHandler;
  *
  * @author Eva-Maria Zeintl
  */
+@SuppressWarnings("checkstyle:ClassFanOutComplexity")
 public class AutoGrader extends Recorder implements SimpleBuildStep {
     private final String configuration;
 
@@ -103,7 +104,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         catch (JSONException exception) {
             throw new IllegalArgumentException("Invalid configuration: " + configuration, exception);
         }
-   }
+    }
 
     @VisibleForTesting
     private void gradePitResults(@NonNull final Run<?, ?> run,

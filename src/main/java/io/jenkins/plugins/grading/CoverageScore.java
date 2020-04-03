@@ -3,8 +3,8 @@ package io.jenkins.plugins.grading;
 import io.jenkins.plugins.coverage.targets.Ratio;
 
 /**
- * Computes the {@link Score} impact of code coverage results. These results are obtained by inspecting a
- * {@link CoverageConfiguration} instance of the Code Coverage API plugin.
+ * Computes the {@link Score} impact of code coverage results. These results are obtained by inspecting a {@link
+ * CoverageConfiguration} instance of the Code Coverage API plugin.
  *
  * @author Eva-Maria Zeintl
  */
@@ -17,6 +17,14 @@ public class CoverageScore {
     private final int coveredSize;
     private final int missedSize;
 
+    /**
+     * Creates a new {@link CoverageScore} instance.
+     *
+     * @param configuration
+     *         the grading configuration
+     * @param ratio
+     *         the coverage ratio
+     */
     public CoverageScore(final CoverageConfiguration configuration, final Ratio ratio) {
         this.id = "Line";
 

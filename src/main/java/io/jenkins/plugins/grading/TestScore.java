@@ -19,7 +19,15 @@ public class TestScore {
     private final int failedSize;
     private final int skippedSize;
 
-    public TestScore(final TestConfiguration testsConfiguration, final TestResultAction action) {
+    /**
+     * Creates a new {@link TestScore} instance.
+     *
+     * @param configuration
+     *         the grading configuration
+     * @param action
+     *         the action that contains the test results
+     */
+    public TestScore(final TestConfiguration configuration, final TestResultAction action) {
         id = action.getDisplayName();
 
         failedSize = action.getFailCount();
@@ -27,7 +35,7 @@ public class TestScore {
         totalSize = action.getTotalCount();
         passedSize = totalSize - failedSize - skippedSize;
 
-        totalImpact = computeImpact(testsConfiguration);
+        totalImpact = computeImpact(configuration);
     }
 
     private int computeImpact(final TestConfiguration configs) {
