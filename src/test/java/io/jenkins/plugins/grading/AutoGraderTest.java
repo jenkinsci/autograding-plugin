@@ -17,6 +17,7 @@ import static org.mockito.Mockito.*;
  * @author Ullrich Hafner
  */
 class AutoGraderTest {
+
     @Test
     void shouldThrowExceptionOnBrokenConfiguration() {
         AutoGrader autoGrader = new AutoGrader("broken");
@@ -25,4 +26,15 @@ class AutoGraderTest {
                 autoGrader.perform(mock(Run.class), new FilePath((VirtualChannel) null, "/"), mock(Launcher.class),
                         TaskListener.NULL));
     }
+
+    @Test
+    void shouldThrowNullPointerExceptionOnValidButNotCorrectConfiguration() {
+        String json = "{ 'key': 'value' }";
+        AutoGrader autoGrader = new AutoGrader(json);
+
+        Assertions.assertThatNullPointerException().isThrownBy(() ->
+                autoGrader.perform(mock(Run.class), new FilePath((VirtualChannel) null, "/"), mock(Launcher.class),
+                        TaskListener.NULL));
+    }
+
 }

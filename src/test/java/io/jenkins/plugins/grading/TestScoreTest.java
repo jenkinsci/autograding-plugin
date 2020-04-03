@@ -7,6 +7,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runners.Parameterized.Parameters;
 
+import net.sf.json.JSONObject;
+
 import hudson.tasks.junit.TestResultAction;
 
 import static org.assertj.core.api.Assertions.assertThat;
