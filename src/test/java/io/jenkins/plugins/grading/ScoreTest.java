@@ -101,4 +101,56 @@ class ScoreTest {
         assertThat(score.getPitConfiguration()).hasMaxScore(100);
         assertThat(score.getPitConfiguration()).hasDetectedImpact(2);
     }
+
+    @Test
+    void shouldUpdateWithAllConfigurations() {
+        Score score = new Score();
+        assertThat(score).hasAchieved(0);
+
+        PitConfiguration pitConfiguration = new PitConfiguration.PitConfigurationBuilder()
+                .setMaxScore(100)
+                .setDetectedImpact(2)
+                .build();
+
+        PitScore pitScore = mock(PitScore.class);
+        when(pitScore.getTotalImpact()).thenReturn(-2);
+
+        score.addPitTotal(pitConfiguration, pitScore);
+
+        assertThat(score).hasAchieved(98);
+        assertThat(score).hasTotal(100);
+
+        TestConfiguration testConfiguration = new TestConfigurationBuilder()
+                .setMaxScore(100)
+                .setFailureImpact(-3)
+                .build();
+
+        TestScore testScore = mock(TestScore.class);
+        when(testScore.getTotalImpact()).thenReturn(-3);
+
+        score.addTestsTotal(testConfiguration, testScore);
+
+        assertThat(score).hasAchieved(195);
+        assertThat(score).hasTotal(200);
+
+        CoverageConfiguration coverageConfiguration = new CoverageConfigurationBuilder()
+                .setMaxScore(100)
+                .setMissedImpact(-2)
+                .build();
+
+        score.addCoverageTotal(coverageConfiguration,
+                new CoverageScore(coverageConfiguration, Ratio.create(198, 200)));
+
+        assertThat(score).hasAchieved(293);
+        assertThat(score).hasTotal(300);
+
+        AnalysisConfiguration analysisConfiguration = new AnalysisConfigurationBuilder()
+                .setMaxScore(100)
+                .build();
+
+        score.addAnalysisTotal(analysisConfiguration, Collections.singletonList(createAnalysisScore(-5)));
+
+        assertThat(score).hasAchieved(388);
+        assertThat(score).hasTotal(400);
+    }
 }
