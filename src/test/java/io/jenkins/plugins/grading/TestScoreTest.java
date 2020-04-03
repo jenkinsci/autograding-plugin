@@ -21,10 +21,10 @@ import static org.mockito.Mockito.when;
  * @author Lukas Kirner
  */
 
-public class TestScoreTest {
+class TestScoreTest {
 
     @Parameters
-    public static Collection<Object[]> data() {
+    private static Collection<Object[]> createTestConfigurationParameters() {
         return Arrays.asList(new Object[][] {
             {
                 createTestConfiguration(25,-1, -2, 1),
@@ -61,7 +61,8 @@ public class TestScoreTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void test(TestConfiguration configuration, TestResultAction resultAction, int expectedTotalImpact) {
+    void shouldComputeTestScoreWith(final TestConfiguration configuration, 
+            final TestResultAction resultAction,  final int expectedTotalImpact) {
         TestScore test = new TestScore(configuration, resultAction);
         assertThat(test.getTotalSize()).isEqualTo(resultAction.getTotalCount());
         assertThat(test.getPassedSize()).isEqualTo(resultAction.getTotalCount() - resultAction.getFailCount() - resultAction.getSkipCount());
