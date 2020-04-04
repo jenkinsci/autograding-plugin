@@ -1,0 +1,267 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "required": [
+    "analysis",
+    "tests",
+    "coverage",
+    "pit"
+  ],
+  "properties": {
+    "analysis": {
+      "$id": "#/properties/analysis",
+      "type": "object",
+      "title": "The Analysis Schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "maxScore": 100.0,
+          "highImpact": -5.0,
+          "normalImpact": -2.0,
+          "errorImpact": -10.0,
+          "lowImpact": -1.0
+        }
+      ],
+      "required": [
+        "maxScore",
+        "errorImpact",
+        "highImpact",
+        "normalImpact",
+        "lowImpact"
+      ],
+      "properties": {
+        "maxScore": {
+          "$id": "#/properties/analysis/properties/maxScore",
+          "type": "integer",
+          "title": "The Maxscore Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            100
+          ]
+        },
+        "errorImpact": {
+          "$id": "#/properties/analysis/properties/errorImpact",
+          "type": "integer",
+          "title": "The Errorimpact Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            -10
+          ]
+        },
+        "highImpact": {
+          "$id": "#/properties/analysis/properties/highImpact",
+          "type": "integer",
+          "title": "The Highimpact Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            -5
+          ]
+        },
+        "normalImpact": {
+          "$id": "#/properties/analysis/properties/normalImpact",
+          "type": "integer",
+          "title": "The Normalimpact Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            -2
+          ]
+        },
+        "lowImpact": {
+          "$id": "#/properties/analysis/properties/lowImpact",
+          "type": "integer",
+          "title": "The Lowimpact Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            -1
+          ]
+        }
+      }
+    },
+    "tests": {
+      "$id": "#/properties/tests",
+      "type": "object",
+      "title": "The Tests Schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "maxScore": 100.0,
+          "failureImpact": -5.0,
+          "passedImpact": 1.0,
+          "skippedImpact": -1.0
+        }
+      ],
+      "required": [
+        "maxScore",
+        "passedImpact",
+        "failureImpact",
+        "skippedImpact"
+      ],
+      "properties": {
+        "maxScore": {
+          "$id": "#/properties/tests/properties/maxScore",
+          "type": "integer",
+          "title": "The Maxscore Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            100
+          ]
+        },
+        "passedImpact": {
+          "$id": "#/properties/tests/properties/passedImpact",
+          "type": "integer",
+          "title": "The Passedimpact Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            1
+          ]
+        },
+        "failureImpact": {
+          "$id": "#/properties/tests/properties/failureImpact",
+          "type": "integer",
+          "title": "The Failureimpact Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            -5
+          ]
+        },
+        "skippedImpact": {
+          "$id": "#/properties/tests/properties/skippedImpact",
+          "type": "integer",
+          "title": "The Skippedimpact Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            -1
+          ]
+        }
+      }
+    },
+    "coverage": {
+      "$id": "#/properties/coverage",
+      "type": "object",
+      "title": "The Coverage Schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "maxScore": 100.0,
+          "coveredImpact": 1.0,
+          "missedImpact": -1.0
+        }
+      ],
+      "required": [
+        "maxScore",
+        "coveredImpact",
+        "missedImpact"
+      ],
+      "properties": {
+        "maxScore": {
+          "$id": "#/properties/coverage/properties/maxScore",
+          "type": "integer",
+          "title": "The Maxscore Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            100
+          ]
+        },
+        "coveredImpact": {
+          "$id": "#/properties/coverage/properties/coveredImpact",
+          "type": "integer",
+          "title": "The Coveredimpact Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            1
+          ]
+        },
+        "missedImpact": {
+          "$id": "#/properties/coverage/properties/missedImpact",
+          "type": "integer",
+          "title": "The Missedimpact Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            -1
+          ]
+        }
+      }
+    },
+    "pit": {
+      "$id": "#/properties/pit",
+      "type": "object",
+      "title": "The Pit Schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "maxScore": 100.0,
+          "ratioImpact": 0.0,
+          "undetectedImpact": -1.0,
+          "detectedImpact": 1.0
+        }
+      ],
+      "required": [
+        "maxScore",
+        "detectedImpact",
+        "undetectedImpact",
+        "ratioImpact"
+      ],
+      "properties": {
+        "maxScore": {
+          "$id": "#/properties/pit/properties/maxScore",
+          "type": "integer",
+          "title": "The Maxscore Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            100
+          ]
+        },
+        "detectedImpact": {
+          "$id": "#/properties/pit/properties/detectedImpact",
+          "type": "integer",
+          "title": "The Detectedimpact Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            1
+          ]
+        },
+        "undetectedImpact": {
+          "$id": "#/properties/pit/properties/undetectedImpact",
+          "type": "integer",
+          "title": "The Undetectedimpact Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            -1
+          ]
+        },
+        "ratioImpact": {
+          "$id": "#/properties/pit/properties/ratioImpact",
+          "type": "integer",
+          "title": "The Ratioimpact Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            0
+          ]
+        }
+      }
+    }
+  }
+}
