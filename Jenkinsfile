@@ -86,7 +86,7 @@
                                 if (skipTests) {
                                     mavenOptions += "-DskipTests"
                                 }
-                                mavenOptions += "-npu -Djenkins.test.timeout=2500 clean verify"
+                                mavenOptions += "-npu -Djenkins.test.timeout=2500 clean install"
                                 infra.runMaven(mavenOptions, jdk, null, null, addToolEnv)
                             } else {
                                 echo "WARNING: Gradle mode for buildPlugin() is deprecated, please use buildPluginWithGradle()"
@@ -123,7 +123,8 @@
                                 recordIssues enabledForFailure: true, tools: [java(), javaDoc()], sourceCodeEncoding: 'UTF-8', filters:[excludeFile('.*Assert.java')], referenceJobName: 'Plugins/autograding-plugin/master'
                                 recordIssues tools: [spotBugs(pattern: 'target/spotbugsXml.xml'),
                                         checkStyle(pattern: 'target/checkstyle-result.xml'),
-                                        pmdParser(pattern: 'target/pmd.xml')], sourceCodeEncoding: 'UTF-8', referenceJobName: 'Plugins/autograding-plugin/master'
+                                        pmdParser(pattern: 'target/pmd.xml'),
+                                        cpd('target/cpd.xml)], sourceCodeEncoding: 'UTF-8', referenceJobName: 'Plugins/autograding-plugin/master'
                                 recordIssues enabledForFailure: true, tool: taskScanner(
                                         includePattern:'**/*.java',
                                         excludePattern:'target/**',
