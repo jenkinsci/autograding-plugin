@@ -61,14 +61,7 @@ class AnalysisScoreTest {
         when(result.getTotalLowPrioritySize()).thenReturn(4);
         when(result.getId()).thenReturn(ID);
 
-        AnalysisConfiguration configuration = new AnalysisConfigurationBuilder()
-                .setErrorImpact(1)
-                .setHighImpact(1)
-                .setNormalImpact(1)
-                .setLowImpact(1)
-                .build();
-
-        AnalysisScore analysisScore = new AnalysisScore(NAME, configuration, result);
+        AnalysisScore analysisScore = new AnalysisScore(NAME, createConfigurationWithOnePointForEachSeverity(), result);
 
         assertThat(analysisScore.getErrorsSize()).isEqualTo(3);
         assertThat(analysisScore).hasErrorsSize(3);
@@ -88,14 +81,7 @@ class AnalysisScoreTest {
         when(result.getTotalLowPrioritySize()).thenReturn(-4);
         when(result.getId()).thenReturn(ID);
 
-        AnalysisConfiguration configuration = new AnalysisConfigurationBuilder()
-                .setErrorImpact(1)
-                .setHighImpact(1)
-                .setNormalImpact(1)
-                .setLowImpact(1)
-                .build();
-
-        AnalysisScore analysisScore = new AnalysisScore(NAME, configuration, result);
+        AnalysisScore analysisScore = new AnalysisScore(NAME, createConfigurationWithOnePointForEachSeverity(), result);
 
         assertThat(analysisScore.getErrorsSize()).isEqualTo(-3);
         assertThat(analysisScore).hasErrorsSize(-3);
@@ -104,6 +90,15 @@ class AnalysisScoreTest {
         assertThat(analysisScore).hasLowPrioritySize(-4);
         assertThat(analysisScore).hasName(NAME);
         assertThat(analysisScore).hasId(ID);
+    }
+
+    private AnalysisConfiguration createConfigurationWithOnePointForEachSeverity() {
+        return new AnalysisConfigurationBuilder()
+                .setErrorImpact(1)
+                .setHighImpact(1)
+                .setNormalImpact(1)
+                .setLowImpact(1)
+                .build();
     }
 
     @Test
