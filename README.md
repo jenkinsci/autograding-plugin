@@ -4,6 +4,8 @@
 ![JDK8](https://img.shields.io/badge/jdk-8-yellow.svg?label=min.%20JDK)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+<img src="etc/images/graduation-cap.svg" alt="drawing" width="64"/> 
+
 Jenkins plugin that autogrades projects based on a configurable set of metrics. Currently, you can select from the 
 following metrics:
 - Test statistics (e.g., number of failed tests) from the [JUnit Plugin](https://github.com/jenkinsci/junit-plugin)
@@ -27,7 +29,40 @@ It consists of the following stages:
 3. Run the test cases and compute the line and branch coverage 
 4. Run PIT to compute the mutation coverage 
 5. Record all Maven warnings 
-6. Autograde the results from steps 2-5   
+6. Autograde the results from steps 2-5 
+
+The example pipeline uses the following configuration:
+```json
+{
+  "analysis": {
+    "maxScore": 100,
+    "errorImpact": -10,
+    "highImpact": -5,
+    "normalImpact": -2,
+    "lowImpact": -1
+  },
+  "tests": {
+    "maxScore": 100,
+    "passedImpact": 1,
+    "failureImpact": -5,
+    "skippedImpact": -1
+  },
+  "coverage": {
+    "maxScore": 100,
+    "coveredImpact": 1,
+    "missedImpact": -1
+  },
+  "pit": {
+    "maxScore": 100,
+    "detectedImpact": 1,
+    "undetectedImpact": -1,
+    "ratioImpact": 0
+  }
+}
+
+```
+
+If you want to skip one of the tools just remove the corresponding JSON node from the configuration. 
  
 [![Jenkins](https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/)
 [![CI on all platforms](https://github.com/jenkinsci/autograding-plugin/workflows/CI%20on%20all%20platforms/badge.svg?branch=master)](https://github.com/jenkinsci/autograding-plugin/actions)
