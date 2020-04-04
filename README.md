@@ -6,15 +6,28 @@
 
 Jenkins plugin that autogrades projects based on a configurable set of metrics. Currently, you can select from the 
 following metrics:
-- Test statistics (e.g., number of failed tests)
-- Code coverage (e.g., line coverage percentage)
-- PIT mutation coverage (eg., missed mutation percentage)
-- Static analysis (e.g., number of warnings)
+- Test statistics (e.g., number of failed tests) from the [JUnit Plugin](https://github.com/jenkinsci/junit-plugin)
+- Code coverage (e.g., line coverage percentage) from the [Code Coverage API Plugin](https://github.com/jenkinsci/code-coverage-api-plugin)
+- PIT mutation coverage (eg., missed mutation percentage)  from the [PIT Mutation reporting plugin](https://github.com/jenkinsci/pitmutation-plugin)
+- Static analysis (e.g., number of warnings) from the [Warnings Plugin - Next Generation](https://github.com/jenkinsci/warnings-ng-plugin)
 
-In order to 
-## Test results
+In order to autograde a project, you first need to build your project using your favorite build tool. Make sure 
+your build invokes all tools that will produce the artifacts required for the autograding later on. Then 
+run all post build steps that record the desired results using the plugins from the list above. Autograding is based
+on the persisted Jenkins model of these plugins (i.e., Jenkins build actions), so make sure the results of these plugins
+show correctly up in the Jenkins build view. The autograding has to be started as the last step: you can configure
+the impact of the individual results using a simple JSON string. Currently, no UI configuration of the configuration is
+available. The autograding step will read all requested build results and calculates a score based on the defined 
+properties in JSON configuration.
 
-The plugin reads the  
+Please have a look at the [example pipeline](etc/Jenkinsfile.autograding) that shows how to use this plugin in practice.
+It consists of the following stages:   
+1. Checkout from SCM 
+2. Build and test the project and run the static analysis with Maven
+3. Run the test cases and compute the line and branch coverage 
+4. Run PIT to compute the mutation coverage 
+5. Record all Maven warnings 
+6. Autograde the results from steps 2-5   
  
 [![Jenkins](https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/)
 [![CI on all platforms](https://github.com/jenkinsci/autograding-plugin/workflows/CI%20on%20all%20platforms/badge.svg?branch=master)](https://github.com/jenkinsci/autograding-plugin/actions)
