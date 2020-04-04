@@ -124,7 +124,7 @@
                                 recordIssues tools: [spotBugs(pattern: 'target/spotbugsXml.xml'),
                                         checkStyle(pattern: 'target/checkstyle-result.xml'),
                                         pmdParser(pattern: 'target/pmd.xml'),
-                                        cpd('target/cpd.xml)], sourceCodeEncoding: 'UTF-8', referenceJobName: 'Plugins/autograding-plugin/master'
+                                        cpd('target/cpd.xml')], sourceCodeEncoding: 'UTF-8', referenceJobName: 'Plugins/autograding-plugin/master'
                                 recordIssues enabledForFailure: true, tool: taskScanner(
                                         includePattern:'**/*.java',
                                         excludePattern:'target/**',
