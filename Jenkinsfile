@@ -1,4 +1,4 @@
-    Map params = []
+    Map params = [useAci: true]
 
     // Faster build and reduces IO needs
     properties([
