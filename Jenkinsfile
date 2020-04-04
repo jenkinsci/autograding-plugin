@@ -119,9 +119,11 @@
                             }
 
                             if (first) {
-                                recordIssues enabledForFailure: true, tool: mavenConsole()
-                                recordIssues enabledForFailure: true, tools: [java(), javaDoc()], sourceCodeEncoding: 'UTF-8'
-                                recordIssues tools: [spotBugs(), checkStyle(), pmdParser(), cpd()], sourceCodeEncoding: 'UTF-8'
+                                recordIssues enabledForFailure: true, tool: mavenConsole(), referenceJobName: 'Plugins/autograding-plugin/master'
+                                recordIssues enabledForFailure: true, tools: [java(), javaDoc()], sourceCodeEncoding: 'UTF-8', filters:[excludeFile('.*Assert.java')], referenceJobName: 'Plugins/autograding-plugin/master'
+                                recordIssues tools: [spotBugs(pattern: 'target/spotbugsXml.xml'),
+                                        checkStyle(pattern: 'target/checkstyle-result.xml'),
+                                        pmdParser(pattern: 'target/pmd.xml')], sourceCodeEncoding: 'UTF-8', referenceJobName: 'Plugins/autograding-plugin/master'
                                 recordIssues enabledForFailure: true, tool: taskScanner(
                                         includePattern:'**/*.java',
                                         excludePattern:'target/**',
@@ -150,6 +152,8 @@
                                     }
                                     archiveArtifacts artifacts: artifacts, fingerprint: true
                                 }
+                            } else {
+                                echo "INFO: Skipping archiving of artifacts"
                             }
                         }
                     }
@@ -169,6 +173,8 @@
     parallel(tasks)
     if (publishingIncrementals) {
         infra.maybePublishIncrementals()
+    } else {
+        echo "INFO: Skipping publishing of incrementals"
     }
 
 boolean hasDockerLabel() {
