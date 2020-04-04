@@ -4,7 +4,17 @@
 ![JDK8](https://img.shields.io/badge/jdk-8-yellow.svg?label=min.%20JDK)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Jenkins plugin that autogrades projects based on a configurable set of metrics.
+Jenkins plugin that autogrades projects based on a configurable set of metrics. Currently, you can select from the 
+following metrics:
+- Test statistics (e.g., number of failed tests)
+- Code coverage (e.g., line coverage percentage)
+- PIT mutation coverage (eg., missed mutation percentage)
+- Static analysis (e.g., number of warnings)
+
+In order to 
+## Test results
+
+The plugin reads the  
  
 [![Jenkins](https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/)
 [![CI on all platforms](https://github.com/jenkinsci/autograding-plugin/workflows/CI%20on%20all%20platforms/badge.svg?branch=master)](https://github.com/jenkinsci/autograding-plugin/actions)
