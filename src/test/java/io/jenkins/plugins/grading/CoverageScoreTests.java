@@ -7,12 +7,15 @@ import io.jenkins.plugins.grading.CoverageConfiguration.CoverageConfigurationBui
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
 
+import net.sf.json.JSONObject;
+
 /**
  * Tests the class {@link CoverageScore}.
  *
  * @author Eva-Maria Zeintl
  * @author Ullrich Hafner
  * @author Patrick Rogg
+ * @author Johannes Hintermaier
  */
 class CoverageScoreTests {
 
@@ -57,4 +60,36 @@ class CoverageScoreTests {
                 .setCoveredImpact(coveredImpact)
                 .build();
     }
+
+    @Test
+    void shouldConvertFromJson() {
+        CoverageConfiguration configuration = CoverageConfiguration.from(JSONObject.fromObject("{\"maxScore\": 4, \"coveredImpact\":5, \"missedImpact\":3}"));
+        assertThat(configuration).hasMaxScore(4);
+        assertThat(configuration).hasCoveredImpact(5);
+        assertThat(configuration).hasMissedImpact(3);
+    }
+
+    @Test
+    void shouldInitializeWithDefault(){
+        CoverageConfiguration configurationEmpty = CoverageConfiguration.from(JSONObject.fromObject("{}"));
+        assertThat(configurationEmpty).hasMaxScore(0);
+        assertThat(configurationEmpty).hasCoveredImpact(0);
+        assertThat(configurationEmpty).hasMissedImpact(0);
+
+        CoverageConfiguration configurationOneValue = CoverageConfiguration.from(JSONObject.fromObject("{\"maxScore\": 4}"));
+        assertThat(configurationOneValue).hasMaxScore(4);
+        assertThat(configurationOneValue).hasCoveredImpact(0);
+        assertThat(configurationOneValue).hasMissedImpact(0);
+    }
+
+    @Test
+    void shouldNotReadAdditionalAttributes(){
+        CoverageConfiguration configuration = CoverageConfiguration.from(JSONObject.fromObject("{\"maxScore\": 2, \"coveredImpact\":3, \"missedImpact\":4, \"notRead\":5}"));
+        assertThat(configuration).hasMaxScore(2);
+        assertThat(configuration).hasCoveredImpact(3);
+        assertThat(configuration).hasMissedImpact(4);
+    }
+
+
+
 }
