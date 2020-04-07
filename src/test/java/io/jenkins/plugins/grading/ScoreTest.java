@@ -29,16 +29,26 @@ class ScoreTest {
         AnalysisConfiguration configuration = new AnalysisConfigurationBuilder().setMaxScore(20).build();
         score.addAnalysisTotal(configuration, Collections.emptyList());
         assertThat(score).hasAchieved(20);
+        assertThat(score).hasTotal(20);
+        assertThat(score).hasRatio(100);
+        assertThat(score).hasStyle(Score.EXCELLENT);
 
         score.addAnalysisTotal(configuration, Collections.singletonList(createAnalysisScore(-10)));
         assertThat(score).hasAchieved(30);
+        assertThat(score).hasTotal(40);
+        assertThat(score).hasRatio(75);
+        assertThat(score).hasStyle(Score.EXCELLENT);
 
         score.addAnalysisTotal(configuration, Arrays.asList(createAnalysisScore(-10), createAnalysisScore(-5)));
         assertThat(score).hasAchieved(35);
+        assertThat(score).hasTotal(60);
+        assertThat(score).hasRatio(35 * 100 / 60);
+        assertThat(score).hasStyle(Score.GOOD);
     }
 
     private AnalysisScore createAnalysisScore(final int total) {
         AnalysisScore analysisScore = mock(AnalysisScore.class);
+
         when(analysisScore.getTotalImpact()).thenReturn(total);
 
         return analysisScore;

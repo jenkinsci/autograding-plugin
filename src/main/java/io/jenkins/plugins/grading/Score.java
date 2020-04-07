@@ -11,6 +11,10 @@ import java.util.List;
  * @author Ullrich Hafner
  */
 public class Score {
+    static final String EXCELLENT = "progress-bg-excellent";
+    static final String GOOD = "progress-bg-good";
+    static final String FAILURE = "progress-bg-failure";
+
     private int total;
     private int achieved;
 
@@ -23,12 +27,46 @@ public class Score {
     private PitConfiguration pitConfiguration;
     private PitScore pitScore;
 
+    /**
+     * Returns the number of achieved points.
+     *
+     * @return the number of achieved points
+     */
     public int getAchieved() {
         return achieved;
     }
 
+    /**
+     * Returns the total number of points that could be achieved.
+     *
+     * @return the total number of points that could be achieved
+     */
     public int getTotal() {
         return total;
+    }
+
+    /**
+     * Returns the success ratio, i.e. number of achieved points divided by total points.
+     *
+     * @return the success ration
+     */
+    public int getRatio() {
+        return achieved * 100 / total;
+    }
+
+    /**
+     * Returns a styling class that will be used to render the success progress bar.
+     *
+     * @return a styling class
+     */
+    public String getStyle() {
+        if (getRatio() < 50) {
+            return FAILURE;
+        }
+        else if (getRatio() < 75) {
+            return GOOD;
+        }
+        return EXCELLENT;
     }
 
     public AnalysisConfiguration getAnalysisConfiguration() {
