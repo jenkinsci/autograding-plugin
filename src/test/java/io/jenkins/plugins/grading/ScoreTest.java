@@ -58,18 +58,19 @@ class ScoreTest {
     void shouldUpdateCoverage() {
         CoverageConfiguration coverageConfiguration = new CoverageConfigurationBuilder()
                 .setMaxScore(100)
-                .setMissedImpact(-2)
+                .setMissedImpact(-1)
                 .build();
 
         Score score = new Score();
         score.addCoverageTotal(coverageConfiguration,
-                new CoverageScore(coverageConfiguration, Ratio.create(198, 200)));
+                new CoverageScore("Line", coverageConfiguration, Ratio.create(50, 100)),
+                new CoverageScore("Branch", coverageConfiguration, Ratio.create(60, 100)));
 
-        assertThat(score).hasAchieved(98);
+        assertThat(score).hasAchieved(10);
         assertThat(score).hasTotal(100);
 
         assertThat(score.getCoverageConfiguration()).hasMaxScore(100);
-        assertThat(score.getCoverageConfiguration()).hasMissedImpact(-2);
+        assertThat(score.getCoverageConfiguration()).hasMissedImpact(-1);
     }
 
     @Test

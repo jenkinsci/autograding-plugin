@@ -137,13 +137,25 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
         logHandler.log("Grading coverage results " + action.getDisplayName());
         CoverageConfiguration coverageConfiguration = CoverageConfiguration.from(jsonConfiguration);
-        CoverageScore score = new CoverageScore(coverageConfiguration,
-                action.getResult().getCoverage(CoverageElement.LINE));
-        int total = actualScore.addCoverageTotal(coverageConfiguration, score);
+
+        CoverageScore lineCoverage = createCoverageScore(action, coverageConfiguration, CoverageElement.LINE);
+        logHandler.log("-> Score %d - from recorded line coverage results: %d%%",
+                lineCoverage.getTotalImpact(), lineCoverage.getCoveredSize());
+
+        CoverageScore branchCoverage = createCoverageScore(action, coverageConfiguration, CoverageElement.CONDITIONAL);
+        logHandler.log("-> Score %d - from recorded branch coverage results: %d%%",
+                branchCoverage.getTotalImpact(), branchCoverage.getCoveredSize());
+
+        int total = actualScore.addCoverageTotal(coverageConfiguration, lineCoverage, branchCoverage);
 
         logHandler.log("-> Score %d - from recorded coverage results: %d%%",
-                score.getTotalImpact(), score.getCoveredSize());
+                lineCoverage.getTotalImpact(), lineCoverage.getCoveredSize());
         logHandler.log("Total score for coverage results: " + total);
+    }
+
+    private CoverageScore createCoverageScore(final CoverageAction action,
+            final CoverageConfiguration coverageConfiguration, final CoverageElement type) {
+        return new CoverageScore(type.getName(), coverageConfiguration, action.getResult().getCoverage(type));
     }
 
     @VisibleForTesting

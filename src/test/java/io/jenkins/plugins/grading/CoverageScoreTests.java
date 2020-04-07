@@ -21,7 +21,7 @@ class CoverageScoreTests {
     @Test
     void shouldCalculateTotalImpactWithZeroCoveredImpact() {
         CoverageConfiguration coverageConfiguration = createCoverageConfiguration(-2, 0);
-        CoverageScore coverageScore = new CoverageScore(coverageConfiguration, Ratio.create(99, 100));
+        CoverageScore coverageScore = new CoverageScore("Line", coverageConfiguration, Ratio.create(99, 100));
 
         assertThat(coverageScore).hasTotalImpact(-2);
     }
@@ -29,7 +29,7 @@ class CoverageScoreTests {
     @Test
     void shouldCalculateTotalImpactWithZeroMissedImpact() {
         CoverageConfiguration coverageConfiguration = createCoverageConfiguration(0, 5);
-        CoverageScore coverageScore = new CoverageScore(coverageConfiguration, Ratio.create(99, 100));
+        CoverageScore coverageScore = new CoverageScore("Line", coverageConfiguration, Ratio.create(99, 100));
 
         assertThat(coverageScore).hasTotalImpact(495);
     }
@@ -37,7 +37,7 @@ class CoverageScoreTests {
     @Test
     void shouldCalculateTotalImpact() {
         CoverageConfiguration coverageConfiguration = createCoverageConfiguration(-1, 3);
-        CoverageScore coverageScore = new CoverageScore(coverageConfiguration, Ratio.create(99, 100));
+        CoverageScore coverageScore = new CoverageScore("Line", coverageConfiguration, Ratio.create(99, 100));
 
         assertThat(coverageScore).hasTotalImpact(296);
     }
@@ -46,9 +46,9 @@ class CoverageScoreTests {
     void shouldGetProperties() {
         Ratio codeCoverageRatio = Ratio.create(99, 100);
         CoverageConfiguration coverageConfiguration = createCoverageConfiguration(1, 1);
-        CoverageScore coverageScore = new CoverageScore(coverageConfiguration, codeCoverageRatio);
+        CoverageScore coverageScore = new CoverageScore("Line", coverageConfiguration, codeCoverageRatio);
 
-        assertThat(coverageScore).hasId("Line");
+        assertThat(coverageScore).hasName("Line");
         assertThat(coverageScore).hasCoveredSize(codeCoverageRatio.getPercentage());
         assertThat(coverageScore).hasMissedSize(100 - codeCoverageRatio.getPercentage());
     }

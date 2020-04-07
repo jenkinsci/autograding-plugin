@@ -20,12 +20,15 @@ public class Score {
 
     private AnalysisConfiguration analysisConfiguration;
     private final List<AnalysisScore> analysisScores = new ArrayList<>();
+
     private TestConfiguration testsConfiguration;
-    private TestScore testsScore;
+    private List<TestScore> testScores = new ArrayList<>();
+
     private CoverageConfiguration coverageConfiguration;
-    private CoverageScore coverageScore;
+    private final List<CoverageScore> coverageScores = new ArrayList<>();
+
     private PitConfiguration pitConfiguration;
-    private PitScore pitScore;
+    private final List<PitScore> pitScores = new ArrayList<>();
 
     /**
      * Returns the number of achieved points.
@@ -82,7 +85,7 @@ public class Score {
     }
 
     public List<TestScore> getTestScores() {
-        return Collections.singletonList(testsScore);
+        return testScores;
     }
 
     public CoverageConfiguration getCoverageConfiguration() {
@@ -90,7 +93,7 @@ public class Score {
     }
 
     public List<CoverageScore> getCoverageScores() {
-        return Collections.singletonList(coverageScore);
+        return coverageScores;
     }
 
     public PitConfiguration getPitConfiguration() {
@@ -98,7 +101,7 @@ public class Score {
     }
 
     public List<PitScore> getPitScores() {
-        return Collections.singletonList(pitScore);
+        return pitScores;
     }
 
     /**
@@ -134,10 +137,10 @@ public class Score {
      * @return the total score impact (limited by the {@code maxScore} parameter of the configuration)
      */
     public int addTestsTotal(final TestConfiguration configuration, final TestScore score) {
-        testsScore = score;
+        testScores.add(score);
         testsConfiguration = configuration;
 
-        return updateScore(configuration.getMaxScore(), testsScore.getTotalImpact());
+        return updateScore(configuration.getMaxScore(), score.getTotalImpact());
     }
 
     /**
@@ -145,17 +148,27 @@ public class Score {
      *
      * @param configuration
      *         the grading configuration
-     * @param score
-     *         the score to take into account
+     * @param scores
+     *         the scores to take into account
      *
      * @return the total score impact (limited by the {@code maxScore} parameter of the configuration)
      */
-    // TODO: replace with a concept similar to the analysis configuration (line and branch coverage)
-    public int addCoverageTotal(final CoverageConfiguration configuration, final CoverageScore score) {
-        this.coverageScore = score;
+    public int addCoverageTotal(final CoverageConfiguration configuration, final CoverageScore... scores) {
+        Collections.addAll(coverageScores, scores);
         this.coverageConfiguration = configuration;
 
-        return updateScore(configuration.getMaxScore(), score.getTotalImpact());
+        int delta = aggregateDelta(scores);
+
+        return updateScore(configuration.getMaxScore(), delta);
+    }
+
+    // TODO: create base class
+    private int aggregateDelta(final CoverageScore[] scores) {
+        int delta = 0;
+        for (CoverageScore score : scores) {
+            delta = delta + score.getTotalImpact();
+        }
+        return delta;
     }
 
     /**
@@ -170,7 +183,7 @@ public class Score {
      */
     public int addPitTotal(final PitConfiguration configuration, final PitScore score) {
         this.pitConfiguration = configuration;
-        this.pitScore = score;
+        this.pitScores.add(score);
 
         return updateScore(configuration.getMaxScore(), score.getTotalImpact());
     }
