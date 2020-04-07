@@ -50,6 +50,4 @@ class CoverageScoreTests {
 
         assertThat(coverageScore).hasTotalImpact(missedImpactValue*99);
     }
-
-
 }
