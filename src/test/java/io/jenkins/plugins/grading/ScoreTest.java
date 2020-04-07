@@ -29,16 +29,26 @@ class ScoreTest {
         AnalysisConfiguration configuration = new AnalysisConfigurationBuilder().setMaxScore(20).build();
         score.addAnalysisTotal(configuration, Collections.emptyList());
         assertThat(score).hasAchieved(20);
+        assertThat(score).hasTotal(20);
+        assertThat(score).hasRatio(100);
+        assertThat(score).hasStyle(Score.EXCELLENT);
 
         score.addAnalysisTotal(configuration, Collections.singletonList(createAnalysisScore(-10)));
         assertThat(score).hasAchieved(30);
+        assertThat(score).hasTotal(40);
+        assertThat(score).hasRatio(75);
+        assertThat(score).hasStyle(Score.EXCELLENT);
 
         score.addAnalysisTotal(configuration, Arrays.asList(createAnalysisScore(-10), createAnalysisScore(-5)));
         assertThat(score).hasAchieved(35);
+        assertThat(score).hasTotal(60);
+        assertThat(score).hasRatio(35 * 100 / 60);
+        assertThat(score).hasStyle(Score.GOOD);
     }
 
     private AnalysisScore createAnalysisScore(final int total) {
         AnalysisScore analysisScore = mock(AnalysisScore.class);
+
         when(analysisScore.getTotalImpact()).thenReturn(total);
 
         return analysisScore;
@@ -109,48 +119,59 @@ class ScoreTest {
 
         PitConfiguration pitConfiguration = new PitConfiguration.PitConfigurationBuilder()
                 .setMaxScore(100)
-                .setDetectedImpact(2)
                 .build();
 
         PitScore pitScore = mock(PitScore.class);
-        when(pitScore.getTotalImpact()).thenReturn(-2);
+        when(pitScore.getTotalImpact()).thenReturn(-20);
 
         score.addPitTotal(pitConfiguration, pitScore);
 
-        assertThat(score).hasAchieved(98);
+        assertThat(score).hasAchieved(80);
         assertThat(score).hasTotal(100);
+        assertThat(score).hasRatio(80);
+        assertThat(score).hasStyle(Score.EXCELLENT);
+        assertThat(score.getPitConfiguration()).isSameAs(pitConfiguration);
 
         TestConfiguration testConfiguration = new TestConfigurationBuilder()
                 .setMaxScore(100)
-                .setFailureImpact(-3)
                 .build();
 
         TestScore testScore = mock(TestScore.class);
-        when(testScore.getTotalImpact()).thenReturn(-3);
+        when(testScore.getTotalImpact()).thenReturn(40);
 
         score.addTestsTotal(testConfiguration, testScore);
 
-        assertThat(score).hasAchieved(195);
+        assertThat(score).hasAchieved(120);
         assertThat(score).hasTotal(200);
+        assertThat(score).hasRatio(60);
+        assertThat(score).hasStyle(Score.GOOD);
+        assertThat(score.getTestConfiguration()).isSameAs(testConfiguration);
 
         CoverageConfiguration coverageConfiguration = new CoverageConfigurationBuilder()
                 .setMaxScore(100)
-                .setMissedImpact(-2)
                 .build();
 
-        score.addCoverageTotal(coverageConfiguration,
-                new CoverageScore(coverageConfiguration, Ratio.create(198, 200)));
+        CoverageScore coverageScore = mock(CoverageScore.class);
+        when(coverageScore.getTotalImpact()).thenReturn(-70);
 
-        assertThat(score).hasAchieved(293);
+        score.addCoverageTotal(coverageConfiguration, coverageScore);
+
+        assertThat(score).hasAchieved(150);
         assertThat(score).hasTotal(300);
+        assertThat(score).hasRatio(50);
+        assertThat(score).hasStyle(Score.GOOD);
+        assertThat(score.getCoverageConfiguration()).isSameAs(coverageConfiguration);
 
         AnalysisConfiguration analysisConfiguration = new AnalysisConfigurationBuilder()
                 .setMaxScore(100)
                 .build();
 
-        score.addAnalysisTotal(analysisConfiguration, Collections.singletonList(createAnalysisScore(-5)));
+        score.addAnalysisTotal(analysisConfiguration, Collections.singletonList(createAnalysisScore(49)));
 
-        assertThat(score).hasAchieved(388);
+        assertThat(score).hasAchieved(199);
         assertThat(score).hasTotal(400);
+        assertThat(score).hasRatio(49);
+        assertThat(score).hasStyle(Score.FAILURE);
+        assertThat(score.getAnalysisConfiguration()).isSameAs(analysisConfiguration);
     }
 }

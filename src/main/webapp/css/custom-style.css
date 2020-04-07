@@ -1,0 +1,15 @@
+/* ------------------------------------------------------------------------------------------------------------------- */
+/* Bootstrap Progress                                                                                                  */
+/* ------------------------------------------------------------------------------------------------------------------- */
+
+.progress-bar.progress-bg-excellent {
+    background-color: #A5D6A7;
+}
+
+.progress-bar.progress-bg-good {
+    background-color: #FFF59D;
+}
+
+.progress-bar.progress-bg-failure {
+    background-color: #EF9A9A;
+}
