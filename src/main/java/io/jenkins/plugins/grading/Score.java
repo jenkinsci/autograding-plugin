@@ -15,19 +15,22 @@ public class Score {
     static final String GOOD = "progress-bg-good";
     static final String FAILURE = "progress-bg-failure";
 
+    private static final int FAILURE_RATIO = 50;
+    private static final int EXCELLENT_RATIO = 75;
+
     private int total;
     private int achieved;
 
-    private AnalysisConfiguration analysisConfiguration;
+    private AnalysisConfiguration analysisConfiguration = new AnalysisConfiguration();
     private final List<AnalysisScore> analysisScores = new ArrayList<>();
 
-    private TestConfiguration testsConfiguration;
-    private List<TestScore> testScores = new ArrayList<>();
+    private TestConfiguration testsConfiguration = new TestConfiguration();
+    private final List<TestScore> testScores = new ArrayList<>();
 
-    private CoverageConfiguration coverageConfiguration;
+    private CoverageConfiguration coverageConfiguration = new CoverageConfiguration();
     private final List<CoverageScore> coverageScores = new ArrayList<>();
 
-    private PitConfiguration pitConfiguration;
+    private PitConfiguration pitConfiguration = new PitConfiguration();
     private final List<PitScore> pitScores = new ArrayList<>();
 
     /**
@@ -63,10 +66,10 @@ public class Score {
      * @return a styling class
      */
     public String getStyle() {
-        if (getRatio() < 50) {
+        if (getRatio() < FAILURE_RATIO) {
             return FAILURE;
         }
-        else if (getRatio() < 75) {
+        else if (getRatio() < EXCELLENT_RATIO) {
             return GOOD;
         }
         return EXCELLENT;
