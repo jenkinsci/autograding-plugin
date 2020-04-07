@@ -15,7 +15,6 @@ import static io.jenkins.plugins.grading.assertions.Assertions.*;
  * @author Andreas Riepl
  */
 class CoverageScoreTests {
-
     @Test
     void givenCoverageScore_whenRatio99Percent_thenTotalImpactShouldEqualImpactValue() {
         int missedImpactValue = -2;
