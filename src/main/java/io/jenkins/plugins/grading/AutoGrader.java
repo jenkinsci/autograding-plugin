@@ -66,7 +66,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         try {
             JSONObject gradingConfiguration = JSONObject.fromObject(configuration);
 
-            Score score = new Score();
+            AggregatedScore score = new AggregatedScore();
             JSONObject analysisConfiguration = (JSONObject) gradingConfiguration.get("analysis");
             if (analysisConfiguration == null) {
                 logHandler.log("Skipping static analysis results");
@@ -108,7 +108,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
     @VisibleForTesting
     private void gradePitResults(@NonNull final Run<?, ?> run,
-            final Score actualScore, final JSONObject jsonConfiguration, final LogHandler logHandler) {
+            final AggregatedScore actualScore, final JSONObject jsonConfiguration, final LogHandler logHandler) {
         PitBuildAction action = run.getAction(PitBuildAction.class);
         if (action == null) {
             throw new IllegalArgumentException(
@@ -128,7 +128,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
     @VisibleForTesting
     private void gradeCoverageResults(@NonNull final Run<?, ?> run,
-            final Score actualScore, final JSONObject jsonConfiguration, final LogHandler logHandler) {
+            final AggregatedScore actualScore, final JSONObject jsonConfiguration, final LogHandler logHandler) {
         CoverageAction action = run.getAction(CoverageAction.class);
         if (action == null) {
             throw new IllegalArgumentException(
@@ -160,7 +160,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
     @VisibleForTesting
     private void gradeTestResults(@NonNull final Run<?, ?> run,
-            final Score actualScore, final JSONObject testConfiguration, final LogHandler logHandler) {
+            final AggregatedScore actualScore, final JSONObject testConfiguration, final LogHandler logHandler) {
         TestResultAction action = run.getAction(TestResultAction.class);
         if (action == null) {
             throw new IllegalArgumentException(
@@ -180,7 +180,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
     @VisibleForTesting
     void gradeAnalysisResults(final Run<?, ?> run,
-            final Score actualScore, final JSONObject jsonConfiguration, final LogHandler logHandler) {
+            final AggregatedScore actualScore, final JSONObject jsonConfiguration, final LogHandler logHandler) {
         List<ResultAction> actions = run.getActions(ResultAction.class);
         AnalysisConfiguration analysisConfiguration = AnalysisConfiguration.from(jsonConfiguration);
         List<AnalysisScore> analysisScores = new ArrayList<>();

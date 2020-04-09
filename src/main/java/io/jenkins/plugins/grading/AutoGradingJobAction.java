@@ -8,7 +8,7 @@ import io.jenkins.plugins.util.JobAction;
 
 /**
  * A job action displays a link on the side panel of a job that refers to the last build that contains autograding
- * results (i.e. a {@link AutoGradingBuildAction} with a {@link Score} instance). This action also is responsible to
+ * results (i.e. a {@link AutoGradingBuildAction} with a {@link AggregatedScore} instance). This action also is responsible to
  * render the historical trend via its associated 'floatingBox.jelly' view.
  *
  * @author Eva-Maria Zeintl

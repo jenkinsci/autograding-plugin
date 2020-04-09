@@ -63,13 +63,14 @@ class TestScoreTest {
     void shouldComputeTestScoreWith(final TestConfiguration configuration,
             final TestResultAction resultAction, final int expectedTotalImpact) {
         TestScore test = new TestScore(configuration, resultAction);
-        assertThat(test.getTotalSize()).isEqualTo(resultAction.getTotalCount());
-        assertThat(test.getPassedSize()).isEqualTo(
+        assertThat(test).hasTotalSize(resultAction.getTotalCount());
+        assertThat(test).hasPassedSize(
                 resultAction.getTotalCount() - resultAction.getFailCount() - resultAction.getSkipCount());
-        assertThat(test.getFailedSize()).isEqualTo(resultAction.getFailCount());
-        assertThat(test.getSkippedSize()).isEqualTo(resultAction.getSkipCount());
-        assertThat(test.getId()).isEqualTo(resultAction.getDisplayName());
-        assertThat(test.getTotalImpact()).isEqualTo(expectedTotalImpact);
+        assertThat(test).hasFailedSize(resultAction.getFailCount());
+        assertThat(test).hasSkippedSize(resultAction.getSkipCount());
+        assertThat(test).hasId(TestScore.ID);
+        assertThat(test).hasName(resultAction.getDisplayName());
+        assertThat(test).hasTotalImpact(expectedTotalImpact);
     }
 
     private static TestConfiguration createTestConfiguration(
@@ -87,6 +88,7 @@ class TestScoreTest {
         when(action.getTotalCount()).thenReturn(totalSize);
         when(action.getFailCount()).thenReturn(failedSize);
         when(action.getSkipCount()).thenReturn(skippedSize);
+        when(action.getDisplayName()).thenReturn("Tests");
         return action;
     }
 
