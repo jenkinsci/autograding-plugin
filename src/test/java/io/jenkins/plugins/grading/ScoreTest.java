@@ -58,18 +58,19 @@ class ScoreTest {
     void shouldUpdateCoverage() {
         CoverageConfiguration coverageConfiguration = new CoverageConfigurationBuilder()
                 .setMaxScore(100)
-                .setMissedImpact(-2)
+                .setMissedImpact(-1)
                 .build();
 
         Score score = new Score();
         score.addCoverageTotal(coverageConfiguration,
-                new CoverageScore(coverageConfiguration, Ratio.create(198, 200)));
+                new CoverageScore("Line", coverageConfiguration, Ratio.create(50, 100)),
+                new CoverageScore("Branch", coverageConfiguration, Ratio.create(60, 100)));
 
-        assertThat(score).hasAchieved(98);
+        assertThat(score).hasAchieved(10);
         assertThat(score).hasTotal(100);
 
         assertThat(score.getCoverageConfiguration()).hasMaxScore(100);
-        assertThat(score.getCoverageConfiguration()).hasMissedImpact(-2);
+        assertThat(score.getCoverageConfiguration()).hasMissedImpact(-1);
     }
 
     @Test
@@ -131,6 +132,7 @@ class ScoreTest {
         assertThat(score).hasRatio(80);
         assertThat(score).hasStyle(Score.EXCELLENT);
         assertThat(score.getPitConfiguration()).isSameAs(pitConfiguration);
+        assertThat(score).hasPitScores(pitScore);
 
         TestConfiguration testConfiguration = new TestConfigurationBuilder()
                 .setMaxScore(100)
@@ -146,6 +148,7 @@ class ScoreTest {
         assertThat(score).hasRatio(60);
         assertThat(score).hasStyle(Score.GOOD);
         assertThat(score.getTestConfiguration()).isSameAs(testConfiguration);
+        assertThat(score).hasTestScores(testScore);
 
         CoverageConfiguration coverageConfiguration = new CoverageConfigurationBuilder()
                 .setMaxScore(100)
@@ -161,17 +164,20 @@ class ScoreTest {
         assertThat(score).hasRatio(50);
         assertThat(score).hasStyle(Score.GOOD);
         assertThat(score.getCoverageConfiguration()).isSameAs(coverageConfiguration);
+        assertThat(score).hasCoverageScores(coverageScore);
 
         AnalysisConfiguration analysisConfiguration = new AnalysisConfigurationBuilder()
                 .setMaxScore(100)
                 .build();
 
-        score.addAnalysisTotal(analysisConfiguration, Collections.singletonList(createAnalysisScore(49)));
+        AnalysisScore analysisScore = createAnalysisScore(49);
+        score.addAnalysisTotal(analysisConfiguration, Collections.singletonList(analysisScore));
 
         assertThat(score).hasAchieved(199);
         assertThat(score).hasTotal(400);
         assertThat(score).hasRatio(49);
         assertThat(score).hasStyle(Score.FAILURE);
         assertThat(score.getAnalysisConfiguration()).isSameAs(analysisConfiguration);
+        assertThat(score.getAnalysisScores()).containsExactly(analysisScore);
     }
 }

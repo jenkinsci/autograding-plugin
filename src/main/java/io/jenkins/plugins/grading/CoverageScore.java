@@ -10,7 +10,7 @@ import io.jenkins.plugins.coverage.targets.Ratio;
  */
 @SuppressWarnings("PMD.DataClass")
 public class CoverageScore {
-    private final String id;
+    private final String name;
 
     private final int totalImpact;
 
@@ -20,13 +20,15 @@ public class CoverageScore {
     /**
      * Creates a new {@link CoverageScore} instance.
      *
+     * @param type
+     *         coverage type (like line or branch coverage)
      * @param configuration
      *         the grading configuration
      * @param ratio
      *         the coverage ratio
      */
-    public CoverageScore(final CoverageConfiguration configuration, final Ratio ratio) {
-        this.id = "Line";
+    public CoverageScore(final String type, final CoverageConfiguration configuration, final Ratio ratio) {
+        this.name = type;
 
         this.coveredSize = ratio.getPercentage();
         this.missedSize = 100 - ratio.getPercentage();
@@ -43,8 +45,8 @@ public class CoverageScore {
         return change;
     }
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
     public int getTotalImpact() {

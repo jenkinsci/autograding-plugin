@@ -109,7 +109,7 @@
                     <j:forEach var="checks" items="${score.coverageScores}">
                       <tr>
                         <td>
-                          <a href="../coverage">${checks.id}</a>
+                          <a href="../coverage">${checks.name}</a>
                         </td>
                         <td>
                           ${checks.coveredSize}

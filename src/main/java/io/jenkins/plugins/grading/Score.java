@@ -15,17 +15,23 @@ public class Score {
     static final String GOOD = "progress-bg-good";
     static final String FAILURE = "progress-bg-failure";
 
+    private static final int FAILURE_RATIO = 50;
+    private static final int EXCELLENT_RATIO = 75;
+
     private int total;
     private int achieved;
 
-    private AnalysisConfiguration analysisConfiguration;
+    private AnalysisConfiguration analysisConfiguration = new AnalysisConfiguration();
     private final List<AnalysisScore> analysisScores = new ArrayList<>();
-    private TestConfiguration testsConfiguration;
-    private TestScore testsScore;
-    private CoverageConfiguration coverageConfiguration;
-    private CoverageScore coverageScore;
-    private PitConfiguration pitConfiguration;
-    private PitScore pitScore;
+
+    private TestConfiguration testsConfiguration = new TestConfiguration();
+    private final List<TestScore> testScores = new ArrayList<>();
+
+    private CoverageConfiguration coverageConfiguration = new CoverageConfiguration();
+    private final List<CoverageScore> coverageScores = new ArrayList<>();
+
+    private PitConfiguration pitConfiguration = new PitConfiguration();
+    private final List<PitScore> pitScores = new ArrayList<>();
 
     /**
      * Returns the number of achieved points.
@@ -60,10 +66,10 @@ public class Score {
      * @return a styling class
      */
     public String getStyle() {
-        if (getRatio() < 50) {
+        if (getRatio() < FAILURE_RATIO) {
             return FAILURE;
         }
-        else if (getRatio() < 75) {
+        else if (getRatio() < EXCELLENT_RATIO) {
             return GOOD;
         }
         return EXCELLENT;
@@ -82,7 +88,7 @@ public class Score {
     }
 
     public List<TestScore> getTestScores() {
-        return Collections.singletonList(testsScore);
+        return testScores;
     }
 
     public CoverageConfiguration getCoverageConfiguration() {
@@ -90,7 +96,7 @@ public class Score {
     }
 
     public List<CoverageScore> getCoverageScores() {
-        return Collections.singletonList(coverageScore);
+        return coverageScores;
     }
 
     public PitConfiguration getPitConfiguration() {
@@ -98,7 +104,7 @@ public class Score {
     }
 
     public List<PitScore> getPitScores() {
-        return Collections.singletonList(pitScore);
+        return pitScores;
     }
 
     /**
@@ -134,10 +140,10 @@ public class Score {
      * @return the total score impact (limited by the {@code maxScore} parameter of the configuration)
      */
     public int addTestsTotal(final TestConfiguration configuration, final TestScore score) {
-        testsScore = score;
+        testScores.add(score);
         testsConfiguration = configuration;
 
-        return updateScore(configuration.getMaxScore(), testsScore.getTotalImpact());
+        return updateScore(configuration.getMaxScore(), score.getTotalImpact());
     }
 
     /**
@@ -145,17 +151,27 @@ public class Score {
      *
      * @param configuration
      *         the grading configuration
-     * @param score
-     *         the score to take into account
+     * @param scores
+     *         the scores to take into account
      *
      * @return the total score impact (limited by the {@code maxScore} parameter of the configuration)
      */
-    // TODO: replace with a concept similar to the analysis configuration (line and branch coverage)
-    public int addCoverageTotal(final CoverageConfiguration configuration, final CoverageScore score) {
-        this.coverageScore = score;
+    public int addCoverageTotal(final CoverageConfiguration configuration, final CoverageScore... scores) {
+        Collections.addAll(coverageScores, scores);
         this.coverageConfiguration = configuration;
 
-        return updateScore(configuration.getMaxScore(), score.getTotalImpact());
+        int delta = aggregateDelta(scores);
+
+        return updateScore(configuration.getMaxScore(), delta);
+    }
+
+    // TODO: create base class
+    private int aggregateDelta(final CoverageScore[] scores) {
+        int delta = 0;
+        for (CoverageScore score : scores) {
+            delta = delta + score.getTotalImpact();
+        }
+        return delta;
     }
 
     /**
@@ -170,7 +186,7 @@ public class Score {
      */
     public int addPitTotal(final PitConfiguration configuration, final PitScore score) {
         this.pitConfiguration = configuration;
-        this.pitScore = score;
+        this.pitScores.add(score);
 
         return updateScore(configuration.getMaxScore(), score.getTotalImpact());
     }
