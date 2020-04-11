@@ -70,6 +70,19 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(40);
     }
 
+    @Test
+    public void shouldGradeCoverageScore() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
+
+        configureScannerCoverageScore(job, "jacoco", "{ \"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 42 - from recorded line coverage results: 71%");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 8 - from recorded branch coverage results: 54%");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 42 - from recorded coverage results: 71%");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for coverage results: 50");
+    }
+
     /**
      * Returns the console log as a String.
      *
@@ -91,6 +104,15 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         job.setDefinition(new CpsFlowDefinition("node {\n"
                 + "  stage ('Integration Test') {\n"
                 + "         recordIssues tool: checkStyle(pattern: '**/" + fileName + "*')\n"
+                + "         autoGrade('" + configuration + "')\n"
+                + "  }\n"
+                + "}", true));
+    }
+
+    private void configureScannerCoverageScore(final WorkflowJob job, final String fileName, final String configuration) {
+        job.setDefinition(new CpsFlowDefinition("node {\n"
+                + "  stage ('Integration Test Coverage') {\n"
+                + "   publishCoverage adapters: [jacocoAdapter('**/" + fileName + "*')], sourceFileResolver: sourceFiles('NEVER_STORE')\n"
                 + "         autoGrade('" + configuration + "')\n"
                 + "  }\n"
                 + "}", true));
