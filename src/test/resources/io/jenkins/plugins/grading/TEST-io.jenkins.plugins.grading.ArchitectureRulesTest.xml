@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="io.jenkins.plugins.grading.ArchitectureRulesTest" time="1.327" tests="5" errors="0" skipped="0" failures="0">
+  <testcase name="NO_JENKINS_INSTANCE_CALL" classname="ArchitectureRulesTest" time="1.324"/>
+  <testcase name="NO_PUBLIC_TEST_CLASSES" classname="ArchitectureRulesTest" time="0"/>
+  <testcase name="NO_TEST_API_CALLED" classname="ArchitectureRulesTest" time="0"/>
+  <testcase name="NO_FORBIDDEN_PACKAGE_ACCESSED" classname="ArchitectureRulesTest" time="0.001"/>
+  <testcase name="NO_FORBIDDEN_CLASSES_CALLED" classname="ArchitectureRulesTest" time="0.001"/>
+</testsuite>
