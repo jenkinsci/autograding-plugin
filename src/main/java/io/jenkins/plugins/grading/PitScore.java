@@ -1,5 +1,7 @@
 package io.jenkins.plugins.grading;
 
+import java.util.Objects;
+
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
 
 /**
@@ -28,7 +30,7 @@ public class PitScore extends Score {
      *         the action that contains the PIT results
      */
     public PitScore(final PitConfiguration configuration, final PitBuildAction action) {
-        super(ID, action.getDisplayName());
+        super(ID, Objects.requireNonNull(action.getDisplayName()));
 
         mutationsSize = action.getReport().getMutationStats().getTotalMutations();
         undetectedSize = action.getReport().getMutationStats().getUndetected();

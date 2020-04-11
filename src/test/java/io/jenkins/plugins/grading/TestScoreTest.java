@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import net.sf.json.JSONObject;
 
 import hudson.tasks.junit.TestResultAction;
@@ -23,6 +25,7 @@ import static org.mockito.Mockito.*;
  */
 class TestScoreTest {
     @SuppressWarnings("PMD.UnusedPrivateMethod")
+    @SuppressFBWarnings("UPM")
     private static Collection<Object[]> createTestConfigurationParameters() {
         return Arrays.asList(new Object[][] {
                 {
