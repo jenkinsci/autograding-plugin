@@ -7,7 +7,7 @@ import edu.hm.hafner.util.Ensure;
  *
  * @author Ullrich Hafner
  */
-class Score {
+public class Score {
     private final String id;
     private final String name;
     private int totalImpact;

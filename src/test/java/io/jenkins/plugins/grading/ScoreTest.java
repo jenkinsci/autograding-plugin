@@ -21,29 +21,40 @@ import static org.mockito.Mockito.*;
  */
 class ScoreTest {
     @Test
-    void shouldSumAnalysisConfiguration() {
+    void shouldInitializeToZero() {
         AggregatedScore score = new AggregatedScore();
-
         assertThat(score).hasAchieved(0);
-
-        AnalysisConfiguration configuration = new AnalysisConfigurationBuilder().setMaxScore(20).build();
-        score.addAnalysisTotal(configuration, Collections.emptyList());
-        assertThat(score).hasAchieved(20);
-        assertThat(score).hasTotal(20);
+        assertThat(score).hasTotal(0);
         assertThat(score).hasRatio(100);
-        assertThat(score).hasStyle(AggregatedScore.EXCELLENT);
+    }
 
-        score.addAnalysisTotal(configuration, Collections.singletonList(createAnalysisScore(-10)));
-        assertThat(score).hasAchieved(30);
-        assertThat(score).hasTotal(40);
-        assertThat(score).hasRatio(75);
-        assertThat(score).hasStyle(AggregatedScore.EXCELLENT);
+    @Test
+    void shouldSumAnalysisConfiguration() {
+        AnalysisConfiguration configuration = new AnalysisConfigurationBuilder().setMaxScore(20).build();
 
-        score.addAnalysisTotal(configuration, Arrays.asList(createAnalysisScore(-10), createAnalysisScore(-5)));
-        assertThat(score).hasAchieved(35);
-        assertThat(score).hasTotal(60);
-        assertThat(score).hasRatio(35 * 100 / 60);
-        assertThat(score).hasStyle(AggregatedScore.GOOD);
+        AggregatedScore noActionScore = new AggregatedScore();
+        noActionScore.addAnalysisTotal(configuration, Collections.emptyList());
+        assertThat(noActionScore).hasAchieved(20);
+        assertThat(noActionScore).hasTotal(20);
+        assertThat(noActionScore).hasRatio(100);
+        assertThat(noActionScore).hasAnalysisAchieved(20);
+        assertThat(noActionScore).hasAnalysisRatio(100);
+
+        AggregatedScore oneActionScore = new AggregatedScore();
+        oneActionScore.addAnalysisTotal(configuration, Collections.singletonList(createAnalysisScore(-10)));
+        assertThat(oneActionScore).hasAchieved(10);
+        assertThat(oneActionScore).hasTotal(20);
+        assertThat(oneActionScore).hasRatio(50);
+        assertThat(oneActionScore).hasAnalysisAchieved(10);
+        assertThat(oneActionScore).hasAnalysisRatio(50);
+
+        AggregatedScore twoActionsScore = new AggregatedScore();
+        twoActionsScore.addAnalysisTotal(configuration, Arrays.asList(createAnalysisScore(-10), createAnalysisScore(-5)));
+        assertThat(twoActionsScore).hasAchieved(5);
+        assertThat(twoActionsScore).hasTotal(20);
+        assertThat(twoActionsScore).hasRatio(25);
+        assertThat(twoActionsScore).hasAnalysisAchieved(5);
+        assertThat(twoActionsScore).hasAnalysisRatio(25);
     }
 
     private AnalysisScore createAnalysisScore(final int total) {
@@ -68,6 +79,9 @@ class ScoreTest {
 
         assertThat(score).hasAchieved(10);
         assertThat(score).hasTotal(100);
+        assertThat(score).hasRatio(10);
+        assertThat(score).hasCoverageAchieved(10);
+        assertThat(score).hasCoverageRatio(10);
 
         assertThat(score.getCoverageConfiguration()).hasMaxScore(100);
         assertThat(score.getCoverageConfiguration()).hasMissedImpact(-1);
@@ -88,6 +102,9 @@ class ScoreTest {
 
         assertThat(score).hasAchieved(97);
         assertThat(score).hasTotal(100);
+        assertThat(score).hasRatio(97);
+        assertThat(score).hasTestAchieved(97);
+        assertThat(score).hasTestRatio(97);
 
         assertThat(score.getTestConfiguration()).hasMaxScore(100);
         assertThat(score.getTestConfiguration()).hasFailureImpact(-3);
@@ -108,6 +125,9 @@ class ScoreTest {
 
         assertThat(score).hasAchieved(98);
         assertThat(score).hasTotal(100);
+        assertThat(score).hasRatio(98);
+        assertThat(score).hasPitAchieved(98);
+        assertThat(score).hasPitRatio(98);
 
         assertThat(score.getPitConfiguration()).hasMaxScore(100);
         assertThat(score.getPitConfiguration()).hasDetectedImpact(2);
@@ -130,7 +150,6 @@ class ScoreTest {
         assertThat(score).hasAchieved(80);
         assertThat(score).hasTotal(100);
         assertThat(score).hasRatio(80);
-        assertThat(score).hasStyle(AggregatedScore.EXCELLENT);
         assertThat(score.getPitConfiguration()).isSameAs(pitConfiguration);
         assertThat(score).hasPitScores(pitScore);
 
@@ -146,7 +165,6 @@ class ScoreTest {
         assertThat(score).hasAchieved(120);
         assertThat(score).hasTotal(200);
         assertThat(score).hasRatio(60);
-        assertThat(score).hasStyle(AggregatedScore.GOOD);
         assertThat(score.getTestConfiguration()).isSameAs(testConfiguration);
         assertThat(score).hasTestScores(testScore);
 
@@ -162,7 +180,6 @@ class ScoreTest {
         assertThat(score).hasAchieved(150);
         assertThat(score).hasTotal(300);
         assertThat(score).hasRatio(50);
-        assertThat(score).hasStyle(AggregatedScore.GOOD);
         assertThat(score.getCoverageConfiguration()).isSameAs(coverageConfiguration);
         assertThat(score).hasCoverageScores(coverageScore);
 
@@ -176,7 +193,6 @@ class ScoreTest {
         assertThat(score).hasAchieved(199);
         assertThat(score).hasTotal(400);
         assertThat(score).hasRatio(49);
-        assertThat(score).hasStyle(AggregatedScore.FAILURE);
         assertThat(score.getAnalysisConfiguration()).isSameAs(analysisConfiguration);
         assertThat(score.getAnalysisScores()).containsExactly(analysisScore);
     }

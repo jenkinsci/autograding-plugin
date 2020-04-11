@@ -1,0 +1,41 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler">
+
+  <st:documentation>
+    Rendes the score of a given category. The score is rendered with a text title and a progress bar.
+    <st:attribute name="total" type="int">
+      The total number of possible points for this category.
+    </st:attribute>
+    <st:attribute name="achieved" type="int">
+      The achieved number of points for this category.
+    </st:attribute>
+    <st:attribute name="ratio" type="int">
+      The score of the category, given as a percentage.
+    </st:attribute>
+  </st:documentation>
+
+  <j:choose>
+    <j:when test="${ratio > 79}">
+      <j:set var="style" value="progress-bg-excellent"/>
+    </j:when>
+    <j:when test="${ratio &lt; 50}">
+      <j:set var="style" value="progress-bg-failed"/>
+    </j:when>
+    <j:otherwise>
+      <j:set var="style" value="progress-bg-good"/>
+    </j:otherwise>
+  </j:choose>
+
+  <strong>Score: ${achieved} / ${total}</strong>
+  <div class="progress-container">
+    <div class="progress">
+      <div class="progress-bar ${style}" role="progressbar" style="width: ${ratio}%;"
+           aria-valuenow="${ratio}"
+           aria-valuemin="0"
+           aria-valuemax="100">
+        ${ratio}%
+      </div>
+    </div>
+  </div>
+
+</j:jelly>

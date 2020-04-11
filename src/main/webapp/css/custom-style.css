@@ -2,6 +2,11 @@
 /* Bootstrap Progress                                                                                                  */
 /* ------------------------------------------------------------------------------------------------------------------- */
 
+.progress-container {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
 .progress-bar.progress-bg-excellent {
     background-color: #A5D6A7;
     color: black;

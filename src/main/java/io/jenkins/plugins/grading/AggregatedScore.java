@@ -1,6 +1,7 @@
 package io.jenkins.plugins.grading;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,27 +12,21 @@ import java.util.List;
  * @author Ullrich Hafner
  */
 public class AggregatedScore {
-    static final String EXCELLENT = "progress-bg-excellent";
-    static final String GOOD = "progress-bg-good";
-    static final String FAILURE = "progress-bg-failure";
-
-    private static final int FAILURE_RATIO = 50;
-    private static final int EXCELLENT_RATIO = 75;
-
-    private int total;
-    private int achieved;
-
     private AnalysisConfiguration analysisConfiguration = new AnalysisConfiguration();
     private final List<AnalysisScore> analysisScores = new ArrayList<>();
+    private int analysisAchieved;
 
     private TestConfiguration testsConfiguration = new TestConfiguration();
     private final List<TestScore> testScores = new ArrayList<>();
+    private int testAchieved;
 
     private CoverageConfiguration coverageConfiguration = new CoverageConfiguration();
     private final List<CoverageScore> coverageScores = new ArrayList<>();
+    private int coverageAchieved;
 
     private PitConfiguration pitConfiguration = new PitConfiguration();
     private final List<PitScore> pitScores = new ArrayList<>();
+    private int pitAchieved;
 
     /**
      * Returns the number of achieved points.
@@ -39,7 +34,7 @@ public class AggregatedScore {
      * @return the number of achieved points
      */
     public int getAchieved() {
-        return achieved;
+        return analysisAchieved + testAchieved + coverageAchieved + pitAchieved;
     }
 
     /**
@@ -48,7 +43,40 @@ public class AggregatedScore {
      * @return the total number of points that could be achieved
      */
     public int getTotal() {
-        return total;
+        return analysisConfiguration.getMaxScore() + testsConfiguration.getMaxScore()
+                + coverageConfiguration.getMaxScore() + pitConfiguration.getMaxScore();
+    }
+
+    public int getAnalysisAchieved() {
+        return analysisAchieved;
+    }
+
+    public int getAnalysisRatio() {
+        return getRatio(analysisConfiguration.getMaxScore(), getAnalysisAchieved());
+    }
+
+    public int getTestAchieved() {
+        return testAchieved;
+    }
+
+    public int getTestRatio() {
+        return getRatio(testsConfiguration.getMaxScore(), getTestAchieved());
+    }
+
+    public int getCoverageAchieved() {
+        return coverageAchieved;
+    }
+
+    public int getCoverageRatio() {
+        return getRatio(coverageConfiguration.getMaxScore(), getCoverageAchieved());
+    }
+
+    public int getPitAchieved() {
+        return pitAchieved;
+    }
+
+    public int getPitRatio() {
+        return getRatio(pitConfiguration.getMaxScore(), getPitAchieved());
     }
 
     /**
@@ -57,22 +85,14 @@ public class AggregatedScore {
      * @return the success ration
      */
     public int getRatio() {
-        return achieved * 100 / total;
+        return getRatio(getTotal(), getAchieved());
     }
 
-    /**
-     * Returns a styling class that will be used to render the success progress bar.
-     *
-     * @return a styling class
-     */
-    public String getStyle() {
-        if (getRatio() < FAILURE_RATIO) {
-            return FAILURE;
+    private int getRatio(final int total, final int achieved) {
+        if (total == 0) {
+            return 100;
         }
-        else if (getRatio() < EXCELLENT_RATIO) {
-            return GOOD;
-        }
-        return EXCELLENT;
+        return achieved * 100 / total;
     }
 
     public AnalysisConfiguration getAnalysisConfiguration() {
@@ -121,12 +141,10 @@ public class AggregatedScore {
         analysisScores.addAll(scores);
         analysisConfiguration = configuration;
 
-        int delta = 0;
-        for (AnalysisScore score : scores) {
-            delta = delta + score.getTotalImpact();
-        }
+        int delta = aggregateDelta(scores);
 
-        return updateScore(analysisConfiguration.getMaxScore(), delta);
+        analysisAchieved = computeScore(analysisConfiguration.getMaxScore(), delta);
+        return analysisAchieved;
     }
 
     /**
@@ -143,7 +161,8 @@ public class AggregatedScore {
         testScores.add(score);
         testsConfiguration = configuration;
 
-        return updateScore(configuration.getMaxScore(), score.getTotalImpact());
+        testAchieved = computeScore(configuration.getMaxScore(), score.getTotalImpact());
+        return testAchieved;
     }
 
     /**
@@ -160,18 +179,10 @@ public class AggregatedScore {
         Collections.addAll(coverageScores, scores);
         this.coverageConfiguration = configuration;
 
-        int delta = aggregateDelta(scores);
+        int delta = aggregateDelta(Arrays.asList(scores));
 
-        return updateScore(configuration.getMaxScore(), delta);
-    }
-
-    // TODO: create base class
-    private int aggregateDelta(final CoverageScore[] scores) {
-        int delta = 0;
-        for (CoverageScore score : scores) {
-            delta = delta + score.getTotalImpact();
-        }
-        return delta;
+        coverageAchieved = computeScore(configuration.getMaxScore(), delta);
+        return coverageAchieved;
     }
 
     /**
@@ -188,21 +199,24 @@ public class AggregatedScore {
         this.pitConfiguration = configuration;
         this.pitScores.add(score);
 
-        return updateScore(configuration.getMaxScore(), score.getTotalImpact());
+        pitAchieved = computeScore(configuration.getMaxScore(), score.getTotalImpact());
+        return pitAchieved;
     }
 
-    private int updateScore(final int maxScore, final int totalChange) {
-        total += maxScore;
-
-        int actual;
-        if (totalChange <= 0) {
-            actual = Math.max(0, maxScore + totalChange);
+    private int computeScore(final int maxScore, final int totalImpact) {
+        if (totalImpact <= 0) {
+            return Math.max(0, maxScore + totalImpact);
         }
         else {
-            actual = Math.min(maxScore, totalChange);
+            return Math.min(maxScore, totalImpact);
         }
-        achieved += actual;
+    }
 
-        return actual;
+    private int aggregateDelta(final List<? extends Score> scores) {
+        int delta = 0;
+        for (Score score : scores) {
+            delta = delta + score.getTotalImpact();
+        }
+        return delta;
     }
 }
