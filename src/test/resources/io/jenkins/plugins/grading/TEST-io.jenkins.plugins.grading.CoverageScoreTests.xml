@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="io.jenkins.plugins.grading.CoverageScoreTests" time="0.072" tests="7" errors="0" skipped="0" failures="0">
+  <testcase name="shouldNotReadAdditionalAttributes" classname="io.jenkins.plugins.grading.CoverageScoreTests" time="0.027"/>
+  <testcase name="shouldConvertFromJson" classname="io.jenkins.plugins.grading.CoverageScoreTests" time="0.004"/>
+  <testcase name="shouldCalculateTotalImpact" classname="io.jenkins.plugins.grading.CoverageScoreTests" time="0.019"/>
+  <testcase name="shouldInitializeWithDefault" classname="io.jenkins.plugins.grading.CoverageScoreTests" time="0.003"/>
+  <testcase name="shouldCalculateTotalImpactWithZeroMissedImpact" classname="io.jenkins.plugins.grading.CoverageScoreTests" time="0.001"/>
+  <testcase name="shouldGetProperties" classname="io.jenkins.plugins.grading.CoverageScoreTests" time="0.001"/>
+  <testcase name="shouldCalculateTotalImpactWithZeroCoveredImpact" classname="io.jenkins.plugins.grading.CoverageScoreTests" time="0.001"/>
+</testsuite>

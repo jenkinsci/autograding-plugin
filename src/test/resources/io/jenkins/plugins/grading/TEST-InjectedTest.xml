@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-failsafe-plugin/xsd/failsafe-test-report-3.0.xsd" version="3.0" name="InjectedTest" time="26.628" tests="11" errors="0" skipped="0" failures="0">
+  <testcase name="" classname="org.jvnet.hudson.test.JellyTestSuiteBuilder$JellyCheck" time="0.248"/>
+  <testcase name="" classname="org.jvnet.hudson.test.JellyTestSuiteBuilder$JellyCheck" time="0.215"/>
+  <testcase name="" classname="org.jvnet.hudson.test.JellyTestSuiteBuilder$JellyCheck" time="0.03"/>
+  <testcase name="" classname="org.jvnet.hudson.test.JellyTestSuiteBuilder$JellyCheck" time="0.005"/>
+  <testcase name="testCliSanity" classname="InjectedTest" time="0.017"/>
+  <testcase name="testPluginActive" classname="InjectedTest" time="0"/>
+  <testcase name="" classname="org.jvnet.hudson.test.junit.FailedTest" time="0"/>
+  <testcase name="" classname="org.jvnet.hudson.test.PropertiesTestSuite$PropertiesTest" time="0.002"/>
+  <testcase name="" classname="org.jvnet.hudson.test.PropertiesTestSuite$PropertiesTest" time="0.002"/>
+  <testcase name="" classname="org.jvnet.hudson.test.PropertiesTestSuite$PropertiesTest" time="0.004"/>
+  <testcase name="" classname="org.jvnet.hudson.test.PropertiesTestSuite$PropertiesTest" time="0.003"/>
+</testsuite>

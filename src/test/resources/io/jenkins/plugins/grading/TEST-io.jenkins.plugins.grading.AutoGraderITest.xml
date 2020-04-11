@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-failsafe-plugin/xsd/failsafe-test-report-3.0.xsd" version="3.0" name="io.jenkins.plugins.grading.AutoGraderITest" time="33.551" tests="3" errors="0" skipped="0" failures="0">
+  <testcase name="shouldCountCheckStyleWarnings" classname="io.jenkins.plugins.grading.AutoGraderITest" time="3.499"/>
+  <testcase name="shouldSkipGradingIfConfigurationIsEmpty" classname="io.jenkins.plugins.grading.AutoGraderITest" time="0.517"/>
+  <testcase name="shouldAbortBuildSinceNoTestActionHasBeenRegistered" classname="io.jenkins.plugins.grading.AutoGraderITest" time="0.421"/>
+</testsuite>

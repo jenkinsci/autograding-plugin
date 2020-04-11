@@ -6,11 +6,14 @@ import java.util.List;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
+import net.sf.json.JSONObject;
+
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import hudson.model.Result;
 import hudson.model.Run;
 
+import io.jenkins.plugins.coverage.targets.Ratio;
 import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
@@ -19,6 +22,8 @@ import static io.jenkins.plugins.grading.assertions.Assertions.*;
  * Integration tests for the {@link AutoGrader} step.
  *
  * @author Ullrich Hafner
+ * @author Johannes Hintermaier
+ * @author Lion Kosiuk
  */
 public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     /** Verifies that the step skips all autograding parts if the configuration is empty. */
@@ -70,6 +75,131 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
+     * Verifies that SpotBugs results are correctly graded.
+     */
+    @Test
+    public void shouldGradeSpotBugs(){
+        WorkflowJob job = createPipelineWithWorkspaceFiles("spotbugs.xml");
+
+        configureScanner(job, "spotbugs", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(97);
+    }
+
+    /**
+     * Verifies that CPD results are correctly graded.
+     */
+    @Test
+    public void shouldGradeCPD(){
+        WorkflowJob job = createPipelineWithWorkspaceFiles("cpd.xml");
+
+        configureScanner(job, "cpd", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(98);
+    }
+
+    /**
+     * Verifies that PMD results are correctly graded.
+     */
+    @Test
+    public void shouldGradePMD(){
+        WorkflowJob job = createPipelineWithWorkspaceFiles("pmd.xml");
+
+        configureScanner(job, "pmd", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(88);
+    }
+
+    /**
+     * Verifies that Mutation results are correctly graded.
+     */
+    @Test
+    public void shouldGradeMutationCoverage() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("mutations.xml");
+
+        configureScanner(job, "mutations",
+                "{\"pit\":{\"maxScore\":100,\"detectedImpact\":1,\"undetectedImpact\":-1,\"ratioImpact\":0}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(56);
+    }
+
+    @Test
+    public void shouldGradeTestResults() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("TEST-InjectedTest.xml",
+                "TEST-io.jenkins.plugins.grading.AnalysisScoreTest.xml",
+                "TEST-io.jenkins.plugins.grading.ArchitectureRulesTest.xml",
+                "TEST-io.jenkins.plugins.grading.AutoGraderITest.xml",
+                "TEST-io.jenkins.plugins.grading.AutoGraderTest.xml",
+                "TEST-io.jenkins.plugins.grading.CoverageScoreTests.xml",
+                "TEST-io.jenkins.plugins.grading.PackageArchitectureTest.xml",
+                "TEST-io.jenkins.plugins.grading.PitScoreTest.xml",
+                "TEST-io.jenkins.plugins.grading.ScoreTest.xml",
+                "TEST-io.jenkins.plugins.grading.TestScoreTest.xml");
+
+        configureScanner(job, "*",
+                "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(53);
+    }
+
+    @Test
+    public void shouldGradeCoverageScore() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
+
+        configureScanner(job, "jacoco", "{ \"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(50);
+
+    }
+
+    @Test
+    public void shouldGradeCoverage() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
+
+        configureScanner(job, "jacoco",
+                "{ \"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(50);
+    }
+
+
+    /**
      * Returns the console log as a String.
      *
      * @param build
@@ -86,13 +216,46 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         }
     }
 
-    private void configureScanner(final WorkflowJob job, final String fileName, final String configuration) {
-        job.setDefinition(new CpsFlowDefinition("node {\n"
-                + "  stage ('Integration Test') {\n"
-                + "         recordIssues tool: checkStyle(pattern: '**/" + fileName + "*')\n"
-                + "         autoGrade('" + configuration + "')\n"
+
+    private void configureScanner(final WorkflowJob job, final String fileName,
+            final String configuration) {
+        String script = "node {\n";
+        switch (fileName) {
+            case "checkstyle":
+                script += "  stage ('Integration Test') {\n"
+                        + "         recordIssues tool: checkStyle(pattern: '**/" + fileName + "*')\n";
+                break;
+            case "jacoco":
+                script += "  stage ('Integration Test Coverage') {\n"
+                        + "         publishCoverage adapters: [jacocoAdapter('**/" + fileName
+                        + "*')], sourceFileResolver: sourceFiles('NEVER_STORE')\n";
+                break;
+            case "mutations":
+                script += "  stage ('Integration Test Mutation Coverage') {\n"
+                        + "         step([$class: 'PitPublisher', mutationStatsFile: '**/" + fileName + "*'])\n";
+                break;
+            case "spotbugs":
+                script += "  stage ('Integration Test SpotBugs') {\n"
+                        + "         recordIssues tool: spotBugs(pattern: '**/" + fileName + "*')\n";
+                break;
+            case "cpd":
+                script += "  stage ('Integration Test CPD') {\n"
+                        + "         recordIssues tool: cpd(pattern: '**/" + fileName + "*')\n";
+                break;
+            case "pmd":
+                script += "  stage ('Integration Test PMD') {\n"
+                        + "         recordIssues tool: pmdParser(pattern: '**/" + fileName + "*')\n";
+                break;
+
+            default:
+                script += "  stage ('Build and Static Analysis') {\n"
+                        + "         junit testResults: '**/TEST-" + fileName + ".xml'\n";
+                break;
+        }
+        script += "         autoGrade('" + configuration + "')\n"
                 + "  }\n"
-                + "}", true));
+                + "}";
+        job.setDefinition(new CpsFlowDefinition(script, true));
     }
 
 }
