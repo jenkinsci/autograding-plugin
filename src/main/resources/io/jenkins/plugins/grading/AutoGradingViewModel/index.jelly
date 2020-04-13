@@ -140,7 +140,7 @@
         <div class="row py-3">
           <div class="col-12">
 
-            <bs:card title="PIT mutations" fontAwesomeIcon="viruses">
+            <bs:card title="PIT Mutations" fontAwesomeIcon="viruses">
               <g:score ratio="${score.pitRatio}" achieved="${score.pitAchieved}" total="${pitConfig.maxScore}"/>
               <div class="table-responsive">
                 <table class="table table-hover table-striped display" id="pit">
@@ -200,7 +200,7 @@
         <div class="row py-3">
           <div class="col-12">
 
-            <bs:card title="Static Analysis Checks" fontAwesomeIcon="exclamation-triangle">
+            <bs:card title="Static Analysis Warnings" fontAwesomeIcon="exclamation-triangle">
               <g:score ratio="${score.analysisRatio}" achieved="${score.analysisAchieved}" total="${analysisConfig.maxScore}"/>
               <j:set var="analysisScores" value="${score.analysisScores}"/>
               <div class="table-responsive">
