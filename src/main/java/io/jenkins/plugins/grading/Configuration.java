@@ -5,7 +5,7 @@ package io.jenkins.plugins.grading;
  *
  * @author Ullrich Hafner
  */
-class Configuration {
+public class Configuration {
     private int maxScore;
 
     Configuration(final int maxScore) {

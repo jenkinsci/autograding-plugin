@@ -1,5 +1,5 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:bs="/bootstrap">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:bs="/bootstrap" xmlns:g="/grading">
 
   <st:header name="Content-Type" value="text/html;charset=UTF-8"/>
   <bs:layout title="${it.displayName}" norefresh="true">
@@ -24,11 +24,7 @@
         <div class="row py-3">
           <div class="col-12">
             <bs:card title="Code Quality Score" fontAwesomeIcon="graduation-cap">
-              <p><strong>Your current score: ${score.achieved} / ${score.total}</strong></p>
-              <div class="progress">
-                <div class="progress-bar ${score.style}" role="progressbar" style="width: ${score.ratio}%;" aria-valuenow="${score.ratio}" aria-valuemin="0"
-                     aria-valuemax="100">${score.ratio}</div>
-              </div>
+              <g:score ratio="${score.ratio}" achieved="${score.achieved}" total="${score.total}"/>
             </bs:card>
           </div>
         </div>
@@ -37,6 +33,7 @@
           <div class="col-12">
 
             <bs:card title="Unit Tests" fontAwesomeIcon="check-square">
+              <g:score ratio="${score.testRatio}" achieved="${score.testAchieved}" total="${testConfig.maxScore}"/>
               <div class="table-responsive">
                 <table class="table table-hover table-striped display" id="test">
                   <thead>
@@ -95,6 +92,7 @@
           <div class="col-12">
 
             <bs:card title="Code Coverage" fontAwesomeIcon="microscope">
+              <g:score ratio="${score.coverageRatio}" achieved="${score.coverageAchieved}" total="${coverageConfig.maxScore}"/>
               <div class="table-responsive">
                 <table class="table table-hover table-striped display" id="coverage">
                   <thead>
@@ -142,7 +140,8 @@
         <div class="row py-3">
           <div class="col-12">
 
-            <bs:card title="PIT mutations" fontAwesomeIcon="viruses">
+            <bs:card title="PIT Mutations" fontAwesomeIcon="viruses">
+              <g:score ratio="${score.pitRatio}" achieved="${score.pitAchieved}" total="${pitConfig.maxScore}"/>
               <div class="table-responsive">
                 <table class="table table-hover table-striped display" id="pit">
                   <thead>
@@ -201,7 +200,8 @@
         <div class="row py-3">
           <div class="col-12">
 
-            <bs:card title="Static Analysis Checks" fontAwesomeIcon="exclamation-triangle">
+            <bs:card title="Static Analysis Warnings" fontAwesomeIcon="exclamation-triangle">
+              <g:score ratio="${score.analysisRatio}" achieved="${score.analysisAchieved}" total="${analysisConfig.maxScore}"/>
               <j:set var="analysisScores" value="${score.analysisScores}"/>
               <div class="table-responsive">
                 <table class="table table-hover table-striped display" id="analysis">

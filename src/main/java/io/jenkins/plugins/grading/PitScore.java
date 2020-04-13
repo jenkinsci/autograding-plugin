@@ -1,18 +1,18 @@
 package io.jenkins.plugins.grading;
 
+import java.util.Objects;
+
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
 
 /**
- * Computes the {@link Score} impact of PIT mutation test results. These results are obtained by inspecting a {@link
+ * Computes the {@link AggregatedScore} impact of PIT mutation test results. These results are obtained by inspecting a {@link
  * PitBuildAction} instance of the PIT plugin.
  *
  * @author Eva-Maria Zeintl
  */
 @SuppressWarnings("PMD.DataClass")
-public class PitScore {
-    private final String id;
-
-    private final int totalImpact;
+public class PitScore extends Score {
+    static final String ID = "pit";
 
     private final int mutationsSize;
 
@@ -30,14 +30,14 @@ public class PitScore {
      *         the action that contains the PIT results
      */
     public PitScore(final PitConfiguration configuration, final PitBuildAction action) {
-        id = action.getDisplayName();
+        super(ID, Objects.requireNonNull(action.getDisplayName()));
 
         mutationsSize = action.getReport().getMutationStats().getTotalMutations();
         undetectedSize = action.getReport().getMutationStats().getUndetected();
         detectedSize = mutationsSize - undetectedSize;
         ratio = 100 - detectedSize * 100 / mutationsSize;
 
-        totalImpact = computeImpact(configuration);
+        setTotalImpact(computeImpact(configuration));
     }
 
     private int computeImpact(final PitConfiguration configs) {
@@ -48,14 +48,6 @@ public class PitScore {
         change = change + configs.getRatioImpact() * ratio;
 
         return change;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public int getTotalImpact() {
-        return totalImpact;
     }
 
     public int getMutationsSize() {

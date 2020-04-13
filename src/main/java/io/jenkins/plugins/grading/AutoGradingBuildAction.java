@@ -14,7 +14,7 @@ import io.jenkins.plugins.util.BuildAction;
  *
  * @author Eva-Maria Zeintl
  */
-public class AutoGradingBuildAction extends BuildAction<Score> implements StaplerProxy {
+public class AutoGradingBuildAction extends BuildAction<AggregatedScore> implements StaplerProxy {
     private static final long serialVersionUID = -1165416468486465651L;
 
     /**
@@ -25,12 +25,12 @@ public class AutoGradingBuildAction extends BuildAction<Score> implements Staple
      * @param score
      *         score instance where all results are saved
      */
-    public AutoGradingBuildAction(final Run<?, ?> owner, final Score score) {
+    public AutoGradingBuildAction(final Run<?, ?> owner, final AggregatedScore score) {
         this(owner, score, true);
     }
 
     @VisibleForTesting
-    AutoGradingBuildAction(final Run<?, ?> owner, final Score score, final boolean canSerialize) {
+    AutoGradingBuildAction(final Run<?, ?> owner, final AggregatedScore score, final boolean canSerialize) {
         super(owner, score, canSerialize);
     }
 

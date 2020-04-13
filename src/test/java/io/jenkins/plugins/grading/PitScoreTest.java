@@ -71,7 +71,8 @@ class PitScoreTest {
 
         PitScore pits = new PitScore(pitConfiguration, pitBuildAction);
 
-        assertThat(pits).hasId(pitBuildAction.getDisplayName());
+        assertThat(pits).hasId(PitScore.ID);
+        assertThat(pits).hasName(pitBuildAction.getDisplayName());
         assertThat(pits).hasTotalImpact(50);
         assertThat(pits).hasMutationsSize(100);
         assertThat(pits).hasDetectedSize(75);
@@ -80,14 +81,17 @@ class PitScoreTest {
     }
 
     private PitBuildAction createAction(final int mutationsSize, final int undetectedSize) {
-        PitBuildAction action = mock(PitBuildAction.class);
-        ProjectMutations mutations = mock(ProjectMutations.class);
         MutationStatsImpl stats = mock(MutationStatsImpl.class);
         when(stats.getTotalMutations()).thenReturn(mutationsSize);
         when(stats.getUndetected()).thenReturn(undetectedSize);
+
+        ProjectMutations mutations = mock(ProjectMutations.class);
         when(mutations.getMutationStats()).thenReturn(stats);
+
+        PitBuildAction action = mock(PitBuildAction.class);
         when(action.getReport()).thenReturn(mutations);
         when(action.getDisplayName()).thenReturn("pit-build-action");
+
         return action;
     }
 }

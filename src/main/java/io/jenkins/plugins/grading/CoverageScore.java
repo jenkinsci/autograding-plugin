@@ -1,19 +1,17 @@
 package io.jenkins.plugins.grading;
 
+import org.apache.commons.lang3.StringUtils;
+
 import io.jenkins.plugins.coverage.targets.Ratio;
 
 /**
- * Computes the {@link Score} impact of code coverage results. These results are obtained by inspecting a {@link
+ * Computes the {@link AggregatedScore} impact of code coverage results. These results are obtained by inspecting a {@link
  * CoverageConfiguration} instance of the Code Coverage API plugin.
  *
  * @author Eva-Maria Zeintl
  */
 @SuppressWarnings("PMD.DataClass")
-public class CoverageScore {
-    private final String name;
-
-    private final int totalImpact;
-
+public class CoverageScore extends Score {
     private final int coveredSize;
     private final int missedSize;
 
@@ -28,12 +26,12 @@ public class CoverageScore {
      *         the coverage ratio
      */
     public CoverageScore(final String type, final CoverageConfiguration configuration, final Ratio ratio) {
-        this.name = type;
+        super(StringUtils.lowerCase(type), type);
 
         this.coveredSize = ratio.getPercentage();
         this.missedSize = 100 - ratio.getPercentage();
 
-        totalImpact = computeImpact(configuration);
+        setTotalImpact(computeImpact(configuration));
     }
 
     private int computeImpact(final CoverageConfiguration configuration) {
@@ -43,14 +41,6 @@ public class CoverageScore {
         change = change + configuration.getCoveredImpact() * coveredSize;
 
         return change;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getTotalImpact() {
-        return totalImpact;
     }
 
     public int getCoveredSize() {

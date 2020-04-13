@@ -11,7 +11,7 @@ import hudson.model.Run;
  */
 public class AutoGradingViewModel implements ModelObject {
     private final Run<?, ?> owner;
-    private final Score score;
+    private final AggregatedScore score;
 
     /**
      * Creates a new instance of {@link AutoGradingViewModel}.
@@ -21,7 +21,7 @@ public class AutoGradingViewModel implements ModelObject {
      * @param score
      *         the scores to show in the view
      */
-    AutoGradingViewModel(final Run<?, ?> owner, final Score score) {
+    AutoGradingViewModel(final Run<?, ?> owner, final AggregatedScore score) {
         super();
 
         this.owner = owner;
@@ -37,7 +37,7 @@ public class AutoGradingViewModel implements ModelObject {
         return Messages.Action_Name();
     }
 
-    public Score getScore() {
+    public AggregatedScore getScore() {
         return score;
     }
 }

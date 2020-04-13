@@ -3,16 +3,14 @@ package io.jenkins.plugins.grading;
 import hudson.tasks.junit.TestResultAction;
 
 /**
- * Computes the {@link Score} impact of test results. These results are obtained by inspecting a {@link
+ * Computes the {@link AggregatedScore} impact of test results. These results are obtained by inspecting a {@link
  * TestResultAction} instance of the JUnit plugin.
  *
  * @author Eva-Maria Zeintl
  */
 @SuppressWarnings("PMD.DataClass")
-public class TestScore {
-    private final String id;
-
-    private final int totalImpact;
+public class TestScore extends Score {
+    static final String ID = "tests";
 
     private final int passedSize;
     private final int totalSize;
@@ -28,14 +26,14 @@ public class TestScore {
      *         the action that contains the test results
      */
     public TestScore(final TestConfiguration configuration, final TestResultAction action) {
-        id = action.getDisplayName();
+        super(ID, action.getDisplayName());
 
         failedSize = action.getFailCount();
         skippedSize = action.getSkipCount();
         totalSize = action.getTotalCount();
         passedSize = totalSize - failedSize - skippedSize;
 
-        totalImpact = computeImpact(configuration);
+        setTotalImpact(computeImpact(configuration));
     }
 
     private int computeImpact(final TestConfiguration configs) {
@@ -45,14 +43,6 @@ public class TestScore {
         change = change + configs.getSkippedImpact() * skippedSize;
 
         return change;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public int getTotalImpact() {
-        return totalImpact;
     }
 
     public int getPassedSize() {
