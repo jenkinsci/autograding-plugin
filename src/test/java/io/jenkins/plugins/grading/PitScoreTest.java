@@ -1,5 +1,6 @@
 package io.jenkins.plugins.grading;
 
+import net.sf.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
@@ -15,8 +16,24 @@ import static org.mockito.Mockito.*;
  * @author Eva-Maria Zeintl
  * @author Ullrich Hafner
  * @author Kevin Richter
+ * @author Thomas Großbeck
  */
 class PitScoreTest {
+    @Test
+    void shouldCalculateTotalImpactWithConfigurationAsJson() {
+        JSONObject json = new JSONObject();
+        json.put("maxScore", 50);
+        json.put("undetectedImpact", -2);
+        json.put("detectedImpact", 1);
+        json.put("ratioImpact", -1);
+
+        PitConfiguration pitConfiguration = PitConfiguration.from(json);
+
+        PitScore pitScore = new PitScore(pitConfiguration, createAction(30, 3));
+
+        assertThat(pitScore).hasTotalImpact(11);
+    }
+
     @Test
     void shouldCalculateSizeImpacts() {
         PitConfiguration pitConfiguration = new PitConfiguration.PitConfigurationBuilder().setMaxScore(25)
