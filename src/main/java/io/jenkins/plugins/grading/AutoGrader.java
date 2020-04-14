@@ -148,8 +148,6 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
         int total = actualScore.addCoverageTotal(coverageConfiguration, lineCoverage, branchCoverage);
 
-        logHandler.log("-> Score %d - from recorded coverage results: %d%%",
-                lineCoverage.getTotalImpact(), lineCoverage.getCoveredSize());
         logHandler.log("Total score for coverage results: " + total);
     }
 
