@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
  */
 class PitScoreTest {
     @Test
-    void shouldCalculateTotalImpactWithConfigurationAsJson() {
+    void shouldInitialiseConfigurationWithJson() {
         JSONObject json = new JSONObject();
         json.put("maxScore", 50);
         json.put("undetectedImpact", -2);
@@ -29,9 +29,39 @@ class PitScoreTest {
 
         PitConfiguration pitConfiguration = PitConfiguration.from(json);
 
-        PitScore pitScore = new PitScore(pitConfiguration, createAction(30, 3));
+        assertThat(pitConfiguration).hasMaxScore(50);
+        assertThat(pitConfiguration).hasUndetectedImpact(-2);
+        assertThat(pitConfiguration).hasDetectedImpact(1);
+        assertThat(pitConfiguration).hasRatioImpact(-1);
+    }
 
-        assertThat(pitScore).hasTotalImpact(11);
+    @Test
+    void shouldInitialiseConfigurationWithDefaultValues() {
+        JSONObject json = new JSONObject();
+
+        PitConfiguration pitConfiguration = PitConfiguration.from(json);
+
+        assertThat(pitConfiguration).hasMaxScore(0);
+        assertThat(pitConfiguration).hasUndetectedImpact(0);
+        assertThat(pitConfiguration).hasDetectedImpact(0);
+        assertThat(pitConfiguration).hasRatioImpact(0);
+    }
+
+    @Test
+    void shouldInitialiseConfigurationWithJsonIgnoresAdditionalAttributes() {
+        JSONObject json = new JSONObject();
+        json.put("maxScore", 50);
+        json.put("undetectedImpact", -2);
+        json.put("detectedImpact", 1);
+        json.put("ratioImpact", -1);
+        json.put("additionalAttribute", 3);
+
+        PitConfiguration pitConfiguration = PitConfiguration.from(json);
+
+        assertThat(pitConfiguration).hasMaxScore(50);
+        assertThat(pitConfiguration).hasUndetectedImpact(-2);
+        assertThat(pitConfiguration).hasDetectedImpact(1);
+        assertThat(pitConfiguration).hasRatioImpact(-1);
     }
 
     @Test
