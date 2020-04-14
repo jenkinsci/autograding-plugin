@@ -90,6 +90,13 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
+        CoverageConfiguration covConfiguration = new CoverageConfiguration.CoverageConfigurationBuilder()
+                .setMaxScore(100)
+                .setCoveredImpact(1)
+                .setMissedImpact(-1)
+                .build();
+
+        assertThat(score).hasCoverageConfiguration(covConfiguration);
         assertThat(score).hasTotal(100);
         assertThat(score).hasCoverageAchieved(18);
         assertThat(score).hasAchieved(18);

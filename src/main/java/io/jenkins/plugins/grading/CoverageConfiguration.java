@@ -104,4 +104,26 @@ public class CoverageConfiguration extends Configuration {
             return new CoverageConfiguration(getMaxScore(), coveredImpact, missedImpact);
         }
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        CoverageConfiguration that = (CoverageConfiguration) o;
+
+        if(getMaxScore() != that.getMaxScore()) {
+            return false;
+        }
+
+        if (getCoveredImpact() != that.getCoveredImpact()) {
+            return false;
+        }
+        return getMissedImpact() == that.getMissedImpact();
+    }
+
 }
