@@ -1,5 +1,6 @@
 package io.jenkins.plugins.grading;
 
+import net.sf.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
@@ -15,8 +16,54 @@ import static org.mockito.Mockito.*;
  * @author Eva-Maria Zeintl
  * @author Ullrich Hafner
  * @author Kevin Richter
+ * @author Thomas Großbeck
  */
 class PitScoreTest {
+    @Test
+    void shouldInitialiseConfigurationWithJson() {
+        JSONObject json = new JSONObject();
+        json.put("maxScore", 50);
+        json.put("undetectedImpact", -2);
+        json.put("detectedImpact", 1);
+        json.put("ratioImpact", -1);
+
+        PitConfiguration pitConfiguration = PitConfiguration.from(json);
+
+        assertThat(pitConfiguration).hasMaxScore(50);
+        assertThat(pitConfiguration).hasUndetectedImpact(-2);
+        assertThat(pitConfiguration).hasDetectedImpact(1);
+        assertThat(pitConfiguration).hasRatioImpact(-1);
+    }
+
+    @Test
+    void shouldInitialiseConfigurationWithDefaultValues() {
+        JSONObject json = new JSONObject();
+
+        PitConfiguration pitConfiguration = PitConfiguration.from(json);
+
+        assertThat(pitConfiguration).hasMaxScore(0);
+        assertThat(pitConfiguration).hasUndetectedImpact(0);
+        assertThat(pitConfiguration).hasDetectedImpact(0);
+        assertThat(pitConfiguration).hasRatioImpact(0);
+    }
+
+    @Test
+    void shouldInitialiseConfigurationWithJsonIgnoresAdditionalAttributes() {
+        JSONObject json = new JSONObject();
+        json.put("maxScore", 50);
+        json.put("undetectedImpact", -2);
+        json.put("detectedImpact", 1);
+        json.put("ratioImpact", -1);
+        json.put("additionalAttribute", 3);
+
+        PitConfiguration pitConfiguration = PitConfiguration.from(json);
+
+        assertThat(pitConfiguration).hasMaxScore(50);
+        assertThat(pitConfiguration).hasUndetectedImpact(-2);
+        assertThat(pitConfiguration).hasDetectedImpact(1);
+        assertThat(pitConfiguration).hasRatioImpact(-1);
+    }
+
     @Test
     void shouldCalculateSizeImpacts() {
         PitConfiguration pitConfiguration = new PitConfiguration.PitConfigurationBuilder().setMaxScore(25)
