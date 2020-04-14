@@ -84,13 +84,14 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results Coverage Report");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -10 - from recorded line coverage results: 45%");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 28 - from recorded branch coverage results: 64%");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -10 - from recorded line coverage results: 45%");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for coverage results: 18");
 
         List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
+        assertThat(score).hasTotal(100);
+        assertThat(score).hasCoverageAchieved(18);
         assertThat(score).hasAchieved(18);
     }
 
