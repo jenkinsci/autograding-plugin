@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<report name="Java coding style">
+  <sessioninfo id="0c657cb0f6a7-e3d369e1" start="1585847774870" dump="1585847792348"/>
+  <package name="edu/hm/hafner/util">
+    <class name="edu/hm/hafner/util/Ensure$ObjectCondition" sourcefilename="Ensure.java">
+      <method name="isNotNull" desc="(Ljava/lang/String;[Ljava/lang/Object;)V" line="567">
+        <counter type="INSTRUCTION" missed="6" covered="23"/>
+        <counter type="BRANCH" missed="0" covered="6"/>
+        <counter type="LINE" missed="2" covered="4"/>
+        <counter type="COMPLEXITY" missed="0" covered="4"/>
+        <counter type="METHOD" missed="0" covered="1"/>
+      </method>
+      <counter type="INSTRUCTION" missed="28" covered="93"/>
+      <counter type="BRANCH" missed="3" covered="11"/>
+      <counter type="LINE" missed="8" covered="25"/>
+      <counter type="COMPLEXITY" missed="3" covered="12"/>
+      <counter type="METHOD" missed="0" covered="8"/>
+      <counter type="CLASS" missed="0" covered="1"/>
+    </class>
+    <sourcefile name="Ensure.java">
+      <line nr="48" mi="0" ci="5" mb="0" cb="0"/>
+      <line nr="64" mi="0" ci="6" mb="0" cb="0"/>
+      <counter type="INSTRUCTION" missed="95" covered="5"/>
+      <counter type="BRANCH" missed="90" covered="10"/>
+      <counter type="LINE" missed="44" covered="54"/>
+      <counter type="COMPLEXITY" missed="86" covered="14"/>
+      <counter type="METHOD" missed="97" covered="3"/>
+      <counter type="CLASS" missed="81" covered="19"/>
+    </sourcefile>
+    <counter type="INSTRUCTION" missed="95" covered="5"/>
+    <counter type="BRANCH" missed="50" covered="90"/>
+    <counter type="LINE" missed="56" covered="45"/>
+    <counter type="COMPLEXITY" missed="86" covered="14"/>
+    <counter type="METHOD" missed="97" covered="3"/>
+    <counter type="CLASS" missed="81" covered="19"/>
+  </package>
+  <counter type="INSTRUCTION" missed="95" covered="5"/>
+  <counter type="BRANCH" missed="90" covered="10"/>
+  <counter type="LINE" missed="86" covered="14"/>
+  <counter type="COMPLEXITY" missed="86" covered="14"/>
+  <counter type="METHOD" missed="97" covered="3"/>
+  <counter type="CLASS" missed="81" covered="19"/>
+</report>

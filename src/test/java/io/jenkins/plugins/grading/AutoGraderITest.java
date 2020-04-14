@@ -69,6 +69,31 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(40);
     }
 
+    @Test
+    public void shouldCountJacocoWarning() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
+
+        configureJacocoScanner(job, "jacoco",
+                "{\"coverage\": {"
+                + "\"maxScore\": 100,"
+                + "\"coveredImpact\": 1,"
+                + "\"missedImpact\": -1"
+                + "}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results Coverage Report");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -10 - from recorded line coverage results: 45%");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 28 - from recorded branch coverage results: 64%");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -10 - from recorded line coverage results: 45%");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for coverage results: 18");
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(18);
+    }
+
     /**
      * Returns the console log as a String.
      *
@@ -91,6 +116,15 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 + "  stage ('Integration Test') {\n"
                 + "         recordIssues tool: checkStyle(pattern: '**/" + fileName + "*')\n"
                 + "         autoGrade('" + configuration + "')\n"
+                + "  }\n"
+                + "}", true));
+    }
+
+    private void configureJacocoScanner(final WorkflowJob job, final String fileName, final String configuration) {
+        job.setDefinition(new CpsFlowDefinition("node {\n"
+                + "  stage ('Integration Test') {\n"
+                + "     publishCoverage adapters: [jacocoAdapter('**/" + fileName + "*')]\n"
+                + "     autoGrade('" + configuration + "')\n"
                 + "  }\n"
                 + "}", true));
     }
