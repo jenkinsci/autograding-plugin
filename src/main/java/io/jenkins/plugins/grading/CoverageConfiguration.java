@@ -1,5 +1,9 @@
 package io.jenkins.plugins.grading;
 
+import java.util.Objects;
+
+import edu.hm.hafner.util.Generated;
+
 import net.sf.json.JSONObject;
 
 /**
@@ -9,6 +13,8 @@ import net.sf.json.JSONObject;
  */
 @SuppressWarnings("PMD.DataClass")
 public class CoverageConfiguration extends Configuration {
+    private static final long serialVersionUID = 1L;
+
     private int coveredImpact;
     private int missedImpact;
 
@@ -55,6 +61,26 @@ public class CoverageConfiguration extends Configuration {
     @SuppressWarnings("unused") // Required for JSON conversion
     public void setMissedImpact(final int missedImpact) {
         this.missedImpact = missedImpact;
+    }
+
+    @Override @Generated
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        CoverageConfiguration that = (CoverageConfiguration) o;
+        return coveredImpact == that.coveredImpact && missedImpact == that.missedImpact;
+    }
+
+    @Override @Generated
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), coveredImpact, missedImpact);
     }
 
     /**

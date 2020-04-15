@@ -1,7 +1,5 @@
 package io.jenkins.plugins.grading;
 
-import jline.internal.Nullable;
-
 import hudson.model.Job;
 
 import io.jenkins.plugins.util.JobAction;
@@ -34,7 +32,6 @@ public class AutoGradingJobAction extends JobAction<AutoGradingBuildAction> {
     }
 
     @Override
-    @Nullable
     public String getIconFileName() {
         return SMALL_ICON;
     }

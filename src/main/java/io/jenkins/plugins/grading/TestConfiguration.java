@@ -1,5 +1,9 @@
 package io.jenkins.plugins.grading;
 
+import java.util.Objects;
+
+import edu.hm.hafner.util.Generated;
+
 import net.sf.json.JSONObject;
 
 /**
@@ -9,6 +13,8 @@ import net.sf.json.JSONObject;
  */
 @SuppressWarnings("PMD.DataClass")
 public class TestConfiguration extends Configuration {
+    private static final long serialVersionUID = 1L;
+
     private int failureImpact;
     private int passedImpact;
     private int skippedImpact;
@@ -67,6 +73,28 @@ public class TestConfiguration extends Configuration {
     @SuppressWarnings("unused") // Required for JSON conversion
     public void setPassedImpact(final int passedImpact) {
         this.passedImpact = passedImpact;
+    }
+
+    @Override @Generated
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        TestConfiguration that = (TestConfiguration) o;
+        return failureImpact == that.failureImpact
+                && passedImpact == that.passedImpact
+                && skippedImpact == that.skippedImpact;
+    }
+
+    @Override @Generated
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), failureImpact, passedImpact, skippedImpact);
     }
 
     /**
