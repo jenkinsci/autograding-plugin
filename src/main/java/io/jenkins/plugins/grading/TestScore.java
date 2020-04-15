@@ -67,7 +67,7 @@ public class TestScore extends Score {
         return skippedSize;
     }
 
-    @Override
+    @Override @Generated
     public boolean equals(final Object o) {
         if (this == o) {
             return true;

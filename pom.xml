@@ -207,6 +207,20 @@
           </excludedMethods>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>io/jenkins/plugins/**/*</include>
+          </includes>
+          <excludes>
+            <exclude>**/*Action*</exclude>
+            <exclude>**/*Messages*</exclude>
+            <exclude>**/*ViewModel*</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
