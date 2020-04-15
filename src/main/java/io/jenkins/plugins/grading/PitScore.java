@@ -2,6 +2,8 @@ package io.jenkins.plugins.grading;
 
 import java.util.Objects;
 
+import edu.hm.hafner.util.Generated;
+
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
 
 /**
@@ -12,6 +14,8 @@ import org.jenkinsci.plugins.pitmutation.PitBuildAction;
  */
 @SuppressWarnings("PMD.DataClass")
 public class PitScore extends Score {
+    private static final long serialVersionUID = 1L;
+
     static final String ID = "pit";
 
     private final int mutationsSize;
@@ -64,5 +68,25 @@ public class PitScore extends Score {
 
     public int getRatio() {
         return ratio;
+    }
+
+    @Override @Generated
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        PitScore pitScore = (PitScore) o;
+        return mutationsSize == pitScore.mutationsSize
+                && detectedSize == pitScore.detectedSize
+                && undetectedSize == pitScore.undetectedSize
+                && ratio == pitScore.ratio;
+    }
+
+    @Override @Generated
+    public int hashCode() {
+        return Objects.hash(mutationsSize, detectedSize, undetectedSize, ratio);
     }
 }

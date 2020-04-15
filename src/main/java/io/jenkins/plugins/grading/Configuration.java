@@ -1,11 +1,18 @@
 package io.jenkins.plugins.grading;
 
+import java.io.Serializable;
+import java.util.Objects;
+
+import edu.hm.hafner.util.Generated;
+
 /**
  * Base class for configurations with a maximum score.
  *
  * @author Ullrich Hafner
  */
-public class Configuration {
+public class Configuration implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int maxScore;
 
     Configuration(final int maxScore) {
@@ -18,6 +25,23 @@ public class Configuration {
 
     public int getMaxScore() {
         return maxScore;
+    }
+
+    @Override @Generated
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Configuration that = (Configuration) o;
+        return maxScore == that.maxScore;
+    }
+
+    @Override @Generated
+    public int hashCode() {
+        return Objects.hash(maxScore);
     }
 
     /**

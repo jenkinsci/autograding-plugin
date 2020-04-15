@@ -1,5 +1,9 @@
 package io.jenkins.plugins.grading;
 
+import java.util.Objects;
+
+import edu.hm.hafner.util.Generated;
+
 import hudson.tasks.junit.TestResultAction;
 
 /**
@@ -10,6 +14,8 @@ import hudson.tasks.junit.TestResultAction;
  */
 @SuppressWarnings("PMD.DataClass")
 public class TestScore extends Score {
+    private static final long serialVersionUID = 1L;
+
     static final String ID = "tests";
 
     private final int passedSize;
@@ -59,5 +65,28 @@ public class TestScore extends Score {
 
     public int getSkippedSize() {
         return skippedSize;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        TestScore testScore = (TestScore) o;
+        return passedSize == testScore.passedSize
+                && totalSize == testScore.totalSize
+                && failedSize == testScore.failedSize
+                && skippedSize == testScore.skippedSize;
+    }
+
+    @Override @Generated
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), passedSize, totalSize, failedSize, skippedSize);
     }
 }

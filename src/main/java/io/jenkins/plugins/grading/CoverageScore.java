@@ -1,6 +1,10 @@
 package io.jenkins.plugins.grading;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.StringUtils;
+
+import edu.hm.hafner.util.Generated;
 
 import io.jenkins.plugins.coverage.targets.Ratio;
 
@@ -12,6 +16,8 @@ import io.jenkins.plugins.coverage.targets.Ratio;
  */
 @SuppressWarnings("PMD.DataClass")
 public class CoverageScore extends Score {
+    private static final long serialVersionUID = 1L;
+
     private final int coveredSize;
     private final int missedSize;
 
@@ -49,5 +55,22 @@ public class CoverageScore extends Score {
 
     public int getMissedSize() {
         return missedSize;
+    }
+
+    @Override @Generated
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        CoverageScore that = (CoverageScore) o;
+        return coveredSize == that.coveredSize && missedSize == that.missedSize;
+    }
+
+    @Override @Generated
+    public int hashCode() {
+        return Objects.hash(coveredSize, missedSize);
     }
 }
