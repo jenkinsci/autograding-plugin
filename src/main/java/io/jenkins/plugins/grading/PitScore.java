@@ -3,6 +3,7 @@ package io.jenkins.plugins.grading;
 import java.util.Objects;
 
 import edu.hm.hafner.util.Generated;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
 
@@ -33,8 +34,9 @@ public class PitScore extends Score {
      * @param action
      *         the action that contains the PIT results
      */
+    @SuppressFBWarnings(value = "NP", justification = "False positive")
     public PitScore(final PitConfiguration configuration, final PitBuildAction action) {
-        super(ID, Objects.requireNonNull(action.getDisplayName()));
+        super(ID, action.getDisplayName());
 
         mutationsSize = action.getReport().getMutationStats().getTotalMutations();
         undetectedSize = action.getReport().getMutationStats().getUndetected();
