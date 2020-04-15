@@ -69,6 +69,21 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(40);
     }
 
+    @Test
+    public void shouldGradeTestScoreAchieve3() {
+        final String filename = "Testsuite-TestScore-3";
+        WorkflowJob job = createPipelineWithWorkspaceFiles(filename + ".xml");
+
+        configureTester(job, filename, "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(3);
+    }
+
     /**
      * Returns the console log as a String.
      *
@@ -95,4 +110,12 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 + "}", true));
     }
 
+    private void configureTester(final WorkflowJob job, final String fileName, final String configuration) {
+        job.setDefinition(new CpsFlowDefinition("node {\n"
+                + "  stage ('Build and Static Analysis') {\n"
+                + "         junit testResults: '**/" + fileName + ".xml'\n"
+                + "         autoGrade('" + configuration + "')\n"
+                + "  }\n"
+                + "}", true));
+    }
 }
