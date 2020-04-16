@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite>
-  <testcase name="shouldInitialiseWithDefaultValues" classname="io.jenkins.plugins.grading.TestScoreTest" time="0.1"/>
-  <testcase name="shouldIgnoresAdditionalAttributes" classname="io.jenkins.plugins.grading.TestScoreTest" time="0.1"/>
-  <testcase name="shouldConvertFromJson" classname="io.jenkins.plugins.grading.TestScoreTest" time="0.1"/>
-</testsuite>
