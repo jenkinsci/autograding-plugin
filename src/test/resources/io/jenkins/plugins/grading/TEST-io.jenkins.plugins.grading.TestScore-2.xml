@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.jenkins.plugins.grading.TestScoreTest" tests="4">
+  <testcase name="test0" classname="io.jenkins.plugins.grading.TestScoreTest"/>
+  <testcase name="test1" classname="io.jenkins.plugins.grading.TestScoreTest"/>
+  <testcase name="test2" classname="io.jenkins.plugins.grading.TestScoreTest"/>
+  <testcase name="failTest0" classname="io.jenkins.plugins.grading.TestScoreTest">
+    <failure message="java.lang.AssertionError" type="java.lang.AssertionError">java.lang.AssertionError</failure>
+  </testcase>
+</testsuite>

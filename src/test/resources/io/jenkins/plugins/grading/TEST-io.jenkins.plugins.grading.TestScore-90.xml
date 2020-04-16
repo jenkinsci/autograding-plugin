@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="org.jenkinsci.plugins.jvctb.perform.JvctbPerformerTest" name="io.jenkins.plugins.grading.TestScoreTest">
-  <testcase name="shouldInitialiseWithDefaultValues" classname="io.jenkins.plugins.grading.TestScoreTest" time="0.1"/>
-  <testcase name="shouldIgnoresAdditionalAttributes" classname="io.jenkins.plugins.grading.TestScoreTest" time="0.1"/>
-  <testcase name="shouldConvertFromJson" classname="io.jenkins.plugins.grading.TestScoreTest" time="0.1"/>
-  <testcase name="failTest0" classname="com.example.jenkinstest.ExampleUnitTest" time="0.0">
-    <failure message="java.lang.AssertionError" type="java.lang.AssertionError">java.lang.AssertionError</failure>
-  </testcase>
-</testsuite>

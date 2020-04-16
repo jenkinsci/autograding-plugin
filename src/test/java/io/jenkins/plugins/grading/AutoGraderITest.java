@@ -13,6 +13,7 @@ import hudson.model.Run;
 
 import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
 
+import static hudson.model.Result.UNSTABLE;
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
 
 /**
@@ -70,18 +71,33 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     @Test
-    public void shouldGradeTestScoreAchieve90() {
-        final String filename = "TEST-io.jenkins.plugins.grading.TestScore-90";
+    public void shouldGradeTestScoreAchieveMinus97() {
+        final String filename = "TEST-io.jenkins.plugins.grading.TestScore-97";
         WorkflowJob job = createPipelineWithWorkspaceFiles(filename + ".xml");
 
-        configureTester(job, filename, "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-10,\"skippedImpact\":-5}}");
-        Run<?, ?> baseline = buildSuccessfully(job);
+        configureTester(job, filename, "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-1,\"skippedImpact\":-1}}");
+        Run<?, ?> baseline = buildWithResult(job, UNSTABLE);
 
         List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
-        assertThat(score).hasAchieved(90);
+        assertThat(score).hasAchieved(97);
+    }
+
+    @Test
+    public void shouldGradeTestScoreAchieve2() {
+        final String filename = "TEST-io.jenkins.plugins.grading.TestScore-2";
+        WorkflowJob job = createPipelineWithWorkspaceFiles(filename + ".xml");
+
+        configureTester(job, filename, "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-1,\"skippedImpact\":-1}}");
+        Run<?, ?> baseline = buildWithResult(job, UNSTABLE);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(2);
     }
 
     /**
