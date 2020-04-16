@@ -71,7 +71,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     @Test
-    public void shouldGradeTestScoreAchieveMinus97() {
+    public void shouldGradeTestScoreAchieve97() {
         final String filename = "TEST-io.jenkins.plugins.grading.TestScore-97";
         WorkflowJob job = createPipelineWithWorkspaceFiles(filename + ".xml");
 
@@ -98,6 +98,21 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         AggregatedScore score = actions.get(0).getResult();
 
         assertThat(score).hasAchieved(2);
+    }
+
+    @Test
+    public void shouldGradeTestScoreAchieve1() {
+        final String filename = "TEST-io.jenkins.plugins.grading.TestScore-1";
+        WorkflowJob job = createPipelineWithWorkspaceFiles(filename + ".xml");
+
+        configureTester(job, filename, "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-1,\"skippedImpact\":-1}}");
+        Run<?, ?> baseline = buildWithResult(job, UNSTABLE);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(1);
     }
 
     /**
