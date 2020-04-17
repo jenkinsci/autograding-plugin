@@ -35,8 +35,8 @@ public class AutoGradingBuildAction extends BuildAction<AggregatedScore> impleme
     }
 
     @Override
-    protected ScoreXmlStream createXmlStream() {
-        return new ScoreXmlStream();
+    protected AggregatedScoreXmlStream createXmlStream() {
+        return new AggregatedScoreXmlStream();
     }
 
     @Override
