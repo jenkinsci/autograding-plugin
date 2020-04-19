@@ -56,7 +56,7 @@ It consists of the following stages:
 . Record all Maven warnings
 . Autograde the results from steps 2-5
 
-The example pipeline uses the following configuration:
+The example pipeline uses the following configuration that shows all possible parameters:
 
 [source,json]
 ----
@@ -90,6 +90,10 @@ The example pipeline uses the following configuration:
 ----
 
 If you want to skip one of the tools just remove the corresponding JSON node from the configuration.
+Additionally, you need to select the individual configuration options based on your current assignment. Sometimes
+it makes sense to start with a given number of points and subtract points for each violation (e.g., minus points for
+each SpotBugs warning). For other metrics it makes more sense to add points for each achieved percentage (e.g., for
+line coverage).
 
 image:https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/badge/icon[Jenkins, link={https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/}]
 image:https://github.com/jenkinsci/autograding-plugin/workflows/CI%20on%20all%20platforms/badge.svg?branch=master[GitHub Actions, link={https://github.com/jenkinsci/autograding-plugin/actions}]
