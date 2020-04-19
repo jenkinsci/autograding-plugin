@@ -2,10 +2,10 @@
 
 = Jenkins AutoGrading Plugin
 
-image:https://img.shields.io/jenkins/plugin/v/autograding-api.svg?label=latest%20version[Jenkins Plugin, link={https://plugins.jenkins.io/autograding}]
-image:https://img.shields.io/badge/Jenkins-2.204.4-green.svg?label=min.%20Jenkins[Jenkins Version, link={https://jenkins.io/download/lts}]
+image:https://img.shields.io/jenkins/plugin/v/autograding-api.svg?label=latest%20version[Jenkins Plugin, link=https://plugins.jenkins.io/autograding]
+image:https://img.shields.io/badge/Jenkins-2.204.4-green.svg?label=min.%20Jenkins[Jenkins Version, link=https://jenkins.io/download/lts]
 image:https://img.shields.io/badge/jdk-8-yellow.svg?label=min.%20JDK[JDK8]
-image:https://img.shields.io/badge/license-MIT-yellow.svg[License: MIT, link={https://opensource.org/licenses/MIT}]
+image:https://img.shields.io/badge/license-MIT-yellow.svg[License: MIT, link=https://opensource.org/licenses/MIT]
 
 image::graduation-cap.svg[Scores, width="100"]
 
@@ -95,10 +95,10 @@ it makes sense to start with a given number of points and subtract points for ea
 each SpotBugs warning). For other metrics it makes more sense to add points for each achieved percentage (e.g., for
 line coverage).
 
-image:https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/badge/icon[Jenkins, link={https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/}]
-image:https://github.com/jenkinsci/autograding-plugin/workflows/CI%20on%20all%20platforms/badge.svg?branch=master[GitHub Actions, link={https://github.com/jenkinsci/autograding-plugin/actions}]
-image:https://img.shields.io/github/issues-pr/jenkinsci/autograding-plugin.svg[GitHub pull requests, link={https://github.com/jenkinsci/autograding-plugin/pulls}]
-image:https://api.codacy.com/project/badge/Grade/1be7bb5b899446968e411e6e59c8ea6c[Codacy Badge, link={https://www.codacy.com/app/jenkinsci/autograding-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jenkinsci/autograding-plugin&amp;utm_campaign=Badge_Grade}]
-image:https://codecov.io/gh/jenkinsci/autograding-plugin/branch/master/graph/badge.svg[codecov, link={https://codecov.io/gh/jenkinsci/autograding-plugin}]
+image:https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/badge/icon[Jenkins, link=https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/]
+image:https://github.com/jenkinsci/autograding-plugin/workflows/CI%20on%20all%20platforms/badge.svg?branch=master[GitHub Actions, link=https://github.com/jenkinsci/autograding-plugin/actions]
+image:https://img.shields.io/github/issues-pr/jenkinsci/autograding-plugin.svg[GitHub pull requests, link=https://github.com/jenkinsci/autograding-plugin/pulls]
+image:https://api.codacy.com/project/badge/Grade/1be7bb5b899446968e411e6e59c8ea6c[Codacy Badge, link=https://www.codacy.com/app/jenkinsci/autograding-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jenkinsci/autograding-plugin&amp;utm_campaign=Badge_Grade]
+image:https://codecov.io/gh/jenkinsci/autograding-plugin/branch/master/graph/badge.svg[codecov, link=https://codecov.io/gh/jenkinsci/autograding-plugin]
 
 
