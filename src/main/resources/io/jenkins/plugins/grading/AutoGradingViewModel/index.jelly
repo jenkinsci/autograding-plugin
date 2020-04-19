@@ -1,7 +1,9 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:bs="/bootstrap" xmlns:g="/grading">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:bs="/bootstrap" xmlns:c="/charts"
+         xmlns:g="/grading">
 
   <st:header name="Content-Type" value="text/html;charset=UTF-8"/>
+
   <bs:layout title="${it.displayName}" norefresh="true">
 
     <st:include it="${it.owner}" page="sidepanel.jelly"/>
@@ -22,9 +24,66 @@
       <div class="fluid-container">
 
         <div class="row py-3">
-          <div class="col-12">
-            <bs:card title="Code Quality Score" fontAwesomeIcon="graduation-cap">
-              <g:score ratio="${score.ratio}" achieved="${score.achieved}" total="${score.total}"/>
+          <div class="col-xl-12 col-xxl-4">
+            <bs:card title="Autograding score" fontAwesomeIcon="graduation-cap">
+              <div class="row align-items-center justify-content-center">
+                <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-12">
+                  <c:progress-chart id="total-progress" model="${it.getProgressModel(score.ratio)}" height="150"
+                                    value="${score.ratio}" tooltip="${%tooltip(score.achieved, score.total)}"/>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-6 d-none d-block d-xl-block d-xxl-none">
+                  <g:score title="Unit tests score" ratio="${score.testRatio}" achieved="${score.testAchieved}" total="${testConfig.maxScore}"/>
+                  <g:score title="Test coverage score" ratio="${score.coverageRatio}" achieved="${score.coverageAchieved}"
+                           total="${coverageConfig.maxScore}"/>
+                  <g:score title="Mutation coverage score" ratio="${score.pitRatio}" achieved="${score.pitAchieved}" total="${pitConfig.maxScore}"/>
+                  <g:score title="Static analysis score" ratio="${score.analysisRatio}" achieved="${score.analysisAchieved}"
+                           total="${analysisConfig.maxScore}"/>
+                </div>
+              </div>
+            </bs:card>
+          </div>
+          <div class="col-xxl-2 d-none d-xxl-block">
+            <bs:card title="Unit tests score" fontAwesomeIcon="check-square">
+              <p>
+                <div class="">
+                  <c:progress-chart id="test-progress" model="${it.getProgressModel(score.testRatio)}" height="150"
+                                    value="${score.testRatio}"
+                                    tooltip="${%tooltip(score.testAchieved, testConfig.maxScore)}"/>
+                </div>
+              </p>
+            </bs:card>
+          </div>
+          <div class="col-xxl-2 d-none d-xxl-block">
+            <bs:card title="Test coverage score" fontAwesomeIcon="microscope">
+              <p>
+                <div class="">
+                  <c:progress-chart id="coverage-progress" model="${it.getProgressModel(score.coverageRatio)}"
+                                    height="150" value="${score.coverageRatio}"
+                                    tooltip="${%tooltip(score.coverageAchieved, coverageConfig.maxScore)}"/>
+                </div>
+              </p>
+            </bs:card>
+          </div>
+          <div class="col-xxl-2 d-none d-xxl-block">
+            <bs:card title="Mutation coverage score" fontAwesomeIcon="viruses">
+              <p>
+                <div class="">
+                  <c:progress-chart id="pit-progress" model="${it.getProgressModel(score.pitRatio)}" height="150"
+                                    value="${score.pitRatio}"
+                                    tooltip="${%tooltip(score.pitAchieved, pitConfig.maxScore)}"/>
+                </div>
+              </p>
+            </bs:card>
+          </div>
+          <div class="col-xxl-2 d-none d-xxl-block">
+            <bs:card title="Static analysis score" fontAwesomeIcon="exclamation-triangle">
+              <p>
+                <div class="">
+                  <c:progress-chart id="analysis-progress" model="${it.getProgressModel(score.analysisRatio)}"
+                                    height="150" value="${score.analysisRatio}"
+                                    tooltip="${%tooltip(score.analysisAchieved, analysisConfig.maxScore)}"/>
+                </div>
+              </p>
             </bs:card>
           </div>
         </div>
@@ -33,7 +92,6 @@
           <div class="col-12">
 
             <bs:card title="Unit Tests" fontAwesomeIcon="check-square">
-              <g:score ratio="${score.testRatio}" achieved="${score.testAchieved}" total="${testConfig.maxScore}"/>
               <div class="table-responsive">
                 <table class="table table-hover table-striped display" id="test">
                   <thead>
@@ -92,7 +150,6 @@
           <div class="col-12">
 
             <bs:card title="Code Coverage" fontAwesomeIcon="microscope">
-              <g:score ratio="${score.coverageRatio}" achieved="${score.coverageAchieved}" total="${coverageConfig.maxScore}"/>
               <div class="table-responsive">
                 <table class="table table-hover table-striped display" id="coverage">
                   <thead>
@@ -141,7 +198,6 @@
           <div class="col-12">
 
             <bs:card title="PIT Mutations" fontAwesomeIcon="viruses">
-              <g:score ratio="${score.pitRatio}" achieved="${score.pitAchieved}" total="${pitConfig.maxScore}"/>
               <div class="table-responsive">
                 <table class="table table-hover table-striped display" id="pit">
                   <thead>
@@ -201,7 +257,6 @@
           <div class="col-12">
 
             <bs:card title="Static Analysis Warnings" fontAwesomeIcon="exclamation-triangle">
-              <g:score ratio="${score.analysisRatio}" achieved="${score.analysisAchieved}" total="${analysisConfig.maxScore}"/>
               <j:set var="analysisScores" value="${score.analysisScores}"/>
               <div class="table-responsive">
                 <table class="table table-hover table-striped display" id="analysis">
