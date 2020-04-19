@@ -8,7 +8,7 @@
     <lowImpact>-1</lowImpact>
   </analysisConfiguration>
   <analysisScores>
-    <io.jenkins.plugins.grading.AnalysisScore>
+    <analysisScore>
       <id>java</id>
       <name>Java</name>
       <totalImpact>0</totalImpact>
@@ -17,8 +17,8 @@
       <normalPrioritySize>0</normalPrioritySize>
       <lowPrioritySize>0</lowPrioritySize>
       <totalSize>0</totalSize>
-    </io.jenkins.plugins.grading.AnalysisScore>
-    <io.jenkins.plugins.grading.AnalysisScore>
+    </analysisScore>
+    <analysisScore>
       <id>error-prone</id>
       <name>Error Prone</name>
       <totalImpact>0</totalImpact>
@@ -27,8 +27,8 @@
       <normalPrioritySize>0</normalPrioritySize>
       <lowPrioritySize>0</lowPrioritySize>
       <totalSize>0</totalSize>
-    </io.jenkins.plugins.grading.AnalysisScore>
-    <io.jenkins.plugins.grading.AnalysisScore>
+    </analysisScore>
+    <analysisScore>
       <id>checkstyle</id>
       <name>CheckStyle</name>
       <totalImpact>0</totalImpact>
@@ -37,48 +37,48 @@
       <normalPrioritySize>0</normalPrioritySize>
       <lowPrioritySize>0</lowPrioritySize>
       <totalSize>0</totalSize>
-    </io.jenkins.plugins.grading.AnalysisScore>
-    <io.jenkins.plugins.grading.AnalysisScore>
+    </analysisScore>
+    <analysisScore>
       <id>spotbugs</id>
       <name>SpotBugs</name>
-      <totalImpact>-3</totalImpact>
-      <errorsSize>0</errorsSize>
-      <highPrioritySize>0</highPrioritySize>
-      <normalPrioritySize>1</normalPrioritySize>
-      <lowPrioritySize>1</lowPrioritySize>
-      <totalSize>2</totalSize>
-    </io.jenkins.plugins.grading.AnalysisScore>
-    <io.jenkins.plugins.grading.AnalysisScore>
-      <id>pmd</id>
-      <name>PMD</name>
-      <totalImpact>-2</totalImpact>
-      <errorsSize>0</errorsSize>
-      <highPrioritySize>0</highPrioritySize>
-      <normalPrioritySize>1</normalPrioritySize>
-      <lowPrioritySize>0</lowPrioritySize>
-      <totalSize>1</totalSize>
-    </io.jenkins.plugins.grading.AnalysisScore>
-    <io.jenkins.plugins.grading.AnalysisScore>
-      <id>cpd</id>
-      <name>CPD</name>
       <totalImpact>0</totalImpact>
       <errorsSize>0</errorsSize>
       <highPrioritySize>0</highPrioritySize>
       <normalPrioritySize>0</normalPrioritySize>
       <lowPrioritySize>0</lowPrioritySize>
       <totalSize>0</totalSize>
-    </io.jenkins.plugins.grading.AnalysisScore>
-    <io.jenkins.plugins.grading.AnalysisScore>
-      <id>open-tasks</id>
-      <name>Open Tasks Scanner</name>
+    </analysisScore>
+    <analysisScore>
+      <id>pmd</id>
+      <name>PMD</name>
       <totalImpact>-4</totalImpact>
       <errorsSize>0</errorsSize>
       <highPrioritySize>0</highPrioritySize>
       <normalPrioritySize>2</normalPrioritySize>
       <lowPrioritySize>0</lowPrioritySize>
       <totalSize>2</totalSize>
-    </io.jenkins.plugins.grading.AnalysisScore>
-    <io.jenkins.plugins.grading.AnalysisScore>
+    </analysisScore>
+    <analysisScore>
+      <id>cpd</id>
+      <name>CPD</name>
+      <totalImpact>-7</totalImpact>
+      <errorsSize>0</errorsSize>
+      <highPrioritySize>0</highPrioritySize>
+      <normalPrioritySize>0</normalPrioritySize>
+      <lowPrioritySize>7</lowPrioritySize>
+      <totalSize>7</totalSize>
+    </analysisScore>
+    <analysisScore>
+      <id>open-tasks</id>
+      <name>Open Tasks Scanner</name>
+      <totalImpact>-2</totalImpact>
+      <errorsSize>0</errorsSize>
+      <highPrioritySize>0</highPrioritySize>
+      <normalPrioritySize>1</normalPrioritySize>
+      <lowPrioritySize>0</lowPrioritySize>
+      <totalSize>1</totalSize>
+    </analysisScore>
+    <analysisScore>
       <id>maven-warnings</id>
       <name>Maven</name>
       <totalImpact>-8</totalImpact>
@@ -87,9 +87,9 @@
       <normalPrioritySize>4</normalPrioritySize>
       <lowPrioritySize>0</lowPrioritySize>
       <totalSize>4</totalSize>
-    </io.jenkins.plugins.grading.AnalysisScore>
+    </analysisScore>
   </analysisScores>
-  <analysisAchieved>83</analysisAchieved>
+  <analysisAchieved>79</analysisAchieved>
   <testsConfiguration>
     <maxScore>100</maxScore>
     <failureImpact>-5</failureImpact>
@@ -97,39 +97,39 @@
     <skippedImpact>-1</skippedImpact>
   </testsConfiguration>
   <testScores>
-    <io.jenkins.plugins.grading.TestScore>
+    <testScore>
       <id>tests</id>
       <name>Test Result</name>
-      <totalImpact>53</totalImpact>
-      <passedSize>53</passedSize>
-      <totalSize>53</totalSize>
+      <totalImpact>60</totalImpact>
+      <passedSize>60</passedSize>
+      <totalSize>60</totalSize>
       <failedSize>0</failedSize>
       <skippedSize>0</skippedSize>
-    </io.jenkins.plugins.grading.TestScore>
+    </testScore>
   </testScores>
-  <testAchieved>53</testAchieved>
+  <testAchieved>60</testAchieved>
   <coverageConfiguration>
     <maxScore>100</maxScore>
     <coveredImpact>1</coveredImpact>
     <missedImpact>-1</missedImpact>
   </coverageConfiguration>
   <coverageScores>
-    <io.jenkins.plugins.grading.CoverageScore>
+    <coverageScore>
       <id>line</id>
       <name>Line</name>
-      <totalImpact>42</totalImpact>
-      <coveredSize>71</coveredSize>
-      <missedSize>29</missedSize>
-    </io.jenkins.plugins.grading.CoverageScore>
-    <io.jenkins.plugins.grading.CoverageScore>
+      <totalImpact>70</totalImpact>
+      <coveredSize>85</coveredSize>
+      <missedSize>15</missedSize>
+    </coverageScore>
+    <coverageScore>
       <id>conditional</id>
       <name>Conditional</name>
       <totalImpact>8</totalImpact>
       <coveredSize>54</coveredSize>
       <missedSize>46</missedSize>
-    </io.jenkins.plugins.grading.CoverageScore>
+    </coverageScore>
   </coverageScores>
-  <coverageAchieved>50</coverageAchieved>
+  <coverageAchieved>78</coverageAchieved>
   <pitConfiguration>
     <maxScore>100</maxScore>
     <ratioImpact>0</ratioImpact>
@@ -137,15 +137,15 @@
     <undetectedImpact>-1</undetectedImpact>
   </pitConfiguration>
   <pitScores>
-    <io.jenkins.plugins.grading.PitScore>
+    <pitScore>
       <id>pit</id>
       <name>PIT Mutation Report</name>
-      <totalImpact>56</totalImpact>
-      <mutationsSize>190</mutationsSize>
-      <detectedSize>123</detectedSize>
-      <undetectedSize>67</undetectedSize>
-      <ratio>36</ratio>
-    </io.jenkins.plugins.grading.PitScore>
+      <totalImpact>73</totalImpact>
+      <mutationsSize>191</mutationsSize>
+      <detectedSize>132</detectedSize>
+      <undetectedSize>59</undetectedSize>
+      <ratio>31</ratio>
+    </pitScore>
   </pitScores>
-  <pitAchieved>56</pitAchieved>
+  <pitAchieved>73</pitAchieved>
 </scores>

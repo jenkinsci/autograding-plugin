@@ -23,9 +23,9 @@ public class AggregatedScoreXmlStreamTest extends SerializableTest<AggregatedSco
     void shouldReadVersion1Serialization() {
         AggregatedScore score = createSerializable();
 
-        assertThat(score).hasAnalysisAchieved(83);
-        assertThat(score).hasTestAchieved(53);
-        assertThat(score).hasCoverageAchieved(50);
-        assertThat(score).hasPitAchieved(56);
+        assertThat(score).hasAnalysisAchieved(79);
+        assertThat(score).hasTestAchieved(60);
+        assertThat(score).hasCoverageAchieved(78);
+        assertThat(score).hasPitAchieved(73);
     }
 }
