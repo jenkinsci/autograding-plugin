@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>2.4.1</version>
+    <version>4.0.0</version>
     <relativePath/>
   </parent>
 
@@ -29,7 +29,7 @@
     <jquery3-api.version>3.4.1-10</jquery3-api.version>
     <bootstrap4-api.version>4.4.1-10</bootstrap4-api.version>
     <data-tables-api.version>1.10.20-14</data-tables-api.version>
-    <echarts-api.version>4.6.0-8</echarts-api.version>
+    <echarts-api.version>4.6.0-9</echarts-api.version>
     <plugin-util-api.version>1.1.0</plugin-util-api.version>
 
     <code-coverage-api-plugin.version>1.1.4</code-coverage-api-plugin.version>
