@@ -1,5 +1,5 @@
-tag-template: forensics-api-$NEXT_PATCH_VERSION
-name-template: Forensics API $NEXT_PATCH_VERSION 🎁
+tag-template: autograding-$NEXT_PATCH_VERSION
+name-template: Autograding Plugin $NEXT_PATCH_VERSION 🎁
 
 template: |
   $CHANGES
