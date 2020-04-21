@@ -1,8 +1,14 @@
 package io.jenkins.plugins.grading;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.assertj.core.api.Assertions;
+import static io.jenkins.plugins.grading.assertions.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import hudson.FilePath;
@@ -41,7 +47,7 @@ class AutoGraderTest {
     }
 
     @Test
-    void shouldLogScoreFromRecordedTestResults() {
+    void shouldLogScoreFromRecordedTestResults() throws IOException {
         String testConfiguration = "{ 'tests' : "
                 + "{ "
                 + "'passedImpact' : 1, "
@@ -52,7 +58,6 @@ class AutoGraderTest {
                 + "}";
         String displayName = "testName";
         AutoGrader autoGrader = new AutoGrader(testConfiguration);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         TestResultAction action = mock(TestResultAction.class);
         when(action.getFailCount()).thenReturn(1);
@@ -69,13 +74,17 @@ class AutoGraderTest {
         Run run = mock(Run.class);
         when(run.getAction(any())).thenReturn(action);
 
-        autoGrader.perform(run, new FilePath((VirtualChannel) null, "/"), mock(Launcher.class),
-                TaskListener.NULL);
+        Path tempFile = Files.createTempFile("score", "xml");
+        when(run.getRootDir()).thenReturn(tempFile.toFile());
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(out, true, StandardCharsets.UTF_8.name());
+        TaskListener listener = mock(TaskListener.class);
+        when(listener.getLogger()).thenReturn(printStream);
+        autoGrader.perform(run, new FilePath((VirtualChannel) null, "/"), mock(Launcher.class), listener);
 
+        assertThat(out.toString()).contains(String.format("[Autograding] Grading test results %s\n"
+                + "[Autograding] -> Score %d - from recorded test results: %d, %d, %d, %d\n"
+                + "[Autograding] Total score for test results: %s",displayName, 5, 5, 3, 1, 1, 1));
 
-        Assertions.assertThat(outputStream.toString())
-                .isEqualTo(String.format("Grading test results [%s]\n"
-                        + "-> Score [%d] - from recorded test results: [%d], [%d], [%d], [%d]\n"
-                        + "Total score for test results: [%s]",displayName, 1, 1, 1, 1, 1, 1));
     }
 }
