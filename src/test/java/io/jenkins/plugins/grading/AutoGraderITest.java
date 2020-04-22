@@ -70,6 +70,10 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(40);
     }
 
+
+    /**
+     * Verifies that PMD results are correctly graded.
+     */
     @Test
     public void shouldGradePmdAchieve98() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("pmd.xml");
@@ -89,6 +93,9 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 98");
     }
 
+    /**
+     * Verifies that CPD results are correctly graded.
+     */
     @Test
     public void shouldGradeCpdAchieve93() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("cpd.xml");
