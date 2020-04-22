@@ -19,6 +19,7 @@ import static io.jenkins.plugins.grading.assertions.Assertions.*;
  * Integration tests for the {@link AutoGrader} step.
  *
  * @author Ullrich Hafner
+ * @author Kevin Richter
  */
 public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     /** Verifies that the step skips all autograding parts if the configuration is empty. */
@@ -26,7 +27,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldSkipGradingIfConfigurationIsEmpty() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
-        configureScanner(job, "checkstyle", "{}");
+        configureScanner(job, "checkstyle", "{}", "checkStyle");
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping static analysis results");
@@ -42,7 +43,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldAbortBuildSinceNoTestActionHasBeenRegistered() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
-        configureScanner(job, "checkstyle", "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
+        configureScanner(job, "checkstyle", "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}", "checkStyle");
         Run<?, ?> baseline = buildWithResult(job, Result.FAILURE);
 
         assertThat(getConsoleLog(baseline)).contains("java.lang.IllegalArgumentException: Test scoring has been enabled, but no test results have been found.");
@@ -55,7 +56,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldCountCheckStyleWarnings() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
-        configureScanner(job, "checkstyle", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}");
+        configureScanner(job, "checkstyle", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}", "checkStyle");
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CheckStyle");
@@ -67,6 +68,44 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         AggregatedScore score = actions.get(0).getResult();
 
         assertThat(score).hasAchieved(40);
+    }
+
+    @Test
+    public void shouldGradePmdAchieve98() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("pmd.xml");
+
+        String configuration = "{\"analysis\": {\"maxScore\": 100, \"errorImpact\": -10, \"highImpact\": -5, \"normalImpact\": -2, \"lowImpact\": -1}}";
+        configureScanner(job, "pmd", configuration, "pmdParser");
+
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(98);
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for PMD");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -2 (warnings distribution err:0, high:0, normal:1, low:0)");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 98");
+    }
+
+    @Test
+    public void shouldGradeCpdAchieve93() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("cpd.xml");
+
+        String configuration = "{\"analysis\": {\"maxScore\": 100, \"errorImpact\": -10, \"highImpact\": -5, \"normalImpact\": -2, \"lowImpact\": -1}}";
+        configureScanner(job, "cpd", configuration, "cpd");
+
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(93);
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CPD");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -7 (warnings distribution err:0, high:0, normal:0, low:7)");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 93");
     }
 
     /**
@@ -86,10 +125,10 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         }
     }
 
-    private void configureScanner(final WorkflowJob job, final String fileName, final String configuration) {
+    private void configureScanner(final WorkflowJob job, final String fileName, final String configuration, final String tool) {
         job.setDefinition(new CpsFlowDefinition("node {\n"
                 + "  stage ('Integration Test') {\n"
-                + "         recordIssues tool: checkStyle(pattern: '**/" + fileName + "*')\n"
+                + "         recordIssues tool: " + tool + "(pattern: '**/" + fileName + "*')\n"
                 + "         autoGrade('" + configuration + "')\n"
                 + "  }\n"
                 + "}", true));

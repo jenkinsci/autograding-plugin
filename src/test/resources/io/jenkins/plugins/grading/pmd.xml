@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
+     version="6.22.0" timestamp="2020-04-21T20:46:11.581">
+  <file name="/var/data/workspace/autograding/src/main/java/io/jenkins/plugins/grading/PercentagePieChart.java">
+    <violation beginline="32" endline="32" begincolumn="26" endcolumn="27" rule="AvoidLiteralsInIfCondition"
+               ruleset="Error Prone" package="io.jenkins.plugins.grading" class="PercentagePieChart"
+               method="computeColor"
+               externalInfoUrl="https://pmd.github.io/pmd-6.22.0/pmd_rules_java_errorprone.html#avoidliteralsinifcondition"
+               priority="3">
+      Avoid using Literals in Conditional Statements
+    </violation>
+  </file>
+</pmd>

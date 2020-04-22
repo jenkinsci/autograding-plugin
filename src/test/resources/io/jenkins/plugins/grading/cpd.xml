@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd-cpd>
+  <duplication lines="13" tokens="58">
+    <file column="5" endcolumn="9" endline="99" line="87"
+          path="/var/data/workspace/autograding/src/main/java/io/jenkins/plugins/grading/AnalysisConfiguration.java"/>
+    <file column="5" endcolumn="9" endline="76" line="64"
+          path="/var/data/workspace/autograding/src/main/java/io/jenkins/plugins/grading/CoverageConfiguration.java"/>
+    <file column="5" endcolumn="9" endline="88" line="76"
+          path="/var/data/workspace/autograding/src/main/java/io/jenkins/plugins/grading/PitConfiguration.java"/>
+    <file column="5" endcolumn="9" endline="88" line="76"
+          path="/var/data/workspace/autograding/src/main/java/io/jenkins/plugins/grading/TestConfiguration.java"/>
+    <file column="5" endcolumn="9" endline="80" line="68"
+          path="/var/data/workspace/autograding/src/main/java/io/jenkins/plugins/grading/TestScore.java"/>
+    <codefragment><![CDATA[    }
+
+    @Override @Generated
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }]]></codefragment>
+  </duplication>
+  <duplication lines="12" tokens="52">
+    <file column="35" endcolumn="8" endline="39" line="28"
+          path="/var/data/workspace/autograding/src/test/java/io/jenkins/plugins/grading/PitScoreTest.java"/>
+    <file column="42" endcolumn="8" endline="68" line="57"
+          path="/var/data/workspace/autograding/src/test/java/io/jenkins/plugins/grading/PitScoreTest.java"/>
+    <codefragment><![CDATA[        json.put("ratioImpact", -1);
+
+        PitConfiguration pitConfiguration = PitConfiguration.from(json);
+
+        assertThat(pitConfiguration).hasMaxScore(50);
+        assertThat(pitConfiguration).hasUndetectedImpact(-2);
+        assertThat(pitConfiguration).hasDetectedImpact(1);
+        assertThat(pitConfiguration).hasRatioImpact(-1);
+    }
+
+    @Test
+    void shouldInitialiseConfigurationWithDefaultValues() {]]></codefragment>
+  </duplication>
+</pmd-cpd>
