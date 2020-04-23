@@ -82,9 +82,9 @@ class AutoGraderTest {
         when(listener.getLogger()).thenReturn(printStream);
         autoGrader.perform(run, new FilePath((VirtualChannel) null, "/"), mock(Launcher.class), listener);
 
-        assertThat(out.toString()).contains(String.format("[Autograding] Grading test results %s\n"
-                + "[Autograding] -> Score %d - from recorded test results: %d, %d, %d, %d\n"
-                + "[Autograding] Total score for test results: %s",displayName, 5, 5, 3, 1, 1, 1));
-
+        assertThat(out.toString()).contains(String.format("[Autograding] Grading test results %s", displayName));
+        assertThat(out.toString()).contains(String.format("[Autograding] -> Score %d - from recorded test results: %d, %d, %d, %d", 5, 5, 3, 1, 1));
+        assertThat(out.toString()).contains(String.format("[Autograding] -> Score %d - from recorded test results: %d, %d, %d, %d", 5, 5, 3, 1, 1));
+        assertThat(out.toString()).contains(String.format("[Autograding] Total score for test results: %s", 1));
     }
 }
