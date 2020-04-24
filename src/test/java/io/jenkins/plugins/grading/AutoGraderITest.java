@@ -1,22 +1,40 @@
 package io.jenkins.plugins.grading;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+
+import javax.annotation.Nonnull;
 
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
+import edu.hm.hafner.analysis.IssueParser;
+
+import junit.framework.TestResult;
 import net.sf.json.JSONObject;
 
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+import hudson.FilePath;
+import hudson.Launcher;
+import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import hudson.model.Run;
+import hudson.model.TaskListener;
+import hudson.tasks.junit.JUnitResultArchiver;
+import hudson.tasks.junit.TestDataPublisher;
+import hudson.tasks.junit.TestResultAction.Data;
 
+import io.jenkins.plugins.analysis.core.steps.IssuesRecorder;
+import io.jenkins.plugins.analysis.warnings.JUnit;
+import io.jenkins.plugins.analysis.warnings.checkstyle.CheckStyle;
+import io.jenkins.plugins.coverage.CoveragePublisher;
+import io.jenkins.plugins.coverage.adapter.JacocoReportAdapter;
 import io.jenkins.plugins.coverage.targets.Ratio;
 import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
 
-import static io.jenkins.plugins.grading.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Integration tests for the {@link AutoGrader} step.
@@ -143,6 +161,9 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(56);
     }
 
+    /**
+     * Verifies that Tests results are correctly graded with pipeline.
+     */
     @Test
     public void shouldGradeTestResults() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("TEST-InjectedTest.xml",
@@ -160,13 +181,46 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
         Run<?, ?> baseline = buildSuccessfully(job);
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        testResultsAssertions(baseline);
+    }
+
+    /**
+     * Verifies that Tests results are correctly graded with freestyle.
+     */
+    @Test
+    public void shouldGradeTestResultsFreestyle() {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("TEST-InjectedTest.xml",
+                "TEST-io.jenkins.plugins.grading.AnalysisScoreTest.xml",
+                "TEST-io.jenkins.plugins.grading.ArchitectureRulesTest.xml",
+                "TEST-io.jenkins.plugins.grading.AutoGraderITest.xml",
+                "TEST-io.jenkins.plugins.grading.AutoGraderTest.xml",
+                "TEST-io.jenkins.plugins.grading.CoverageScoreTests.xml",
+                "TEST-io.jenkins.plugins.grading.PackageArchitectureTest.xml",
+                "TEST-io.jenkins.plugins.grading.PitScoreTest.xml",
+                "TEST-io.jenkins.plugins.grading.ScoreTest.xml",
+                "TEST-io.jenkins.plugins.grading.TestScoreTest.xml");
+
+        JUnitResultArchiver jUnitResultArchiver = new JUnitResultArchiver("*");
+
+        project.getPublishersList().add(jUnitResultArchiver);
+        project.getPublishersList().add(new AutoGrader("{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}"));
+
+        Run<?, ?> run = buildSuccessfully(project);
+
+        testResultsAssertions(run);
+    }
+
+    private void testResultsAssertions(Run<?, ?> run) {
+        List<AutoGradingBuildAction> actions = run.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
         assertThat(score).hasAchieved(53);
     }
 
+    /**
+     * Verifies that Coveragescore results are correctly graded with pipeline.
+     */
     @Test
     public void shouldGradeCoverageScore() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
@@ -174,24 +228,30 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         configureScanner(job, "jacoco", "{ \"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}}");
         Run<?, ?> baseline = buildSuccessfully(job);
 
-
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
-
-        assertThat(score).hasAchieved(50);
-
+        jacocoBugAssertions(baseline);
     }
 
+    /**
+     * Verifies that Coveragescore results are correctly graded with freestyle.
+     */
     @Test
-    public void shouldGradeCoverage() {
-        WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
+    public void shouldGraveCoverageScoreFreestyle() {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("jacoco.xml");
 
-        configureScanner(job, "jacoco",
-                "{ \"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}}");
-        Run<?, ?> baseline = buildSuccessfully(job);
+        JacocoReportAdapter jacocoReportAdapter = new JacocoReportAdapter("**/jacoco.xml*");
+        CoveragePublisher coveragePublisher = new CoveragePublisher();
+        coveragePublisher.setAdapters(Collections.singletonList(jacocoReportAdapter));
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        project.getPublishersList().add(coveragePublisher);
+        project.getPublishersList().add(new AutoGrader("{ \"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}}"));
+
+        Run<?, ?> run = buildSuccessfully(project);
+
+        jacocoBugAssertions(run);
+    }
+
+    private void jacocoBugAssertions(Run<?, ?> run) {
+        List<AutoGradingBuildAction> actions = run.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
@@ -218,7 +278,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
 
     private void configureScanner(final WorkflowJob job, final String fileName,
-            final String configuration) {
+                                  final String configuration) {
         String script = "node {\n";
         switch (fileName) {
             case "checkstyle":
