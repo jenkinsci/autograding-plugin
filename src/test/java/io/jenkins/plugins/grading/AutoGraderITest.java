@@ -176,6 +176,27 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(83);
     }
 
+    @Test
+    public void shouldCountPitWarnings() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("mutations.xml");
+
+        configurePitScanner(job, "mutations",
+                "{\"pit\": {"
+                        + "\"maxScore\": 100,"
+                        + "\"detectedImpact\": 1,"
+                        + "\"undetectedImpact\": -1,"
+                        + "\"ratioImpact\": 0"
+                        + "}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        System.out.println(baseline);
+        //assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results Coverage Report");
+        //assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -10 - from recorded line coverage results: 45%");
+        //assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 28 - from recorded branch coverage results: 64%");
+        //assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for coverage results: 18");
+
+    }
+
     /**
      * Returns the console log as a String.
      *
@@ -206,6 +227,15 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         job.setDefinition(new CpsFlowDefinition("node {\n"
                 + "  stage ('Integration Test') {\n"
                 + "     publishCoverage adapters: [jacocoAdapter('**/" + fileName + "*')]\n"
+                + "     autoGrade('" + configuration + "')\n"
+                + "  }\n"
+                + "}", true));
+    }
+
+    private void configurePitScanner(final WorkflowJob job, final String fileName, final String configuration) {
+        job.setDefinition(new CpsFlowDefinition("node {\n"
+                + "  stage ('Mutation Coverage') {\n"
+                + "     step([$class: 'PitPublisher', mutationStatsFile: '**/" + fileName + "*'])\n"
                 + "     autoGrade('" + configuration + "')\n"
                 + "  }\n"
                 + "}", true));

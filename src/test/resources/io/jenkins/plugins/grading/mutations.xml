@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mutations>
+  <mutation detected='false' status='SURVIVED' numberOfTestsRun='3'>
+    <sourceFile>AggregatedScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AggregatedScore</mutatedClass>
+    <mutatedMethod>addAnalysisTotal</mutatedMethod>
+    <methodDescription>(Lio/jenkins/plugins/grading/AnalysisConfiguration;Ljava/util/List;)I</methodDescription>
+    <lineNumber>153</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.PrimitiveReturnsMutator</mutator>
+    <index>33</index>
+    <block>4</block>
+    <killingTest/>
+    <description>replaced int return with 0 for io/jenkins/plugins/grading/AggregatedScore::addAnalysisTotal
+    </description>
+  </mutation>
+  <mutation detected='false' status='SURVIVED' numberOfTestsRun='3'>
+    <sourceFile>AggregatedScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AggregatedScore</mutatedClass>
+    <mutatedMethod>addCoverageTotal</mutatedMethod>
+    <methodDescription>
+      (Lio/jenkins/plugins/grading/CoverageConfiguration;[Lio/jenkins/plugins/grading/CoverageScore;)I
+    </methodDescription>
+    <lineNumber>191</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.PrimitiveReturnsMutator</mutator>
+    <index>33</index>
+    <block>5</block>
+    <killingTest/>
+    <description>replaced int return with 0 for io/jenkins/plugins/grading/AggregatedScore::addCoverageTotal
+    </description>
+  </mutation>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='1'>
+    <sourceFile>AggregatedScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AggregatedScore</mutatedClass>
+    <mutatedMethod>aggregateDelta</mutatedMethod>
+    <methodDescription>(Ljava/util/List;)I</methodDescription>
+    <lineNumber>224</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.MathMutator</mutator>
+    <index>24</index>
+    <block>6</block>
+    <killingTest>
+      io.jenkins.plugins.grading.ScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.ScoreTest]/[method:shouldUpdateCoverage()]
+    </killingTest>
+    <description>Replaced integer addition with subtraction</description>
+  </mutation>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='1'>
+    <sourceFile>AggregatedScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AggregatedScore</mutatedClass>
+    <mutatedMethod>aggregateDelta</mutatedMethod>
+    <methodDescription>(Ljava/util/List;)I</methodDescription>
+    <lineNumber>226</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.PrimitiveReturnsMutator</mutator>
+    <index>33</index>
+    <block>7</block>
+    <killingTest>
+      io.jenkins.plugins.grading.ScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.ScoreTest]/[method:shouldUpdateCoverage()]
+    </killingTest>
+    <description>replaced int return with 0 for io/jenkins/plugins/grading/AggregatedScore::aggregateDelta</description>
+  </mutation>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='4'>
+    <sourceFile>AggregatedScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AggregatedScore</mutatedClass>
+    <mutatedMethod>computeScore</mutatedMethod>
+    <methodDescription>(II)I</methodDescription>
+    <lineNumber>213</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator</mutator>
+    <index>4</index>
+    <block>0</block>
+    <killingTest>
+      io.jenkins.plugins.grading.ScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.ScoreTest]/[method:shouldSumAnalysisConfiguration()]
+    </killingTest>
+    <description>changed conditional boundary</description>
+  </mutation>
+  <mutation detected='false' status='NO_COVERAGE' numberOfTestsRun='0'>
+    <sourceFile>AutoGrader.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AutoGrader</mutatedClass>
+    <mutatedMethod>createCoverageScore</mutatedMethod>
+    <methodDescription>
+      (Lio/jenkins/plugins/coverage/CoverageAction;Lio/jenkins/plugins/grading/CoverageConfiguration;Lio/jenkins/plugins/coverage/targets/CoverageElement;)Lio/jenkins/plugins/grading/CoverageScore;
+    </methodDescription>
+    <lineNumber>156</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.NullReturnValsMutator</mutator>
+    <index>13</index>
+    <block>4</block>
+    <killingTest/>
+    <description>replaced return value with null for io/jenkins/plugins/grading/AutoGrader::createCoverageScore
+    </description>
+  </mutation>
+  <mutation detected='false' status='NO_COVERAGE' numberOfTestsRun='0'>
+    <sourceFile>AutoGrader.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AutoGrader</mutatedClass>
+    <mutatedMethod>getConfiguration</mutatedMethod>
+    <methodDescription>()Ljava/lang/String;</methodDescription>
+    <lineNumber>57</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.EmptyObjectReturnValsMutator</mutator>
+    <index>5</index>
+    <block>0</block>
+    <killingTest/>
+    <description>replaced return value with &#34;&#34; for io/jenkins/plugins/grading/AutoGrader::getConfiguration
+    </description>
+  </mutation>
+</mutations>
