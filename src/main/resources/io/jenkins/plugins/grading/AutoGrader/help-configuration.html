@@ -1,0 +1,38 @@
+<div>
+    <div>
+        The configuration must be a valid JSON object with respect to the
+        <a href="https://github.com/jenkinsci/autograding-plugin/blob/master/etc/configuration.json">given Schema</a>.
+        For each metric you can define the impact on the overall score and the individual scoring criteria. In order to
+        skip
+        one of the metrics, simply remove that part of the configuration. Note: if you configure a metric but Jenkins
+        does
+        not
+        create a corresponding result, then your build we be failed with an exception.
+    </div>
+    <h3>Example</h3>
+
+    <code style=display:block;white-space:pre-wrap>
+{
+  "analysis": {
+    "maxScore": 100,
+    "errorImpact": -10,
+    "highImpact": -5,
+    "normalImpact": -2,
+    "lowImpact": -1
+  },
+  "tests": {
+    "maxScore": 100,
+    "failureImpact": -2,
+    "skippedImpact": -1
+  },
+  "coverage": {
+    "maxScore": 100,
+    "missedImpact": -1
+  },
+  "pit": {
+    "maxScore": 100,
+    "undetectedImpact": -1,
+  }
+}
+</code>
+</div>
