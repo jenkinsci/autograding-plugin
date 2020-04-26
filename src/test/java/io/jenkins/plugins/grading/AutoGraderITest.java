@@ -1,19 +1,17 @@
 package io.jenkins.plugins.grading;
 
-import java.io.IOException;
-import java.util.List;
-
+import hudson.model.Result;
+import hudson.model.Run;
+import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
+import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
+import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
-import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
-import org.jenkinsci.plugins.workflow.job.WorkflowJob;
-import hudson.model.Result;
-import hudson.model.Run;
+import java.io.IOException;
+import java.util.List;
 
-import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
-
-import static io.jenkins.plugins.grading.assertions.Assertions.*;
+import static io.jenkins.plugins.grading.assertions.Assertions.assertThat;
 
 /**
  * Integration tests for the {@link AutoGrader} step.
@@ -32,6 +30,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     private static final String TOOLTYPE_PIT = "pit";
     private static final String TOOLTYPE_COVERAGE = "coverage";
     private static final String TOOLTYPE_TEST_RESULTS = "test-results";
+    private static final String TOOLTYPE_CSSLINT = "cssLint";
 
     /**
      * Verifies that the step skips all autograding parts if the configuration is empty.
@@ -82,6 +81,30 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         AggregatedScore score = actions.get(0).getResult();
 
         assertThat(score).hasAchieved(40);
+    }
+
+    /**
+     * Verifies that Lint results are correctly graded.
+     *
+     * @author Andreas Stiglmeier
+     */
+    @Test
+    public void shouldCountLintResults() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("csslint.xml");
+
+        configureScanner(job, TOOLTYPE_CSSLINT, "csslint", AUTOGRADE_ANALYSIS_CONFIGURATION);
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CssLint");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score -228 (warnings distribution err:0, high:42, normal:9, low:0)");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 0 of 100");
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(0);
     }
 
     /**
@@ -179,6 +202,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
+     * Verifies that Pit results are correctly graded.
+     *
      * @author Andreas Stiglmeier
      */
     @Test
@@ -203,27 +228,25 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     /**
      * Returns the console log as a String.
      *
-     * @param build
-     *         the build to get the log for
-     *
+     * @param build the build to get the log for
      * @return the console log
      */
     protected String getConsoleLog(final Run<?, ?> build) {
         try {
             return JenkinsRule.getLog(build);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new AssertionError(e);
         }
     }
 
     private void configureScanner(final WorkflowJob job, final String toolType, final String fileName,
-            final String configuration) {
+                                  final String configuration) {
         String pipeLineScript = "node {\n"
                 + "  stage ('Integration Test') {\n";
 
         switch (toolType) {
             case TOOLTYPE_CHECKSTYLE:
+            case TOOLTYPE_CSSLINT:
                 pipeLineScript += "recordIssues tool: " + toolType + "(pattern: '**/" + fileName + "*')\n";
                 break;
             case TOOLTYPE_PIT:
@@ -234,6 +257,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 break;
             case TOOLTYPE_TEST_RESULTS:
                 pipeLineScript += "junit testResults: '**/" + fileName + "'\n";
+                break;
 
         }
         pipeLineScript += "autoGrade('" + configuration + "')\n"
