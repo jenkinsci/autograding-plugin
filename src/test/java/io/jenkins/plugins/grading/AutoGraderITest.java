@@ -59,7 +59,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CheckStyle");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 40");
 
         List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
@@ -67,6 +68,92 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         AggregatedScore score = actions.get(0).getResult();
 
         assertThat(score).hasAchieved(40);
+    }
+
+    @Test
+    public void shouldGradeTestResults() {
+        String fileName = "test-successful.xml";
+        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
+
+        configureTestScanner(job, fileName,
+                "{\"tests\":{\"maxScore\":2,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results ");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score 2 - from recorded test results: 2, 2, 0, 0");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 2");
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(2);
+    }
+
+    @Test
+    public void shouldGradeTestResultsWithAssertionError() {
+        String fileName = "test-assertion-error.xml";
+        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
+
+        configureTestScanner(job, fileName,
+                "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
+        Run<?, ?> baseline = buildWithResult(job, Result.UNSTABLE);
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results ");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score -10 - from recorded test results: 2, 0, 2, 0");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 90");
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(90);
+    }
+
+    @Test
+    public void shouldGradeTestResultsWithAssertionErrorAndSkipTest() {
+        String fileName = "test-assertion-error-with-skip.xml";
+        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
+
+        configureTestScanner(job, fileName,
+                "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
+        Run<?, ?> baseline = buildWithResult(job, Result.UNSTABLE);
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results ");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score -5 - from recorded test results: 3, 1, 1, 1");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 95");
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(95);
+    }
+
+    @Test
+    public void shouldGradeCoverageResults() {
+        String fileName = "coverage.xml";
+        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
+
+        configureCoverageScanner(job, fileName,
+                "{\"coverage\": {\"maxScore\": 100,\"coveredImpact\": 1,\"missedImpact\": -1}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results ");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score 100 - from recorded line coverage results: 100%");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score 58 - from recorded branch coverage results: 79%");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for coverage results: 100");
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(100);
     }
 
     /**
@@ -91,6 +178,24 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 + "  stage ('Integration Test') {\n"
                 + "         recordIssues tool: checkStyle(pattern: '**/" + fileName + "*')\n"
                 + "         autoGrade('" + configuration + "')\n"
+                + "  }\n"
+                + "}", true));
+    }
+
+    private void configureTestScanner(final WorkflowJob job, final String fileName, final String configuration) {
+        job.setDefinition(new CpsFlowDefinition("node {\n"
+                + "  stage ('Build and Static Analysis') {\n"
+                + "         junit testResults: '**/" + fileName + "'\n"
+                + "         autoGrade('" + configuration + "')\n"
+                + "  }\n"
+                + "}", true));
+    }
+
+    private void configureCoverageScanner(final WorkflowJob job, final String fileName, final String configuration) {
+        job.setDefinition(new CpsFlowDefinition("node {\n"
+                + "  stage ('Integration Test') {\n"
+                + "     publishCoverage adapters: [jacocoAdapter('**/" + fileName + "*')]\n"
+                + "     autoGrade('" + configuration + "')\n"
                 + "  }\n"
                 + "}", true));
     }

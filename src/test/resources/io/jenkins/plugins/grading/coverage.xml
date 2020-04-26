@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<report name="Autograding Plugin">
+  <sessioninfo start="1587637078121" dump="1587637081562"/>
+  <package name="io/jenkins/plugins/grading">
+    <class name="io/jenkins/plugins/grading/CoverageScore" sourcefilename="CoverageScore.java">
+      <method name="getCoveredSize" desc="()I" line="53">
+        <counter type="INSTRUCTION" missed="0" covered="3"/>
+        <counter type="LINE" missed="0" covered="1"/>
+        <counter type="COMPLEXITY" missed="0" covered="1"/>
+        <counter type="METHOD" missed="0" covered="1"/>
+      </method>
+      <method name="getMissedSize" desc="()I" line="57">
+        <counter type="INSTRUCTION" missed="0" covered="3"/>
+        <counter type="BRANCH" missed="3" covered="11"/>
+        <counter type="LINE" missed="0" covered="1"/>
+        <counter type="COMPLEXITY" missed="0" covered="1"/>
+        <counter type="METHOD" missed="0" covered="1"/>
+      </method>
+      <counter type="INSTRUCTION" missed="0" covered="47"/>
+      <counter type="BRANCH" missed="3" covered="11"/>
+      <counter type="LINE" missed="0" covered="11"/>
+      <counter type="COMPLEXITY" missed="0" covered="4"/>
+      <counter type="METHOD" missed="0" covered="4"/>
+      <counter type="CLASS" missed="0" covered="1"/>
+    </class>
+  </package>
+  <counter type="INSTRUCTION" missed="487" covered="1073"/>
+  <counter type="BRANCH" missed="16" covered="10"/>
+  <counter type="LINE" missed="79" covered="279"/>
+  <counter type="COMPLEXITY" missed="24" covered="128"/>
+  <counter type="METHOD" missed="14" covered="125"/>
+  <counter type="CLASS" missed="2" covered="18"/>
+</report>
