@@ -65,7 +65,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      * Verifies that CheckStyle results are correctly graded.
      */
     @Test
-    public void shouldCountCheckStyleWarnings() {
+    public void shouldGradeCheckStyleWarnings() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
         configureScanner(job, TOOLTYPE_CHECKSTYLE, "checkstyle", AUTOGRADE_ANALYSIS_CONFIGURATION);
@@ -76,11 +76,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 "[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 40");
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
-
-        assertThat(score).hasAchieved(40);
+        assertGradingResult(baseline, 40);
     }
 
     /**
@@ -89,7 +85,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      * @author Andreas Stiglmeier
      */
     @Test
-    public void shouldCountLintResults() {
+    public void shouldGradeLintResults() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("csslint.xml");
 
         configureScanner(job, TOOLTYPE_CSSLINT, "csslint", AUTOGRADE_ANALYSIS_CONFIGURATION);
@@ -100,11 +96,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 "[Autograding] -> Score -228 (warnings distribution err:0, high:42, normal:9, low:0)");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 0 of 100");
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
-
-        assertThat(score).hasAchieved(0);
+        assertGradingResult(baseline, 0);
     }
 
     /**
@@ -123,11 +115,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 "[Autograding] -> Score 2 - from recorded test results: 2, 2, 0, 0");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 2");
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
-
-        assertThat(score).hasAchieved(2);
+        assertGradingResult(baseline, 2);
     }
 
     /**
@@ -146,11 +134,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 "[Autograding] -> Score -10 - from recorded test results: 2, 0, 2, 0");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 90");
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
-
-        assertThat(score).hasAchieved(90);
+        assertGradingResult(baseline, 90);
     }
 
     /**
@@ -169,11 +153,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 "[Autograding] -> Score -5 - from recorded test results: 3, 1, 1, 1");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 95");
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
-
-        assertThat(score).hasAchieved(95);
+        assertGradingResult(baseline, 95);
     }
 
     /**
@@ -194,11 +174,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 "[Autograding] -> Score 58 - from recorded branch coverage results: 79%");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for coverage results: 100");
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
-
-        assertThat(score).hasAchieved(100);
+        assertGradingResult(baseline, 100);
     }
 
     /**
@@ -218,11 +194,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for mutation coverage results: 61");
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
-
-        assertThat(score).hasAchieved(61);
+        assertGradingResult(baseline, 61);
     }
 
     /**
@@ -265,5 +237,13 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 + "}";
 
         job.setDefinition(new CpsFlowDefinition(pipeLineScript, true));
+    }
+
+    private void assertGradingResult(Run<?, ?> baseline, int gradingScore) {
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(gradingScore);
     }
 }
