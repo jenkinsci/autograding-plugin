@@ -1,17 +1,19 @@
 package io.jenkins.plugins.grading;
 
-import hudson.model.Result;
-import hudson.model.Run;
-import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
-import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
-import org.jenkinsci.plugins.workflow.job.WorkflowJob;
-import org.junit.Test;
-import org.jvnet.hudson.test.JenkinsRule;
-
 import java.io.IOException;
 import java.util.List;
 
-import static io.jenkins.plugins.grading.assertions.Assertions.assertThat;
+import org.junit.Test;
+import org.jvnet.hudson.test.JenkinsRule;
+
+import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
+import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+import hudson.model.Result;
+import hudson.model.Run;
+
+import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
+
+import static io.jenkins.plugins.grading.assertions.Assertions.*;
 
 /**
  * Integration tests for the {@link AutoGrader} step.
@@ -23,10 +25,13 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     private static final String AUTOGRADE_TESTS_CONFIGURATION = "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}";
     private static final String AUTOGRADE_ANALYSIS_CONFIGURATION = "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}";
     private static final String AUTOGRADE_MUTATION_CONFIGURATION = "{\"pit\":{\"maxScore\":100,\"ratioImpact\":-1,\"detectedImpact\":0,\"undetectedImpact\":-1}}";
+    private static final String COVERAGE_CONFIGURATION = "{\"coverage\": {\"maxScore\": 100,\"coveredImpact\": 1,\"missedImpact\": -1}}";
+    private static final String TEST_RESULTS_CONFIGURATION = "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}";
 
     private static final String TOOLTYPE_CHECKSTYLE = "checkStyle";
     private static final String TOOLTYPE_PIT = "pit";
-
+    private static final String TOOLTYPE_COVERAGE = "coverage";
+    private static final String TOOLTYPE_TEST_RESULTS = "test-results";
 
     /**
      * Verifies that the step skips all autograding parts if the configuration is empty.
@@ -79,13 +84,15 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(40);
     }
 
+    /**
+     *
+     */
     @Test
     public void shouldGradeTestResults() {
         String fileName = "test-successful.xml";
         WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
 
-        configureTestScanner(job, fileName,
-                "{\"tests\":{\"maxScore\":2,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
+        configureScanner(job, TOOLTYPE_TEST_RESULTS, fileName, TEST_RESULTS_CONFIGURATION);
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results ");
@@ -100,13 +107,15 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(2);
     }
 
+    /**
+     *
+     */
     @Test
     public void shouldGradeTestResultsWithAssertionError() {
         String fileName = "test-assertion-error.xml";
         WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
 
-        configureTestScanner(job, fileName,
-                "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
+        configureScanner(job, TOOLTYPE_TEST_RESULTS, fileName, TEST_RESULTS_CONFIGURATION);
         Run<?, ?> baseline = buildWithResult(job, Result.UNSTABLE);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results ");
@@ -121,13 +130,15 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(90);
     }
 
+    /**
+     *
+     */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorAndSkipTest() {
         String fileName = "test-assertion-error-with-skip.xml";
         WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
 
-        configureTestScanner(job, fileName,
-                "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
+        configureScanner(job, TOOLTYPE_TEST_RESULTS, fileName, TEST_RESULTS_CONFIGURATION);
         Run<?, ?> baseline = buildWithResult(job, Result.UNSTABLE);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results ");
@@ -142,13 +153,15 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(95);
     }
 
+    /**
+     *
+     */
     @Test
     public void shouldGradeCoverageResults() {
         String fileName = "coverage.xml";
         WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
 
-        configureCoverageScanner(job, fileName,
-                "{\"coverage\": {\"maxScore\": 100,\"coveredImpact\": 1,\"missedImpact\": -1}}");
+        configureScanner(job, TOOLTYPE_COVERAGE, fileName, COVERAGE_CONFIGURATION);
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results ");
@@ -176,7 +189,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading PIT mutation results PIT Mutation Report");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for mutation coverage results: 61");
 
         List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
@@ -189,53 +203,43 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     /**
      * Returns the console log as a String.
      *
-     * @param build the build to get the log for
+     * @param build
+     *         the build to get the log for
+     *
      * @return the console log
      */
     protected String getConsoleLog(final Run<?, ?> build) {
         try {
             return JenkinsRule.getLog(build);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new AssertionError(e);
         }
     }
 
-    private void configureScanner(final WorkflowJob job, final String toolType, final String fileName, final String configuration) {
+    private void configureScanner(final WorkflowJob job, final String toolType, final String fileName,
+            final String configuration) {
         String pipeLineScript = "node {\n"
                 + "  stage ('Integration Test') {\n";
 
         switch (toolType) {
             case TOOLTYPE_CHECKSTYLE:
-                pipeLineScript += "         recordIssues tool: " + toolType + "(pattern: '**/" + fileName + "*')\n";
+                pipeLineScript += "recordIssues tool: " + toolType + "(pattern: '**/" + fileName + "*')\n";
                 break;
             case TOOLTYPE_PIT:
-                pipeLineScript += "         step([$class: 'PitPublisher', mutationStatsFile: '**/" + fileName + "*'])\n";
+                pipeLineScript += "step([$class: 'PitPublisher', mutationStatsFile: '**/" + fileName + "*'])\n";
                 break;
+            case TOOLTYPE_COVERAGE:
+                pipeLineScript += "publishCoverage adapters: [jacocoAdapter('**/" + fileName + "*')]\n";
+                break;
+            case TOOLTYPE_TEST_RESULTS:
+                pipeLineScript += "junit testResults: '**/" + fileName + "'\n";
+
         }
-        pipeLineScript += "         autoGrade('" + configuration + "')\n"
+        pipeLineScript += "autoGrade('" + configuration + "')\n"
                 + "  }\n"
                 + "}";
 
-
         job.setDefinition(new CpsFlowDefinition(pipeLineScript, true));
     }
-
-    private void configureTestScanner(final WorkflowJob job, final String fileName, final String configuration) {
-        job.setDefinition(new CpsFlowDefinition("node {\n"
-                + "  stage ('Build and Static Analysis') {\n"
-                + "         junit testResults: '**/" + fileName + "'\n"
-                + "         autoGrade('" + configuration + "')\n"
-                + "  }\n"
-                + "}", true));
-    }
-
-    private void configureCoverageScanner(final WorkflowJob job, final String fileName, final String configuration) {
-        job.setDefinition(new CpsFlowDefinition("node {\n"
-                + "  stage ('Integration Test') {\n"
-                + "     publishCoverage adapters: [jacocoAdapter('**/" + fileName + "*')]\n"
-                + "     autoGrade('" + configuration + "')\n"
-                + "  }\n"
-                + "}", true));
-    }
-
 }
