@@ -29,7 +29,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldSkipGradingIfConfigurationIsEmpty() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
-        configureScanner(job, "checkstyle", "checkstyle", "{}");
+        configureScanner(job, "checkStyle", "checkstyle", "{}");
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping static analysis results");
@@ -45,7 +45,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldAbortBuildSinceNoTestActionHasBeenRegistered() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
-        configureScanner(job, "checkstyle", "checkstyle", "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
+        configureScanner(job, "checkStyle", "checkstyle", "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
         Run<?, ?> baseline = buildWithResult(job, Result.FAILURE);
 
         assertThat(getConsoleLog(baseline)).contains("java.lang.IllegalArgumentException: Test scoring has been enabled, but no test results have been found.");
@@ -58,7 +58,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldCountCheckStyleWarnings() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
-        configureScanner(job, "checkstyle", "checkstyle", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}");
+        configureScanner(job, "checkStyle", "checkstyle", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}");
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CheckStyle");
@@ -78,7 +78,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
         configureJacocoScanner(job, "jacoco",
                 "{\"coverage\": {"
-                        + "\"max Score\": 100,"
+                        + "\"maxScore\": 100,"
                         + "\"coveredImpact\": 1,"
                         + "\"missedImpact\": -1"
                         + "}}");
