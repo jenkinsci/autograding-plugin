@@ -1,5 +1,8 @@
 package io.jenkins.plugins.grading;
 
+import hudson.model.FreeStyleProject;
+import hudson.model.Result;
+import hudson.model.Run;
 import java.io.IOException;
 import java.util.List;
 
@@ -8,10 +11,12 @@ import org.jvnet.hudson.test.JenkinsRule;
 
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
-import hudson.model.Result;
-import hudson.model.Run;
-
 import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
+import org.jenkinsci.plugins.pitmutation.PitPublisher;
+import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
+import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+import org.junit.Test;
+import org.jvnet.hudson.test.JenkinsRule;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
 
@@ -187,6 +192,31 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
         configureScanner(job, TOOLTYPE_PIT, "mutations", AUTOGRADE_MUTATION_CONFIGURATION);
         Run<?, ?> baseline = buildSuccessfully(job);
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading PIT mutation results PIT Mutation Report");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for mutation coverage results: 61");
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(61);
+    }
+
+    /**
+     * @author Andreas Stiglmeier
+     */
+    @Test
+    public void shouldGradePitResultsFreeStyle() {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("mutations.xml");
+
+        PitPublisher pitPublisher = new PitPublisher("mutations.xml", 0, false);
+
+        project.getPublishersList().add(pitPublisher);
+        project.getPublishersList().add(new AutoGrader(AUTOGRADE_MUTATION_CONFIGURATION));
+
+        Run<?, ?> baseline = buildSuccessfully(project);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading PIT mutation results PIT Mutation Report");
         assertThat(getConsoleLog(baseline)).contains(
