@@ -85,7 +85,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     *
+     * @author Patrick Rogg
      */
     @Test
     public void shouldGradeTestResults() {
@@ -108,7 +108,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     *
+     * @author Patrick Rogg
      */
     @Test
     public void shouldGradeTestResultsWithAssertionError() {
@@ -131,7 +131,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     *
+     * @author Patrick Rogg
      */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorAndSkipTest() {
@@ -154,7 +154,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     *
+     * @author Patrick Rogg
      */
     @Test
     public void shouldGradeCoverageResults() {
