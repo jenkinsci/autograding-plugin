@@ -11,6 +11,7 @@ import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import hudson.model.Result;
 import hudson.model.Run;
 
+import io.jenkins.plugins.grading.AnalysisConfiguration.AnalysisConfigurationBuilder;
 import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
@@ -19,6 +20,8 @@ import static io.jenkins.plugins.grading.assertions.Assertions.*;
  * Integration tests for the {@link AutoGrader} step.
  *
  * @author Ullrich Hafner
+ * @author Oliver Scholz
+ *
  */
 public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     /** Verifies that the step skips all autograding parts if the configuration is empty. */
@@ -26,7 +29,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldSkipGradingIfConfigurationIsEmpty() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
-        configureScanner(job, "checkstyle", "{}");
+        configureScanner(job, "checkstyle", "checkstyle", "{}");
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping static analysis results");
@@ -42,7 +45,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldAbortBuildSinceNoTestActionHasBeenRegistered() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
-        configureScanner(job, "checkstyle", "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
+        configureScanner(job, "checkstyle", "checkstyle", "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
         Run<?, ?> baseline = buildWithResult(job, Result.FAILURE);
 
         assertThat(getConsoleLog(baseline)).contains("java.lang.IllegalArgumentException: Test scoring has been enabled, but no test results have been found.");
@@ -55,7 +58,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldCountCheckStyleWarnings() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
-        configureScanner(job, "checkstyle", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}");
+        configureScanner(job, "checkstyle", "checkstyle", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}");
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CheckStyle");
@@ -75,10 +78,10 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
         configureJacocoScanner(job, "jacoco",
                 "{\"coverage\": {"
-                + "\"maxScore\": 100,"
-                + "\"coveredImpact\": 1,"
-                + "\"missedImpact\": -1"
-                + "}}");
+                        + "\"max Score\": 100,"
+                        + "\"coveredImpact\": 1,"
+                        + "\"missedImpact\": -1"
+                        + "}}");
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results Coverage Report");
@@ -96,10 +99,46 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 .setMissedImpact(-1)
                 .build();
 
+        // Check if CoverageConfiguration equals an identically setup configuration object
         assertThat(score).hasCoverageConfiguration(covConfiguration);
         assertThat(score).hasTotal(100);
         assertThat(score).hasCoverageAchieved(18);
         assertThat(score).hasAchieved(18);
+    }
+
+    @Test
+    public void shouldCountPmdWarnings() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("pmd.xml");
+
+        configureScanner(job, "pmdParser", "pmd",
+                "{\"analysis\": {" +
+                "\"maxScore\": 100," +
+                "\"errorImpact\": -10," +
+                "\"highImpact\": -5," +
+                "\"normalImpact\": -2," +
+                "\"lowImpact\": -1}}");
+
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for PMD");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -8 (warnings distribution err:0, high:1, normal:1, low:1)");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 92 of 100");
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        AnalysisConfiguration analysisConfiguration = new AnalysisConfigurationBuilder()
+                .setMaxScore(100)
+                .setErrorImpact(-10)
+                .setHighImpact(-5)
+                .setNormalImpact(-2)
+                .setLowImpact(-1)
+                .build();
+
+        assertThat(score).hasAnalysisConfiguration(analysisConfiguration);
+        assertThat(score).hasTotal(100);
+        assertThat(score).hasAchieved(92);
     }
 
     /**
@@ -119,10 +158,10 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         }
     }
 
-    private void configureScanner(final WorkflowJob job, final String fileName, final String configuration) {
+    private void configureScanner(final WorkflowJob job, final String tool, final String fileName, final String configuration) {
         job.setDefinition(new CpsFlowDefinition("node {\n"
                 + "  stage ('Integration Test') {\n"
-                + "         recordIssues tool: checkStyle(pattern: '**/" + fileName + "*')\n"
+                + "         recordIssues tool: " + tool + "(pattern: '**/" + fileName + "*')\n"
                 + "         autoGrade('" + configuration + "')\n"
                 + "  }\n"
                 + "}", true));
