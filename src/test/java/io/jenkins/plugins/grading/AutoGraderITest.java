@@ -3,14 +3,25 @@ package io.jenkins.plugins.grading;
 import java.io.IOException;
 import java.util.List;
 
+import org.checkerframework.checker.units.qual.C;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import hudson.model.Run;
+import hudson.model.utils.ResultWriterPublisher;
+import hudson.tasks.Publisher;
+import hudson.tasks.junit.JUnitResultArchiver;
+import hudson.tasks.test.AggregatedTestResultPublisher;
 
+import io.jenkins.plugins.coverage.CoveragePublisher;
+import io.jenkins.plugins.coverage.adapter.CoverageReportAdapter;
+import io.jenkins.plugins.coverage.adapter.JacocoReportAdapter;
+import io.jenkins.plugins.coverage.source.DefaultSourceFileResolver;
+import io.jenkins.plugins.coverage.source.SourceFileResolver.SourceFileResolverLevel;
 import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
@@ -72,16 +83,9 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         configureScanner(job, TOOLTYPE_CHECKSTYLE, "checkstyle", AUTOGRADE_ANALYSIS_CONFIGURATION);
         Run<?, ?> baseline = buildSuccessfully(job);
 
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CheckStyle");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 40");
-
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
-
-        assertThat(score).hasAchieved(40);
+        assertTestResults(baseline, "[Autograding] Grading static analysis results for CheckStyle",
+                "[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)",
+                "[Autograding] Total score for static analysis results: 40", 40);
     }
 
     /**
@@ -95,16 +99,24 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         configureScanner(job, TOOLTYPE_TEST_RESULTS, fileName, TEST_RESULTS_CONFIGURATION);
         Run<?, ?> baseline = buildSuccessfully(job);
 
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results ");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score 2 - from recorded test results: 2, 2, 0, 0");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 2");
+        assertTestResults(baseline, "[Autograding] Grading test results ",
+                "[Autograding] -> Score 2 - from recorded test results: 2, 2, 0, 0",
+                "[Autograding] Total score for test results: 2", 2);
+    }
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
+    /**
+     * @author Patrick Rogg
+     */
+    @Test
+    public void shouldGradeTestResultsInFreeStyle() {
+        String fileName = "test-successful.xml";
+        FreeStyleProject project = createFreeStyleProject(fileName, new JUnitResultArchiver(fileName));
 
-        assertThat(score).hasAchieved(2);
+        Run<?, ?> baseline = buildSuccessfully(project);
+
+        assertTestResults(baseline, "[Autograding] Grading test results ",
+                "[Autograding] -> Score 2 - from recorded test results: 2, 2, 0, 0",
+                "[Autograding] Total score for test results: 2", 2);
     }
 
     /**
@@ -118,16 +130,24 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         configureScanner(job, TOOLTYPE_TEST_RESULTS, fileName, TEST_RESULTS_CONFIGURATION);
         Run<?, ?> baseline = buildWithResult(job, Result.UNSTABLE);
 
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results ");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score -10 - from recorded test results: 2, 0, 2, 0");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 90");
+        assertTestResults(baseline, "[Autograding] Grading test results ",
+                "[Autograding] -> Score -10 - from recorded test results: 2, 0, 2, 0",
+                "[Autograding] Total score for test results: 90", 90);
+    }
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
+    /**
+     * @author Patrick Rogg
+     */
+    @Test
+    public void shouldGradeTestResultsWithAssertionErrorInFreeStyle() {
+        String fileName = "test-assertion-error.xml";
+        FreeStyleProject project = createFreeStyleProject(fileName, new JUnitResultArchiver(fileName));
 
-        assertThat(score).hasAchieved(90);
+        Run<?, ?> baseline = buildWithResult(project, Result.UNSTABLE);
+
+        assertTestResults(baseline, "[Autograding] Grading test results ",
+                "[Autograding] -> Score -10 - from recorded test results: 2, 0, 2, 0",
+                "[Autograding] Total score for test results: 90", 90);
     }
 
     /**
@@ -141,16 +161,24 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         configureScanner(job, TOOLTYPE_TEST_RESULTS, fileName, TEST_RESULTS_CONFIGURATION);
         Run<?, ?> baseline = buildWithResult(job, Result.UNSTABLE);
 
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results ");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score -5 - from recorded test results: 3, 1, 1, 1");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 95");
+        assertTestResults(baseline, "[Autograding] Grading test results ",
+                "[Autograding] -> Score -5 - from recorded test results: 3, 1, 1, 1",
+                "[Autograding] Total score for test results: 95", 95);
+    }
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
+    /**
+     * @author Patrick Rogg
+     */
+    @Test
+    public void shouldGradeTestResultsWithAssertionErrorAndSkipTestInFreeStyle() {
+        String fileName = "test-assertion-error-with-skip.xml";
+        FreeStyleProject project = createFreeStyleProject(fileName, new JUnitResultArchiver(fileName));
 
-        assertThat(score).hasAchieved(95);
+        Run<?, ?> baseline = buildWithResult(project, Result.UNSTABLE);
+
+        assertTestResults(baseline, "[Autograding] Grading test results ",
+                "[Autograding] -> Score -5 - from recorded test results: 3, 1, 1, 1",
+                "[Autograding] Total score for test results: 95", 95);
     }
 
     /**
@@ -164,18 +192,23 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         configureScanner(job, TOOLTYPE_COVERAGE, fileName, COVERAGE_CONFIGURATION);
         Run<?, ?> baseline = buildSuccessfully(job);
 
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results ");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score 100 - from recorded line coverage results: 100%");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score 58 - from recorded branch coverage results: 79%");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for coverage results: 100");
+        assertCoverageResults(baseline);
+    }
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
+    /**
+     * @author Patrick Rogg
+     */
+    @Test
+    public void shouldGradeCoverageResultsInFreeStyle() {
+        String fileName = "coverage.xml";
+        CoveragePublisher coveragePublisher = new CoveragePublisher();
+        coveragePublisher.getAdapters().add(new JacocoReportAdapter(fileName));
+        coveragePublisher.setSourceFileResolver(new DefaultSourceFileResolver(SourceFileResolverLevel.NEVER_STORE));
+        FreeStyleProject project = createFreeStyleProject(fileName, coveragePublisher);
 
-        assertThat(score).hasAchieved(100);
+        Run<?, ?> baseline = buildSuccessfully(project);
+
+        assertCoverageResults(baseline);
     }
 
     /**
@@ -188,16 +221,30 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         configureScanner(job, TOOLTYPE_PIT, "mutations", AUTOGRADE_MUTATION_CONFIGURATION);
         Run<?, ?> baseline = buildSuccessfully(job);
 
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading PIT mutation results PIT Mutation Report");
+        assertTestResults(baseline, "[Autograding] Grading PIT mutation results PIT Mutation Report",
+                "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34",
+                "[Autograding] Total score for mutation coverage results: 61", 61);
+    }
+
+    private void assertCoverageResults(final Run<?, ?> baseline) {
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results ");
+        assertTestResults(baseline, "[Autograding] -> Score 100 - from recorded line coverage results: 100%",
+                "[Autograding] -> Score 58 - from recorded branch coverage results: 79%",
+                "[Autograding] Total score for coverage results: 100", 100);
+    }
+
+    private void assertTestResults(final Run<?, ?> baseline, final String s, final String s2, final String s3,
+            final int i) {
+        assertThat(getConsoleLog(baseline)).contains(s);
         assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for mutation coverage results: 61");
+                s2);
+        assertThat(getConsoleLog(baseline)).contains(s3);
 
         List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
-        assertThat(score).hasAchieved(61);
+        assertThat(score).hasAchieved(i);
     }
 
     /**
@@ -241,5 +288,12 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 + "}";
 
         job.setDefinition(new CpsFlowDefinition(pipeLineScript, true));
+    }
+
+    private FreeStyleProject createFreeStyleProject(final String fileName, final Publisher publisher) {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles(fileName);
+        project.getPublishersList().add(publisher);
+        project.getPublishersList().add(new AutoGrader(TEST_RESULTS_CONFIGURATION));
+        return project;
     }
 }
