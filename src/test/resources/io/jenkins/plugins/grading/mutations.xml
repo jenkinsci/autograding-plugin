@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mutations>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='1'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>&#60;init&#62;</mutatedMethod>
+    <methodDescription>
+      (Ljava/lang/String;Lio/jenkins/plugins/grading/AnalysisConfiguration;Lio/jenkins/plugins/analysis/core/model/AnalysisResult;)V
+    </methodDescription>
+    <lineNumber>45</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator</mutator>
+    <index>44</index>
+    <block>8</block>
+    <killingTest>
+      io.jenkins.plugins.grading.AnalysisScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.AnalysisScoreTest]/[method:shouldCalculate()]
+    </killingTest>
+    <description>removed call to io/jenkins/plugins/grading/AnalysisScore::setTotalImpact</description>
+  </mutation>
+  <mutation detected='false' status='SURVIVED' numberOfTestsRun='4'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>computeImpact</mutatedMethod>
+    <methodDescription>(Lio/jenkins/plugins/grading/AnalysisConfiguration;)I</methodDescription>
+    <lineNumber>51</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.MathMutator</mutator>
+    <index>12</index>
+    <block>1</block>
+    <killingTest/>
+    <description>Replaced integer multiplication with division</description>
+  </mutation>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='1'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>computeImpact</mutatedMethod>
+    <methodDescription>(Lio/jenkins/plugins/grading/AnalysisConfiguration;)I</methodDescription>
+    <lineNumber>51</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.MathMutator</mutator>
+    <index>13</index>
+    <block>1</block>
+    <killingTest>
+      io.jenkins.plugins.grading.AnalysisScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.AnalysisScoreTest]/[method:shouldCalculate()]
+    </killingTest>
+    <description>Replaced integer addition with subtraction</description>
+  </mutation>
+  <mutation detected='false' status='SURVIVED' numberOfTestsRun='4'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>computeImpact</mutatedMethod>
+    <methodDescription>(Lio/jenkins/plugins/grading/AnalysisConfiguration;)I</methodDescription>
+    <lineNumber>52</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.MathMutator</mutator>
+    <index>22</index>
+    <block>2</block>
+    <killingTest/>
+    <description>Replaced integer multiplication with division</description>
+  </mutation>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='1'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>computeImpact</mutatedMethod>
+    <methodDescription>(Lio/jenkins/plugins/grading/AnalysisConfiguration;)I</methodDescription>
+    <lineNumber>52</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.MathMutator</mutator>
+    <index>23</index>
+    <block>2</block>
+    <killingTest>
+      io.jenkins.plugins.grading.AnalysisScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.AnalysisScoreTest]/[method:shouldCalculate()]
+    </killingTest>
+    <description>Replaced integer addition with subtraction</description>
+  </mutation>
+  <mutation detected='false' status='SURVIVED' numberOfTestsRun='4'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>computeImpact</mutatedMethod>
+    <methodDescription>(Lio/jenkins/plugins/grading/AnalysisConfiguration;)I</methodDescription>
+    <lineNumber>53</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.MathMutator</mutator>
+    <index>32</index>
+    <block>3</block>
+    <killingTest/>
+    <description>Replaced integer multiplication with division</description>
+  </mutation>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='1'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>computeImpact</mutatedMethod>
+    <methodDescription>(Lio/jenkins/plugins/grading/AnalysisConfiguration;)I</methodDescription>
+    <lineNumber>53</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.MathMutator</mutator>
+    <index>33</index>
+    <block>3</block>
+    <killingTest>
+      io.jenkins.plugins.grading.AnalysisScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.AnalysisScoreTest]/[method:shouldCalculate()]
+    </killingTest>
+    <description>Replaced integer addition with subtraction</description>
+  </mutation>
+  <mutation detected='false' status='SURVIVED' numberOfTestsRun='4'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>computeImpact</mutatedMethod>
+    <methodDescription>(Lio/jenkins/plugins/grading/AnalysisConfiguration;)I</methodDescription>
+    <lineNumber>54</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.MathMutator</mutator>
+    <index>42</index>
+    <block>4</block>
+    <killingTest/>
+    <description>Replaced integer multiplication with division</description>
+  </mutation>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='1'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>computeImpact</mutatedMethod>
+    <methodDescription>(Lio/jenkins/plugins/grading/AnalysisConfiguration;)I</methodDescription>
+    <lineNumber>54</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.MathMutator</mutator>
+    <index>43</index>
+    <block>4</block>
+    <killingTest>
+      io.jenkins.plugins.grading.AnalysisScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.AnalysisScoreTest]/[method:shouldCalculate()]
+    </killingTest>
+    <description>Replaced integer addition with subtraction</description>
+  </mutation>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='1'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>computeImpact</mutatedMethod>
+    <methodDescription>(Lio/jenkins/plugins/grading/AnalysisConfiguration;)I</methodDescription>
+    <lineNumber>56</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.PrimitiveReturnsMutator</mutator>
+    <index>48</index>
+    <block>4</block>
+    <killingTest>
+      io.jenkins.plugins.grading.AnalysisScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.AnalysisScoreTest]/[method:shouldCalculate()]
+    </killingTest>
+    <description>replaced int return with 0 for io/jenkins/plugins/grading/AnalysisScore::computeImpact</description>
+  </mutation>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='1'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>getErrorsSize</mutatedMethod>
+    <methodDescription>()I</methodDescription>
+    <lineNumber>60</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.PrimitiveReturnsMutator</mutator>
+    <index>5</index>
+    <block>0</block>
+    <killingTest>
+      io.jenkins.plugins.grading.AnalysisScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.AnalysisScoreTest]/[method:shouldReturnNegativeParams()]
+    </killingTest>
+    <description>replaced int return with 0 for io/jenkins/plugins/grading/AnalysisScore::getErrorsSize</description>
+  </mutation>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='1'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>getHighPrioritySize</mutatedMethod>
+    <methodDescription>()I</methodDescription>
+    <lineNumber>64</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.PrimitiveReturnsMutator</mutator>
+    <index>5</index>
+    <block>0</block>
+    <killingTest>
+      io.jenkins.plugins.grading.AnalysisScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.AnalysisScoreTest]/[method:shouldReturnNegativeParams()]
+    </killingTest>
+    <description>replaced int return with 0 for io/jenkins/plugins/grading/AnalysisScore::getHighPrioritySize
+    </description>
+  </mutation>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='1'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>getLowPrioritySize</mutatedMethod>
+    <methodDescription>()I</methodDescription>
+    <lineNumber>72</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.PrimitiveReturnsMutator</mutator>
+    <index>5</index>
+    <block>0</block>
+    <killingTest>
+      io.jenkins.plugins.grading.AnalysisScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.AnalysisScoreTest]/[method:shouldReturnNegativeParams()]
+    </killingTest>
+    <description>replaced int return with 0 for io/jenkins/plugins/grading/AnalysisScore::getLowPrioritySize
+    </description>
+  </mutation>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='1'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>getNormalPrioritySize</mutatedMethod>
+    <methodDescription>()I</methodDescription>
+    <lineNumber>68</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.PrimitiveReturnsMutator</mutator>
+    <index>5</index>
+    <block>0</block>
+    <killingTest>
+      io.jenkins.plugins.grading.AnalysisScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.AnalysisScoreTest]/[method:shouldReturnNegativeParams()]
+    </killingTest>
+    <description>replaced int return with 0 for io/jenkins/plugins/grading/AnalysisScore::getNormalPrioritySize
+    </description>
+  </mutation>
+  <mutation detected='false' status='NO_COVERAGE' numberOfTestsRun='0'>
+    <sourceFile>AnalysisScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.AnalysisScore</mutatedClass>
+    <mutatedMethod>getTotalSize</mutatedMethod>
+    <methodDescription>()I</methodDescription>
+    <lineNumber>76</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.PrimitiveReturnsMutator</mutator>
+    <index>5</index>
+    <block>0</block>
+    <killingTest/>
+    <description>replaced int return with 0 for io/jenkins/plugins/grading/AnalysisScore::getTotalSize</description>
+  </mutation>
+</mutations>
