@@ -15,7 +15,7 @@
   <version>${revision}${changelist}</version>
 
   <description>This plugin autogrades projects based on a configurable set of metrics.</description>
-  <url>https://github.com/jenkinsci/autograde-plugin</url>
+  <url>https://github.com/jenkinsci/autograding-plugin</url>
 
   <properties>
     <revision>1.0.1</revision>
