@@ -141,6 +141,41 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(92);
     }
 
+    @Test
+    public void shoudCountSpotbugsFindings() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("spotbugsXml.xml");
+
+        configureScanner(job, "spotBugs", "spotbugsXml",
+                "{\"analysis\": {" +
+                        "\"maxScore\": 100," +
+                        "\"errorImpact\": -10," +
+                        "\"highImpact\": -5," +
+                        "\"normalImpact\": -2," +
+                        "\"lowImpact\": -1}}");
+
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for SpotBugs");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -17 (warnings distribution err:0, high:2, normal:2, low:3)");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 83 of 100");
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        AnalysisConfiguration analysisConfiguration = new AnalysisConfigurationBuilder()
+                .setMaxScore(100)
+                .setErrorImpact(-10)
+                .setHighImpact(-5)
+                .setNormalImpact(-2)
+                .setLowImpact(-1)
+                .build();
+
+        assertThat(score).hasAnalysisConfiguration(analysisConfiguration);
+        assertThat(score).hasTotal(100);
+        assertThat(score).hasAchieved(83);
+    }
+
     /**
      * Returns the console log as a String.
      *
