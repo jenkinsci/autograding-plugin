@@ -216,7 +216,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     @Test
-    public void shouldGradePitMutationAsFreestyle() {
+    public void shouldGradeTestResultMutationAsFreestyle() {
         FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("TEST-InjectedTest.xml",
                 "TEST-io.jenkins.plugins.grading.AggregatedScoreXmlStreamTest.xml",
                 "TEST-io.jenkins.plugins.grading.AnalysisScoreTest.xml",
