@@ -1,0 +1,1582 @@
+<BugCollection sequence='0' release='' analysisTimestamp='1585847273692' version='3.1.12' timestamp='1585847012000'>
+  <Project projectName='Static Analysis Model and Parsers'>
+    <Jar>/var/data/workspace/pipeline-analysis-model/target/classes</Jar>
+    <Jar>/var/data/workspace/pipeline-analysis-model/target/test-classes</Jar>
+  </Project>
+  <BugInstance instanceOccurrenceNum='0' instanceHash='fe0397f12c4063d0f8a1fa515a378fa0' cweid='400' rank='12'
+               abbrev='SECRD' category='SECURITY' priority='1' type='REDOS' instanceOccurrenceMax='0'>
+    <ShortMessage>Regex DOS (ReDOS)</ShortMessage>
+    <LongMessage>The regular expression "^(?:.*\\[[^]]*\\])?\\s*"?([^"]*)"?, line ([0-9]+)\\.[0-9]+:(
+      (?:[A-Z]+|[0-9]+-)[0-9]+)? \\(([USEWI])\\)\\s*(.*)$" is vulnerable to a denial of service attack (ReDOS)
+    </LongMessage>
+    <String value='^(?:.*\\[[^]]*\\])?\\s*"?([^"]*)"?, line ([0-9]+)\\.[0-9]+:( (?:[A-Z]+|[0-9]+-)[0-9]+)? \\(([USEWI])\\)\\s*(.*)$'>
+      <Message>Value ^(?:.*\\[[^]]*\\])?\\s*"?([^"]*)"?, line ([0-9]+)\\.[0-9]+:( (?:[A-Z]+|[0-9]+-)[0-9]+)?
+        \\(([USEWI])\\)\\s*(.*)$
+      </Message>
+    </String>
+    <Class classname='edu.hm.hafner.analysis.parser.XlcCompilerParser' primary='true'>
+      <SourceLine classname='edu.hm.hafner.analysis.parser.XlcCompilerParser' start='26' end='78'
+                  sourcepath='edu/hm/hafner/analysis/parser/XlcCompilerParser.java' sourcefile='XlcCompilerParser.java'>
+        <Message>At XlcCompilerParser.java:[lines 26-78]</Message>
+      </SourceLine>
+      <Message>In class edu.hm.hafner.analysis.parser.XlcCompilerParser</Message>
+    </Class>
+    <Method isStatic='true' classname='edu.hm.hafner.analysis.parser.XlcCompilerParser' signature='()V'
+            name='&lt;clinit&gt;' primary='true'>
+      <SourceLine endBytecode='44' classname='edu.hm.hafner.analysis.parser.XlcCompilerParser' start='26' end='27'
+                  sourcepath='edu/hm/hafner/analysis/parser/XlcCompilerParser.java' sourcefile='XlcCompilerParser.java'
+                  startBytecode='0'></SourceLine>
+      <Message>In method edu.hm.hafner.analysis.parser.XlcCompilerParser.&lt;static initializer for XlcCompilerParser&gt;()</Message>
+    </Method>
+    <SourceLine endBytecode='2' classname='edu.hm.hafner.analysis.parser.XlcCompilerParser' start='26' end='26'
+                sourcepath='edu/hm/hafner/analysis/parser/XlcCompilerParser.java' sourcefile='XlcCompilerParser.java'
+                startBytecode='2' primary='true'>
+      <Message>At XlcCompilerParser.java:[line 26]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum='0' instanceHash='5059b2b6009ba4f224f88afac05d3698' cweid='400' rank='12'
+               abbrev='SECRD' category='SECURITY' priority='2' type='REDOS' instanceOccurrenceMax='0'>
+    <ShortMessage>Regex DOS (ReDOS)</ShortMessage>
+    <LongMessage>The regular expression "^(?:.*\\[[^]]*\\])?\\s*\\s*((?:[A-Z]+|[0-9]+-)[0-9]+)?:? ?\\(([USEWI])\\)(
+      INFORMATION:)?\\s*(.*)$" is vulnerable to a denial of service attack (ReDOS)
+    </LongMessage>
+    <String value='^(?:.*\\[[^]]*\\])?\\s*\\s*((?:[A-Z]+|[0-9]+-)[0-9]+)?:? ?\\(([USEWI])\\)( INFORMATION:)?\\s*(.*)$'>
+      <Message>Value ^(?:.*\\[[^]]*\\])?\\s*\\s*((?:[A-Z]+|[0-9]+-)[0-9]+)?:? ?\\(([USEWI])\\)(
+        INFORMATION:)?\\s*(.*)$
+      </Message>
+    </String>
+    <Class classname='edu.hm.hafner.analysis.parser.XlcCompilerParser' primary='true'>
+      <SourceLine classname='edu.hm.hafner.analysis.parser.XlcCompilerParser' start='26' end='78'
+                  sourcepath='edu/hm/hafner/analysis/parser/XlcCompilerParser.java' sourcefile='XlcCompilerParser.java'>
+        <Message>At XlcCompilerParser.java:[lines 26-78]</Message>
+      </SourceLine>
+      <Message>In class edu.hm.hafner.analysis.parser.XlcCompilerParser</Message>
+    </Class>
+    <Method isStatic='true' classname='edu.hm.hafner.analysis.parser.XlcCompilerParser' signature='()V'
+            name='&lt;clinit&gt;' primary='true'>
+      <SourceLine endBytecode='44' classname='edu.hm.hafner.analysis.parser.XlcCompilerParser' start='26' end='27'
+                  sourcepath='edu/hm/hafner/analysis/parser/XlcCompilerParser.java' sourcefile='XlcCompilerParser.java'
+                  startBytecode='0'></SourceLine>
+      <Message>In method edu.hm.hafner.analysis.parser.XlcCompilerParser.&lt;static initializer for XlcCompilerParser&gt;()</Message>
+    </Method>
+    <SourceLine endBytecode='10' classname='edu.hm.hafner.analysis.parser.XlcCompilerParser' start='27' end='27'
+                sourcepath='edu/hm/hafner/analysis/parser/XlcCompilerParser.java' sourcefile='XlcCompilerParser.java'
+                startBytecode='10' primary='true'>
+      <Message>At XlcCompilerParser.java:[line 27]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum='0' instanceHash='44b4813685ad4b975064c35f8248b58f' cweid='400' rank='12'
+               abbrev='SECRD' category='SECURITY' priority='2' type='REDOS' instanceOccurrenceMax='0'>
+    <ShortMessage>Regex DOS (ReDOS)</ShortMessage>
+    <LongMessage>The regular expression "^(?:.*\\[[^]]*\\])?\\s*ld: ([0-9]+-[0-9]+).*ERROR:\\s*(.*)$" is vulnerable to a
+      denial of service attack (ReDOS)
+    </LongMessage>
+    <String value='^(?:.*\\[[^]]*\\])?\\s*ld: ([0-9]+-[0-9]+).*ERROR:\\s*(.*)$'>
+      <Message>Value ^(?:.*\\[[^]]*\\])?\\s*ld: ([0-9]+-[0-9]+).*ERROR:\\s*(.*)$</Message>
+    </String>
+    <Class classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' primary='true'>
+      <SourceLine classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' start='26' end='71'
+                  sourcepath='edu/hm/hafner/analysis/parser/XlcLinkerParser.java' sourcefile='XlcLinkerParser.java'>
+        <Message>At XlcLinkerParser.java:[lines 26-71]</Message>
+      </SourceLine>
+      <Message>In class edu.hm.hafner.analysis.parser.XlcLinkerParser</Message>
+    </Class>
+    <Method isStatic='true' classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' signature='()V'
+            name='&lt;clinit&gt;' primary='true'>
+      <SourceLine endBytecode='68' classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' start='26' end='29'
+                  sourcepath='edu/hm/hafner/analysis/parser/XlcLinkerParser.java' sourcefile='XlcLinkerParser.java'
+                  startBytecode='0'></SourceLine>
+      <Message>In method edu.hm.hafner.analysis.parser.XlcLinkerParser.&lt;static initializer for
+        XlcLinkerParser&gt;()
+      </Message>
+    </Method>
+    <SourceLine endBytecode='2' classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' start='26' end='26'
+                sourcepath='edu/hm/hafner/analysis/parser/XlcLinkerParser.java' sourcefile='XlcLinkerParser.java'
+                startBytecode='2' primary='true'>
+      <Message>At XlcLinkerParser.java:[line 26]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum='0' instanceHash='4e43f6fe9e2aae84d3cde8a47d48804e' cweid='400' rank='12'
+               abbrev='SECRD' category='SECURITY' priority='1' type='REDOS' instanceOccurrenceMax='0'>
+    <ShortMessage>Regex DOS (ReDOS)</ShortMessage>
+    <LongMessage>The regular expression "^(?:.*\\[[^]]*\\])?\\s*ld: ([0-9]+-[0-9]+)\\s*(.*)$" is vulnerable to a denial
+      of service attack (ReDOS)
+    </LongMessage>
+    <String value='^(?:.*\\[[^]]*\\])?\\s*ld: ([0-9]+-[0-9]+)\\s*(.*)$'>
+      <Message>Value ^(?:.*\\[[^]]*\\])?\\s*ld: ([0-9]+-[0-9]+)\\s*(.*)$</Message>
+    </String>
+    <Class classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' primary='true'>
+      <SourceLine classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' start='26' end='71'
+                  sourcepath='edu/hm/hafner/analysis/parser/XlcLinkerParser.java' sourcefile='XlcLinkerParser.java'>
+        <Message>At XlcLinkerParser.java:[lines 26-71]</Message>
+      </SourceLine>
+      <Message>In class edu.hm.hafner.analysis.parser.XlcLinkerParser</Message>
+    </Class>
+    <Method isStatic='true' classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' signature='()V'
+            name='&lt;clinit&gt;' primary='true'>
+      <SourceLine endBytecode='68' classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' start='26' end='29'
+                  sourcepath='edu/hm/hafner/analysis/parser/XlcLinkerParser.java' sourcefile='XlcLinkerParser.java'
+                  startBytecode='0'></SourceLine>
+      <Message>In method edu.hm.hafner.analysis.parser.XlcLinkerParser.&lt;static initializer for
+        XlcLinkerParser&gt;()
+      </Message>
+    </Method>
+    <SourceLine endBytecode='26' classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' start='29' end='29'
+                sourcepath='edu/hm/hafner/analysis/parser/XlcLinkerParser.java' sourcefile='XlcLinkerParser.java'
+                startBytecode='26' primary='true'>
+      <Message>At XlcLinkerParser.java:[line 29]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum='0' instanceHash='435987f6f337a2c18847f424a7c3c89f' cweid='400' rank='12'
+               abbrev='SECRD' category='SECURITY' priority='3' type='REDOS' instanceOccurrenceMax='0'>
+    <ShortMessage>Regex DOS (ReDOS)</ShortMessage>
+    <LongMessage>The regular expression "^(?:.*\\[[^]]*\\])?\\s*ld: ([0-9]+-[0-9]+)\\s*(Error .*)$" is vulnerable to a
+      denial of service attack (ReDOS)
+    </LongMessage>
+    <String value='^(?:.*\\[[^]]*\\])?\\s*ld: ([0-9]+-[0-9]+)\\s*(Error .*)$'>
+      <Message>Value ^(?:.*\\[[^]]*\\])?\\s*ld: ([0-9]+-[0-9]+)\\s*(Error .*)$</Message>
+    </String>
+    <Class classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' primary='true'>
+      <SourceLine classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' start='26' end='71'
+                  sourcepath='edu/hm/hafner/analysis/parser/XlcLinkerParser.java' sourcefile='XlcLinkerParser.java'>
+        <Message>At XlcLinkerParser.java:[lines 26-71]</Message>
+      </SourceLine>
+      <Message>In class edu.hm.hafner.analysis.parser.XlcLinkerParser</Message>
+    </Class>
+    <Method isStatic='true' classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' signature='()V'
+            name='&lt;clinit&gt;' primary='true'>
+      <SourceLine endBytecode='68' classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' start='26' end='29'
+                  sourcepath='edu/hm/hafner/analysis/parser/XlcLinkerParser.java' sourcefile='XlcLinkerParser.java'
+                  startBytecode='0'></SourceLine>
+      <Message>In method edu.hm.hafner.analysis.parser.XlcLinkerParser.&lt;static initializer for
+        XlcLinkerParser&gt;()
+      </Message>
+    </Method>
+    <SourceLine endBytecode='10' classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' start='27' end='27'
+                sourcepath='edu/hm/hafner/analysis/parser/XlcLinkerParser.java' sourcefile='XlcLinkerParser.java'
+                startBytecode='10' primary='true'>
+      <Message>At XlcLinkerParser.java:[line 27]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum='0' instanceHash='548ee1b32879e301fee8e00262823622' cweid='400' rank='12'
+               abbrev='SECRD' category='SECURITY' priority='3' type='REDOS' instanceOccurrenceMax='0'>
+    <ShortMessage>Regex DOS (ReDOS)</ShortMessage>
+    <LongMessage>The regular expression "^(?:.*\\[[^]]*\\])?\\s*ld: ([0-9]+-[0-9]+)\\s*WARNING:\\s*(.*)$" is vulnerable
+      to a denial of service attack (ReDOS)
+    </LongMessage>
+    <String value='^(?:.*\\[[^]]*\\])?\\s*ld: ([0-9]+-[0-9]+)\\s*WARNING:\\s*(.*)$'>
+      <Message>Value ^(?:.*\\[[^]]*\\])?\\s*ld: ([0-9]+-[0-9]+)\\s*WARNING:\\s*(.*)$</Message>
+    </String>
+    <Class classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' primary='true'>
+      <SourceLine classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' start='26' end='71'
+                  sourcepath='edu/hm/hafner/analysis/parser/XlcLinkerParser.java' sourcefile='XlcLinkerParser.java'>
+        <Message>At XlcLinkerParser.java:[lines 26-71]</Message>
+      </SourceLine>
+      <Message>In class edu.hm.hafner.analysis.parser.XlcLinkerParser</Message>
+    </Class>
+    <Method isStatic='true' classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' signature='()V'
+            name='&lt;clinit&gt;' primary='true'>
+      <SourceLine endBytecode='68' classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' start='26' end='29'
+                  sourcepath='edu/hm/hafner/analysis/parser/XlcLinkerParser.java' sourcefile='XlcLinkerParser.java'
+                  startBytecode='0'></SourceLine>
+      <Message>In method edu.hm.hafner.analysis.parser.XlcLinkerParser.&lt;static initializer for
+        XlcLinkerParser&gt;()
+      </Message>
+    </Method>
+    <SourceLine endBytecode='18' classname='edu.hm.hafner.analysis.parser.XlcLinkerParser' start='28' end='28'
+                sourcepath='edu/hm/hafner/analysis/parser/XlcLinkerParser.java' sourcefile='XlcLinkerParser.java'
+                startBytecode='18' primary='true'>
+      <Message>At XlcLinkerParser.java:[line 28]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum='0' instanceHash='7a36d930b1a552dee4ac776281164136' cweid='643' rank='12'
+               abbrev='SECXPI' category='SECURITY' priority='3' type='XPATH_INJECTION' instanceOccurrenceMax='0'>
+    <ShortMessage>Potential XPath Injection</ShortMessage>
+    <LongMessage>This use of
+      javax/xml/xpath/XPath.evaluate(Ljava/lang/String;Ljava/lang/Object;Ljavax/xml/namespace/QName;)Ljava/lang/Object;
+      can be vulnerable to XPath Injection
+    </LongMessage>
+    <Class classname='edu.hm.hafner.analysis.parser.XmlParser' primary='true'>
+      <SourceLine classname='edu.hm.hafner.analysis.parser.XmlParser' start='39' end='164'
+                  sourcepath='edu/hm/hafner/analysis/parser/XmlParser.java' sourcefile='XmlParser.java'>
+        <Message>At XmlParser.java:[lines 39-164]</Message>
+      </SourceLine>
+      <Message>In class edu.hm.hafner.analysis.parser.XmlParser</Message>
+    </Class>
+    <Method isStatic='false' classname='edu.hm.hafner.analysis.parser.XmlParser'
+            signature='(Ledu/hm/hafner/analysis/ReaderFactory;)Ledu/hm/hafner/analysis/Report;' name='parse'
+            primary='true'>
+      <SourceLine endBytecode='715' classname='edu.hm.hafner.analysis.parser.XmlParser' start='74' end='110'
+                  sourcepath='edu/hm/hafner/analysis/parser/XmlParser.java' sourcefile='XmlParser.java'
+                  startBytecode='0'></SourceLine>
+      <Message>In method edu.hm.hafner.analysis.parser.XmlParser.parse(ReaderFactory)</Message>
+    </Method>
+    <SourceLine endBytecode='25' classname='edu.hm.hafner.analysis.parser.XmlParser' start='78' end='78'
+                sourcepath='edu/hm/hafner/analysis/parser/XmlParser.java' sourcefile='XmlParser.java' startBytecode='25'
+                primary='true'>
+      <Message>At XmlParser.java:[line 78]</Message>
+    </SourceLine>
+    <String role='Sink method'
+            value='javax/xml/xpath/XPath.evaluate(Ljava/lang/String;Ljava/lang/Object;Ljavax/xml/namespace/QName;)Ljava/lang/Object;'>
+      <Message>Sink method
+        javax/xml/xpath/XPath.evaluate(Ljava/lang/String;Ljava/lang/Object;Ljavax/xml/namespace/QName;)Ljava/lang/Object;
+      </Message>
+    </String>
+    <String role='Sink parameter' value='2'>
+      <Message>Sink parameter 2</Message>
+    </String>
+    <String role='Unknown source' value='edu/hm/hafner/analysis/parser/XmlParser.getXmlIssueRoot()Ljava/lang/String;'>
+      <Message>Unknown source edu/hm/hafner/analysis/parser/XmlParser.getXmlIssueRoot()Ljava/lang/String;</Message>
+    </String>
+    <String role='Unknown source' value='edu/hm/hafner/analysis/parser/XmlParser.xmlIssueRoot'>
+      <Message>Unknown source edu/hm/hafner/analysis/parser/XmlParser.xmlIssueRoot</Message>
+    </String>
+    <SourceLine endBytecode='1' classname='edu.hm.hafner.analysis.parser.XmlParser' start='39' end='39'
+                sourcepath='edu/hm/hafner/analysis/parser/XmlParser.java' sourcefile='XmlParser.java' startBytecode='1'>
+      <Message>At XmlParser.java:[line 39]</Message>
+    </SourceLine>
+    <SourceLine endBytecode='18' classname='edu.hm.hafner.analysis.parser.XmlParser' start='78' end='78'
+                sourcepath='edu/hm/hafner/analysis/parser/XmlParser.java' sourcefile='XmlParser.java'
+                startBytecode='18'>
+      <Message>At XmlParser.java:[line 78]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugCategory category='SECURITY'>
+    <Description>Security</Description>
+  </BugCategory>
+  <BugPattern cweid='400' abbrev='SECRD' category='SECURITY' type='REDOS'>
+    <ShortDescription>Regex DOS (ReDOS)</ShortDescription>
+    <Details>
+
+      &lt;p&gt;
+      Regular expressions (Regex) are frequently subject to Denial of Service (DOS) attacks (called ReDOS). This is due
+      to the fact that regex engines
+      may take a large amount of time when analyzing certain strings, depending on how the regex is defined.
+      &lt;p&gt;
+      For example, for the regex: &lt;code&gt;^(a+)+$&lt;/code&gt;, the input "&lt;code&gt;aaaaaaaaaaaaaaaaX&lt;/code&gt;"
+      will cause the regex engine to analyze 65536
+      different paths.&lt;sup&gt;[1] Example taken from OWASP references&lt;/sup&gt;&lt;/p&gt;
+      &lt;p&gt;
+      Therefore, it is possible that a single request may cause a large amount of computation on the server side.
+      The problem with this regex, and others like it, is that there are two different ways the same input character can
+      be accepted by the
+      Regex due to the &lt;code&gt;+&lt;/code&gt; (or a &lt;code&gt;*&lt;/code&gt;) inside the parenthesis, and the &lt;code&gt;+&lt;/code&gt;
+      (or a &lt;code&gt;*&lt;/code&gt;) outside the parenthesis. The way this is written, either &lt;code&gt;+&lt;/code&gt;
+      could
+      consume the character 'a'. To fix this, the regex should be rewritten to eliminate the ambiguity. For example,
+      this could simply be
+      rewritten as: &lt;code&gt;^a+$&lt;/code&gt;, which is presumably what the author meant anyway (any number of a's).
+      Assuming that's what the original
+      regex meant, this new regex can be evaluated quickly, and is not subject to ReDOS.
+      &lt;/p&gt;
+      &lt;br/&gt;
+      &lt;p&gt;
+      &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+      &lt;a href="https://sebastiankuebeck.wordpress.com/2011/03/01/detecting-and-preventing-redos-vulnerabilities/"&gt;Sebastian
+      Kubeck's Weblog: Detecting and Preventing ReDoS Vulnerabilities&lt;/a&gt;&lt;br/&gt;
+      &lt;sup&gt;[1]&lt;/sup&gt; &lt;a
+      href="https://www.owasp.org/index.php/Regular_expression_Denial_of_Service_-_ReDoS"&gt;OWASP: Regular expression
+      Denial of Service&lt;/a&gt;&lt;br/&gt;
+      &lt;a href="https://cwe.mitre.org/data/definitions/400.html"&gt;CWE-400: Uncontrolled Resource Consumption
+      ('Resource Exhaustion')&lt;/a&gt;
+      &lt;/p&gt;
+
+    </Details>
+  </BugPattern>
+  <BugPattern cweid='643' abbrev='SECXPI' category='SECURITY' type='XPATH_INJECTION'>
+    <ShortDescription>Potential XPath Injection</ShortDescription>
+    <Details>
+
+      &lt;p&gt;
+      XPath injection risks are similar to SQL injection. If the XPath query contains untrusted user input, the complete
+      data source
+      could be exposed. This could allow an attacker to access unauthorized data or maliciously modify the target XML.
+      &lt;/p&gt;
+      &lt;br/&gt;
+      &lt;p&gt;
+      &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+      &lt;a href="http://projects.webappsec.org/w/page/13246963/SQL%20Injection"&gt;WASC-39: XPath Injection&lt;/a&gt;&lt;br/&gt;
+      &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+      &lt;a href="https://cwe.mitre.org/data/definitions/643.html"&gt;CWE-643: Improper Neutralization of Data within
+      XPath Expressions ('XPath Injection')&lt;/a&gt;&lt;br/&gt;
+      &lt;a href="https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=61407250"&gt;CERT: IDS09-J.
+      Prevent XPath Injection (archive)&lt;/a&gt;&lt;br/&gt;
+      &lt;a href="https://media.blackhat.com/bh-eu-12/Siddharth/bh-eu-12-Siddharth-Xpath-WP.pdf"&gt;Black Hat Europe
+      2012: Hacking XPath 2.0&lt;/a&gt;&lt;br/&gt;
+      &lt;a href="https://www.balisage.net/Proceedings/vol7/html/Vlist02/BalisageVol7-Vlist02.html"&gt;Balisage.net:
+      XQuery Injection&lt;/a&gt;
+      &lt;/p&gt;
+
+    </Details>
+  </BugPattern>
+  <BugCode abbrev='SECRD'>
+    <Description>Regex DOS</Description>
+  </BugCode>
+  <BugCode abbrev='SECXPI'>
+    <Description>XPath Injection</Description>
+  </BugCode>
+  <Errors missingClasses='9' errors='0'>
+    <MissingClass>accept</MissingClass>
+    <MissingClass>answer</MissingClass>
+    <MissingClass>apply</MissingClass>
+    <MissingClass>applyAsInt</MissingClass>
+    <MissingClass>call</MissingClass>
+    <MissingClass>get</MissingClass>
+    <MissingClass>resolveEntity</MissingClass>
+    <MissingClass>run</MissingClass>
+    <MissingClass>test</MissingClass>
+  </Errors>
+  <FindBugsSummary num_packages='17' total_classes='372' priority_2='7' total_size='18326' clock_seconds='48.95'
+                   referenced_classes='882' vm_version='25.212-b04' total_bugs='7' java_version='1.8.0_212'
+                   gc_seconds='2.66' alloc_mbytes='455.50' cpu_seconds='72.54' peak_mbytes='355.07'
+                   timestamp='Thu, 2 Apr 2020 17:03:32 +0000'>
+    <FileStats path='edu/hm/hafner/ArchitectureTest.java' size='18' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/PackageArchitectureTest.java' size='10' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/AbstractPackageDetector.java' size='20' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/AbstractParserTest.java' size='54' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/CSharpNamespaceDetector.java' size='19' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/CSharpNamespaceDetectorTest.java' size='20' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/Categories.java' size='19' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/CategoriesAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/DuplicationGroup.java' size='33' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/DuplicationGroupAssert.java' size='55' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/DuplicationGroupTest.java' size='47' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FileNameResolver.java' size='38' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FileNameResolverAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FileNameResolverTest.java' size='157' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FileReaderFactory.java' size='40' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FileReaderFactoryAssert.java' size='20' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FileReaderFactoryTest.java' size='75' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FilteredLog.java' size='44' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FilteredLogAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FilteredLogTest.java' size='46' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FingerprintGenerator.java' size='37' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FingerprintGeneratorAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FingerprintGeneratorTest.java' size='94' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FullTextFingerprint.java' size='57' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FullTextFingerprintAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/FullTextFingerprintTest.java' size='47' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/Issue.java' size='266' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/IssueAssert.java' size='235' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/IssueBuilder.java' size='162' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/IssueBuilderAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/IssueBuilderTest.java' size='182' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/IssueDifference.java' size='62' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/IssueDifferenceAssert.java' size='132' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/IssueDifferenceTest.java' size='118' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/IssueFilterTest.java' size='213' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/IssueParser.java' size='14' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/IssueParserAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/IssueTest.java' size='231' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/JavaPackageDetector.java' size='19' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/JavaPackageDetectorTest.java' size='23' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/LineRange.java' size='37' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/LineRangeAssert.java' size='20' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/LineRangeList.java' size='200' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/LineRangeListAssert.java' size='16' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/LineRangeListTest.java' size='70' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/LookaheadParser.java' size='51' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/LookaheadParserAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ModuleDetector.java' size='127' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ModuleDetectorAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ModuleDetectorFileSystemAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ModuleDetectorTest.java' size='194' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ModuleResolver.java' size='15' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ModuleResolverAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ModuleResolverTest.java' size='21' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/PackageDetectors.java' size='20' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/PackageDetectorsTest.java' size='11' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/PackageNameResolver.java' size='30' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/PackageNameResolverAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/PackageNameResolverTest.java' size='51' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ParsingCanceledException.java' size='8' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ParsingCanceledExceptionAssert.java' size='69' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ParsingException.java' size='14' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ParsingExceptionAssert.java' size='69' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ReaderFactory.java' size='65' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ReaderFactoryAssert.java' size='20' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/RegexpLineParser.java' size='15' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/RegexpLineParserAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/Report.java' size='337' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ReportAssert.java' size='624' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ReportIssueFilterBuilderAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ReportIssuePrinterAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ReportPrinterTest.java' size='31' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ReportStandardOutputPrinterAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/ReportTest.java' size='570' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/SecureDigester.java' size='11' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/SecureXmlParserFactory.java' size='61' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/SecureXmlParserFactoryAssert.java' size='6' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/SecureXmlParserFactoryTest.java' size='15' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/Severity.java' size='75' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/SeverityAssert.java' size='55' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/SeverityTest.java' size='57' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/assertions/Assertions.java' size='60' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/assertions/SoftAssertions.java' size='59' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/package-info.java' size='1' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/AcuCobolParser.java' size='14' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/AcuCobolParserTest.java' size='43' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/AjcParser.java' size='68' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/AjcParserTest.java' size='79' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/AnsibleLintParser.java' size='14' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/AnsibleLintParserTest.java' size='47' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/AntJavacParser.java' size='30' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/AntJavacParserTest.java' size='111' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/Armcc5CompilerParser.java' size='19' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/Armcc5CompilerParserTest.java' size='32' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ArmccCompilerParser.java' size='15' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ArmccCompilerParserTest.java' size='32' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/BuckminsterParser.java' size='11' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/BuckminsterParserTest.java' size='32' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CMakeParser.java' size='19' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CMakeParserTest.java' size='59' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CadenceIncisiveParser.java' size='46' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CadenceIncisiveParserTest.java' size='29' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CargoCheckParser.java' size='82' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CargoCheckParserTest.java' size='27' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CcmParserTest.java' size='24' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CheckStyleParserTest.java' size='49' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ClangAnalyzerPlistParser.java' size='64' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ClangAnalyzerPlistParserTest.java' size='40'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ClangParser.java' size='24' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ClangParserTest.java' size='131' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ClangTidyParser.java' size='18' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ClangTidyParserTest.java' size='67' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CodeAnalysisParser.java' size='22' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CodeAnalysisParserTest.java' size='32' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CoolfluxChessccParser.java' size='14' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CoolfluxChessccParserTest.java' size='18' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CppLintParser.java' size='23' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CppLintParserTest.java' size='51' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/CssLintParserTest.java' size='11' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/DScannerParser.java' size='29' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/DScannerParserTest.java' size='56' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/DiabCParser.java' size='19' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/DiabCParserTest.java' size='98' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/DoxygenParserTest.java' size='169' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/DrMemoryParser.java' size='75' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/DrMemoryParserTest.java' size='67' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/EclipseMavenParser.java' size='25' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/EclipseMavenParserTest.java' size='83' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/EclipseParser.java' size='38' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/EclipseParserTest.java' size='147' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/EclipseSharedChecks.java' size='39' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/EclipseXMLParser.java' size='99' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/EclipseXMLParserTest.java' size='106' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ErlcParser.java' size='19' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ErlcParserTest.java' size='23' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ErrorProneParser.java' size='38' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ErrorProneParserTest.java' size='34' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/FindBugsParser.java' size='164' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/FindBugsParserTest.java' size='141' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/FlexSdkParser.java' size='13' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/FlexSdkParserTest.java' size='45' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/FxcopParserTest.java' size='27' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/Gcc4CompilerParser.java' size='36' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/Gcc4CompilerParserTest.java' size='356' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/Gcc4LinkerParser.java' size='28' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/Gcc4LinkerParserTest.java' size='83' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GccParser.java' size='46' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GccParserTest.java' size='219' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GendarmeParserTest.java' size='33' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GhsMultiParser.java' size='24' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GhsMultiParserTest.java' size='57' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GnatParser.java' size='21' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GnatParserTest.java' size='76' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GnuFortranParser.java' size='45' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GnuFortranParserTest.java' size='103' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GoLintParser.java' size='15' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GoLintParserTest.java' size='53' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GoVetParser.java' size='12' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GoVetParserTest.java' size='23' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GradleErrorProneParser.java' size='14' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/GradleErrorProneParserTest.java' size='36' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/HpiCompileParserTest.java' size='25' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/IarCstatParser.java' size='24' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/IarCstatParserTest.java' size='54' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/IarParser.java' size='26' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/IarParserTest.java' size='99' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/IdeaInspectionParser.java' size='42' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/IdeaInspectionParserTest.java' size='67' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/IntelParser.java' size='22' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/IntelParserTest.java' size='110' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/InvalidsParser.java' size='19' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/InvalidsParserTest.java' size='39' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/IssuePropertiesParser.java' size='25' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/JSLintParserTest.java' size='44' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/JSLintXmlSaxParser.java' size='54' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/JavaDocParser.java' size='31' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/JavaDocParserTest.java' size='193' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/JavacParser.java' size='24' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/JavacParserTest.java' size='116' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/JcReportParserTest.java' size='46' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/JsonBaseParser.java' size='60' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/JsonLogParser.java' size='30' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/JsonLogParserTest.java' size='69' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/JsonParser.java' size='25' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/JsonParserTest.java' size='61' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/LintParser.java' size='8' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/MavenConsoleParser.java' size='53' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/MavenConsoleParserTest.java' size='64' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/MentorParser.java' size='80' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/MentorParserTest.java' size='90' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/MetrowerksCwCompilerParser.java' size='21' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/MetrowerksCwCompilerParserTest.java' size='49'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/MetrowerksCwLinkerParser.java' size='23' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/MetrowerksCwLinkerParserTest.java' size='35'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/MsBuildParser.java' size='59' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/MsBuildParserTest.java' size='651' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/NagFortranParser.java' size='22' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/NagFortranParserTest.java' size='303' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/P4Parser.java' size='24' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/P4ParserTest.java' size='56' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/Pep8Parser.java' size='22' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/Pep8ParserTest.java' size='100' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/PerlCriticParser.java' size='25' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/PerlCriticParserTest.java' size='74' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/PhpParser.java' size='24' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/PhpParserTest.java' size='64' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/PmdParserTest.java' size='74' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/PreFastParser.java' size='12' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/PreFastParserTest.java' size='33' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ProtoLintParser.java' size='13' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ProtoLintParserTest.java' size='27' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/PuppetLintParser.java' size='38' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/PuppetLintParserTest.java' size='52' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/PyLintParser.java' size='46' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/PylintParserTest.java' size='308' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/QacSourceCodeAnalyserParser.java' size='18' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/QacSourceCodeAnalyserParserTest.java' size='78'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/RfLintParser.java' size='151' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/RfLintParserTest.java' size='247' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/RobocopyParser.java' size='16' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/RobocopyParserTest.java' size='33' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/RuboCopParser.java' size='22' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/RuboCopParserTest.java' size='25' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/SbtScalacParser.java' size='16' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/SbtScalacParserTest.java' size='39' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ScalacParser.java' size='15' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ScalacParserTest.java' size='35' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/SonarQubeDiffParser.java' size='18' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/SonarQubeDiffParserTest.java' size='30' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/SonarQubeIssuesParser.java' size='21' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/SonarQubeIssuesParserTest.java' size='32' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/SonarQubeParser.java' size='106' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/SphinxBuildParser.java' size='19' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/SphinxBuildParserTest.java' size='67' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/StyleCopParser.java' size='37' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/StyleCopParserTest.java' size='55' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/SunCParser.java' size='17' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/SunCParserTest.java' size='67' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/TaglistParser.java' size='37' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/TaglistParserTest.java' size='45' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/TaskingVxCompilerParser.java' size='26' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/TaskingVxCompilerParserTest.java' size='63' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/TiCcsParser.java' size='24' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/TiCcsParserTest.java' size='74' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/TnsdlParser.java' size='18' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/TnsdlParserTest.java' size='35' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/XlcCompilerParser.java' size='40'
+               bugHash='e6758ffb5939090f503a5a0592b7536f' bugCount='2'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/XlcLinkerParser.java' size='46'
+               bugHash='fa0b7099f16bafe844718e303ba77f2b' bugCount='4'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/XlcLinkerParserTest.java' size='81' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/XlcParserTest.java' size='165' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/XmlParser.java' size='70' bugHash='0471e2ef3948e790b1821df037ec6503'
+               bugCount='1'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/XmlParserTest.java' size='119' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/YuiCompressorParser.java' size='103' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/YuiCompressorParserTest.java' size='39' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ccm/Ccm.java' size='13' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ccm/CcmParser.java' size='62' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ccm/Metric.java' size='39' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/ccm/package-info.java' size='1' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/checkstyle/CheckStyle.java' size='10' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/checkstyle/CheckStyleParser.java' size='49' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/checkstyle/Error.java' size='33' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/checkstyle/File.java' size='16' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/checkstyle/package-info.java' size='1' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/AbstractDryParser.java' size='30' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/cpd/CpdParser.java' size='35' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/cpd/CpdParserTest.java' size='99' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/cpd/Duplication.java' size='28' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/cpd/SourceFile.java' size='15' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/cpd/package-info.java' size='1' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/dupfinder/DupFinderParser.java' size='48'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/dupfinder/DupFinderParserTest.java' size='66'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/dupfinder/Duplicate.java' size='16' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/dupfinder/Fragment.java' size='29' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/dupfinder/Range.java' size='15' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/dupfinder/package-info.java' size='1' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/package-info.java' size='1' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/simian/Block.java' size='21' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/simian/Set.java' size='16' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/simian/SimianParser.java' size='34' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/simian/SimianParserTest.java' size='92' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/dry/simian/package-info.java' size='1' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/fxcop/FxCopParser.java' size='134' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/fxcop/FxCopRule.java' size='34' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/fxcop/FxCopRuleSet.java' size='28' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/fxcop/package-info.java' size='1' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/gendarme/GendarmeParser.java' size='70' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/gendarme/GendarmeRule.java' size='27' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/gendarme/GendarmeRuleType.java' size='12' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/gendarme/package-info.java' size='1' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/jcreport/File.java' size='46' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/jcreport/Item.java' size='51' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/jcreport/JcReportParser.java' size='44' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/jcreport/Report.java' size='13' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/jcreport/package-info.java' size='1' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/package-info.java' size='1' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/pmd/File.java' size='16' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/pmd/Pmd.java' size='17' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/pmd/PmdError.java' size='21' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/pmd/PmdParser.java' size='92' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/pmd/Violation.java' size='63' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/pmd/package-info.java' size='1' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/pvsstudio/AnalyzerType.java' size='101' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/pvsstudio/PVSStudioParser.java' size='26' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/pvsstudio/PVSStudioParserTest.java' size='31'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/pvsstudio/PlogMessage.java' size='80' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/AbstractViolationAdapter.java' size='43'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/AndroidLintParserAdapter.java' size='7'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/AndroidLintParserAdapterTest.java' size='29'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/CodeNarcAdapter.java' size='7' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/CodeNarcAdapterTest.java' size='17'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/CppCheckAdapter.java' size='21' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/CppCheckAdapterTest.java' size='51'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/DocFxAdapter.java' size='10' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/DocFxAdapterTest.java' size='33' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/Flake8Adapter.java' size='7' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/Flake8AdapterTest.java' size='42'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/JUnitAdapter.java' size='7' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/JUnitAdapterTest.java' size='34' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/JsHintAdapter.java' size='7' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/JsHintAdapterTest.java' size='16'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/KlocWorkAdapter.java' size='7' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/KlocWorkAdapterTest.java' size='23'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/MyPyAdapter.java' size='7' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/MyPyAdapterTest.java' size='21' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/PitAdapter.java' size='18' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/PitAdapterTest.java' size='25' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/PyDocStyleAdapter.java' size='7' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/PyDocStyleAdapterTest.java' size='17'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/ResharperInspectCodeAdapter.java' size='6'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/ResharperInspectCodeAdapterTest.java' size='34'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/XmlLintAdapter.java' size='7' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/XmlLintAdapterTest.java' size='17'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/YamlLintAdapter.java' size='7' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/YamlLintAdapterTest.java' size='18'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/ZptLintAdapter.java' size='7' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/ZptLintAdapterTest.java' size='16'
+               bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/analysis/parser/violations/package-info.java' size='1' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/util/IntegerParser.java' size='9' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/util/IntegerParserTest.java' size='11' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/util/LookaheadStream.java' size='50' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/util/LookaheadStreamTest.java' size='55' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/util/XmlElementUtil.java' size='25' bugCount='0'></FileStats>
+    <FileStats path='edu/hm/hafner/util/package-info.java' size='1' bugCount='0'></FileStats>
+    <PackageStats package='edu.hm.hafner' total_bugs='0' total_size='28' total_types='2'>
+      <ClassStats bugs='0' size='18' interface='false' sourceFile='ArchitectureTest.java'
+                  class='edu.hm.hafner.ArchitectureTest'></ClassStats>
+      <ClassStats bugs='0' size='10' interface='false' sourceFile='PackageArchitectureTest.java'
+                  class='edu.hm.hafner.PackageArchitectureTest'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis' total_bugs='0' total_size='5641' total_types='91'>
+      <ClassStats bugs='0' size='20' interface='false' sourceFile='AbstractPackageDetector.java'
+                  class='edu.hm.hafner.analysis.AbstractPackageDetector'></ClassStats>
+      <ClassStats bugs='0' size='44' interface='false' sourceFile='AbstractParserTest.java'
+                  class='edu.hm.hafner.analysis.AbstractParserTest'></ClassStats>
+      <ClassStats bugs='0' size='10' interface='false' sourceFile='AbstractParserTest.java'
+                  class='edu.hm.hafner.analysis.AbstractParserTest$StringReaderFactory'></ClassStats>
+      <ClassStats bugs='0' size='19' interface='false' sourceFile='CSharpNamespaceDetector.java'
+                  class='edu.hm.hafner.analysis.CSharpNamespaceDetector'></ClassStats>
+      <ClassStats bugs='0' size='20' interface='false' sourceFile='CSharpNamespaceDetectorTest.java'
+                  class='edu.hm.hafner.analysis.CSharpNamespaceDetectorTest'></ClassStats>
+      <ClassStats bugs='0' size='19' interface='false' sourceFile='Categories.java'
+                  class='edu.hm.hafner.analysis.Categories'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='CategoriesAssert.java'
+                  class='edu.hm.hafner.analysis.CategoriesAssert'></ClassStats>
+      <ClassStats bugs='0' size='33' interface='false' sourceFile='DuplicationGroup.java'
+                  class='edu.hm.hafner.analysis.DuplicationGroup'></ClassStats>
+      <ClassStats bugs='0' size='55' interface='false' sourceFile='DuplicationGroupAssert.java'
+                  class='edu.hm.hafner.analysis.DuplicationGroupAssert'></ClassStats>
+      <ClassStats bugs='0' size='47' interface='false' sourceFile='DuplicationGroupTest.java'
+                  class='edu.hm.hafner.analysis.DuplicationGroupTest'></ClassStats>
+      <ClassStats bugs='0' size='38' interface='false' sourceFile='FileNameResolver.java'
+                  class='edu.hm.hafner.analysis.FileNameResolver'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='FileNameResolverAssert.java'
+                  class='edu.hm.hafner.analysis.FileNameResolverAssert'></ClassStats>
+      <ClassStats bugs='0' size='157' interface='false' sourceFile='FileNameResolverTest.java'
+                  class='edu.hm.hafner.analysis.FileNameResolverTest'></ClassStats>
+      <ClassStats bugs='0' size='40' interface='false' sourceFile='FileReaderFactory.java'
+                  class='edu.hm.hafner.analysis.FileReaderFactory'></ClassStats>
+      <ClassStats bugs='0' size='20' interface='false' sourceFile='FileReaderFactoryAssert.java'
+                  class='edu.hm.hafner.analysis.FileReaderFactoryAssert'></ClassStats>
+      <ClassStats bugs='0' size='51' interface='false' sourceFile='FileReaderFactoryTest.java'
+                  class='edu.hm.hafner.analysis.FileReaderFactoryTest'></ClassStats>
+      <ClassStats bugs='0' size='24' interface='false' sourceFile='FileReaderFactoryTest.java'
+                  class='edu.hm.hafner.analysis.FileReaderFactoryTest$ConsoleLogReaderFactory'></ClassStats>
+      <ClassStats bugs='0' size='44' interface='false' sourceFile='FilteredLog.java'
+                  class='edu.hm.hafner.analysis.FilteredLog'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='FilteredLogAssert.java'
+                  class='edu.hm.hafner.analysis.FilteredLogAssert'></ClassStats>
+      <ClassStats bugs='0' size='46' interface='false' sourceFile='FilteredLogTest.java'
+                  class='edu.hm.hafner.analysis.FilteredLogTest'></ClassStats>
+      <ClassStats bugs='0' size='37' interface='false' sourceFile='FingerprintGenerator.java'
+                  class='edu.hm.hafner.analysis.FingerprintGenerator'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='FingerprintGeneratorAssert.java'
+                  class='edu.hm.hafner.analysis.FingerprintGeneratorAssert'></ClassStats>
+      <ClassStats bugs='0' size='94' interface='false' sourceFile='FingerprintGeneratorTest.java'
+                  class='edu.hm.hafner.analysis.FingerprintGeneratorTest'></ClassStats>
+      <ClassStats bugs='0' size='52' interface='false' sourceFile='FullTextFingerprint.java'
+                  class='edu.hm.hafner.analysis.FullTextFingerprint'></ClassStats>
+      <ClassStats bugs='0' size='5' interface='false' sourceFile='FullTextFingerprint.java'
+                  class='edu.hm.hafner.analysis.FullTextFingerprint$FileSystem'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='FullTextFingerprintAssert.java'
+                  class='edu.hm.hafner.analysis.FullTextFingerprintAssert'></ClassStats>
+      <ClassStats bugs='0' size='47' interface='false' sourceFile='FullTextFingerprintTest.java'
+                  class='edu.hm.hafner.analysis.FullTextFingerprintTest'></ClassStats>
+      <ClassStats bugs='0' size='266' interface='false' sourceFile='Issue.java'
+                  class='edu.hm.hafner.analysis.Issue'></ClassStats>
+      <ClassStats bugs='0' size='235' interface='false' sourceFile='IssueAssert.java'
+                  class='edu.hm.hafner.analysis.IssueAssert'></ClassStats>
+      <ClassStats bugs='0' size='162' interface='false' sourceFile='IssueBuilder.java'
+                  class='edu.hm.hafner.analysis.IssueBuilder'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='IssueBuilderAssert.java'
+                  class='edu.hm.hafner.analysis.IssueBuilderAssert'></ClassStats>
+      <ClassStats bugs='0' size='182' interface='false' sourceFile='IssueBuilderTest.java'
+                  class='edu.hm.hafner.analysis.IssueBuilderTest'></ClassStats>
+      <ClassStats bugs='0' size='62' interface='false' sourceFile='IssueDifference.java'
+                  class='edu.hm.hafner.analysis.IssueDifference'></ClassStats>
+      <ClassStats bugs='0' size='132' interface='false' sourceFile='IssueDifferenceAssert.java'
+                  class='edu.hm.hafner.analysis.IssueDifferenceAssert'></ClassStats>
+      <ClassStats bugs='0' size='118' interface='false' sourceFile='IssueDifferenceTest.java'
+                  class='edu.hm.hafner.analysis.IssueDifferenceTest'></ClassStats>
+      <ClassStats bugs='0' size='213' interface='false' sourceFile='IssueFilterTest.java'
+                  class='edu.hm.hafner.analysis.IssueFilterTest'></ClassStats>
+      <ClassStats bugs='0' size='14' interface='false' sourceFile='IssueParser.java'
+                  class='edu.hm.hafner.analysis.IssueParser'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='IssueParserAssert.java'
+                  class='edu.hm.hafner.analysis.IssueParserAssert'></ClassStats>
+      <ClassStats bugs='0' size='231' interface='false' sourceFile='IssueTest.java'
+                  class='edu.hm.hafner.analysis.IssueTest'></ClassStats>
+      <ClassStats bugs='0' size='19' interface='false' sourceFile='JavaPackageDetector.java'
+                  class='edu.hm.hafner.analysis.JavaPackageDetector'></ClassStats>
+      <ClassStats bugs='0' size='23' interface='false' sourceFile='JavaPackageDetectorTest.java'
+                  class='edu.hm.hafner.analysis.JavaPackageDetectorTest'></ClassStats>
+      <ClassStats bugs='0' size='37' interface='false' sourceFile='LineRange.java'
+                  class='edu.hm.hafner.analysis.LineRange'></ClassStats>
+      <ClassStats bugs='0' size='20' interface='false' sourceFile='LineRangeAssert.java'
+                  class='edu.hm.hafner.analysis.LineRangeAssert'></ClassStats>
+      <ClassStats bugs='0' size='81' interface='false' sourceFile='LineRangeList.java'
+                  class='edu.hm.hafner.analysis.LineRangeList'></ClassStats>
+      <ClassStats bugs='0' size='119' interface='false' sourceFile='LineRangeList.java'
+                  class='edu.hm.hafner.analysis.LineRangeList$Cursor'></ClassStats>
+      <ClassStats bugs='0' size='16' interface='false' sourceFile='LineRangeListAssert.java'
+                  class='edu.hm.hafner.analysis.LineRangeListAssert'></ClassStats>
+      <ClassStats bugs='0' size='70' interface='false' sourceFile='LineRangeListTest.java'
+                  class='edu.hm.hafner.analysis.LineRangeListTest'></ClassStats>
+      <ClassStats bugs='0' size='51' interface='false' sourceFile='LookaheadParser.java'
+                  class='edu.hm.hafner.analysis.LookaheadParser'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='LookaheadParserAssert.java'
+                  class='edu.hm.hafner.analysis.LookaheadParserAssert'></ClassStats>
+      <ClassStats bugs='0' size='124' interface='false' sourceFile='ModuleDetector.java'
+                  class='edu.hm.hafner.analysis.ModuleDetector'></ClassStats>
+      <ClassStats bugs='0' size='3' interface='true' sourceFile='ModuleDetector.java'
+                  class='edu.hm.hafner.analysis.ModuleDetector$FileSystem'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='ModuleDetectorAssert.java'
+                  class='edu.hm.hafner.analysis.ModuleDetectorAssert'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='ModuleDetectorFileSystemAssert.java'
+                  class='edu.hm.hafner.analysis.ModuleDetectorFileSystemAssert'></ClassStats>
+      <ClassStats bugs='0' size='192' interface='false' sourceFile='ModuleDetectorTest.java'
+                  class='edu.hm.hafner.analysis.ModuleDetectorTest'></ClassStats>
+      <ClassStats bugs='0' size='2' interface='true' sourceFile='ModuleDetectorTest.java'
+                  class='edu.hm.hafner.analysis.ModuleDetectorTest$Stub'></ClassStats>
+      <ClassStats bugs='0' size='15' interface='false' sourceFile='ModuleResolver.java'
+                  class='edu.hm.hafner.analysis.ModuleResolver'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='ModuleResolverAssert.java'
+                  class='edu.hm.hafner.analysis.ModuleResolverAssert'></ClassStats>
+      <ClassStats bugs='0' size='21' interface='false' sourceFile='ModuleResolverTest.java'
+                  class='edu.hm.hafner.analysis.ModuleResolverTest'></ClassStats>
+      <ClassStats bugs='0' size='15' interface='false' sourceFile='PackageDetectors.java'
+                  class='edu.hm.hafner.analysis.PackageDetectors'></ClassStats>
+      <ClassStats bugs='0' size='5' interface='false' sourceFile='PackageDetectors.java'
+                  class='edu.hm.hafner.analysis.PackageDetectors$FileSystem'></ClassStats>
+      <ClassStats bugs='0' size='11' interface='false' sourceFile='PackageDetectorsTest.java'
+                  class='edu.hm.hafner.analysis.PackageDetectorsTest'></ClassStats>
+      <ClassStats bugs='0' size='30' interface='false' sourceFile='PackageNameResolver.java'
+                  class='edu.hm.hafner.analysis.PackageNameResolver'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='PackageNameResolverAssert.java'
+                  class='edu.hm.hafner.analysis.PackageNameResolverAssert'></ClassStats>
+      <ClassStats bugs='0' size='51' interface='false' sourceFile='PackageNameResolverTest.java'
+                  class='edu.hm.hafner.analysis.PackageNameResolverTest'></ClassStats>
+      <ClassStats bugs='0' size='8' interface='false' sourceFile='ParsingCanceledException.java'
+                  class='edu.hm.hafner.analysis.ParsingCanceledException'></ClassStats>
+      <ClassStats bugs='0' size='69' interface='false' sourceFile='ParsingCanceledExceptionAssert.java'
+                  class='edu.hm.hafner.analysis.ParsingCanceledExceptionAssert'></ClassStats>
+      <ClassStats bugs='0' size='14' interface='false' sourceFile='ParsingException.java'
+                  class='edu.hm.hafner.analysis.ParsingException'></ClassStats>
+      <ClassStats bugs='0' size='69' interface='false' sourceFile='ParsingExceptionAssert.java'
+                  class='edu.hm.hafner.analysis.ParsingExceptionAssert'></ClassStats>
+      <ClassStats bugs='0' size='65' interface='false' sourceFile='ReaderFactory.java'
+                  class='edu.hm.hafner.analysis.ReaderFactory'></ClassStats>
+      <ClassStats bugs='0' size='20' interface='false' sourceFile='ReaderFactoryAssert.java'
+                  class='edu.hm.hafner.analysis.ReaderFactoryAssert'></ClassStats>
+      <ClassStats bugs='0' size='15' interface='false' sourceFile='RegexpLineParser.java'
+                  class='edu.hm.hafner.analysis.RegexpLineParser'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='RegexpLineParserAssert.java'
+                  class='edu.hm.hafner.analysis.RegexpLineParserAssert'></ClassStats>
+      <ClassStats bugs='0' size='225' interface='false' sourceFile='Report.java'
+                  class='edu.hm.hafner.analysis.Report'></ClassStats>
+      <ClassStats bugs='0' size='87' interface='false' sourceFile='Report.java'
+                  class='edu.hm.hafner.analysis.Report$IssueFilterBuilder'></ClassStats>
+      <ClassStats bugs='0' size='11' interface='false' sourceFile='Report.java'
+                  class='edu.hm.hafner.analysis.Report$IssueFilterBuilder$FilterType'></ClassStats>
+      <ClassStats bugs='0' size='2' interface='true' sourceFile='Report.java'
+                  class='edu.hm.hafner.analysis.Report$IssuePrinter'></ClassStats>
+      <ClassStats bugs='0' size='12' interface='false' sourceFile='Report.java'
+                  class='edu.hm.hafner.analysis.Report$StandardOutputPrinter'></ClassStats>
+      <ClassStats bugs='0' size='624' interface='false' sourceFile='ReportAssert.java'
+                  class='edu.hm.hafner.analysis.ReportAssert'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='ReportIssueFilterBuilderAssert.java'
+                  class='edu.hm.hafner.analysis.ReportIssueFilterBuilderAssert'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='ReportIssuePrinterAssert.java'
+                  class='edu.hm.hafner.analysis.ReportIssuePrinterAssert'></ClassStats>
+      <ClassStats bugs='0' size='31' interface='false' sourceFile='ReportPrinterTest.java'
+                  class='edu.hm.hafner.analysis.ReportPrinterTest'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='ReportStandardOutputPrinterAssert.java'
+                  class='edu.hm.hafner.analysis.ReportStandardOutputPrinterAssert'></ClassStats>
+      <ClassStats bugs='0' size='570' interface='false' sourceFile='ReportTest.java'
+                  class='edu.hm.hafner.analysis.ReportTest'></ClassStats>
+      <ClassStats bugs='0' size='11' interface='false' sourceFile='SecureDigester.java'
+                  class='edu.hm.hafner.analysis.SecureDigester'></ClassStats>
+      <ClassStats bugs='0' size='61' interface='false' sourceFile='SecureXmlParserFactory.java'
+                  class='edu.hm.hafner.analysis.SecureXmlParserFactory'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='SecureXmlParserFactoryAssert.java'
+                  class='edu.hm.hafner.analysis.SecureXmlParserFactoryAssert'></ClassStats>
+      <ClassStats bugs='0' size='15' interface='false' sourceFile='SecureXmlParserFactoryTest.java'
+                  class='edu.hm.hafner.analysis.SecureXmlParserFactoryTest'></ClassStats>
+      <ClassStats bugs='0' size='75' interface='false' sourceFile='Severity.java'
+                  class='edu.hm.hafner.analysis.Severity'></ClassStats>
+      <ClassStats bugs='0' size='55' interface='false' sourceFile='SeverityAssert.java'
+                  class='edu.hm.hafner.analysis.SeverityAssert'></ClassStats>
+      <ClassStats bugs='0' size='57' interface='false' sourceFile='SeverityTest.java'
+                  class='edu.hm.hafner.analysis.SeverityTest'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.analysis.package-info'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.assertions' total_bugs='0' total_size='119' total_types='2'>
+      <ClassStats bugs='0' size='60' interface='false' sourceFile='Assertions.java'
+                  class='edu.hm.hafner.analysis.assertions.Assertions'></ClassStats>
+      <ClassStats bugs='0' size='59' interface='false' sourceFile='SoftAssertions.java'
+                  class='edu.hm.hafner.analysis.assertions.SoftAssertions'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.parser' total_bugs='7' priority_2='7' total_size='10136'
+                  total_types='180'>
+      <ClassStats bugs='0' size='14' interface='false' sourceFile='AcuCobolParser.java'
+                  class='edu.hm.hafner.analysis.parser.AcuCobolParser'></ClassStats>
+      <ClassStats bugs='0' size='43' interface='false' sourceFile='AcuCobolParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.AcuCobolParserTest'></ClassStats>
+      <ClassStats bugs='0' size='53' interface='false' sourceFile='AjcParser.java'
+                  class='edu.hm.hafner.analysis.parser.AjcParser'></ClassStats>
+      <ClassStats bugs='0' size='4' interface='false' sourceFile='AjcParser.java'
+                  class='edu.hm.hafner.analysis.parser.AjcParser$1'></ClassStats>
+      <ClassStats bugs='0' size='11' interface='false' sourceFile='AjcParser.java'
+                  class='edu.hm.hafner.analysis.parser.AjcParser$States'></ClassStats>
+      <ClassStats bugs='0' size='79' interface='false' sourceFile='AjcParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.AjcParserTest'></ClassStats>
+      <ClassStats bugs='0' size='14' interface='false' sourceFile='AnsibleLintParser.java'
+                  class='edu.hm.hafner.analysis.parser.AnsibleLintParser'></ClassStats>
+      <ClassStats bugs='0' size='47' interface='false' sourceFile='AnsibleLintParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.AnsibleLintParserTest'></ClassStats>
+      <ClassStats bugs='0' size='30' interface='false' sourceFile='AntJavacParser.java'
+                  class='edu.hm.hafner.analysis.parser.AntJavacParser'></ClassStats>
+      <ClassStats bugs='0' size='111' interface='false' sourceFile='AntJavacParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.AntJavacParserTest'></ClassStats>
+      <ClassStats bugs='0' size='19' interface='false' sourceFile='Armcc5CompilerParser.java'
+                  class='edu.hm.hafner.analysis.parser.Armcc5CompilerParser'></ClassStats>
+      <ClassStats bugs='0' size='32' interface='false' sourceFile='Armcc5CompilerParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.Armcc5CompilerParserTest'></ClassStats>
+      <ClassStats bugs='0' size='15' interface='false' sourceFile='ArmccCompilerParser.java'
+                  class='edu.hm.hafner.analysis.parser.ArmccCompilerParser'></ClassStats>
+      <ClassStats bugs='0' size='32' interface='false' sourceFile='ArmccCompilerParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.ArmccCompilerParserTest'></ClassStats>
+      <ClassStats bugs='0' size='11' interface='false' sourceFile='BuckminsterParser.java'
+                  class='edu.hm.hafner.analysis.parser.BuckminsterParser'></ClassStats>
+      <ClassStats bugs='0' size='32' interface='false' sourceFile='BuckminsterParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.BuckminsterParserTest'></ClassStats>
+      <ClassStats bugs='0' size='19' interface='false' sourceFile='CMakeParser.java'
+                  class='edu.hm.hafner.analysis.parser.CMakeParser'></ClassStats>
+      <ClassStats bugs='0' size='59' interface='false' sourceFile='CMakeParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.CMakeParserTest'></ClassStats>
+      <ClassStats bugs='0' size='46' interface='false' sourceFile='CadenceIncisiveParser.java'
+                  class='edu.hm.hafner.analysis.parser.CadenceIncisiveParser'></ClassStats>
+      <ClassStats bugs='0' size='29' interface='false' sourceFile='CadenceIncisiveParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.CadenceIncisiveParserTest'></ClassStats>
+      <ClassStats bugs='0' size='62' interface='false' sourceFile='CargoCheckParser.java'
+                  class='edu.hm.hafner.analysis.parser.CargoCheckParser'></ClassStats>
+      <ClassStats bugs='0' size='20' interface='false' sourceFile='CargoCheckParser.java'
+                  class='edu.hm.hafner.analysis.parser.CargoCheckParser$CompilerMessageDetails'></ClassStats>
+      <ClassStats bugs='0' size='27' interface='false' sourceFile='CargoCheckParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.CargoCheckParserTest'></ClassStats>
+      <ClassStats bugs='0' size='24' interface='false' sourceFile='CcmParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.CcmParserTest'></ClassStats>
+      <ClassStats bugs='0' size='49' interface='false' sourceFile='CheckStyleParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.CheckStyleParserTest'></ClassStats>
+      <ClassStats bugs='0' size='64' interface='false' sourceFile='ClangAnalyzerPlistParser.java'
+                  class='edu.hm.hafner.analysis.parser.ClangAnalyzerPlistParser'></ClassStats>
+      <ClassStats bugs='0' size='40' interface='false' sourceFile='ClangAnalyzerPlistParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.ClangAnalyzerPlistParserTest'></ClassStats>
+      <ClassStats bugs='0' size='24' interface='false' sourceFile='ClangParser.java'
+                  class='edu.hm.hafner.analysis.parser.ClangParser'></ClassStats>
+      <ClassStats bugs='0' size='131' interface='false' sourceFile='ClangParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.ClangParserTest'></ClassStats>
+      <ClassStats bugs='0' size='18' interface='false' sourceFile='ClangTidyParser.java'
+                  class='edu.hm.hafner.analysis.parser.ClangTidyParser'></ClassStats>
+      <ClassStats bugs='0' size='67' interface='false' sourceFile='ClangTidyParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.ClangTidyParserTest'></ClassStats>
+      <ClassStats bugs='0' size='22' interface='false' sourceFile='CodeAnalysisParser.java'
+                  class='edu.hm.hafner.analysis.parser.CodeAnalysisParser'></ClassStats>
+      <ClassStats bugs='0' size='32' interface='false' sourceFile='CodeAnalysisParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.CodeAnalysisParserTest'></ClassStats>
+      <ClassStats bugs='0' size='14' interface='false' sourceFile='CoolfluxChessccParser.java'
+                  class='edu.hm.hafner.analysis.parser.CoolfluxChessccParser'></ClassStats>
+      <ClassStats bugs='0' size='18' interface='false' sourceFile='CoolfluxChessccParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.CoolfluxChessccParserTest'></ClassStats>
+      <ClassStats bugs='0' size='23' interface='false' sourceFile='CppLintParser.java'
+                  class='edu.hm.hafner.analysis.parser.CppLintParser'></ClassStats>
+      <ClassStats bugs='0' size='51' interface='false' sourceFile='CppLintParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.CppLintParserTest'></ClassStats>
+      <ClassStats bugs='0' size='11' interface='false' sourceFile='CssLintParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.CssLintParserTest'></ClassStats>
+      <ClassStats bugs='0' size='29' interface='false' sourceFile='DScannerParser.java'
+                  class='edu.hm.hafner.analysis.parser.DScannerParser'></ClassStats>
+      <ClassStats bugs='0' size='56' interface='false' sourceFile='DScannerParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.DScannerParserTest'></ClassStats>
+      <ClassStats bugs='0' size='19' interface='false' sourceFile='DiabCParser.java'
+                  class='edu.hm.hafner.analysis.parser.DiabCParser'></ClassStats>
+      <ClassStats bugs='0' size='98' interface='false' sourceFile='DiabCParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.DiabCParserTest'></ClassStats>
+      <ClassStats bugs='0' size='169' interface='false' sourceFile='DoxygenParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.DoxygenParserTest'></ClassStats>
+      <ClassStats bugs='0' size='75' interface='false' sourceFile='DrMemoryParser.java'
+                  class='edu.hm.hafner.analysis.parser.DrMemoryParser'></ClassStats>
+      <ClassStats bugs='0' size='67' interface='false' sourceFile='DrMemoryParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.DrMemoryParserTest'></ClassStats>
+      <ClassStats bugs='0' size='25' interface='false' sourceFile='EclipseMavenParser.java'
+                  class='edu.hm.hafner.analysis.parser.EclipseMavenParser'></ClassStats>
+      <ClassStats bugs='0' size='83' interface='false' sourceFile='EclipseMavenParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.EclipseMavenParserTest'></ClassStats>
+      <ClassStats bugs='0' size='38' interface='false' sourceFile='EclipseParser.java'
+                  class='edu.hm.hafner.analysis.parser.EclipseParser'></ClassStats>
+      <ClassStats bugs='0' size='147' interface='false' sourceFile='EclipseParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.EclipseParserTest'></ClassStats>
+      <ClassStats bugs='0' size='39' interface='false' sourceFile='EclipseSharedChecks.java'
+                  class='edu.hm.hafner.analysis.parser.EclipseSharedChecks'></ClassStats>
+      <ClassStats bugs='0' size='99' interface='false' sourceFile='EclipseXMLParser.java'
+                  class='edu.hm.hafner.analysis.parser.EclipseXMLParser'></ClassStats>
+      <ClassStats bugs='0' size='106' interface='false' sourceFile='EclipseXMLParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.EclipseXMLParserTest'></ClassStats>
+      <ClassStats bugs='0' size='19' interface='false' sourceFile='ErlcParser.java'
+                  class='edu.hm.hafner.analysis.parser.ErlcParser'></ClassStats>
+      <ClassStats bugs='0' size='23' interface='false' sourceFile='ErlcParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.ErlcParserTest'></ClassStats>
+      <ClassStats bugs='0' size='38' interface='false' sourceFile='ErrorProneParser.java'
+                  class='edu.hm.hafner.analysis.parser.ErrorProneParser'></ClassStats>
+      <ClassStats bugs='0' size='34' interface='false' sourceFile='ErrorProneParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.ErrorProneParserTest'></ClassStats>
+      <ClassStats bugs='0' size='126' interface='false' sourceFile='FindBugsParser.java'
+                  class='edu.hm.hafner.analysis.parser.FindBugsParser'></ClassStats>
+      <ClassStats bugs='0' size='11' interface='false' sourceFile='FindBugsParser.java'
+                  class='edu.hm.hafner.analysis.parser.FindBugsParser$PriorityProperty'></ClassStats>
+      <ClassStats bugs='0' size='27' interface='false' sourceFile='FindBugsParser.java'
+                  class='edu.hm.hafner.analysis.parser.FindBugsParser$XmlBugInstance'></ClassStats>
+      <ClassStats bugs='0' size='141' interface='false' sourceFile='FindBugsParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.FindBugsParserTest'></ClassStats>
+      <ClassStats bugs='0' size='13' interface='false' sourceFile='FlexSdkParser.java'
+                  class='edu.hm.hafner.analysis.parser.FlexSdkParser'></ClassStats>
+      <ClassStats bugs='0' size='45' interface='false' sourceFile='FlexSdkParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.FlexSdkParserTest'></ClassStats>
+      <ClassStats bugs='0' size='27' interface='false' sourceFile='FxcopParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.FxcopParserTest'></ClassStats>
+      <ClassStats bugs='0' size='36' interface='false' sourceFile='Gcc4CompilerParser.java'
+                  class='edu.hm.hafner.analysis.parser.Gcc4CompilerParser'></ClassStats>
+      <ClassStats bugs='0' size='356' interface='false' sourceFile='Gcc4CompilerParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.Gcc4CompilerParserTest'></ClassStats>
+      <ClassStats bugs='0' size='28' interface='false' sourceFile='Gcc4LinkerParser.java'
+                  class='edu.hm.hafner.analysis.parser.Gcc4LinkerParser'></ClassStats>
+      <ClassStats bugs='0' size='83' interface='false' sourceFile='Gcc4LinkerParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.Gcc4LinkerParserTest'></ClassStats>
+      <ClassStats bugs='0' size='46' interface='false' sourceFile='GccParser.java'
+                  class='edu.hm.hafner.analysis.parser.GccParser'></ClassStats>
+      <ClassStats bugs='0' size='219' interface='false' sourceFile='GccParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.GccParserTest'></ClassStats>
+      <ClassStats bugs='0' size='33' interface='false' sourceFile='GendarmeParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.GendarmeParserTest'></ClassStats>
+      <ClassStats bugs='0' size='24' interface='false' sourceFile='GhsMultiParser.java'
+                  class='edu.hm.hafner.analysis.parser.GhsMultiParser'></ClassStats>
+      <ClassStats bugs='0' size='57' interface='false' sourceFile='GhsMultiParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.GhsMultiParserTest'></ClassStats>
+      <ClassStats bugs='0' size='21' interface='false' sourceFile='GnatParser.java'
+                  class='edu.hm.hafner.analysis.parser.GnatParser'></ClassStats>
+      <ClassStats bugs='0' size='76' interface='false' sourceFile='GnatParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.GnatParserTest'></ClassStats>
+      <ClassStats bugs='0' size='45' interface='false' sourceFile='GnuFortranParser.java'
+                  class='edu.hm.hafner.analysis.parser.GnuFortranParser'></ClassStats>
+      <ClassStats bugs='0' size='103' interface='false' sourceFile='GnuFortranParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.GnuFortranParserTest'></ClassStats>
+      <ClassStats bugs='0' size='15' interface='false' sourceFile='GoLintParser.java'
+                  class='edu.hm.hafner.analysis.parser.GoLintParser'></ClassStats>
+      <ClassStats bugs='0' size='53' interface='false' sourceFile='GoLintParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.GoLintParserTest'></ClassStats>
+      <ClassStats bugs='0' size='12' interface='false' sourceFile='GoVetParser.java'
+                  class='edu.hm.hafner.analysis.parser.GoVetParser'></ClassStats>
+      <ClassStats bugs='0' size='23' interface='false' sourceFile='GoVetParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.GoVetParserTest'></ClassStats>
+      <ClassStats bugs='0' size='14' interface='false' sourceFile='GradleErrorProneParser.java'
+                  class='edu.hm.hafner.analysis.parser.GradleErrorProneParser'></ClassStats>
+      <ClassStats bugs='0' size='36' interface='false' sourceFile='GradleErrorProneParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.GradleErrorProneParserTest'></ClassStats>
+      <ClassStats bugs='0' size='25' interface='false' sourceFile='HpiCompileParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.HpiCompileParserTest'></ClassStats>
+      <ClassStats bugs='0' size='24' interface='false' sourceFile='IarCstatParser.java'
+                  class='edu.hm.hafner.analysis.parser.IarCstatParser'></ClassStats>
+      <ClassStats bugs='0' size='54' interface='false' sourceFile='IarCstatParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.IarCstatParserTest'></ClassStats>
+      <ClassStats bugs='0' size='26' interface='false' sourceFile='IarParser.java'
+                  class='edu.hm.hafner.analysis.parser.IarParser'></ClassStats>
+      <ClassStats bugs='0' size='99' interface='false' sourceFile='IarParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.IarParserTest'></ClassStats>
+      <ClassStats bugs='0' size='42' interface='false' sourceFile='IdeaInspectionParser.java'
+                  class='edu.hm.hafner.analysis.parser.IdeaInspectionParser'></ClassStats>
+      <ClassStats bugs='0' size='67' interface='false' sourceFile='IdeaInspectionParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.IdeaInspectionParserTest'></ClassStats>
+      <ClassStats bugs='0' size='22' interface='false' sourceFile='IntelParser.java'
+                  class='edu.hm.hafner.analysis.parser.IntelParser'></ClassStats>
+      <ClassStats bugs='0' size='110' interface='false' sourceFile='IntelParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.IntelParserTest'></ClassStats>
+      <ClassStats bugs='0' size='19' interface='false' sourceFile='InvalidsParser.java'
+                  class='edu.hm.hafner.analysis.parser.InvalidsParser'></ClassStats>
+      <ClassStats bugs='0' size='39' interface='false' sourceFile='InvalidsParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.InvalidsParserTest'></ClassStats>
+      <ClassStats bugs='0' size='25' interface='false' sourceFile='IssuePropertiesParser.java'
+                  class='edu.hm.hafner.analysis.parser.IssuePropertiesParser'></ClassStats>
+      <ClassStats bugs='0' size='44' interface='false' sourceFile='JSLintParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.JSLintParserTest'></ClassStats>
+      <ClassStats bugs='0' size='54' interface='false' sourceFile='JSLintXmlSaxParser.java'
+                  class='edu.hm.hafner.analysis.parser.JSLintXmlSaxParser'></ClassStats>
+      <ClassStats bugs='0' size='31' interface='false' sourceFile='JavaDocParser.java'
+                  class='edu.hm.hafner.analysis.parser.JavaDocParser'></ClassStats>
+      <ClassStats bugs='0' size='193' interface='false' sourceFile='JavaDocParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.JavaDocParserTest'></ClassStats>
+      <ClassStats bugs='0' size='24' interface='false' sourceFile='JavacParser.java'
+                  class='edu.hm.hafner.analysis.parser.JavacParser'></ClassStats>
+      <ClassStats bugs='0' size='116' interface='false' sourceFile='JavacParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.JavacParserTest'></ClassStats>
+      <ClassStats bugs='0' size='46' interface='false' sourceFile='JcReportParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.JcReportParserTest'></ClassStats>
+      <ClassStats bugs='0' size='60' interface='false' sourceFile='JsonBaseParser.java'
+                  class='edu.hm.hafner.analysis.parser.JsonBaseParser'></ClassStats>
+      <ClassStats bugs='0' size='30' interface='false' sourceFile='JsonLogParser.java'
+                  class='edu.hm.hafner.analysis.parser.JsonLogParser'></ClassStats>
+      <ClassStats bugs='0' size='69' interface='false' sourceFile='JsonLogParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.JsonLogParserTest'></ClassStats>
+      <ClassStats bugs='0' size='25' interface='false' sourceFile='JsonParser.java'
+                  class='edu.hm.hafner.analysis.parser.JsonParser'></ClassStats>
+      <ClassStats bugs='0' size='61' interface='false' sourceFile='JsonParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.JsonParserTest'></ClassStats>
+      <ClassStats bugs='0' size='8' interface='false' sourceFile='LintParser.java'
+                  class='edu.hm.hafner.analysis.parser.LintParser'></ClassStats>
+      <ClassStats bugs='0' size='53' interface='false' sourceFile='MavenConsoleParser.java'
+                  class='edu.hm.hafner.analysis.parser.MavenConsoleParser'></ClassStats>
+      <ClassStats bugs='0' size='64' interface='false' sourceFile='MavenConsoleParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.MavenConsoleParserTest'></ClassStats>
+      <ClassStats bugs='0' size='80' interface='false' sourceFile='MentorParser.java'
+                  class='edu.hm.hafner.analysis.parser.MentorParser'></ClassStats>
+      <ClassStats bugs='0' size='90' interface='false' sourceFile='MentorParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.MentorParserTest'></ClassStats>
+      <ClassStats bugs='0' size='21' interface='false' sourceFile='MetrowerksCwCompilerParser.java'
+                  class='edu.hm.hafner.analysis.parser.MetrowerksCwCompilerParser'></ClassStats>
+      <ClassStats bugs='0' size='49' interface='false' sourceFile='MetrowerksCwCompilerParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.MetrowerksCwCompilerParserTest'></ClassStats>
+      <ClassStats bugs='0' size='23' interface='false' sourceFile='MetrowerksCwLinkerParser.java'
+                  class='edu.hm.hafner.analysis.parser.MetrowerksCwLinkerParser'></ClassStats>
+      <ClassStats bugs='0' size='35' interface='false' sourceFile='MetrowerksCwLinkerParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.MetrowerksCwLinkerParserTest'></ClassStats>
+      <ClassStats bugs='0' size='59' interface='false' sourceFile='MsBuildParser.java'
+                  class='edu.hm.hafner.analysis.parser.MsBuildParser'></ClassStats>
+      <ClassStats bugs='0' size='651' interface='false' sourceFile='MsBuildParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.MsBuildParserTest'></ClassStats>
+      <ClassStats bugs='0' size='22' interface='false' sourceFile='NagFortranParser.java'
+                  class='edu.hm.hafner.analysis.parser.NagFortranParser'></ClassStats>
+      <ClassStats bugs='0' size='303' interface='false' sourceFile='NagFortranParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.NagFortranParserTest'></ClassStats>
+      <ClassStats bugs='0' size='24' interface='false' sourceFile='P4Parser.java'
+                  class='edu.hm.hafner.analysis.parser.P4Parser'></ClassStats>
+      <ClassStats bugs='0' size='56' interface='false' sourceFile='P4ParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.P4ParserTest'></ClassStats>
+      <ClassStats bugs='0' size='22' interface='false' sourceFile='Pep8Parser.java'
+                  class='edu.hm.hafner.analysis.parser.Pep8Parser'></ClassStats>
+      <ClassStats bugs='0' size='100' interface='false' sourceFile='Pep8ParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.Pep8ParserTest'></ClassStats>
+      <ClassStats bugs='0' size='25' interface='false' sourceFile='PerlCriticParser.java'
+                  class='edu.hm.hafner.analysis.parser.PerlCriticParser'></ClassStats>
+      <ClassStats bugs='0' size='74' interface='false' sourceFile='PerlCriticParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.PerlCriticParserTest'></ClassStats>
+      <ClassStats bugs='0' size='24' interface='false' sourceFile='PhpParser.java'
+                  class='edu.hm.hafner.analysis.parser.PhpParser'></ClassStats>
+      <ClassStats bugs='0' size='64' interface='false' sourceFile='PhpParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.PhpParserTest'></ClassStats>
+      <ClassStats bugs='0' size='74' interface='false' sourceFile='PmdParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.PmdParserTest'></ClassStats>
+      <ClassStats bugs='0' size='12' interface='false' sourceFile='PreFastParser.java'
+                  class='edu.hm.hafner.analysis.parser.PreFastParser'></ClassStats>
+      <ClassStats bugs='0' size='33' interface='false' sourceFile='PreFastParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.PreFastParserTest'></ClassStats>
+      <ClassStats bugs='0' size='13' interface='false' sourceFile='ProtoLintParser.java'
+                  class='edu.hm.hafner.analysis.parser.ProtoLintParser'></ClassStats>
+      <ClassStats bugs='0' size='27' interface='false' sourceFile='ProtoLintParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.ProtoLintParserTest'></ClassStats>
+      <ClassStats bugs='0' size='38' interface='false' sourceFile='PuppetLintParser.java'
+                  class='edu.hm.hafner.analysis.parser.PuppetLintParser'></ClassStats>
+      <ClassStats bugs='0' size='52' interface='false' sourceFile='PuppetLintParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.PuppetLintParserTest'></ClassStats>
+      <ClassStats bugs='0' size='46' interface='false' sourceFile='PyLintParser.java'
+                  class='edu.hm.hafner.analysis.parser.PyLintParser'></ClassStats>
+      <ClassStats bugs='0' size='308' interface='false' sourceFile='PylintParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.PylintParserTest'></ClassStats>
+      <ClassStats bugs='0' size='18' interface='false' sourceFile='QacSourceCodeAnalyserParser.java'
+                  class='edu.hm.hafner.analysis.parser.QacSourceCodeAnalyserParser'></ClassStats>
+      <ClassStats bugs='0' size='78' interface='false' sourceFile='QacSourceCodeAnalyserParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.QacSourceCodeAnalyserParserTest'></ClassStats>
+      <ClassStats bugs='0' size='42' interface='false' sourceFile='RfLintParser.java'
+                  class='edu.hm.hafner.analysis.parser.RfLintParser'></ClassStats>
+      <ClassStats bugs='0' size='23' interface='false' sourceFile='RfLintParser.java'
+                  class='edu.hm.hafner.analysis.parser.RfLintParser$RfLintCategory'></ClassStats>
+      <ClassStats bugs='0' size='54' interface='false' sourceFile='RfLintParser.java'
+                  class='edu.hm.hafner.analysis.parser.RfLintParser$RfLintRuleName'></ClassStats>
+      <ClassStats bugs='0' size='32' interface='false' sourceFile='RfLintParser.java'
+                  class='edu.hm.hafner.analysis.parser.RfLintParser$RfLintSeverity'></ClassStats>
+      <ClassStats bugs='0' size='247' interface='false' sourceFile='RfLintParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.RfLintParserTest'></ClassStats>
+      <ClassStats bugs='0' size='16' interface='false' sourceFile='RobocopyParser.java'
+                  class='edu.hm.hafner.analysis.parser.RobocopyParser'></ClassStats>
+      <ClassStats bugs='0' size='33' interface='false' sourceFile='RobocopyParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.RobocopyParserTest'></ClassStats>
+      <ClassStats bugs='0' size='22' interface='false' sourceFile='RuboCopParser.java'
+                  class='edu.hm.hafner.analysis.parser.RuboCopParser'></ClassStats>
+      <ClassStats bugs='0' size='25' interface='false' sourceFile='RuboCopParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.RuboCopParserTest'></ClassStats>
+      <ClassStats bugs='0' size='16' interface='false' sourceFile='SbtScalacParser.java'
+                  class='edu.hm.hafner.analysis.parser.SbtScalacParser'></ClassStats>
+      <ClassStats bugs='0' size='39' interface='false' sourceFile='SbtScalacParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.SbtScalacParserTest'></ClassStats>
+      <ClassStats bugs='0' size='15' interface='false' sourceFile='ScalacParser.java'
+                  class='edu.hm.hafner.analysis.parser.ScalacParser'></ClassStats>
+      <ClassStats bugs='0' size='35' interface='false' sourceFile='ScalacParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.ScalacParserTest'></ClassStats>
+      <ClassStats bugs='0' size='18' interface='false' sourceFile='SonarQubeDiffParser.java'
+                  class='edu.hm.hafner.analysis.parser.SonarQubeDiffParser'></ClassStats>
+      <ClassStats bugs='0' size='30' interface='false' sourceFile='SonarQubeDiffParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.SonarQubeDiffParserTest'></ClassStats>
+      <ClassStats bugs='0' size='21' interface='false' sourceFile='SonarQubeIssuesParser.java'
+                  class='edu.hm.hafner.analysis.parser.SonarQubeIssuesParser'></ClassStats>
+      <ClassStats bugs='0' size='32' interface='false' sourceFile='SonarQubeIssuesParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.SonarQubeIssuesParserTest'></ClassStats>
+      <ClassStats bugs='0' size='106' interface='false' sourceFile='SonarQubeParser.java'
+                  class='edu.hm.hafner.analysis.parser.SonarQubeParser'></ClassStats>
+      <ClassStats bugs='0' size='19' interface='false' sourceFile='SphinxBuildParser.java'
+                  class='edu.hm.hafner.analysis.parser.SphinxBuildParser'></ClassStats>
+      <ClassStats bugs='0' size='67' interface='false' sourceFile='SphinxBuildParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.SphinxBuildParserTest'></ClassStats>
+      <ClassStats bugs='0' size='37' interface='false' sourceFile='StyleCopParser.java'
+                  class='edu.hm.hafner.analysis.parser.StyleCopParser'></ClassStats>
+      <ClassStats bugs='0' size='55' interface='false' sourceFile='StyleCopParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.StyleCopParserTest'></ClassStats>
+      <ClassStats bugs='0' size='17' interface='false' sourceFile='SunCParser.java'
+                  class='edu.hm.hafner.analysis.parser.SunCParser'></ClassStats>
+      <ClassStats bugs='0' size='67' interface='false' sourceFile='SunCParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.SunCParserTest'></ClassStats>
+      <ClassStats bugs='0' size='37' interface='false' sourceFile='TaglistParser.java'
+                  class='edu.hm.hafner.analysis.parser.TaglistParser'></ClassStats>
+      <ClassStats bugs='0' size='45' interface='false' sourceFile='TaglistParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.TaglistParserTest'></ClassStats>
+      <ClassStats bugs='0' size='26' interface='false' sourceFile='TaskingVxCompilerParser.java'
+                  class='edu.hm.hafner.analysis.parser.TaskingVxCompilerParser'></ClassStats>
+      <ClassStats bugs='0' size='63' interface='false' sourceFile='TaskingVxCompilerParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.TaskingVxCompilerParserTest'></ClassStats>
+      <ClassStats bugs='0' size='24' interface='false' sourceFile='TiCcsParser.java'
+                  class='edu.hm.hafner.analysis.parser.TiCcsParser'></ClassStats>
+      <ClassStats bugs='0' size='74' interface='false' sourceFile='TiCcsParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.TiCcsParserTest'></ClassStats>
+      <ClassStats bugs='0' size='18' interface='false' sourceFile='TnsdlParser.java'
+                  class='edu.hm.hafner.analysis.parser.TnsdlParser'></ClassStats>
+      <ClassStats bugs='0' size='35' interface='false' sourceFile='TnsdlParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.TnsdlParserTest'></ClassStats>
+      <ClassStats bugs='2' size='40' priority_2='2' interface='false' sourceFile='XlcCompilerParser.java'
+                  class='edu.hm.hafner.analysis.parser.XlcCompilerParser'></ClassStats>
+      <ClassStats bugs='4' size='46' priority_2='4' interface='false' sourceFile='XlcLinkerParser.java'
+                  class='edu.hm.hafner.analysis.parser.XlcLinkerParser'></ClassStats>
+      <ClassStats bugs='0' size='81' interface='false' sourceFile='XlcLinkerParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.XlcLinkerParserTest'></ClassStats>
+      <ClassStats bugs='0' size='165' interface='false' sourceFile='XlcParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.XlcParserTest'></ClassStats>
+      <ClassStats bugs='1' size='70' priority_2='1' interface='false' sourceFile='XmlParser.java'
+                  class='edu.hm.hafner.analysis.parser.XmlParser'></ClassStats>
+      <ClassStats bugs='0' size='119' interface='false' sourceFile='XmlParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.XmlParserTest'></ClassStats>
+      <ClassStats bugs='0' size='57' interface='false' sourceFile='YuiCompressorParser.java'
+                  class='edu.hm.hafner.analysis.parser.YuiCompressorParser'></ClassStats>
+      <ClassStats bugs='0' size='46' interface='false' sourceFile='YuiCompressorParser.java'
+                  class='edu.hm.hafner.analysis.parser.YuiCompressorParser$CategoryAndPriority'></ClassStats>
+      <ClassStats bugs='0' size='39' interface='false' sourceFile='YuiCompressorParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.YuiCompressorParserTest'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.analysis.parser.package-info'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.parser.ccm' total_bugs='0' total_size='115' total_types='4'>
+      <ClassStats bugs='0' size='13' interface='false' sourceFile='Ccm.java'
+                  class='edu.hm.hafner.analysis.parser.ccm.Ccm'></ClassStats>
+      <ClassStats bugs='0' size='62' interface='false' sourceFile='CcmParser.java'
+                  class='edu.hm.hafner.analysis.parser.ccm.CcmParser'></ClassStats>
+      <ClassStats bugs='0' size='39' interface='false' sourceFile='Metric.java'
+                  class='edu.hm.hafner.analysis.parser.ccm.Metric'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.analysis.parser.ccm.package-info'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.parser.checkstyle' total_bugs='0' total_size='109' total_types='5'>
+      <ClassStats bugs='0' size='10' interface='false' sourceFile='CheckStyle.java'
+                  class='edu.hm.hafner.analysis.parser.checkstyle.CheckStyle'></ClassStats>
+      <ClassStats bugs='0' size='49' interface='false' sourceFile='CheckStyleParser.java'
+                  class='edu.hm.hafner.analysis.parser.checkstyle.CheckStyleParser'></ClassStats>
+      <ClassStats bugs='0' size='33' interface='false' sourceFile='Error.java'
+                  class='edu.hm.hafner.analysis.parser.checkstyle.Error'></ClassStats>
+      <ClassStats bugs='0' size='16' interface='false' sourceFile='File.java'
+                  class='edu.hm.hafner.analysis.parser.checkstyle.File'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.analysis.parser.checkstyle.package-info'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.parser.dry' total_bugs='0' total_size='31' total_types='2'>
+      <ClassStats bugs='0' size='30' interface='false' sourceFile='AbstractDryParser.java'
+                  class='edu.hm.hafner.analysis.parser.dry.AbstractDryParser'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.analysis.parser.dry.package-info'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.parser.dry.cpd' total_bugs='0' total_size='178' total_types='5'>
+      <ClassStats bugs='0' size='35' interface='false' sourceFile='CpdParser.java'
+                  class='edu.hm.hafner.analysis.parser.dry.cpd.CpdParser'></ClassStats>
+      <ClassStats bugs='0' size='99' interface='false' sourceFile='CpdParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.dry.cpd.CpdParserTest'></ClassStats>
+      <ClassStats bugs='0' size='28' interface='false' sourceFile='Duplication.java'
+                  class='edu.hm.hafner.analysis.parser.dry.cpd.Duplication'></ClassStats>
+      <ClassStats bugs='0' size='15' interface='false' sourceFile='SourceFile.java'
+                  class='edu.hm.hafner.analysis.parser.dry.cpd.SourceFile'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.analysis.parser.dry.cpd.package-info'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.parser.dry.dupfinder' total_bugs='0' total_size='175' total_types='6'>
+      <ClassStats bugs='0' size='48' interface='false' sourceFile='DupFinderParser.java'
+                  class='edu.hm.hafner.analysis.parser.dry.dupfinder.DupFinderParser'></ClassStats>
+      <ClassStats bugs='0' size='66' interface='false' sourceFile='DupFinderParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.dry.dupfinder.DupFinderParserTest'></ClassStats>
+      <ClassStats bugs='0' size='16' interface='false' sourceFile='Duplicate.java'
+                  class='edu.hm.hafner.analysis.parser.dry.dupfinder.Duplicate'></ClassStats>
+      <ClassStats bugs='0' size='29' interface='false' sourceFile='Fragment.java'
+                  class='edu.hm.hafner.analysis.parser.dry.dupfinder.Fragment'></ClassStats>
+      <ClassStats bugs='0' size='15' interface='false' sourceFile='Range.java'
+                  class='edu.hm.hafner.analysis.parser.dry.dupfinder.Range'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.analysis.parser.dry.dupfinder.package-info'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.parser.dry.simian' total_bugs='0' total_size='164' total_types='5'>
+      <ClassStats bugs='0' size='21' interface='false' sourceFile='Block.java'
+                  class='edu.hm.hafner.analysis.parser.dry.simian.Block'></ClassStats>
+      <ClassStats bugs='0' size='16' interface='false' sourceFile='Set.java'
+                  class='edu.hm.hafner.analysis.parser.dry.simian.Set'></ClassStats>
+      <ClassStats bugs='0' size='34' interface='false' sourceFile='SimianParser.java'
+                  class='edu.hm.hafner.analysis.parser.dry.simian.SimianParser'></ClassStats>
+      <ClassStats bugs='0' size='92' interface='false' sourceFile='SimianParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.dry.simian.SimianParserTest'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.analysis.parser.dry.simian.package-info'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.parser.fxcop' total_bugs='0' total_size='197' total_types='6'>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='FxCopParser.java'
+                  class='edu.hm.hafner.analysis.parser.fxcop.FxCopParser'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='false' sourceFile='FxCopParser.java'
+                  class='edu.hm.hafner.analysis.parser.fxcop.FxCopParser$1'></ClassStats>
+      <ClassStats bugs='0' size='127' interface='false' sourceFile='FxCopParser.java'
+                  class='edu.hm.hafner.analysis.parser.fxcop.FxCopParser$XmlParser'></ClassStats>
+      <ClassStats bugs='0' size='34' interface='false' sourceFile='FxCopRule.java'
+                  class='edu.hm.hafner.analysis.parser.fxcop.FxCopRule'></ClassStats>
+      <ClassStats bugs='0' size='28' interface='false' sourceFile='FxCopRuleSet.java'
+                  class='edu.hm.hafner.analysis.parser.fxcop.FxCopRuleSet'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.analysis.parser.fxcop.package-info'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.parser.gendarme' total_bugs='0' total_size='110' total_types='4'>
+      <ClassStats bugs='0' size='70' interface='false' sourceFile='GendarmeParser.java'
+                  class='edu.hm.hafner.analysis.parser.gendarme.GendarmeParser'></ClassStats>
+      <ClassStats bugs='0' size='27' interface='false' sourceFile='GendarmeRule.java'
+                  class='edu.hm.hafner.analysis.parser.gendarme.GendarmeRule'></ClassStats>
+      <ClassStats bugs='0' size='12' interface='false' sourceFile='GendarmeRuleType.java'
+                  class='edu.hm.hafner.analysis.parser.gendarme.GendarmeRuleType'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.analysis.parser.gendarme.package-info'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.parser.jcreport' total_bugs='0' total_size='155' total_types='5'>
+      <ClassStats bugs='0' size='46' interface='false' sourceFile='File.java'
+                  class='edu.hm.hafner.analysis.parser.jcreport.File'></ClassStats>
+      <ClassStats bugs='0' size='51' interface='false' sourceFile='Item.java'
+                  class='edu.hm.hafner.analysis.parser.jcreport.Item'></ClassStats>
+      <ClassStats bugs='0' size='44' interface='false' sourceFile='JcReportParser.java'
+                  class='edu.hm.hafner.analysis.parser.jcreport.JcReportParser'></ClassStats>
+      <ClassStats bugs='0' size='13' interface='false' sourceFile='Report.java'
+                  class='edu.hm.hafner.analysis.parser.jcreport.Report'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.analysis.parser.jcreport.package-info'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.parser.pmd' total_bugs='0' total_size='210' total_types='6'>
+      <ClassStats bugs='0' size='16' interface='false' sourceFile='File.java'
+                  class='edu.hm.hafner.analysis.parser.pmd.File'></ClassStats>
+      <ClassStats bugs='0' size='17' interface='false' sourceFile='Pmd.java'
+                  class='edu.hm.hafner.analysis.parser.pmd.Pmd'></ClassStats>
+      <ClassStats bugs='0' size='21' interface='false' sourceFile='PmdError.java'
+                  class='edu.hm.hafner.analysis.parser.pmd.PmdError'></ClassStats>
+      <ClassStats bugs='0' size='92' interface='false' sourceFile='PmdParser.java'
+                  class='edu.hm.hafner.analysis.parser.pmd.PmdParser'></ClassStats>
+      <ClassStats bugs='0' size='63' interface='false' sourceFile='Violation.java'
+                  class='edu.hm.hafner.analysis.parser.pmd.Violation'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.analysis.parser.pmd.package-info'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.parser.pvsstudio' total_bugs='0' total_size='238' total_types='11'>
+      <ClassStats bugs='0' size='40' interface='false' sourceFile='AnalyzerType.java'
+                  class='edu.hm.hafner.analysis.parser.pvsstudio.AnalyzerType'></ClassStats>
+      <ClassStats bugs='0' size='3' interface='true' sourceFile='AnalyzerType.java'
+                  class='edu.hm.hafner.analysis.parser.pvsstudio.AnalyzerType$AnalysisType'></ClassStats>
+      <ClassStats bugs='0' size='9' interface='false' sourceFile='AnalyzerType.java'
+                  class='edu.hm.hafner.analysis.parser.pvsstudio.AnalyzerType$CustomerSpecific'></ClassStats>
+      <ClassStats bugs='0' size='15' interface='false' sourceFile='AnalyzerType.java'
+                  class='edu.hm.hafner.analysis.parser.pvsstudio.AnalyzerType$GENERAL'></ClassStats>
+      <ClassStats bugs='0' size='9' interface='false' sourceFile='AnalyzerType.java'
+                  class='edu.hm.hafner.analysis.parser.pvsstudio.AnalyzerType$MISRA'></ClassStats>
+      <ClassStats bugs='0' size='9' interface='false' sourceFile='AnalyzerType.java'
+                  class='edu.hm.hafner.analysis.parser.pvsstudio.AnalyzerType$OPTIMIZATION'></ClassStats>
+      <ClassStats bugs='0' size='7' interface='false' sourceFile='AnalyzerType.java'
+                  class='edu.hm.hafner.analysis.parser.pvsstudio.AnalyzerType$UNKNOWN'></ClassStats>
+      <ClassStats bugs='0' size='9' interface='false' sourceFile='AnalyzerType.java'
+                  class='edu.hm.hafner.analysis.parser.pvsstudio.AnalyzerType$Viva64'></ClassStats>
+      <ClassStats bugs='0' size='26' interface='false' sourceFile='PVSStudioParser.java'
+                  class='edu.hm.hafner.analysis.parser.pvsstudio.PVSStudioParser'></ClassStats>
+      <ClassStats bugs='0' size='31' interface='false' sourceFile='PVSStudioParserTest.java'
+                  class='edu.hm.hafner.analysis.parser.pvsstudio.PVSStudioParserTest'></ClassStats>
+      <ClassStats bugs='0' size='80' interface='false' sourceFile='PlogMessage.java'
+                  class='edu.hm.hafner.analysis.parser.pvsstudio.PlogMessage'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.analysis.parser.violations' total_bugs='0' total_size='569' total_types='32'>
+      <ClassStats bugs='0' size='43' interface='false' sourceFile='AbstractViolationAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.AbstractViolationAdapter'></ClassStats>
+      <ClassStats bugs='0' size='7' interface='false' sourceFile='AndroidLintParserAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.AndroidLintParserAdapter'></ClassStats>
+      <ClassStats bugs='0' size='29' interface='false' sourceFile='AndroidLintParserAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.AndroidLintParserAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='7' interface='false' sourceFile='CodeNarcAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.CodeNarcAdapter'></ClassStats>
+      <ClassStats bugs='0' size='17' interface='false' sourceFile='CodeNarcAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.CodeNarcAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='21' interface='false' sourceFile='CppCheckAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.CppCheckAdapter'></ClassStats>
+      <ClassStats bugs='0' size='51' interface='false' sourceFile='CppCheckAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.CppCheckAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='10' interface='false' sourceFile='DocFxAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.DocFxAdapter'></ClassStats>
+      <ClassStats bugs='0' size='33' interface='false' sourceFile='DocFxAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.DocFxAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='7' interface='false' sourceFile='Flake8Adapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.Flake8Adapter'></ClassStats>
+      <ClassStats bugs='0' size='42' interface='false' sourceFile='Flake8AdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.Flake8AdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='7' interface='false' sourceFile='JUnitAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.JUnitAdapter'></ClassStats>
+      <ClassStats bugs='0' size='34' interface='false' sourceFile='JUnitAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.JUnitAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='7' interface='false' sourceFile='JsHintAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.JsHintAdapter'></ClassStats>
+      <ClassStats bugs='0' size='16' interface='false' sourceFile='JsHintAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.JsHintAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='7' interface='false' sourceFile='KlocWorkAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.KlocWorkAdapter'></ClassStats>
+      <ClassStats bugs='0' size='23' interface='false' sourceFile='KlocWorkAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.KlocWorkAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='7' interface='false' sourceFile='MyPyAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.MyPyAdapter'></ClassStats>
+      <ClassStats bugs='0' size='21' interface='false' sourceFile='MyPyAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.MyPyAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='18' interface='false' sourceFile='PitAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.PitAdapter'></ClassStats>
+      <ClassStats bugs='0' size='25' interface='false' sourceFile='PitAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.PitAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='7' interface='false' sourceFile='PyDocStyleAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.PyDocStyleAdapter'></ClassStats>
+      <ClassStats bugs='0' size='17' interface='false' sourceFile='PyDocStyleAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.PyDocStyleAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='6' interface='false' sourceFile='ResharperInspectCodeAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.ResharperInspectCodeAdapter'></ClassStats>
+      <ClassStats bugs='0' size='34' interface='false' sourceFile='ResharperInspectCodeAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.ResharperInspectCodeAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='7' interface='false' sourceFile='XmlLintAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.XmlLintAdapter'></ClassStats>
+      <ClassStats bugs='0' size='17' interface='false' sourceFile='XmlLintAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.XmlLintAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='7' interface='false' sourceFile='YamlLintAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.YamlLintAdapter'></ClassStats>
+      <ClassStats bugs='0' size='18' interface='false' sourceFile='YamlLintAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.YamlLintAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='7' interface='false' sourceFile='ZptLintAdapter.java'
+                  class='edu.hm.hafner.analysis.parser.violations.ZptLintAdapter'></ClassStats>
+      <ClassStats bugs='0' size='16' interface='false' sourceFile='ZptLintAdapterTest.java'
+                  class='edu.hm.hafner.analysis.parser.violations.ZptLintAdapterTest'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.analysis.parser.violations.package-info'></ClassStats>
+    </PackageStats>
+    <PackageStats package='edu.hm.hafner.util' total_bugs='0' total_size='151' total_types='6'>
+      <ClassStats bugs='0' size='9' interface='false' sourceFile='IntegerParser.java'
+                  class='edu.hm.hafner.util.IntegerParser'></ClassStats>
+      <ClassStats bugs='0' size='11' interface='false' sourceFile='IntegerParserTest.java'
+                  class='edu.hm.hafner.util.IntegerParserTest'></ClassStats>
+      <ClassStats bugs='0' size='50' interface='false' sourceFile='LookaheadStream.java'
+                  class='edu.hm.hafner.util.LookaheadStream'></ClassStats>
+      <ClassStats bugs='0' size='55' interface='false' sourceFile='LookaheadStreamTest.java'
+                  class='edu.hm.hafner.util.LookaheadStreamTest'></ClassStats>
+      <ClassStats bugs='0' size='25' interface='false' sourceFile='XmlElementUtil.java'
+                  class='edu.hm.hafner.util.XmlElementUtil'></ClassStats>
+      <ClassStats bugs='0' size='1' interface='true' sourceFile='package-info.java'
+                  class='edu.hm.hafner.util.package-info'></ClassStats>
+    </PackageStats>
+    <FindBugsProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='6502' totalMilliseconds='17613'
+                    name='edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine'
+                    maxMicrosecondsPerInvocation='65578' standardDeviationMicrosecondsPerInvocation='6231'
+                    invocations='2709'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='570' totalMilliseconds='1539'
+                    name='edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine'
+                    maxMicrosecondsPerInvocation='117005' standardDeviationMicrosecondsPerInvocation='2902'
+                    invocations='2697'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='1582' totalMilliseconds='1395'
+                    name='edu.umd.cs.findbugs.detect.FieldItemSummary' maxMicrosecondsPerInvocation='472073'
+                    standardDeviationMicrosecondsPerInvocation='16253' invocations='882'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='534' totalMilliseconds='1279'
+                    name='edu.umd.cs.findbugs.ba.npe.NullDerefAndRedundantComparisonFinder'
+                    maxMicrosecondsPerInvocation='46242' standardDeviationMicrosecondsPerInvocation='1732'
+                    invocations='2395'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='500' totalMilliseconds='1260'
+                    name='edu.umd.cs.findbugs.classfile.engine.bcel.IsNullValueDataflowFactory'
+                    maxMicrosecondsPerInvocation='59492' standardDeviationMicrosecondsPerInvocation='2185'
+                    invocations='2518'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='445' totalMilliseconds='1157'
+                    name='edu.umd.cs.findbugs.classfile.engine.bcel.ValueNumberDataflowFactory'
+                    maxMicrosecondsPerInvocation='426244' standardDeviationMicrosecondsPerInvocation='8402'
+                    invocations='2599'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='442' totalMilliseconds='1113'
+                    name='com.h3xstream.findsecbugs.taintanalysis.TaintDataflowEngine'
+                    maxMicrosecondsPerInvocation='80022' standardDeviationMicrosecondsPerInvocation='2178'
+                    invocations='2518'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='426' totalMilliseconds='1082'
+                    name='edu.umd.cs.findbugs.classfile.engine.bcel.MethodGenFactory'
+                    maxMicrosecondsPerInvocation='912683' standardDeviationMicrosecondsPerInvocation='18106'
+                    invocations='2540'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='352' totalMilliseconds='900'
+                    name='edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory'
+                    maxMicrosecondsPerInvocation='48209' standardDeviationMicrosecondsPerInvocation='1468'
+                    invocations='2555'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='344' totalMilliseconds='827'
+                    name='edu.umd.cs.findbugs.classfile.engine.bcel.UnconditionalValueDerefDataflowFactory'
+                    maxMicrosecondsPerInvocation='18660' standardDeviationMicrosecondsPerInvocation='890'
+                    invocations='2400'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='879' totalMilliseconds='775'
+                    name='edu.umd.cs.findbugs.detect.FindNoSideEffectMethods' maxMicrosecondsPerInvocation='29241'
+                    standardDeviationMicrosecondsPerInvocation='2291' invocations='882'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='275' totalMilliseconds='698'
+                    name='edu.umd.cs.findbugs.classfile.engine.bcel.CFGFactory' maxMicrosecondsPerInvocation='44635'
+                    standardDeviationMicrosecondsPerInvocation='1129' invocations='2540'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='278' totalMilliseconds='630'
+                    name='edu.umd.cs.findbugs.detect.FindRefComparison$SpecialTypeAnalysis'
+                    maxMicrosecondsPerInvocation='32722' standardDeviationMicrosecondsPerInvocation='1004'
+                    invocations='2262'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='1371' totalMilliseconds='510'
+                    name='com.h3xstream.findsecbugs.kotlin.KotlinHardcodePasswordInMapDetector'
+                    maxMicrosecondsPerInvocation='456554' standardDeviationMicrosecondsPerInvocation='23637'
+                    invocations='372'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='562' totalMilliseconds='496'
+                    name='edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures'
+                    maxMicrosecondsPerInvocation='241615' standardDeviationMicrosecondsPerInvocation='8192'
+                    invocations='882'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='139' totalMilliseconds='489'
+                    name='edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory' maxMicrosecondsPerInvocation='15400'
+                    standardDeviationMicrosecondsPerInvocation='560' invocations='3514'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='944' totalMilliseconds='351'
+                    name='edu.umd.cs.findbugs.detect.CheckTypeQualifiers' maxMicrosecondsPerInvocation='125415'
+                    standardDeviationMicrosecondsPerInvocation='6606' invocations='372'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='853' totalMilliseconds='317'
+                    name='edu.umd.cs.findbugs.detect.CheckRelaxingNullnessAnnotation'
+                    maxMicrosecondsPerInvocation='192796' standardDeviationMicrosecondsPerInvocation='10059'
+                    invocations='372'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='725' totalMilliseconds='269'
+                    name='edu.umd.cs.findbugs.detect.LoadOfKnownNullValue' maxMicrosecondsPerInvocation='19176'
+                    standardDeviationMicrosecondsPerInvocation='1851' invocations='372'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='305' totalMilliseconds='269'
+                    name='edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers'
+                    maxMicrosecondsPerInvocation='28926' standardDeviationMicrosecondsPerInvocation='1324'
+                    invocations='882'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='99' totalMilliseconds='251'
+                    name='edu.umd.cs.findbugs.classfile.engine.bcel.ConstantDataflowFactory'
+                    maxMicrosecondsPerInvocation='38874' standardDeviationMicrosecondsPerInvocation='816'
+                    invocations='2518'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='608' totalMilliseconds='226'
+                    name='edu.umd.cs.findbugs.detect.DumbMethods' maxMicrosecondsPerInvocation='58008'
+                    standardDeviationMicrosecondsPerInvocation='3156' invocations='372'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='85' totalMilliseconds='225'
+                    name='edu.umd.cs.findbugs.util.TopologicalSort' maxMicrosecondsPerInvocation='11829'
+                    standardDeviationMicrosecondsPerInvocation='334' invocations='2633'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='209' totalMilliseconds='223'
+                    name='edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine'
+                    maxMicrosecondsPerInvocation='65240' standardDeviationMicrosecondsPerInvocation='2092'
+                    invocations='1067'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='250' totalMilliseconds='220'
+                    name='edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase' maxMicrosecondsPerInvocation='14844'
+                    standardDeviationMicrosecondsPerInvocation='839' invocations='882'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='245' totalMilliseconds='216'
+                    name='edu.umd.cs.findbugs.detect.BuildStringPassthruGraph' maxMicrosecondsPerInvocation='66253'
+                    standardDeviationMicrosecondsPerInvocation='2356' invocations='882'></ClassProfile>
+      <ClassProfile avgMicrosecondsPerInvocation='2' totalMilliseconds='201'
+                    name='edu.umd.cs.findbugs.ba.npe.TypeQualifierNullnessAnnotationDatabase'
+                    maxMicrosecondsPerInvocation='9036' standardDeviationMicrosecondsPerInvocation='76'
+                    invocations='67965'></ClassProfile>
+    </FindBugsProfile>
+  </FindBugsSummary>
+  <ClassFeatures></ClassFeatures>
+  <History></History>
+</BugCollection>

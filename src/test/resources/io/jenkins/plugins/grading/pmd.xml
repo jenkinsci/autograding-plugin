@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
+     version="6.21.0" timestamp="2020-04-02T17:07:30.187">
+  <file name="/var/data/workspace/pipeline-analysis-model/src/test/java/edu/hm/hafner/analysis/ReportPrinterTest.java">
+    <violation beginline="1" endline="1" begincolumn="1" endcolumn="1" rule="CloseResource" ruleset="Error Prone" package="edu.hm.hafner.analysis" class="ReportPrinterTest" method="shouldPrintAllIssuesToPrintStream" variable="printStream" externalInfoUrl="https://pmd.github.io/pmd-6.21.0/pmd_rules_java_errorprone.html#closeresource" priority="3">
+      Ensure that resources like this PrintStream object are closed after use
+    </violation>
+    <violation beginline="2" endline="2" begincolumn="1" endcolumn="1" rule="CloseResource" ruleset="Error Prone" package="edu.hm.hafner.analysis" class="ReportPrinterTest" method="shouldPrintAllIssuesToPrintStream" variable="printStream" externalInfoUrl="https://pmd.github.io/pmd-6.21.0/pmd_rules_java_errorprone.html#closeresource" priority="5">
+      Ensure that resources like this PrintStream object are closed after use
+    </violation>
+    <violation beginline="3" endline="3" begincolumn="1" endcolumn="1" rule="CloseResource" ruleset="Error Prone" package="edu.hm.hafner.analysis" class="ReportPrinterTest" method="shouldPrintAllIssuesToPrintStream" variable="printStream" externalInfoUrl="https://pmd.github.io/pmd-6.21.0/pmd_rules_java_errorprone.html#closeresource" priority="1">
+      Ensure that resources like this PrintStream object are closed after use
+    </violation>
+  </file>
+</pmd>
