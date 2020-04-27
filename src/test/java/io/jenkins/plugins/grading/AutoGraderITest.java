@@ -63,11 +63,36 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 40");
 
         List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
+//        assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
         assertThat(score).hasAchieved(40);
     }
+
+    @Test
+    public void shouldGradeTestScoreWith94() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("testScore-94.xml");
+
+        configureScanner(job, "testScore-94", "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}");
+        Run<?, ?> baseline = buildWithResult(job, Result.UNSTABLE);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+
+        AggregatedScore score = actions.get(0).getResult();
+        assertThat(score).hasAchieved(94);
+    }
+
+//    @Test
+//    public void shouldGradeCoverageScore() {
+//        WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
+//        configureScanner(job, "jacoco", "{\"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}}");
+//        Run<?, ?> baseline = buildSuccessfully(job);
+//
+//        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+//
+//    }
+
 
     /**
      * Returns the console log as a String.
@@ -87,12 +112,30 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     private void configureScanner(final WorkflowJob job, final String fileName, final String configuration) {
-        job.setDefinition(new CpsFlowDefinition("node {\n"
-                + "  stage ('Integration Test') {\n"
-                + "         recordIssues tool: checkStyle(pattern: '**/" + fileName + "*')\n"
-                + "         autoGrade('" + configuration + "')\n"
-                + "  }\n"
-                + "}", true));
-    }
+        String script = "node {\n";
+        switch(fileName) {
+            case "checkstyle":
+                script += "  stage ('Integration Test') {\n"
+                        + "         recordIssues tool: checkStyle(pattern: '**/" + fileName + "*')\n"
+                        + "         autoGrade('" + configuration + "')\n";
+                break;
+            case "pit":
+                script += "  stage ('Test Mutation Coverage') {\n"
+                        + "         step([$class: 'PitPublisher', mutationStatsFile: '**/" + fileName + "*'])\n";
+                break;
+            case "jacoco":
+                script += " stage ('Code coverage Analysis') {\n"
+                        + "         publishCoverage adapters: [jacocoAdapter('**/" + fileName
+                        + "*')], sourceFileResolver: sourceFiles('NEVER_STORE')\n";
+            default:
+                script += "  stage ('Build and Static Analysis') {\n"
+                        + "         junit testResults: '**/" + fileName + ".xml'\n";
+                break;
+        }
 
+        script += "         autoGrade('" + configuration + "')\n"
+                + "  }\n"
+                + "}";
+        job.setDefinition(new CpsFlowDefinition(script, true));
+        }
 }

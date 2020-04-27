@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.jenkins.plugins.grading.TestScoreTest" tests="6">
+  <properties/>
+  <testcase name="failTest2" classname="io.jenkins.plugins.grading.TestScoreTest" />
+  <testcase name="failTest3" classname="io.jenkins.plugins.grading.TestScoreTest" />
+  <testcase name="failTest4" classname="io.jenkins.plugins.grading.TestScoreTest" >
+    <failure message="java.lang.AssertionError" type="java.lang.AssertionError">java.lang.AssertionError
+    </failure>
+  </testcase>
+  <testcase name="failTest5" classname="io.jenkins.plugins.grading.TestScoreTest" >
+    <failure message="java.lang.AssertionError" type="java.lang.AssertionError">java.lang.AssertionError
+    </failure>
+  </testcase>
+  <testcase name="failTest" classname="io.jenkins.plugins.grading.TestScoreTest" />
+  <testcase name="addition_isCorrect" classname="io.jenkins.plugins.grading.TestScoreTest" />
+</testsuite>
