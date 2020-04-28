@@ -1,18 +1,31 @@
 package io.jenkins.plugins.grading;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
+import org.jenkinsci.plugins.pitmutation.PitPublisher;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import hudson.model.Run;
+import hudson.tasks.junit.JUnitResultArchiver;
 
+import io.jenkins.plugins.analysis.core.steps.IssuesRecorder;
+import io.jenkins.plugins.analysis.warnings.Cpd;
+import io.jenkins.plugins.analysis.warnings.JUnit;
+import io.jenkins.plugins.analysis.warnings.Pmd;
+import io.jenkins.plugins.analysis.warnings.SpotBugs;
+import io.jenkins.plugins.analysis.warnings.checkstyle.CheckStyle;
+import io.jenkins.plugins.coverage.CoveragePublisher;
+import io.jenkins.plugins.coverage.adapter.CoverageAdapter;
+import io.jenkins.plugins.coverage.adapter.JacocoReportAdapter;
+import io.jenkins.plugins.coverage.source.DefaultSourceFileResolver;
+import io.jenkins.plugins.coverage.source.SourceFileResolver.SourceFileResolverLevel;
 import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
@@ -45,7 +58,31 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     * Verifies that an {@link IllegalArgumentException} is thrown if testing has been requested, but no testing action has been recorded.
+     * Verifies that the step skips all autograding parts if the configuration is empty (Freestyle)
+     */
+    @Test
+    public void shouldSkipGradingIfConfigurationIsEmptyFreestyle() {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("checkstyle.xml");
+
+        IssuesRecorder recorder = new IssuesRecorder();
+        CheckStyle checkStyle = new CheckStyle();
+        checkStyle.setPattern("**/*checkstyle.xml");
+        recorder.setTools(checkStyle);
+
+        project.getPublishersList().add(recorder);
+        project.getPublishersList().add(new AutoGrader("{}"));
+
+        Run<?, ?> baseline = buildSuccessfully(project);
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping static analysis results");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping test results");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping coverage results");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping mutation coverage results");
+    }
+
+    /**
+     * Verifies that an {@link IllegalArgumentException} is thrown if testing has been requested, but no testing action
+     * has been recorded.
      */
     @Test
     public void shouldAbortBuildSinceNoTestActionHasBeenRegistered() {
@@ -54,7 +91,30 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         configureScanner(job, "checkstyle", TESTS_CONFIGURATION);
         Run<?, ?> baseline = buildWithResult(job, Result.FAILURE);
 
-        assertThat(getConsoleLog(baseline)).contains("java.lang.IllegalArgumentException: Test scoring has been enabled, but no test results have been found.");
+        assertThat(getConsoleLog(baseline)).contains(
+                "java.lang.IllegalArgumentException: Test scoring has been enabled, but no test results have been found.");
+    }
+
+    /**
+     * Verifies that an {@link IllegalArgumentException} is thrown if testing has been requested, but no testing action
+     * has been recorded (Freestyle)
+     */
+    @Test
+    public void shouldAbortBuildSinceNoTestActionHasBeenRegisteredFreestyle() {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("checkstyle.xml");
+
+        IssuesRecorder recorder = new IssuesRecorder();
+        CheckStyle checkStyle = new CheckStyle();
+        checkStyle.setPattern("**/*checkstyle.xml");
+        recorder.setTools(checkStyle);
+
+        project.getPublishersList().add(recorder);
+        project.getPublishersList().add(new AutoGrader(TESTS_CONFIGURATION));
+
+        Run<?, ?> baseline = buildWithResult(project, Result.FAILURE);
+
+        assertThat(getConsoleLog(baseline)).contains(
+                "java.lang.IllegalArgumentException: Test scoring has been enabled, but no test results have been found.");
     }
 
     /**
@@ -68,10 +128,40 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CheckStyle");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 40");
 
         List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(40);
+    }
+
+    /**
+     * Verifies that CheckStyle results are correctly graded (Freestyle)
+     */
+    @Test
+    public void shouldCountCheckStyleWarningsFreestyle() {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("checkstyle.xml");
+
+        IssuesRecorder recorder = new IssuesRecorder();
+        CheckStyle checkStyle = new CheckStyle();
+        checkStyle.setPattern("**/*checkstyle.xml");
+        recorder.setTools(checkStyle);
+
+        project.getPublishersList().add(recorder);
+        project.getPublishersList().add(new AutoGrader(ANALYSIS_CONFIGURATION));
+
+        Run<?, ?> run = buildSuccessfully(project);
+
+        assertThat(getConsoleLog(run)).contains("[Autograding] Grading static analysis results for CheckStyle");
+        assertThat(getConsoleLog(run)).contains(
+                "[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)");
+        assertThat(getConsoleLog(run)).contains("[Autograding] Total score for static analysis results: 40");
+
+        List<AutoGradingBuildAction> actions = run.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
@@ -92,17 +182,63 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         AggregatedScore score = actions.get(0).getResult();
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for PMD");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -2 (warnings distribution err:0, high:0, normal:1, low:0)");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score -2 (warnings distribution err:0, high:0, normal:1, low:0)");
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CPD");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -7 (warnings distribution err:0, high:0, normal:0, low:7)");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score -7 (warnings distribution err:0, high:0, normal:0, low:7)");
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for SpotBugs");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 0 (warnings distribution err:0, high:0, normal:0, low:0)");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score 0 (warnings distribution err:0, high:0, normal:0, low:0)");
 
         assertThat(score).hasAchieved(91);
     }
 
+    /**
+     * Verifies that Static Analysis results are correctly graded.
+     */
+    @Test
+    public void shouldGradeStaticAnalysisResultsFreestyle() {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("pmd.xml", "cpd.xml", "spotbugsXml.xml");
+
+        IssuesRecorder recorder = new IssuesRecorder();
+
+        Pmd pmd = new Pmd();
+        pmd.setPattern("**/*pmd.xml");
+
+        Cpd cpd = new Cpd();
+        cpd.setPattern("**/*cpd.xml");
+
+        SpotBugs spotBugs = new SpotBugs();
+        spotBugs.setPattern("**/*spotbugsXml.xml");
+
+        recorder.setTools(pmd, cpd, spotBugs);
+
+        project.getPublishersList().add(recorder);
+        project.getPublishersList().add(new AutoGrader(ANALYSIS_CONFIGURATION));
+
+        Run<?, ?> baseline = buildSuccessfully(project);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for PMD");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score -2 (warnings distribution err:0, high:0, normal:1, low:0)");
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CPD");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score -7 (warnings distribution err:0, high:0, normal:0, low:7)");
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for SpotBugs");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score 0 (warnings distribution err:0, high:0, normal:0, low:0)");
+
+        assertThat(score).hasAchieved(91);
+    }
 
     /**
      * Verifies that JUnit results are correctly graded.
@@ -128,7 +264,44 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         AggregatedScore score = actions.get(0).getResult();
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results Test Result");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 60 - from recorded test results: 60, 60, 0, 0");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score 60 - from recorded test results: 60, 60, 0, 0");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 60");
+
+        assertThat(score).hasAchieved(60);
+    }
+
+    /**
+     * Verifies that JUnit results are correctly graded.
+     */
+    @Test
+    public void shouldGradeTestResultsFreestyle() {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("TEST-InjectedTest.xml",
+                "TEST-io.jenkins.plugins.grading.AggregatedScoreXmlStreamTest.xml",
+                "TEST-io.jenkins.plugins.grading.AnalysisScoreTest.xml",
+                "TEST-io.jenkins.plugins.grading.ArchitectureRulesTest.xml",
+                "TEST-io.jenkins.plugins.grading.AutoGraderITest.xml",
+                "TEST-io.jenkins.plugins.grading.AutoGraderTest.xml",
+                "TEST-io.jenkins.plugins.grading.CoverageScoreTests.xml",
+                "TEST-io.jenkins.plugins.grading.PackageArchitectureTest.xml",
+                "TEST-io.jenkins.plugins.grading.PitScoreTest.xml",
+                "TEST-io.jenkins.plugins.grading.ScoreTest.xml",
+                "TEST-io.jenkins.plugins.grading.TestScoreTest.xml");
+
+        JUnitResultArchiver  jUnitResultArchiver = new JUnitResultArchiver("*");
+
+        project.getPublishersList().add(jUnitResultArchiver);
+        project.getPublishersList().add(new AutoGrader(TESTS_CONFIGURATION));
+
+        Run<?, ?> baseline = buildSuccessfully(project);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results Test Result");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score 60 - from recorded test results: 60, 60, 0, 0");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 60");
 
         assertThat(score).hasAchieved(60);
@@ -148,8 +321,47 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         AggregatedScore score = actions.get(0).getResult();
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results Coverage Report");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 70 - from recorded line coverage results: 85%");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 8 - from recorded branch coverage results: 54%");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score 70 - from recorded line coverage results: 85%");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score 8 - from recorded branch coverage results: 54%");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for coverage results: 78");
+
+        assertThat(score).hasAchieved(78);
+    }
+
+    /**
+     * Verifies that code coverage results are correctly graded.
+     */
+    @Test
+    public void shouldGradeCodeCoverageResultsFreestyle() {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("jacoco.xml");
+
+        JacocoReportAdapter jacocoReportAdapter = new JacocoReportAdapter("**/jacoco.xml");
+        DefaultSourceFileResolver defaultSourceFileResolver = new DefaultSourceFileResolver(
+                SourceFileResolverLevel.NEVER_STORE);
+
+        CoveragePublisher coveragePublisher = new CoveragePublisher();
+        List<CoverageAdapter> coverageAdapter = new ArrayList<>();
+        coverageAdapter.add(jacocoReportAdapter);
+        coveragePublisher.setAdapters(coverageAdapter);
+
+        coveragePublisher.setSourceFileResolver(defaultSourceFileResolver);
+
+        project.getPublishersList().add(coveragePublisher);
+        project.getPublishersList().add(new AutoGrader(COVERAGE_CONFIGURATION));
+
+        Run<?, ?> baseline = buildSuccessfully(project);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results Coverage Report");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score 70 - from recorded line coverage results: 85%");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score 8 - from recorded branch coverage results: 54%");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for coverage results: 78");
 
         assertThat(score).hasAchieved(78);
@@ -169,7 +381,34 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         AggregatedScore score = actions.get(0).getResult();
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading PIT mutation results PIT Mutation Report");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 73 - from recorded PIT mutation results: 191, 59, 132, 31");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score 73 - from recorded PIT mutation results: 191, 59, 132, 31");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for mutation coverage results: 73");
+
+        assertThat(score).hasAchieved(73);
+    }
+
+    /**
+     * Verifies that PIT mutation coverage results are correctly graded. (Freestyle)
+     */
+    @Test
+    public void shouldGradePitMutationCoverageResultsFreestyle() {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("mutations.xml");
+
+        PitPublisher pitPublisher = new PitPublisher("**/*mutations.xml", 0, false);
+
+        project.getPublishersList().add(pitPublisher);
+        project.getPublishersList().add(new AutoGrader(PIT_CONFIGURATION));
+
+        Run<?, ?> baseline = buildSuccessfully(project);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading PIT mutation results PIT Mutation Report");
+        assertThat(getConsoleLog(baseline)).contains(
+                "[Autograding] -> Score 73 - from recorded PIT mutation results: 191, 59, 132, 31");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for mutation coverage results: 73");
 
         assertThat(score).hasAchieved(73);
@@ -198,10 +437,12 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
         switch (stepName) {
             case "mutations":
-                pipelineScript.append("         step([$class: 'PitPublisher', mutationStatsFile: '**/mutations.xml'])\n");
+                pipelineScript.append(
+                        "         step([$class: 'PitPublisher', mutationStatsFile: '**/mutations.xml'])\n");
                 break;
             case "jacoco":
-                pipelineScript.append("         publishCoverage adapters: [jacocoAdapter('**/jacoco.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')\n");
+                pipelineScript.append(
+                        "         publishCoverage adapters: [jacocoAdapter('**/jacoco.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')\n");
                 break;
             case "checkstyle":
                 pipelineScript.append("         recordIssues tool: checkStyle(pattern: '**/checkstyle*')\n");
@@ -217,7 +458,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
             default:
                 break;
 
-        };
+        }
 
         pipelineScript.append("         autoGrade('").append(configuration).append("')\n");
         pipelineScript.append("  }\n");
