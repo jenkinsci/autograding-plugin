@@ -268,11 +268,11 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
             DefaultSourceFileResolver defaultSourceFileResolver = new DefaultSourceFileResolver(
                     SourceFileResolverLevel.NEVER_STORE);
 
-            List<CoverageAdapter> coverageAdapter = new ArrayList<>();
-            coverageAdapter.add(jacocoReportAdapter);
+            List<CoverageAdapter> coverageAdapters = new ArrayList<>();
+            coverageAdapters.add(jacocoReportAdapter);
 
             CoveragePublisher coveragePublisher = new CoveragePublisher();
-            coveragePublisher.setAdapters(coverageAdapter);
+            coveragePublisher.setAdapters(coverageAdapters);
             coveragePublisher.setSourceFileResolver(defaultSourceFileResolver);
 
             project.getPublishersList().add(coveragePublisher);
