@@ -106,6 +106,15 @@ class TestScoreTest {
         assertThat(configuration).hasSkippedImpact(0);
     }
 
+    /**
+     * Tests the Fluent Interface Pattern for null return by setter functions.
+     */
+    @Test
+    void shouldThrowNullPointerExceptionIfSetSkippedImpactReturnsNull(){
+        TestConfiguration.TestConfigurationBuilder configurationBuilder = new TestConfiguration.TestConfigurationBuilder().setSkippedImpact(0).setPassedImpact(0);
+        assertThat(configurationBuilder).isNotNull();
+    }
+
     @Test
     void shouldIgnoresAdditionalAttributes() {
         TestConfiguration configuration = TestConfiguration.from(JSONObject.fromObject(
