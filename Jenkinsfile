@@ -40,7 +40,7 @@
         }
 
         tasks[stageIdentifier] = {
-            node("java-agent") {
+            node(label) {
                 try {
                     timeout(timeoutValue) {
                         boolean isMaven
