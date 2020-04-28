@@ -59,6 +59,7 @@ class AnalysisScoreTest {
         when(result.getTotalHighPrioritySize()).thenReturn(5);
         when(result.getTotalNormalPrioritySize()).thenReturn(2);
         when(result.getTotalLowPrioritySize()).thenReturn(4);
+        when(result.getTotalSize()).thenReturn(14);
         when(result.getId()).thenReturn(ID);
 
         AnalysisScore analysisScore = new AnalysisScore(NAME, createConfigurationWithOnePointForEachSeverity(), result);
@@ -68,6 +69,7 @@ class AnalysisScoreTest {
         assertThat(analysisScore).hasHighPrioritySize(5);
         assertThat(analysisScore).hasNormalPrioritySize(2);
         assertThat(analysisScore).hasLowPrioritySize(4);
+        assertThat(analysisScore).hasTotalSize(14);
         assertThat(analysisScore).hasName(NAME);
         assertThat(analysisScore).hasId(ID);
     }
@@ -79,6 +81,7 @@ class AnalysisScoreTest {
         when(result.getTotalHighPrioritySize()).thenReturn(-5);
         when(result.getTotalNormalPrioritySize()).thenReturn(-2);
         when(result.getTotalLowPrioritySize()).thenReturn(-4);
+        when(result.getTotalSize()).thenReturn(-14);
         when(result.getId()).thenReturn(ID);
 
         AnalysisScore analysisScore = new AnalysisScore(NAME, createConfigurationWithOnePointForEachSeverity(), result);
@@ -88,6 +91,7 @@ class AnalysisScoreTest {
         assertThat(analysisScore).hasHighPrioritySize(-5);
         assertThat(analysisScore).hasNormalPrioritySize(-2);
         assertThat(analysisScore).hasLowPrioritySize(-4);
+        assertThat(analysisScore).hasTotalSize(-14);
         assertThat(analysisScore).hasName(NAME);
         assertThat(analysisScore).hasId(ID);
     }
