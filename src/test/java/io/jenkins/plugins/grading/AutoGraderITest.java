@@ -1,13 +1,13 @@
 package io.jenkins.plugins.grading;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.jupiter.api.Disabled;
 import org.jvnet.hudson.test.JenkinsRule;
 
+import org.jenkinsci.plugins.pitmutation.PitPublisher;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import hudson.model.FreeStyleProject;
@@ -15,10 +15,14 @@ import hudson.model.Result;
 import hudson.model.Run;
 
 import io.jenkins.plugins.analysis.core.steps.IssuesRecorder;
-import io.jenkins.plugins.analysis.warnings.Pit;
 import io.jenkins.plugins.analysis.warnings.Pmd;
 import io.jenkins.plugins.analysis.warnings.SpotBugs;
 import io.jenkins.plugins.analysis.warnings.checkstyle.CheckStyle;
+import io.jenkins.plugins.coverage.CoveragePublisher;
+import io.jenkins.plugins.coverage.adapter.CoverageAdapter;
+import io.jenkins.plugins.coverage.adapter.JacocoReportAdapter;
+import io.jenkins.plugins.coverage.source.DefaultSourceFileResolver;
+import io.jenkins.plugins.coverage.source.SourceFileResolver.SourceFileResolverLevel;
 import io.jenkins.plugins.grading.AnalysisConfiguration.AnalysisConfigurationBuilder;
 import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
 
@@ -115,14 +119,22 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(40);
     }
 
-    @Ignore("Coverage Recorder?")
     @Test
     public void shouldCountJacocoWarningFreestyle() {
         FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("jacoco.xml");
-        IssuesRecorder recorder = new IssuesRecorder();
 
+        JacocoReportAdapter jacocoReportAdapter = new JacocoReportAdapter("**/jacoco.xml");
+        DefaultSourceFileResolver defaultSourceFileResolver = new DefaultSourceFileResolver(
+                SourceFileResolverLevel.NEVER_STORE);
 
-        project.getPublishersList().add(recorder);
+        List<CoverageAdapter> coverageAdapters = new ArrayList<>();
+        coverageAdapters.add(jacocoReportAdapter);
+
+        CoveragePublisher coveragePublisher = new CoveragePublisher();
+        coveragePublisher.setAdapters(coverageAdapters);
+        coveragePublisher.setSourceFileResolver(defaultSourceFileResolver);
+
+        project.getPublishersList().add(coveragePublisher);
         project.getPublishersList().add(new AutoGrader(COVERAGE_CONFIGURATION));
 
         Run<?, ?> run = buildSuccessfully(project);
@@ -217,23 +229,20 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(83);
     }
 
-    @Disabled
     @Test
     public void shouldCountPitWarningsFreestyle() {
         FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("mutations.xml");
-        IssuesRecorder recorder = new IssuesRecorder();
-        Pit pit = new Pit();
-        pit.setPattern("**/mutations.xml");
-        recorder.setTools(pit);
 
-        project.getPublishersList().add(recorder);
+        PitPublisher pitPublisher = new PitPublisher();
+        pitPublisher.setMutationStatsFile("mutations.xml");
+
+        project.getPublishersList().add(pitPublisher);
         project.getPublishersList().add(new AutoGrader(PIT_CONFIGURATION));
 
         Run<?, ?> run = buildSuccessfully(project);
-        //assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results Coverage Report");
-        //assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -10 - from recorded line coverage results: 45%");
-        //assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 28 - from recorded branch coverage results: 64%");
-        //assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for coverage results: 18");
+        assertThat(getConsoleLog(run)).contains("[Autograding] Grading PIT mutation results PIT Mutation Report");
+        assertThat(getConsoleLog(run)).contains("[Autograding] -> Score 84 - from recorded PIT mutation results: 180, 48, 132, 27");
+        assertThat(getConsoleLog(run)).contains("[Autograding] Total score for mutation coverage results: 84");
 
     }
 
