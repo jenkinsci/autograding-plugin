@@ -3,7 +3,6 @@ package io.jenkins.plugins.grading;
 import java.io.IOException;
 import java.util.List;
 
-import org.checkerframework.checker.units.qual.C;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
@@ -12,13 +11,10 @@ import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import hudson.model.Run;
-import hudson.model.utils.ResultWriterPublisher;
 import hudson.tasks.Publisher;
 import hudson.tasks.junit.JUnitResultArchiver;
-import hudson.tasks.test.AggregatedTestResultPublisher;
 
 import io.jenkins.plugins.coverage.CoveragePublisher;
-import io.jenkins.plugins.coverage.adapter.CoverageReportAdapter;
 import io.jenkins.plugins.coverage.adapter.JacocoReportAdapter;
 import io.jenkins.plugins.coverage.source.DefaultSourceFileResolver;
 import io.jenkins.plugins.coverage.source.SourceFileResolver.SourceFileResolverLevel;
@@ -61,7 +57,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     * Verifies that an {@link IllegalArgumentException} is thrown if testing has been requested, but no testing action has been recorded.
+     * Verifies that an {@link IllegalArgumentException} is thrown if testing has been requested, but no testing action
+     * has been recorded.
      */
     @Test
     public void shouldAbortBuildSinceNoTestActionHasBeenRegistered() {
@@ -70,7 +67,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         configureScanner(job, TOOLTYPE_CHECKSTYLE, "checkstyle", AUTOGRADE_TESTS_CONFIGURATION);
         Run<?, ?> baseline = buildWithResult(job, Result.FAILURE);
 
-        assertThat(getConsoleLog(baseline)).contains("java.lang.IllegalArgumentException: Test scoring has been enabled, but no test results have been found.");
+        assertThat(getConsoleLog(baseline)).contains(
+                "java.lang.IllegalArgumentException: Test scoring has been enabled, but no test results have been found.");
     }
 
     /**
@@ -89,7 +87,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     * @author Patrick Rogg
+     *
      */
     @Test
     public void shouldGradeTestResults() {
@@ -105,7 +103,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     * @author Patrick Rogg
+     *
      */
     @Test
     public void shouldGradeTestResultsInFreeStyle() {
@@ -120,7 +118,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     * @author Patrick Rogg
+     *
      */
     @Test
     public void shouldGradeTestResultsWithAssertionError() {
@@ -136,7 +134,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     * @author Patrick Rogg
+     *
      */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorInFreeStyle() {
@@ -151,7 +149,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     * @author Patrick Rogg
+     *
      */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorAndSkipTest() {
@@ -167,7 +165,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     * @author Patrick Rogg
+     *
      */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorAndSkipTestInFreeStyle() {
@@ -182,10 +180,10 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     * @author Patrick Rogg
+     *
      */
     @Test
-    public void shouldGradeCoverageResults() {
+    public void shouldGradeCoverage() {
         String fileName = "coverage.xml";
         WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
 
@@ -196,10 +194,10 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     * @author Patrick Rogg
+     *
      */
     @Test
-    public void shouldGradeCoverageResultsInFreeStyle() {
+    public void shouldGradeCoverageInFreeStyle() {
         String fileName = "coverage.xml";
         CoveragePublisher coveragePublisher = new CoveragePublisher();
         coveragePublisher.getAdapters().add(new JacocoReportAdapter(fileName));
@@ -212,7 +210,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     * @author Andreas Stiglmeier
+     *
      */
     @Test
     public void shouldGradePitResults() {
