@@ -1,6 +1,7 @@
 package io.jenkins.plugins.grading;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -15,6 +16,7 @@ import hudson.tasks.Publisher;
 import hudson.tasks.junit.JUnitResultArchiver;
 
 import io.jenkins.plugins.coverage.CoveragePublisher;
+import io.jenkins.plugins.coverage.adapter.CoverageAdapter;
 import io.jenkins.plugins.coverage.adapter.JacocoReportAdapter;
 import io.jenkins.plugins.coverage.source.DefaultSourceFileResolver;
 import io.jenkins.plugins.coverage.source.SourceFileResolver.SourceFileResolverLevel;
@@ -87,7 +89,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     *
+     * @author Patrick Rogg
      */
     @Test
     public void shouldGradeTestResults() {
@@ -103,12 +105,13 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     *
+     * @author Patrick Rogg
      */
     @Test
     public void shouldGradeTestResultsInFreeStyle() {
         String fileName = "test-successful.xml";
-        FreeStyleProject project = createFreeStyleProject(fileName, new JUnitResultArchiver(fileName));
+        FreeStyleProject project = createFreeStyleProject(fileName, new JUnitResultArchiver(fileName),
+                TEST_RESULTS_CONFIGURATION);
 
         Run<?, ?> baseline = buildSuccessfully(project);
 
@@ -118,7 +121,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     *
+     * @author Patrick Rogg
      */
     @Test
     public void shouldGradeTestResultsWithAssertionError() {
@@ -134,12 +137,13 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     *
+     * @author Patrick Rogg
      */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorInFreeStyle() {
         String fileName = "test-assertion-error.xml";
-        FreeStyleProject project = createFreeStyleProject(fileName, new JUnitResultArchiver(fileName));
+        FreeStyleProject project = createFreeStyleProject(fileName, new JUnitResultArchiver(fileName),
+                TEST_RESULTS_CONFIGURATION);
 
         Run<?, ?> baseline = buildWithResult(project, Result.UNSTABLE);
 
@@ -149,7 +153,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     *
+     * @author Patrick Rogg
      */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorAndSkipTest() {
@@ -165,12 +169,13 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     *
+     * @author Patrick Rogg
      */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorAndSkipTestInFreeStyle() {
         String fileName = "test-assertion-error-with-skip.xml";
-        FreeStyleProject project = createFreeStyleProject(fileName, new JUnitResultArchiver(fileName));
+        FreeStyleProject project = createFreeStyleProject(fileName, new JUnitResultArchiver(fileName),
+                TEST_RESULTS_CONFIGURATION);
 
         Run<?, ?> baseline = buildWithResult(project, Result.UNSTABLE);
 
@@ -180,7 +185,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     *
+     * @author Patrick Rogg
      */
     @Test
     public void shouldGradeCoverage() {
@@ -194,15 +199,13 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     *
+     * @author Patrick Rogg
      */
     @Test
     public void shouldGradeCoverageInFreeStyle() {
         String fileName = "coverage.xml";
-        CoveragePublisher coveragePublisher = new CoveragePublisher();
-        coveragePublisher.getAdapters().add(new JacocoReportAdapter(fileName));
-        coveragePublisher.setSourceFileResolver(new DefaultSourceFileResolver(SourceFileResolverLevel.NEVER_STORE));
-        FreeStyleProject project = createFreeStyleProject(fileName, coveragePublisher);
+        CoveragePublisher coveragePublisher = createCoveragePublisher(fileName);
+        FreeStyleProject project = createFreeStyleProject(fileName, coveragePublisher, COVERAGE_CONFIGURATION);
 
         Run<?, ?> baseline = buildSuccessfully(project);
 
@@ -210,7 +213,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     *
+     * @author Andreas Stiglmeier
      */
     @Test
     public void shouldGradePitResults() {
@@ -222,27 +225,6 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertTestResults(baseline, "[Autograding] Grading PIT mutation results PIT Mutation Report",
                 "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34",
                 "[Autograding] Total score for mutation coverage results: 61", 61);
-    }
-
-    private void assertCoverageResults(final Run<?, ?> baseline) {
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results ");
-        assertTestResults(baseline, "[Autograding] -> Score 100 - from recorded line coverage results: 100%",
-                "[Autograding] -> Score 58 - from recorded branch coverage results: 79%",
-                "[Autograding] Total score for coverage results: 100", 100);
-    }
-
-    private void assertTestResults(final Run<?, ?> baseline, final String s, final String s2, final String s3,
-            final int i) {
-        assertThat(getConsoleLog(baseline)).contains(s);
-        assertThat(getConsoleLog(baseline)).contains(
-                s2);
-        assertThat(getConsoleLog(baseline)).contains(s3);
-
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-        assertThat(actions).hasSize(1);
-        AggregatedScore score = actions.get(0).getResult();
-
-        assertThat(score).hasAchieved(i);
     }
 
     /**
@@ -260,6 +242,27 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         catch (IOException e) {
             throw new AssertionError(e);
         }
+    }
+
+    private void assertCoverageResults(final Run<?, ?> baseline) {
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results ");
+        assertTestResults(baseline, "[Autograding] -> Score 100 - from recorded line coverage results: 100%",
+                "[Autograding] -> Score 58 - from recorded branch coverage results: 79%",
+                "[Autograding] Total score for coverage results: 100", 100);
+    }
+
+    private void assertTestResults(final Run<?, ?> baseline, final String firstLine, final String secondLine, final String thirdLine,
+            final int totalResult) {
+        assertThat(getConsoleLog(baseline)).contains(firstLine);
+        assertThat(getConsoleLog(baseline)).contains(
+                secondLine);
+        assertThat(getConsoleLog(baseline)).contains(thirdLine);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(totalResult);
     }
 
     private void configureScanner(final WorkflowJob job, final String toolType, final String fileName,
@@ -288,10 +291,25 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         job.setDefinition(new CpsFlowDefinition(pipeLineScript, true));
     }
 
-    private FreeStyleProject createFreeStyleProject(final String fileName, final Publisher publisher) {
+    private FreeStyleProject createFreeStyleProject(final String fileName, final Publisher publisher,
+            final String configuration) {
         FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles(fileName);
         project.getPublishersList().add(publisher);
-        project.getPublishersList().add(new AutoGrader(TEST_RESULTS_CONFIGURATION));
+        project.getPublishersList().add(new AutoGrader(configuration));
         return project;
+    }
+
+    private CoveragePublisher createCoveragePublisher(final String fileName) {
+        JacocoReportAdapter jacocoReportAdapter = new JacocoReportAdapter("**/" + fileName);
+        DefaultSourceFileResolver defaultSourceFileResolver = new DefaultSourceFileResolver(
+                SourceFileResolverLevel.NEVER_STORE);
+
+        List<CoverageAdapter> coverageAdapters = new ArrayList<>();
+        coverageAdapters.add(jacocoReportAdapter);
+
+        CoveragePublisher coveragePublisher = new CoveragePublisher();
+        coveragePublisher.setAdapters(coverageAdapters);
+        coveragePublisher.setSourceFileResolver(defaultSourceFileResolver);
+        return coveragePublisher;
     }
 }
