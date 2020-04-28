@@ -1,84 +1,61 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "http://example.com/example.json",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://plugins.jenkins.io/autograding.json",
   "type": "object",
-  "title": "The Root Schema",
-  "description": "The root schema comprises the entire JSON document.",
-  "required": [
-    "analysis",
-    "tests",
-    "coverage",
-    "pit"
-  ],
+  "title": "Jenkins Autograding Plugin Configuration",
   "properties": {
     "analysis": {
-      "$id": "#/properties/analysis",
       "type": "object",
-      "title": "The Analysis Schema",
-      "description": "An explanation about the purpose of this instance.",
+      "title": "Static analysis configuration",
       "default": {},
       "examples": [
         {
-          "maxScore": 100.0,
-          "highImpact": -5.0,
-          "normalImpact": -2.0,
-          "errorImpact": -10.0,
-          "lowImpact": -1.0
+          "maxScore": 100,
+          "errorImpact": -10,
+          "highImpact": -5,
+          "normalImpact": -2,
+          "lowImpact": -1
         }
       ],
       "required": [
-        "maxScore",
-        "errorImpact",
-        "highImpact",
-        "normalImpact",
-        "lowImpact"
+        "maxScore"
       ],
       "properties": {
         "maxScore": {
-          "$id": "#/properties/analysis/properties/maxScore",
           "type": "integer",
-          "title": "The Maxscore Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Maximum score for static analysis results.",
           "default": 0,
           "examples": [
             100
           ]
         },
         "errorImpact": {
-          "$id": "#/properties/analysis/properties/errorImpact",
           "type": "integer",
-          "title": "The Errorimpact Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Impact of static analysis errors",
           "default": 0,
           "examples": [
             -10
           ]
         },
         "highImpact": {
-          "$id": "#/properties/analysis/properties/highImpact",
           "type": "integer",
-          "title": "The Highimpact Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Impact of static analysis warnings (severity high)",
           "default": 0,
           "examples": [
             -5
           ]
         },
         "normalImpact": {
-          "$id": "#/properties/analysis/properties/normalImpact",
           "type": "integer",
-          "title": "The Normalimpact Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Impact of static analysis warnings (severity normal)",
           "default": 0,
           "examples": [
             -2
           ]
         },
         "lowImpact": {
-          "$id": "#/properties/analysis/properties/lowImpact",
           "type": "integer",
-          "title": "The Lowimpact Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Impact of static analysis warnings (severity low)",
           "default": 0,
           "examples": [
             -1
@@ -87,61 +64,48 @@
       }
     },
     "tests": {
-      "$id": "#/properties/tests",
       "type": "object",
-      "title": "The Tests Schema",
-      "description": "An explanation about the purpose of this instance.",
+      "title": "Test results configuration",
       "default": {},
       "examples": [
         {
-          "maxScore": 100.0,
-          "failureImpact": -5.0,
-          "passedImpact": 1.0,
-          "skippedImpact": -1.0
+          "maxScore": 100,
+          "failureImpact": -5,
+          "passedImpact": 1,
+          "skippedImpact": -1
         }
       ],
       "required": [
-        "maxScore",
-        "passedImpact",
-        "failureImpact",
-        "skippedImpact"
+        "maxScore"
       ],
       "properties": {
         "maxScore": {
-          "$id": "#/properties/tests/properties/maxScore",
           "type": "integer",
-          "title": "The Maxscore Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Maximum score for test results.",
           "default": 0,
           "examples": [
             100
           ]
         },
         "passedImpact": {
-          "$id": "#/properties/tests/properties/passedImpact",
           "type": "integer",
-          "title": "The Passedimpact Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Impact of one passed test",
           "default": 0,
           "examples": [
             1
           ]
         },
         "failureImpact": {
-          "$id": "#/properties/tests/properties/failureImpact",
           "type": "integer",
-          "title": "The Failureimpact Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Impact of one failed test",
           "default": 0,
           "examples": [
             -5
           ]
         },
         "skippedImpact": {
-          "$id": "#/properties/tests/properties/skippedImpact",
           "type": "integer",
-          "title": "The Skippedimpact Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Impact of one skipped test",
           "default": 0,
           "examples": [
             -1
@@ -150,115 +114,92 @@
       }
     },
     "coverage": {
-      "$id": "#/properties/coverage",
       "type": "object",
-      "title": "The Coverage Schema",
-      "description": "An explanation about the purpose of this instance.",
+      "title": "Coverage results configuration",
       "default": {},
       "examples": [
         {
-          "maxScore": 100.0,
-          "coveredImpact": 1.0,
-          "missedImpact": -1.0
+          "maxScore": 100,
+          "coveredImpact": 1,
+          "missedImpact": -1
         }
       ],
       "required": [
-        "maxScore",
-        "coveredImpact",
-        "missedImpact"
+        "maxScore"
       ],
       "properties": {
         "maxScore": {
-          "$id": "#/properties/coverage/properties/maxScore",
           "type": "integer",
-          "title": "The Maxscore Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Maximum score for coverage results.",
           "default": 0,
           "examples": [
             100
           ]
         },
         "coveredImpact": {
-          "$id": "#/properties/coverage/properties/coveredImpact",
           "type": "integer",
-          "title": "The Coveredimpact Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Impact of one achieved (line and branch) coverage percentage point",
           "default": 0,
           "examples": [
             1
           ]
         },
         "missedImpact": {
-          "$id": "#/properties/coverage/properties/missedImpact",
           "type": "integer",
-          "title": "The Missedimpact Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Impact of one missed (line and branch) coverage percentage point",
           "default": 0,
           "examples": [
-            -1
+            1
           ]
         }
       }
     },
     "pit": {
-      "$id": "#/properties/pit",
       "type": "object",
-      "title": "The Pit Schema",
-      "description": "An explanation about the purpose of this instance.",
+      "title": "Pit mutation  coverage configuration",
       "default": {},
       "examples": [
         {
-          "maxScore": 100.0,
-          "ratioImpact": 0.0,
-          "undetectedImpact": -1.0,
-          "detectedImpact": 1.0
+          "maxScore": 100,
+          "ratioImpact": 0,
+          "undetectedImpact": -1,
+          "detectedImpact": 1
         }
       ],
       "required": [
-        "maxScore",
-        "detectedImpact",
-        "undetectedImpact",
-        "ratioImpact"
+        "maxScore"
       ],
       "properties": {
         "maxScore": {
-          "$id": "#/properties/pit/properties/maxScore",
           "type": "integer",
-          "title": "The Maxscore Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Maximum score for coverage results.",
           "default": 0,
           "examples": [
             100
           ]
         },
         "detectedImpact": {
-          "$id": "#/properties/pit/properties/detectedImpact",
           "type": "integer",
-          "title": "The Detectedimpact Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Impact of one detected mutation",
           "default": 0,
           "examples": [
             1
           ]
         },
         "undetectedImpact": {
-          "$id": "#/properties/pit/properties/undetectedImpact",
           "type": "integer",
-          "title": "The Undetectedimpact Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Impact of one undetectedImpact mutation",
           "default": 0,
           "examples": [
-            -1
+            1
           ]
         },
         "ratioImpact": {
-          "$id": "#/properties/pit/properties/ratioImpact",
           "type": "integer",
-          "title": "The Ratioimpact Schema",
-          "description": "An explanation about the purpose of this instance.",
+          "title": "Impact of one achieved mutation coverage percentage point",
           "default": 0,
           "examples": [
-            0
+            1
           ]
         }
       }

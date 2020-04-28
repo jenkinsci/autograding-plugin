@@ -14,7 +14,7 @@ following metrics:
 
 - Test statistics (e.g., number of failed tests) from the https://github.com/jenkinsci/junit-plugin[JUnit Plugin]
 - Code coverage (e.g., line coverage percentage) from the https://github.com/jenkinsci/code-coverage-api-plugin[Code Coverage API Plugin]
-- PIT mutation coverage (eg., missed mutation percentage)  from the https://github.com/jenkinsci/pitmutation-plugin[PIT Mutation reporting plugin]
+- PIT mutation coverage (e.g., missed mutations' percentage)  from the https://github.com/jenkinsci/pitmutation-plugin[PIT Mutation reporting plugin]
 - Static analysis (e.g., number of warnings) from the https://github.com/jenkinsci/warnings-ng-plugin[Warnings Plugin - Next Generation]
 
 For each metric you can define the impact on the overall score and the individual scoring criteria. After each build
@@ -32,8 +32,8 @@ run all post build steps that record the desired results using the plugins from 
 on the persisted Jenkins model of these plugins (i.e., Jenkins build actions), so make sure the results of these plugins
 show correctly up in the Jenkins build view. The autograding has to be started as the last step: you can configure
 the impact of the individual results using a simple JSON string. Currently, no UI configuration of the configuration is
-available. The autograding step will read all requested build results and calculates a score based on the defined 
-properties in JSON configuration.
+available. The autograding step reads all requested build results and calculates a score based on the defined
+properties in the JSON configuration.
 
 .Summary of the scoring
 [#img-overview]
