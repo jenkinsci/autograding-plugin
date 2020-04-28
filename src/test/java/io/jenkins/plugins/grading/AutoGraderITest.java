@@ -110,13 +110,13 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldCountPmdWarnings() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("pmd.xml");
 
-        configureScanner(job, "pmdParser", "pmd",
-                "{\"analysis\": {" +
-                "\"maxScore\": 100," +
-                "\"errorImpact\": -10," +
-                "\"highImpact\": -5," +
-                "\"normalImpact\": -2," +
-                "\"lowImpact\": -1}}");
+        configureScanner(job, "pmdParser",
+                "pmd",
+                "{\"analysis\": {"
+                        + "\"maxScore\": 100,"
+                        + "\"errorImpact\": -10, \"highImpact\": -5,"
+                        + "\"normalImpact\": -2,"
+                        + "\"lowImpact\": -1}}");
 
         Run<?, ?> baseline = buildSuccessfully(job);
 
@@ -146,12 +146,12 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         WorkflowJob job = createPipelineWithWorkspaceFiles("spotbugsXml.xml");
 
         configureScanner(job, "spotBugs", "spotbugsXml",
-                "{\"analysis\": {" +
-                        "\"maxScore\": 100," +
-                        "\"errorImpact\": -10," +
-                        "\"highImpact\": -5," +
-                        "\"normalImpact\": -2," +
-                        "\"lowImpact\": -1}}");
+                "{\"analysis\": {"
+                        + "\"maxScore\": 100,"
+                        + "\"errorImpact\": -10,"
+                        + "\"highImpact\": -5,"
+                        + "\"normalImpact\": -2,"
+                        + "\"lowImpact\": -1}}");
 
         Run<?, ?> baseline = buildSuccessfully(job);
 
@@ -189,12 +189,10 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                         + "}}");
         Run<?, ?> baseline = buildSuccessfully(job);
 
-        System.out.println(baseline);
-        //assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results Coverage Report");
-        //assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -10 - from recorded line coverage results: 45%");
-        //assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 28 - from recorded branch coverage results: 64%");
-        //assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for coverage results: 18");
 
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading PIT mutation results PIT Mutation Report");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -1 - from recorded PIT mutation results: 7, 4, 3, 58");
+        assertThat(getConsoleLog(baseline)).contains("Total score for mutation coverage results: 99");
     }
 
     /**
