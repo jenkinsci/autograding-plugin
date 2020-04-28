@@ -22,23 +22,23 @@ class AnalysisScoreTest {
     private static final String ID = "result-id";
 
     @Test
-    void shouldCalculate() {
+    void shouldCalculateReturns35() {
         AnalysisResult result = mock(AnalysisResult.class);
-        when(result.getTotalErrorsSize()).thenReturn(1);
-        when(result.getTotalHighPrioritySize()).thenReturn(1);
-        when(result.getTotalNormalPrioritySize()).thenReturn(1);
-        when(result.getTotalLowPrioritySize()).thenReturn(1);
+        when(result.getTotalErrorsSize()).thenReturn(2);
+        when(result.getTotalHighPrioritySize()).thenReturn(5);
+        when(result.getTotalNormalPrioritySize()).thenReturn(3);
+        when(result.getTotalLowPrioritySize()).thenReturn(4);
         when(result.getId()).thenReturn(ID);
 
         AnalysisConfiguration analysisConfiguration = new AnalysisConfigurationBuilder()
                 .setMaxScore(25)
-                .setErrorImpact(-4)
+                .setErrorImpact(-2)
                 .setHighImpact(-3)
-                .setNormalImpact(-2)
+                .setNormalImpact(-4)
                 .setLowImpact(-1)
                 .build();
         AnalysisScore analysisScore = new AnalysisScore(NAME, analysisConfiguration, result);
-        assertThat(analysisScore).hasTotalImpact(-4 - 3 - 2 - 1);
+        assertThat(analysisScore).hasTotalImpact(-35);
     }
 
     @Test
