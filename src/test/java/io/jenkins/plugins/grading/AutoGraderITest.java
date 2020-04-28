@@ -63,7 +63,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 40");
 
         List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-//        assertThat(actions).hasSize(1);
+        assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
         assertThat(score).hasAchieved(40);
@@ -83,15 +83,30 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(score).hasAchieved(94);
     }
 
-//    @Test
-//    public void shouldGradeCoverageScore() {
-//        WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
-//        configureScanner(job, "jacoco", "{\"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}}");
-//        Run<?, ?> baseline = buildSuccessfully(job);
-//
-//        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-//
-//    }
+    @Test
+    public void shouldGradeCoverageScoreWith94() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
+        configureScanner(job, "jacoco", "{\"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+
+    }
+
+    @Test
+    public void shouldGradeMutationsScoreWith94() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("pit.xml");
+        configureScanner(job, "pit", "{\"pit\": {\"maxScore\": 100,\"detectedImpact\": 1,\"undetectedImpact\": -1,\"ratioImpact\": 0}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+
+        AggregatedScore score = actions.get(0).getResult();
+//        assertThat(score).hasAchieved(94);
+    }
+
+
 
 
     /**
