@@ -6,13 +6,27 @@ import java.util.List;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
+import edu.hm.hafner.analysis.parser.pmd.PmdParser;
+
 import net.sf.json.JSONObject;
 
+import org.jenkinsci.plugins.pitmutation.PitPublisher;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import hudson.model.Run;
+import hudson.tasks.junit.JUnitParser;
+import hudson.tasks.junit.JUnitResultArchiver;
 
+import io.jenkins.plugins.analysis.core.steps.IssuesRecorder;
+import io.jenkins.plugins.analysis.warnings.Cpd;
+import io.jenkins.plugins.analysis.warnings.JUnit;
+import io.jenkins.plugins.analysis.warnings.Pmd;
+import io.jenkins.plugins.analysis.warnings.SpotBugs;
+import io.jenkins.plugins.analysis.warnings.checkstyle.CheckStyle;
+import io.jenkins.plugins.coverage.adapter.CoverageAdapter;
+import io.jenkins.plugins.coverage.adapter.JacocoReportAdapter;
 import io.jenkins.plugins.coverage.targets.Ratio;
 import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
 
@@ -26,6 +40,9 @@ import static io.jenkins.plugins.grading.assertions.Assertions.*;
  * @author Lion Kosiuk
  */
 public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
+
+    private static final String ANALYSIS_CONFIGURATION = "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}";
+    private static final String MUTATIONS_CONFIGURATION = "{\"pit\":{\"maxScore\":100,\"detectedImpact\":1,\"undetectedImpact\":-1,\"ratioImpact\":0}}";
     /** Verifies that the step skips all autograding parts if the configuration is empty. */
     @Test
     public void shouldSkipGradingIfConfigurationIsEmpty() {
@@ -60,14 +77,32 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldCountCheckStyleWarnings() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
-        configureScanner(job, "checkstyle", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}");
+        configureScanner(job, "checkstyle", ANALYSIS_CONFIGURATION);
         Run<?, ?> baseline = buildSuccessfully(job);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CheckStyle");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 40");
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        checkstyleAssertions(baseline);
+    }
+
+    @Test
+    public void shouldCountCheckstyleFreeStyle(){
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("checkstyle.xml");
+        IssuesRecorder recorder = new IssuesRecorder();
+        CheckStyle checkStyle = new CheckStyle();
+        checkStyle.setPattern("checkstyle.xml");
+        recorder.setTools(checkStyle);
+        project.getPublishersList().add(recorder);
+        project.getPublishersList().add(new AutoGrader(ANALYSIS_CONFIGURATION));
+
+        Run<?, ?> run = buildSuccessfully(project);
+        checkstyleAssertions(run);
+    }
+
+    private void checkstyleAssertions(Run<?, ?> run) {
+        List<AutoGradingBuildAction> actions = run.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
@@ -81,10 +116,28 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldGradeSpotBugs(){
         WorkflowJob job = createPipelineWithWorkspaceFiles("spotbugs.xml");
 
-        configureScanner(job, "spotbugs", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}");
+        configureScanner(job, "spotbugs", ANALYSIS_CONFIGURATION);
         Run<?, ?> baseline = buildSuccessfully(job);
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        spotBugAssertions(baseline);
+    }
+
+    @Test
+    public void shouldGradeSpotBugsFreestyle(){
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("spotbugs.xml");
+        IssuesRecorder recorder = new IssuesRecorder();
+        SpotBugs spotBugs = new SpotBugs();
+        spotBugs.setPattern("**/spotbugs.xml*");
+        recorder.setTools(spotBugs);
+        project.getPublishersList().add(recorder);
+        project.getPublishersList().add(new AutoGrader(ANALYSIS_CONFIGURATION));
+
+        Run<?, ?> run = buildSuccessfully(project);
+        spotBugAssertions(run);
+    }
+
+    private void spotBugAssertions(Run<?, ?> run){
+        List<AutoGradingBuildAction> actions = run.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
@@ -99,9 +152,27 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         WorkflowJob job = createPipelineWithWorkspaceFiles("cpd.xml");
 
         configureScanner(job, "cpd", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}");
-        Run<?, ?> baseline = buildSuccessfully(job);
+        Run<?, ?> run = buildSuccessfully(job);
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        cpdAssertions(run);
+    }
+
+    @Test
+    public void shouldGradeCPDFreestyle(){
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("cpd.xml");
+        IssuesRecorder recorder = new IssuesRecorder();
+        Cpd cpd = new Cpd();
+        cpd.setPattern("**/cpd.xml*");
+        recorder.setTools(cpd);
+        project.getPublishersList().add(recorder);
+        project.getPublishersList().add(new AutoGrader(ANALYSIS_CONFIGURATION));
+
+        Run<?, ?> run = buildSuccessfully(project);
+        cpdAssertions(run);
+    }
+
+    private void cpdAssertions(Run<?, ?> run){
+        List<AutoGradingBuildAction> actions = run.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
@@ -116,9 +187,29 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         WorkflowJob job = createPipelineWithWorkspaceFiles("pmd.xml");
 
         configureScanner(job, "pmd", "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}");
-        Run<?, ?> baseline = buildSuccessfully(job);
+        Run<?, ?> run = buildSuccessfully(job);
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        pmdAssertions(run);
+
+    }
+
+    @Test
+    public void shouldGradePMDFreestyle(){
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("pmd.xml");
+        IssuesRecorder recorder = new IssuesRecorder();
+        Pmd pmd = new Pmd();
+        pmd.setPattern("**/pmd.xml");
+        recorder.setTools(pmd);
+        project.getPublishersList().add(recorder);
+        project.getPublishersList().add(new AutoGrader(ANALYSIS_CONFIGURATION));
+
+        Run<?, ?> run = buildSuccessfully(project);
+        pmdAssertions(run);
+    }
+
+    private void pmdAssertions(Run<?, ?> run) {
+
+        List<AutoGradingBuildAction> actions = run.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
@@ -132,16 +223,32 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldGradeMutationCoverage() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("mutations.xml");
 
-        configureScanner(job, "mutations",
-                "{\"pit\":{\"maxScore\":100,\"detectedImpact\":1,\"undetectedImpact\":-1,\"ratioImpact\":0}}");
-        Run<?, ?> baseline = buildSuccessfully(job);
+        configureScanner(job, "mutations", MUTATIONS_CONFIGURATION);
+        Run<?, ?> run = buildSuccessfully(job);
+        mutationAssertions(run);
+    }
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+    @Test
+    public void shouldGradeMutationCoverageFreestyle(){
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("mutations.xml");
+        PitPublisher recorder = new PitPublisher("mutations.xml", 0, false);
+
+        project.getPublishersList().add(recorder);
+        project.getPublishersList().add(new AutoGrader(MUTATIONS_CONFIGURATION));
+
+        Run<?, ?> run = buildSuccessfully(project);
+        mutationAssertions(run);
+    }
+
+    private void mutationAssertions(Run<?, ?> run){
+        List<AutoGradingBuildAction> actions = run.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
         assertThat(score).hasAchieved(56);
     }
+
+
 
     @Test
     public void shouldGradeTestResults() {
@@ -168,20 +275,34 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     @Test
-    public void shouldGradeCoverageScore() {
-        WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
+    public void shouldGradeTestFreestyle(){
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("TEST-InjectedTest.xml",
+                "TEST-io.jenkins.plugins.grading.AnalysisScoreTest.xml",
+                "TEST-io.jenkins.plugins.grading.ArchitectureRulesTest.xml",
+                "TEST-io.jenkins.plugins.grading.AutoGraderITest.xml",
+                "TEST-io.jenkins.plugins.grading.AutoGraderTest.xml",
+                "TEST-io.jenkins.plugins.grading.CoverageScoreTests.xml",
+                "TEST-io.jenkins.plugins.grading.PackageArchitectureTest.xml",
+                "TEST-io.jenkins.plugins.grading.PitScoreTest.xml",
+                "TEST-io.jenkins.plugins.grading.ScoreTest.xml",
+                "TEST-io.jenkins.plugins.grading.TestScoreTest.xml");
 
-        configureScanner(job, "jacoco", "{ \"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}}");
-        Run<?, ?> baseline = buildSuccessfully(job);
 
+        JUnitResultArchiver junit = new JUnitResultArchiver("");
 
-        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        project.getPublishersList().add(junit);
+        project.getPublishersList().add(new AutoGrader("{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}"));
+
+        Run<?, ?> run = buildSuccessfully(project);
+
+        List<AutoGradingBuildAction> actions = run.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
-        assertThat(score).hasAchieved(50);
-
+        assertThat(score).hasAchieved(53);
     }
+
+
 
     @Test
     public void shouldGradeCoverage() {
