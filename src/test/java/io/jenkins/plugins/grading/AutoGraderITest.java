@@ -346,7 +346,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
 
     private void configureScanner(final WorkflowJob job, final String fileName,
-            final String configuration) {
+                                  final String configuration) {
         String script = "node {\n";
         switch (fileName) {
             case "checkstyle":
