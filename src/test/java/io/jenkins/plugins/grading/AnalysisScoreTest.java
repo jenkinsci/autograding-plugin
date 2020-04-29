@@ -8,6 +8,7 @@ import io.jenkins.plugins.analysis.core.model.AnalysisResult;
 import io.jenkins.plugins.grading.AnalysisConfiguration.AnalysisConfigurationBuilder;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
+import static io.jenkins.plugins.grading.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
@@ -16,6 +17,7 @@ import static org.mockito.Mockito.*;
  * @author Eva-Maria Zeintl
  * @author Ullrich Hafner
  * @author Andreas Stiglmeier
+ * @author Thomas Großbeck
  */
 class AnalysisScoreTest {
     private static final String NAME = "Results";
@@ -121,5 +123,21 @@ class AnalysisScoreTest {
 
         when(result.getId()).thenReturn(null);
         assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(NAME, configuration, result));
+    }
+
+    @Test
+    public void shouldComputeImpact() {
+        AnalysisResult result = mock(AnalysisResult.class);
+        when(result.getTotalErrorsSize()).thenReturn(3);
+        when(result.getTotalHighPrioritySize()).thenReturn(5);
+        when(result.getTotalNormalPrioritySize()).thenReturn(2);
+        when(result.getTotalLowPrioritySize()).thenReturn(4);
+        when(result.getTotalSize()).thenReturn(7);
+        when(result.getId()).thenReturn(ID);
+
+        AnalysisScore analysisScore = new AnalysisScore(NAME, createConfigurationWithOnePointForEachSeverity(), result);
+
+        assertThat(analysisScore).hasTotalSize(7);
+        assertThat(analysisScore).hasTotalImpact(14);
     }
 }
