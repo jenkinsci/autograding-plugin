@@ -16,6 +16,9 @@ import static org.mockito.Mockito.*;
  * @author Eva-Maria Zeintl
  * @author Ullrich Hafner
  * @author Andreas Stiglmeier
+ * @author Andreas Riepl
+ * @author Oliver Scholz
+ *
  */
 class AnalysisScoreTest {
     private static final String NAME = "Results";

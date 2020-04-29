@@ -9,7 +9,11 @@ import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
 /**
- * Created by Olli on 29.04.2020. Package io.jenkins.plugins.grading Project autograding
+ * Tests the class {@link PercentagePieChart}.
+ *
+ * @author Andreas Riepl
+ * @author Oliver Scholz
+ *
  */
 class PercentagePieChartTest {
 
