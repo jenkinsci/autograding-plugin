@@ -8,7 +8,6 @@ import io.jenkins.plugins.analysis.core.model.AnalysisResult;
 import io.jenkins.plugins.grading.AnalysisConfiguration.AnalysisConfigurationBuilder;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
-import static io.jenkins.plugins.grading.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
