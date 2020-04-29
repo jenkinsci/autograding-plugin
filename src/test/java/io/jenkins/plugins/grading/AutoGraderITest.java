@@ -25,6 +25,11 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     private static final String AUTOGRADE_MUTATION_CONFIGURATION = "{\"pit\":{\"maxScore\":100,\"ratioImpact\":-1,\"detectedImpact\":0,\"undetectedImpact\":-1}}";
     private static final String COVERAGE_CONFIGURATION = "{\"coverage\": {\"maxScore\": 100,\"coveredImpact\": 1,\"missedImpact\": -1}}";
     private static final String TEST_RESULTS_CONFIGURATION = "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}";
+    private static final String KOMBI_CONFIGURATUION = "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1},"
+            + "\"pit\":{\"maxScore\":100,\"ratioImpact\":-1,\"detectedImpact\":0,\"undetectedImpact\":-1},"
+            + "\"coverage\": {\"maxScore\": 100,\"coveredImpact\": 1,\"missedImpact\": -1},"
+            + "\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}"
+            + "}";
 
     private static final String TOOLTYPE_CHECKSTYLE = "checkStyle";
     private static final String TOOLTYPE_PIT = "pit";
@@ -85,9 +90,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldGradeLintResults() {
         Run<?, ?> baseline = buildJob(CSSLINT_FILE, TOOLTYPE_CSSLINT, AUTOGRADE_ANALYSIS_CONFIGURATION);
 
-        assertTestResults(baseline, "[Autograding] Grading static analysis results for CssLint",
-                "[Autograding] -> Score -228 (warnings distribution err:0, high:42, normal:9, low:0)",
-                "[Autograding] Total score for static analysis results: 0 of 100", 0);
+        assertLintResults(baseline, 0);
     }
 
     /**
@@ -97,9 +100,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldGradeTestResults() {
         Run<?, ?> baseline = buildJob(TEST_FILE_SUCCESS, TOOLTYPE_TEST_RESULTS, TEST_RESULTS_CONFIGURATION);
 
-        assertTestResults(baseline, "[Autograding] Grading test results ",
-                "[Autograding] -> Score 2 - from recorded test results: 2, 2, 0, 0",
-                "[Autograding] Total score for test results: 2", 2);
+        assertTestsSuccesfulResults(baseline, 2);
     }
 
     /**
@@ -135,10 +136,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldGradeCoverageResults() {
         Run<?, ?> baseline = buildJob(COVERAGE_FILE, TOOLTYPE_COVERAGE, COVERAGE_CONFIGURATION);
 
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results ");
-        assertTestResults(baseline, "[Autograding] -> Score 100 - from recorded line coverage results: 100%",
-                "[Autograding] -> Score 58 - from recorded branch coverage results: 79%",
-                "[Autograding] Total score for coverage results: 100", 100);
+        assertCoverageResults(baseline, 100);
     }
 
     /**
@@ -150,9 +148,25 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldGradePitResults() {
         Run<?, ?> baseline = buildJob(PIT_FILE, TOOLTYPE_PIT, AUTOGRADE_MUTATION_CONFIGURATION);
 
-        assertTestResults(baseline, "[Autograding] Grading PIT mutation results PIT Mutation Report",
-                "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34",
-                "[Autograding] Total score for mutation coverage results: 61", 61);
+        assertPitResults(baseline, 61);
+    }
+
+    /**
+     * Verifies that results from all 4 metrics are correctly graded.
+     *
+     * @author Andreas Stiglmeier
+     */
+    @Test
+    public void shouldGradeKombiResults() {
+
+        WorkflowJob job = createPipelineWithWorkspaceFiles(CSSLINT_FILE, COVERAGE_FILE, PIT_FILE, TEST_FILE_SUCCESS);
+        configureScannerForAll(job);
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        assertLintResults(baseline, 163);
+        assertTestsSuccesfulResults(baseline, 163);
+        assertCoverageResults(baseline, 163);
+        assertPitResults(baseline, 163);
     }
 
     /**
@@ -197,6 +211,20 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         job.setDefinition(new CpsFlowDefinition(pipeLineScript, true));
     }
 
+    private void configureScannerForAll(final WorkflowJob job) {
+
+        String pipeLineScript = "node {\n"
+                + "  stage ('Integration Test') {\n"
+                + "recordIssues tool: cssLint(pattern: '**/" + CSSLINT_FILE + "*')\n"
+                + "step([$class: 'PitPublisher', mutationStatsFile: '**/" + PIT_FILE + "*'])\n"
+                + "publishCoverage adapters: [jacocoAdapter('**/" + COVERAGE_FILE + "*')]\n"
+                + "junit testResults: '**/" + TEST_FILE_SUCCESS + "'\n"
+                + "autoGrade('" + KOMBI_CONFIGURATUION + "')\n"
+                + "  }\n"
+                + "}";
+        job.setDefinition(new CpsFlowDefinition(pipeLineScript, true));
+    }
+
     private Run<?, ?> buildJob(final String fileName, final String toolType, final String configuration) {
         return buildSuccessfully(configureJob(fileName, toolType, configuration));
     }
@@ -211,6 +239,32 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         configureScanner(job, toolType, fileName, configuration);
         return job;
     }
+
+    private void assertLintResults(final Run<?, ?> baseline, final int finalScore) {
+        assertTestResults(baseline, "[Autograding] Grading static analysis results for CssLint",
+                "[Autograding] -> Score -228 (warnings distribution err:0, high:42, normal:9, low:0)",
+                "[Autograding] Total score for static analysis results: 0 of 100", finalScore);
+    }
+
+    private void assertTestsSuccesfulResults(final Run<?, ?> baseline, final int finalScore) {
+        assertTestResults(baseline, "[Autograding] Grading test results ",
+                "[Autograding] -> Score 2 - from recorded test results: 2, 2, 0, 0",
+                "[Autograding] Total score for test results: 2", finalScore);
+    }
+
+    private void assertCoverageResults(final Run<?, ?> baseline, final int finalScore) {
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results ");
+        assertTestResults(baseline, "[Autograding] -> Score 100 - from recorded line coverage results: 100%",
+                "[Autograding] -> Score 58 - from recorded branch coverage results: 79%",
+                "[Autograding] Total score for coverage results: 100", finalScore);
+    }
+
+    private void assertPitResults(final Run<?, ?> baseline, final int finalScore) {
+        assertTestResults(baseline, "[Autograding] Grading PIT mutation results PIT Mutation Report",
+                "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34",
+                "[Autograding] Total score for mutation coverage results: 61", finalScore);
+    }
+
 
     private void assertTestResults(final Run<?, ?> baseline, final String firstLine, final String secondLine, final String thirdLine,
                                    final int totalResult) {
