@@ -145,9 +145,9 @@ class ScoreTest {
         PitScore pitScore = mock(PitScore.class);
         when(pitScore.getTotalImpact()).thenReturn(-20);
 
-        score.addPitTotal(pitConfiguration, pitScore);
+        int pitScoreAchieved = score.addPitTotal(pitConfiguration, pitScore);
 
-        assertThat(score).hasAchieved(80);
+        assertThat(pitScoreAchieved).isEqualTo(80);
         assertThat(score).hasTotal(100);
         assertThat(score).hasRatio(80);
         assertThat(score.getPitConfiguration()).isSameAs(pitConfiguration);
@@ -160,9 +160,9 @@ class ScoreTest {
         TestScore testScore = mock(TestScore.class);
         when(testScore.getTotalImpact()).thenReturn(40);
 
-        score.addTestsTotal(testConfiguration, testScore);
+        int testScoreAchieved = score.addTestsTotal(testConfiguration, testScore);
 
-        assertThat(score).hasAchieved(120);
+        assertThat(testScoreAchieved).isEqualTo(40);
         assertThat(score).hasTotal(200);
         assertThat(score).hasRatio(60);
         assertThat(score.getTestConfiguration()).isSameAs(testConfiguration);
@@ -175,9 +175,9 @@ class ScoreTest {
         CoverageScore coverageScore = mock(CoverageScore.class);
         when(coverageScore.getTotalImpact()).thenReturn(-70);
 
-        score.addCoverageTotal(coverageConfiguration, coverageScore);
+        int coverageScoreAchieved = score.addCoverageTotal(coverageConfiguration, coverageScore);
 
-        assertThat(score).hasAchieved(150);
+        assertThat(coverageScoreAchieved).isEqualTo(30);
         assertThat(score).hasTotal(300);
         assertThat(score).hasRatio(50);
         assertThat(score.getCoverageConfiguration()).isSameAs(coverageConfiguration);
@@ -188,9 +188,9 @@ class ScoreTest {
                 .build();
 
         AnalysisScore analysisScore = createAnalysisScore(49);
-        score.addAnalysisTotal(analysisConfiguration, Collections.singletonList(analysisScore));
+        int analysisScoreAchieved = score.addAnalysisTotal(analysisConfiguration, Collections.singletonList(analysisScore));
 
-        assertThat(score).hasAchieved(199);
+        assertThat(analysisScoreAchieved).isEqualTo(49);
         assertThat(score).hasTotal(400);
         assertThat(score).hasRatio(49);
         assertThat(score.getAnalysisConfiguration()).isSameAs(analysisConfiguration);
