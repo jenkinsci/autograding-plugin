@@ -32,15 +32,20 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     private static final String TOOLTYPE_TEST_RESULTS = "test-results";
     private static final String TOOLTYPE_CSSLINT = "cssLint";
 
+    private static final String CHECKSTYLE_FILE = "checkstyle.xml";
+    private static final String CSSLINT_FILE = "csslint.xml";
+    private static final String PIT_FILE = "mutations.xml";
+    private static final String COVERAGE_FILE = "coverage.xml";
+    private static final String TEST_FILE_SUCCESS = "test-successful.xml";
+    private static final String TEST_FILE_ERROR = "test-assertion-error.xml";
+    private static final String TEST_FILE_ERROR_SKIP = "test-assertion-error-with-skip.xml";
+
     /**
      * Verifies that the step skips all autograding parts if the configuration is empty.
      */
     @Test
     public void shouldSkipGradingIfConfigurationIsEmpty() {
-        WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
-
-        configureScanner(job, TOOLTYPE_CHECKSTYLE, "checkstyle", "{}");
-        Run<?, ?> baseline = buildSuccessfully(job);
+        Run<?, ?> baseline = buildJob(CHECKSTYLE_FILE, TOOLTYPE_CHECKSTYLE, "{}");
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping static analysis results");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping test results");
@@ -53,10 +58,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldAbortBuildSinceNoTestActionHasBeenRegistered() {
-        WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
-
-        configureScanner(job, TOOLTYPE_CHECKSTYLE, "checkstyle", AUTOGRADE_TESTS_CONFIGURATION);
-        Run<?, ?> baseline = buildWithResult(job, Result.FAILURE);
+        Run<?, ?> baseline = buildJobWithResult(CHECKSTYLE_FILE, TOOLTYPE_CHECKSTYLE, AUTOGRADE_TESTS_CONFIGURATION,
+                Result.FAILURE);
 
         assertThat(getConsoleLog(baseline)).contains("java.lang.IllegalArgumentException: Test scoring has been enabled, but no test results have been found.");
     }
@@ -66,17 +69,11 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeCheckStyleWarnings() {
-        WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
+        Run<?, ?> baseline = buildJob(CHECKSTYLE_FILE, TOOLTYPE_CHECKSTYLE, AUTOGRADE_ANALYSIS_CONFIGURATION);
 
-        configureScanner(job, TOOLTYPE_CHECKSTYLE, "checkstyle", AUTOGRADE_ANALYSIS_CONFIGURATION);
-        Run<?, ?> baseline = buildSuccessfully(job);
-
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CheckStyle");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 40");
-
-        assertGradingResult(baseline, 40);
+        assertTestResults(baseline, "[Autograding] Grading static analysis results for CheckStyle",
+                "[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)",
+                "[Autograding] Total score for static analysis results: 40", 40);
     }
 
     /**
@@ -86,17 +83,11 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeLintResults() {
-        WorkflowJob job = createPipelineWithWorkspaceFiles("csslint.xml");
+        Run<?, ?> baseline = buildJob(CSSLINT_FILE, TOOLTYPE_CSSLINT, AUTOGRADE_ANALYSIS_CONFIGURATION);
 
-        configureScanner(job, TOOLTYPE_CSSLINT, "csslint", AUTOGRADE_ANALYSIS_CONFIGURATION);
-        Run<?, ?> baseline = buildSuccessfully(job);
-
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading static analysis results for CssLint");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score -228 (warnings distribution err:0, high:42, normal:9, low:0)");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for static analysis results: 0 of 100");
-
-        assertGradingResult(baseline, 0);
+        assertTestResults(baseline, "[Autograding] Grading static analysis results for CssLint",
+                "[Autograding] -> Score -228 (warnings distribution err:0, high:42, normal:9, low:0)",
+                "[Autograding] Total score for static analysis results: 0 of 100", 0);
     }
 
     /**
@@ -104,18 +95,11 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeTestResults() {
-        String fileName = "test-successful.xml";
-        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
+        Run<?, ?> baseline = buildJob(TEST_FILE_SUCCESS, TOOLTYPE_TEST_RESULTS, TEST_RESULTS_CONFIGURATION);
 
-        configureScanner(job, TOOLTYPE_TEST_RESULTS, fileName, TEST_RESULTS_CONFIGURATION);
-        Run<?, ?> baseline = buildSuccessfully(job);
-
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results ");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score 2 - from recorded test results: 2, 2, 0, 0");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 2");
-
-        assertGradingResult(baseline, 2);
+        assertTestResults(baseline, "[Autograding] Grading test results ",
+                "[Autograding] -> Score 2 - from recorded test results: 2, 2, 0, 0",
+                "[Autograding] Total score for test results: 2", 2);
     }
 
     /**
@@ -123,18 +107,12 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeTestResultsWithAssertionError() {
-        String fileName = "test-assertion-error.xml";
-        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
+        Run<?, ?> baseline = buildJobWithResult(TEST_FILE_ERROR, TOOLTYPE_TEST_RESULTS, TEST_RESULTS_CONFIGURATION,
+                Result.UNSTABLE);
 
-        configureScanner(job, TOOLTYPE_TEST_RESULTS, fileName, TEST_RESULTS_CONFIGURATION);
-        Run<?, ?> baseline = buildWithResult(job, Result.UNSTABLE);
-
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results ");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score -10 - from recorded test results: 2, 0, 2, 0");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 90");
-
-        assertGradingResult(baseline, 90);
+        assertTestResults(baseline, "[Autograding] Grading test results ",
+                "[Autograding] -> Score -10 - from recorded test results: 2, 0, 2, 0",
+                "[Autograding] Total score for test results: 90", 90);
     }
 
     /**
@@ -142,18 +120,12 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorAndSkipTest() {
-        String fileName = "test-assertion-error-with-skip.xml";
-        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
+        Run<?, ?> baseline = buildJobWithResult(TEST_FILE_ERROR_SKIP, TOOLTYPE_TEST_RESULTS, TEST_RESULTS_CONFIGURATION,
+                Result.UNSTABLE);
 
-        configureScanner(job, TOOLTYPE_TEST_RESULTS, fileName, TEST_RESULTS_CONFIGURATION);
-        Run<?, ?> baseline = buildWithResult(job, Result.UNSTABLE);
-
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading test results ");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score -5 - from recorded test results: 3, 1, 1, 1");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 95");
-
-        assertGradingResult(baseline, 95);
+        assertTestResults(baseline, "[Autograding] Grading test results ",
+                "[Autograding] -> Score -5 - from recorded test results: 3, 1, 1, 1",
+                "[Autograding] Total score for test results: 95", 95);
     }
 
     /**
@@ -161,20 +133,12 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeCoverageResults() {
-        String fileName = "coverage.xml";
-        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
-
-        configureScanner(job, TOOLTYPE_COVERAGE, fileName, COVERAGE_CONFIGURATION);
-        Run<?, ?> baseline = buildSuccessfully(job);
+        Run<?, ?> baseline = buildJob(COVERAGE_FILE, TOOLTYPE_COVERAGE, COVERAGE_CONFIGURATION);
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results ");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score 100 - from recorded line coverage results: 100%");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score 58 - from recorded branch coverage results: 79%");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for coverage results: 100");
-
-        assertGradingResult(baseline, 100);
+        assertTestResults(baseline, "[Autograding] -> Score 100 - from recorded line coverage results: 100%",
+                "[Autograding] -> Score 58 - from recorded branch coverage results: 79%",
+                "[Autograding] Total score for coverage results: 100", 100);
     }
 
     /**
@@ -184,17 +148,11 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradePitResults() {
-        WorkflowJob job = createPipelineWithWorkspaceFiles("mutations.xml");
+        Run<?, ?> baseline = buildJob(PIT_FILE, TOOLTYPE_PIT, AUTOGRADE_MUTATION_CONFIGURATION);
 
-        configureScanner(job, TOOLTYPE_PIT, "mutations", AUTOGRADE_MUTATION_CONFIGURATION);
-        Run<?, ?> baseline = buildSuccessfully(job);
-
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading PIT mutation results PIT Mutation Report");
-        assertThat(getConsoleLog(baseline)).contains(
-                "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34");
-        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for mutation coverage results: 61");
-
-        assertGradingResult(baseline, 61);
+        assertTestResults(baseline, "[Autograding] Grading PIT mutation results PIT Mutation Report",
+                "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34",
+                "[Autograding] Total score for mutation coverage results: 61", 61);
     }
 
     /**
@@ -239,11 +197,32 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         job.setDefinition(new CpsFlowDefinition(pipeLineScript, true));
     }
 
-    private void assertGradingResult(Run<?, ?> baseline, int gradingScore) {
+    private Run<?, ?> buildJob(final String fileName, final String toolType, final String configuration) {
+        return buildSuccessfully(configureJob(fileName, toolType, configuration));
+    }
+
+    private Run<?, ?> buildJobWithResult(final String fileName, final String toolType, final String configuration,
+                                         final Result result) {
+        return buildWithResult(configureJob(fileName, toolType, configuration), result);
+    }
+
+    private WorkflowJob configureJob(final String fileName, final String toolType, final String configuration) {
+        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
+        configureScanner(job, toolType, fileName, configuration);
+        return job;
+    }
+
+    private void assertTestResults(final Run<?, ?> baseline, final String firstLine, final String secondLine, final String thirdLine,
+                                   final int totalResult) {
+        assertThat(getConsoleLog(baseline)).contains(firstLine);
+        assertThat(getConsoleLog(baseline)).contains(
+                secondLine);
+        assertThat(getConsoleLog(baseline)).contains(thirdLine);
+
         List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
         AggregatedScore score = actions.get(0).getResult();
 
-        assertThat(score).hasAchieved(gradingScore);
+        assertThat(score).hasAchieved(totalResult);
     }
 }
