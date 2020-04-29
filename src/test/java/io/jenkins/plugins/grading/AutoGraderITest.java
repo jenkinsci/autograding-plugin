@@ -118,15 +118,12 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeLintResultsFreestyle() {
-
-        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles(CSSLINT_FILE);
-
         IssuesRecorder issuesRecorder = new IssuesRecorder();
         CssLint cssLint = new CssLint();
         cssLint.setPattern(PATTERN_PREFIX + CSSLINT_FILE);
         issuesRecorder.setTools(cssLint);
-        project.getPublishersList().add(issuesRecorder);
-        project.getPublishersList().add(new AutoGrader(AUTOGRADE_ANALYSIS_CONFIGURATION));
+
+        FreeStyleProject project = createFreeStyleProject(CSSLINT_FILE, issuesRecorder, AUTOGRADE_ANALYSIS_CONFIGURATION);
 
         assertTestResults(buildSuccessfully(project), "[Autograding] Grading static analysis results for CssLint",
                 "[Autograding] -> Score -228 (warnings distribution err:0, high:42, normal:9, low:0)",
@@ -280,11 +277,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradePitResultsFreeStyle() {
-        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles(PIT_FILE);
-        PitPublisher pitPublisher = new PitPublisher(PIT_FILE, 0, false);
-
-        project.getPublishersList().add(pitPublisher);
-        project.getPublishersList().add(new AutoGrader(AUTOGRADE_MUTATION_CONFIGURATION));
+        FreeStyleProject project = createFreeStyleProject(PIT_FILE, new PitPublisher(PIT_FILE, 0,
+                false), AUTOGRADE_MUTATION_CONFIGURATION);
 
         assertTestResults(buildSuccessfully(project), "[Autograding] Grading PIT mutation results PIT Mutation Report",
                 "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34",
