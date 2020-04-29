@@ -1,5 +1,7 @@
 package io.jenkins.plugins.grading;
 
+import edu.hm.hafner.echarts.JacksonFacade;
+
 import hudson.model.ModelObject;
 import hudson.model.Run;
 
@@ -10,6 +12,8 @@ import hudson.model.Run;
  * @author Eva-Maria Zeintl
  */
 public class AutoGradingViewModel implements ModelObject {
+    private static final JacksonFacade JACKSON_FACADE = new JacksonFacade();
+
     private final Run<?, ?> owner;
     private final AggregatedScore score;
 
@@ -40,4 +44,18 @@ public class AutoGradingViewModel implements ModelObject {
     public AggregatedScore getScore() {
         return score;
     }
+
+    /**
+     * Returns the UI model for an ECharts progress chart.
+     *
+     * @param percentage
+     *         the percentage to show
+     *
+     * @return the UI model as JSON
+     */
+    @SuppressWarnings("unused") // Called by jelly view
+    public String getProgressModel(final int percentage) {
+        return JACKSON_FACADE.toJson(new PercentagePieChart().create(percentage));
+    }
+
 }

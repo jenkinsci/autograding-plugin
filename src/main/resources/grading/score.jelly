@@ -3,14 +3,17 @@
 
   <st:documentation>
     Rendes the score of a given category. The score is rendered with a text title and a progress bar.
-    <st:attribute name="total" type="int">
+    <st:attribute name="total" use="required" type="int">
       The total number of possible points for this category.
     </st:attribute>
-    <st:attribute name="achieved" type="int">
+    <st:attribute name="achieved" use="required" type="int">
       The achieved number of points for this category.
     </st:attribute>
-    <st:attribute name="ratio" type="int">
+    <st:attribute name="ratio" use="required" type="int">
       The score of the category, given as a percentage.
+    </st:attribute>
+    <st:attribute name="title" use="required" type="String">
+      Title label to show.
     </st:attribute>
   </st:documentation>
 
@@ -26,7 +29,7 @@
     </j:otherwise>
   </j:choose>
 
-  <strong>Score: ${achieved} / ${total}</strong>
+  <strong>${title}: ${achieved} / ${total}</strong>
   <div class="progress-container">
     <div class="progress">
       <div class="progress-bar ${style}" role="progressbar" style="width: ${ratio}%;"

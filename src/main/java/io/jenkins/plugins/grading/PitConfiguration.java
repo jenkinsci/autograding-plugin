@@ -1,5 +1,9 @@
 package io.jenkins.plugins.grading;
 
+import java.util.Objects;
+
+import edu.hm.hafner.util.Generated;
+
 import net.sf.json.JSONObject;
 
 /**
@@ -9,6 +13,8 @@ import net.sf.json.JSONObject;
  */
 @SuppressWarnings("PMD.DataClass")
 public class PitConfiguration extends Configuration {
+    private static final long serialVersionUID = 1L;
+
     private int ratioImpact;
     private int detectedImpact;
     private int undetectedImpact;
@@ -67,6 +73,28 @@ public class PitConfiguration extends Configuration {
     @SuppressWarnings("unused") // Required for JSON conversion
     public void setRatioImpact(final int ratioImpact) {
         this.ratioImpact = ratioImpact;
+    }
+
+    @Override @Generated
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        PitConfiguration that = (PitConfiguration) o;
+        return ratioImpact == that.ratioImpact
+                && detectedImpact == that.detectedImpact
+                && undetectedImpact == that.undetectedImpact;
+    }
+
+    @Override @Generated
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), ratioImpact, detectedImpact, undetectedImpact);
     }
 
     /**

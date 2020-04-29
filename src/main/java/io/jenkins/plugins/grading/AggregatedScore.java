@@ -1,9 +1,13 @@
 package io.jenkins.plugins.grading;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+
+import edu.hm.hafner.util.Generated;
 
 /**
  * Stores the scores of an autograding run. Persists the configuration and the scores for each metric.
@@ -11,7 +15,9 @@ import java.util.List;
  * @author Eva-Maria Zeintl
  * @author Ullrich Hafner
  */
-public class AggregatedScore {
+public class AggregatedScore implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private AnalysisConfiguration analysisConfiguration = new AnalysisConfiguration();
     private final List<AnalysisScore> analysisScores = new ArrayList<>();
     private int analysisAchieved;
@@ -218,5 +224,40 @@ public class AggregatedScore {
             delta = delta + score.getTotalImpact();
         }
         return delta;
+    }
+
+    @Override @Generated
+    public String toString() {
+        return String.format("Score: %d / %d", getAchieved(), getTotal());
+    }
+
+    @Override @Generated
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AggregatedScore that = (AggregatedScore) o;
+        return analysisAchieved == that.analysisAchieved
+                && testAchieved == that.testAchieved
+                && coverageAchieved == that.coverageAchieved
+                && pitAchieved == that.pitAchieved
+                && analysisConfiguration.equals(that.analysisConfiguration)
+                && analysisScores.equals(that.analysisScores)
+                && testsConfiguration.equals(that.testsConfiguration)
+                && testScores.equals(that.testScores)
+                && coverageConfiguration.equals(that.coverageConfiguration)
+                && coverageScores.equals(that.coverageScores)
+                && pitConfiguration.equals(that.pitConfiguration)
+                && pitScores.equals(that.pitScores);
+    }
+
+    @Override @Generated
+    public int hashCode() {
+        return Objects.hash(analysisConfiguration, analysisScores, analysisAchieved, testsConfiguration, testScores,
+                testAchieved, coverageConfiguration, coverageScores, coverageAchieved, pitConfiguration, pitScores,
+                pitAchieved);
     }
 }

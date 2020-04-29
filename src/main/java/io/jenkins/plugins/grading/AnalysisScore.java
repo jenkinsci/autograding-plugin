@@ -1,5 +1,9 @@
 package io.jenkins.plugins.grading;
 
+import java.util.Objects;
+
+import edu.hm.hafner.util.Generated;
+
 import io.jenkins.plugins.analysis.core.model.AnalysisResult;
 
 /**
@@ -10,6 +14,8 @@ import io.jenkins.plugins.analysis.core.model.AnalysisResult;
  */
 @SuppressWarnings("PMD.DataClass")
 public class AnalysisScore extends Score {
+    private static final long serialVersionUID = 1L;
+
     private final int errorsSize;
     private final int highPrioritySize;
     private final int normalPrioritySize;
@@ -68,5 +74,26 @@ public class AnalysisScore extends Score {
 
     public int getTotalSize() {
         return totalSize;
+    }
+
+    @Override @Generated
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AnalysisScore that = (AnalysisScore) o;
+        return errorsSize == that.errorsSize
+                && highPrioritySize == that.highPrioritySize
+                && normalPrioritySize == that.normalPrioritySize
+                && lowPrioritySize == that.lowPrioritySize
+                && totalSize == that.totalSize;
+    }
+
+    @Override @Generated
+    public int hashCode() {
+        return Objects.hash(errorsSize, highPrioritySize, normalPrioritySize, lowPrioritySize, totalSize);
     }
 }

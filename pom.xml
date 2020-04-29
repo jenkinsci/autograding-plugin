@@ -1,12 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>2.3.0</version>
-    <relativePath/>
+    <version>4.0.0</version>
+    <relativePath />
   </parent>
 
   <groupId>io.jenkins.plugins</groupId>
@@ -16,21 +15,21 @@
   <version>${revision}${changelist}</version>
 
   <description>This plugin autogrades projects based on a configurable set of metrics.</description>
-  <url>https://github.com/jenkinsci/autograde-plugin</url>
+  <url>https://github.com/jenkinsci/autograding-plugin</url>
 
   <properties>
-    <revision>1.0.0</revision>
+    <revision>1.1.1</revision>
     <changelist>-SNAPSHOT</changelist>
     <module.name>${project.groupId}.autograding</module.name>
 
-    <commons.lang.version>3.9</commons.lang.version>
+    <commons.lang.version>3.10</commons.lang.version>
 
     <font-awesome-api.version>5.12.0-7</font-awesome-api.version>
     <jquery3-api.version>3.4.1-10</jquery3-api.version>
     <bootstrap4-api.version>4.4.1-10</bootstrap4-api.version>
     <data-tables-api.version>1.10.20-14</data-tables-api.version>
-    <echarts-api.version>4.6.0-8</echarts-api.version>
-    <plugin-util-api.version>1.0.2</plugin-util-api.version>
+    <echarts-api.version>4.6.0-9</echarts-api.version>
+    <plugin-util-api.version>1.2.0</plugin-util-api.version>
 
     <code-coverage-api-plugin.version>1.1.4</code-coverage-api-plugin.version>
     <pitmutation-plugin.version>1.0-18</pitmutation-plugin.version>
@@ -189,6 +188,36 @@
             <package>io.jenkins.plugins.grading</package>
           </packages>
           <entryPointClassPackage>io.jenkins.plugins.grading.assertions</entryPointClassPackage>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <configuration>
+          <excludedClasses>
+            <param>*Action</param>
+            <param>*Messages</param>
+            <param>*ViewModel</param>
+          </excludedClasses>
+          <excludedMethods>
+            <param>*equals</param>
+            <param>*hashCode</param>
+            <param>*toString</param>
+          </excludedMethods>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>io/jenkins/plugins/**/*</include>
+          </includes>
+          <excludes>
+            <exclude>**/*Action*</exclude>
+            <exclude>**/*Messages*</exclude>
+            <exclude>**/*ViewModel*</exclude>
+          </excludes>
         </configuration>
       </plugin>
     </plugins>

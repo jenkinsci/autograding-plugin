@@ -1,6 +1,9 @@
 package io.jenkins.plugins.grading;
 
+import java.util.Objects;
+
 import edu.hm.hafner.analysis.Severity;
+import edu.hm.hafner.util.Generated;
 
 import net.sf.json.JSONObject;
 
@@ -11,6 +14,8 @@ import net.sf.json.JSONObject;
  */
 @SuppressWarnings("PMD.DataClass")
 public class AnalysisConfiguration extends Configuration {
+    private static final long serialVersionUID = 1L;
+
     private int errorImpact;
     private int highImpact;
     private int normalImpact;
@@ -79,6 +84,29 @@ public class AnalysisConfiguration extends Configuration {
 
     public int getLowImpact() {
         return lowImpact;
+    }
+
+    @Override @Generated
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        AnalysisConfiguration that = (AnalysisConfiguration) o;
+        return errorImpact == that.errorImpact
+                && highImpact == that.highImpact
+                && normalImpact == that.normalImpact
+                && lowImpact == that.lowImpact;
+    }
+
+    @Override @Generated
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), errorImpact, highImpact, normalImpact, lowImpact);
     }
 
     /**
