@@ -222,7 +222,9 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     @Test
     public void shouldGradeMutationCoverageFreestyle(){
         FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("mutations.xml");
-        PitPublisher recorder = new PitPublisher("**/mutations.xml", 0, false);
+        PitPublisher recorder = new PitPublisher();
+        recorder.setMutationStatsFile("**/mutations.xml");
+
         project.getPublishersList().add(recorder);
         project.getPublishersList().add(new AutoGrader(MUTATIONS_CONFIGURATION));
         Run<?, ?> run = buildSuccessfully(project);
