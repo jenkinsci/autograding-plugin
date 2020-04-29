@@ -116,12 +116,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeLintResultsFreestyle() {
-        IssuesRecorder issuesRecorder = new IssuesRecorder();
-        CssLint cssLint = new CssLint();
-        cssLint.setPattern(PATTERN_PREFIX + CSSLINT_FILE);
-        issuesRecorder.setTools(cssLint);
-
-        Run<?, ?> baseline = buildFreeStyleProject(CSSLINT_FILE, issuesRecorder, AUTOGRADE_ANALYSIS_CONFIGURATION);
+        Run<?, ?> baseline = buildFreeStyleProject(CSSLINT_FILE, createLintPublisher(), AUTOGRADE_ANALYSIS_CONFIGURATION);
 
         assertLintResults(baseline);
     }
@@ -141,7 +136,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeTestResultsInFreeStyle() {
-        Run<?, ?> baseline = buildFreeStyleProject(TEST_FILE_SUCCESS, new JUnitResultArchiver(TEST_FILE_SUCCESS),
+        Run<?, ?> baseline = buildFreeStyleProject(TEST_FILE_SUCCESS, createTestsPublisher(TEST_FILE_SUCCESS),
                 TEST_RESULTS_CONFIGURATION);
 
         assertTestsSuccesfulResults(baseline);
@@ -163,7 +158,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorInFreeStyle() {
-        Run<?, ?> baseline = buildFreeStyleProjectWithResult(TEST_FILE_ERROR, new JUnitResultArchiver(TEST_FILE_ERROR),
+        Run<?, ?> baseline = buildFreeStyleProjectWithResult(TEST_FILE_ERROR, createTestsPublisher(TEST_FILE_ERROR),
                 TEST_RESULTS_CONFIGURATION, Result.UNSTABLE);
 
         assertTestsErrorResults(baseline);
@@ -185,7 +180,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorAndSkipTestInFreeStyle() {
-        Run<?, ?> baseline = buildFreeStyleProjectWithResult(TEST_FILE_ERROR_SKIP, new JUnitResultArchiver(TEST_FILE_ERROR_SKIP),
+        Run<?, ?> baseline = buildFreeStyleProjectWithResult(TEST_FILE_ERROR_SKIP, createTestsPublisher(TEST_FILE_ERROR_SKIP),
                 TEST_RESULTS_CONFIGURATION, Result.UNSTABLE);
 
         assertTestsErrorSkipResults(baseline);
@@ -206,7 +201,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeCoverageInFreeStyle() {
-        CoveragePublisher coveragePublisher = createCoveragePublisher(COVERAGE_FILE);
+        CoveragePublisher coveragePublisher = createCoveragePublisher();
         Run<?, ?> baseline = buildFreeStyleProject(COVERAGE_FILE, coveragePublisher, COVERAGE_CONFIGURATION);
 
         assertCoverageResults(baseline);
@@ -231,8 +226,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradePitResultsFreeStyle() {
-        Run<?, ?> baseline = buildFreeStyleProject(PIT_FILE, new PitPublisher(PIT_FILE, 0,
-                false), AUTOGRADE_MUTATION_CONFIGURATION);
+        Run<?, ?> baseline = buildFreeStyleProject(PIT_FILE, createPitPublisher(), AUTOGRADE_MUTATION_CONFIGURATION);
 
         assertPitResults(baseline);
     }
@@ -248,6 +242,29 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         WorkflowJob job = createPipelineWithWorkspaceFiles(CSSLINT_FILE, COVERAGE_FILE, PIT_FILE, TEST_FILE_SUCCESS);
         configureScannerForAll(job);
         Run<?, ?> baseline = buildSuccessfully(job);
+
+        assertLintResultsWithTotalScore(baseline, 163);
+        assertTestsSuccesfulResultsWithTotalScore(baseline, 163);
+        assertCoverageResultsWithTotalScore(baseline, 163);
+        assertPitResultsWithTotalScore(baseline, 163);
+    }
+
+    /**
+     * Verifies that results from all 4 metrics are correctly graded.
+     *
+     * @author Andreas Stiglmeier
+     */
+    @Test
+    public void shouldGradeKombiResultsFreeStyle() {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles(CSSLINT_FILE, COVERAGE_FILE, PIT_FILE, TEST_FILE_SUCCESS);
+
+        project.getPublishersList().add(createLintPublisher());
+        project.getPublishersList().add(createCoveragePublisher());
+        project.getPublishersList().add(createPitPublisher());
+        project.getPublishersList().add(createTestsPublisher(TEST_FILE_SUCCESS));
+        project.getPublishersList().add(new AutoGrader(KOMBI_CONFIGURATUION));
+
+        Run<?, ?> baseline = buildSuccessfully(project);
 
         assertLintResultsWithTotalScore(baseline, 163);
         assertTestsSuccesfulResultsWithTotalScore(baseline, 163);
@@ -344,8 +361,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         return project;
     }
 
-    private CoveragePublisher createCoveragePublisher(final String fileName) {
-        JacocoReportAdapter jacocoReportAdapter = new JacocoReportAdapter("**/" + fileName);
+    private CoveragePublisher createCoveragePublisher() {
+        JacocoReportAdapter jacocoReportAdapter = new JacocoReportAdapter(PATTERN_PREFIX + COVERAGE_FILE);
         DefaultSourceFileResolver defaultSourceFileResolver = new DefaultSourceFileResolver(
                 SourceFileResolverLevel.NEVER_STORE);
 
@@ -356,6 +373,22 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         coveragePublisher.setAdapters(coverageAdapters);
         coveragePublisher.setSourceFileResolver(defaultSourceFileResolver);
         return coveragePublisher;
+    }
+
+    private IssuesRecorder createLintPublisher() {
+        IssuesRecorder issuesRecorder = new IssuesRecorder();
+        CssLint cssLint = new CssLint();
+        cssLint.setPattern(PATTERN_PREFIX + CSSLINT_FILE);
+        issuesRecorder.setTools(cssLint);
+        return issuesRecorder;
+    }
+
+    private PitPublisher createPitPublisher() {
+        return new PitPublisher(PIT_FILE, 0, false);
+    }
+
+    private JUnitResultArchiver createTestsPublisher(final String fileName) {
+        return new JUnitResultArchiver(fileName);
     }
 
     private void assertLintResults(final Run<?, ?> baseline) {
