@@ -1,28 +1,29 @@
 package io.jenkins.plugins.grading;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-import org.jvnet.hudson.test.JenkinsRule;
-
-import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
-import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.tasks.Publisher;
 import hudson.tasks.junit.JUnitResultArchiver;
-
+import io.jenkins.plugins.analysis.core.steps.IssuesRecorder;
+import io.jenkins.plugins.analysis.warnings.CssLint;
 import io.jenkins.plugins.coverage.CoveragePublisher;
 import io.jenkins.plugins.coverage.adapter.CoverageAdapter;
 import io.jenkins.plugins.coverage.adapter.JacocoReportAdapter;
 import io.jenkins.plugins.coverage.source.DefaultSourceFileResolver;
 import io.jenkins.plugins.coverage.source.SourceFileResolver.SourceFileResolverLevel;
 import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
+import org.jenkinsci.plugins.pitmutation.PitPublisher;
+import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
+import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+import org.junit.Test;
+import org.jvnet.hudson.test.JenkinsRule;
 
-import static io.jenkins.plugins.grading.assertions.Assertions.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static io.jenkins.plugins.grading.assertions.Assertions.assertThat;
 
 /**
  * Integration tests for the {@link AutoGrader} step.
@@ -41,6 +42,12 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     private static final String TOOLTYPE_PIT = "pit";
     private static final String TOOLTYPE_COVERAGE = "coverage";
     private static final String TOOLTYPE_TEST_RESULTS = "test-results";
+    private static final String TOOLTYPE_CSSLINT = "cssLint";
+
+    private static final String CSSLINT_FILE = "csslint.xml";
+    private static final String PIT_FILE = "mutations.xml";
+
+    private static final String PATTERN_PREFIX = "**/";
 
     /**
      * Verifies that the step skips all autograding parts if the configuration is empty.
@@ -77,7 +84,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      * Verifies that CheckStyle results are correctly graded.
      */
     @Test
-    public void shouldCountCheckStyleWarnings() {
+    public void shouldGradeCheckStyleWarnings() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
         configureScanner(job, TOOLTYPE_CHECKSTYLE, "checkstyle", AUTOGRADE_ANALYSIS_CONFIGURATION);
@@ -86,6 +93,44 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertTestResults(baseline, "[Autograding] Grading static analysis results for CheckStyle",
                 "[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)",
                 "[Autograding] Total score for static analysis results: 40", 40);
+    }
+
+    /**
+     * Verifies that Lint results are correctly graded.
+     *
+     * @author Andreas Stiglmeier
+     */
+    @Test
+    public void shouldGradeLintResults() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("csslint.xml");
+
+        configureScanner(job, TOOLTYPE_CSSLINT, "csslint", AUTOGRADE_ANALYSIS_CONFIGURATION);
+
+        assertTestResults(buildSuccessfully(job), "[Autograding] Grading static analysis results for CssLint",
+                "[Autograding] -> Score -228 (warnings distribution err:0, high:42, normal:9, low:0)",
+                "[Autograding] Total score for static analysis results: 0 of 100", 0);
+    }
+
+    /**
+     * Verifies that Lint results are correctly graded.
+     *
+     * @author Andreas Stiglmeier
+     */
+    @Test
+    public void shouldGradeLintResultsFreestyle() {
+
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles(CSSLINT_FILE);
+
+        IssuesRecorder issuesRecorder = new IssuesRecorder();
+        CssLint cssLint = new CssLint();
+        cssLint.setPattern(PATTERN_PREFIX + CSSLINT_FILE);
+        issuesRecorder.setTools(cssLint);
+        project.getPublishersList().add(issuesRecorder);
+        project.getPublishersList().add(new AutoGrader(AUTOGRADE_ANALYSIS_CONFIGURATION));
+
+        assertTestResults(buildSuccessfully(project), "[Autograding] Grading static analysis results for CssLint",
+                "[Autograding] -> Score -228 (warnings distribution err:0, high:42, normal:9, low:0)",
+                "[Autograding] Total score for static analysis results: 0 of 100", 0);
     }
 
     /**
@@ -213,16 +258,35 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
+     * Verifies that Pit results are correctly graded.
+     *
      * @author Andreas Stiglmeier
      */
     @Test
     public void shouldGradePitResults() {
-        WorkflowJob job = createPipelineWithWorkspaceFiles("mutations.xml");
+        WorkflowJob job = createPipelineWithWorkspaceFiles(PIT_FILE);
 
         configureScanner(job, TOOLTYPE_PIT, "mutations", AUTOGRADE_MUTATION_CONFIGURATION);
-        Run<?, ?> baseline = buildSuccessfully(job);
 
-        assertTestResults(baseline, "[Autograding] Grading PIT mutation results PIT Mutation Report",
+        assertTestResults(buildSuccessfully(job), "[Autograding] Grading PIT mutation results PIT Mutation Report",
+                "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34",
+                "[Autograding] Total score for mutation coverage results: 61", 61);
+    }
+
+    /**
+     * Verifies that Pit results are correctly graded.
+     *
+     * @author Andreas Stiglmeier
+     */
+    @Test
+    public void shouldGradePitResultsFreeStyle() {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles(PIT_FILE);
+        PitPublisher pitPublisher = new PitPublisher(PIT_FILE, 0, false);
+
+        project.getPublishersList().add(pitPublisher);
+        project.getPublishersList().add(new AutoGrader(AUTOGRADE_MUTATION_CONFIGURATION));
+
+        assertTestResults(buildSuccessfully(project), "[Autograding] Grading PIT mutation results PIT Mutation Report",
                 "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34",
                 "[Autograding] Total score for mutation coverage results: 61", 61);
     }
@@ -230,16 +294,13 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     /**
      * Returns the console log as a String.
      *
-     * @param build
-     *         the build to get the log for
-     *
+     * @param build the build to get the log for
      * @return the console log
      */
     protected String getConsoleLog(final Run<?, ?> build) {
         try {
             return JenkinsRule.getLog(build);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new AssertionError(e);
         }
     }
@@ -252,7 +313,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     private void assertTestResults(final Run<?, ?> baseline, final String firstLine, final String secondLine, final String thirdLine,
-            final int totalResult) {
+                                   final int totalResult) {
         assertThat(getConsoleLog(baseline)).contains(firstLine);
         assertThat(getConsoleLog(baseline)).contains(
                 secondLine);
@@ -266,22 +327,24 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     private void configureScanner(final WorkflowJob job, final String toolType, final String fileName,
-            final String configuration) {
+                                  final String configuration) {
         String pipeLineScript = "node {\n"
                 + "  stage ('Integration Test') {\n";
 
         switch (toolType) {
             case TOOLTYPE_CHECKSTYLE:
-                pipeLineScript += "recordIssues tool: " + toolType + "(pattern: '**/" + fileName + "*')\n";
+            case TOOLTYPE_CSSLINT:
+                pipeLineScript += "recordIssues tool: " + toolType + "(pattern: '" + PATTERN_PREFIX + fileName + "*')\n";
                 break;
             case TOOLTYPE_PIT:
-                pipeLineScript += "step([$class: 'PitPublisher', mutationStatsFile: '**/" + fileName + "*'])\n";
+                pipeLineScript += "step([$class: 'PitPublisher', mutationStatsFile: '" + PATTERN_PREFIX + fileName + "*'])\n";
                 break;
             case TOOLTYPE_COVERAGE:
-                pipeLineScript += "publishCoverage adapters: [jacocoAdapter('**/" + fileName + "*')]\n";
+                pipeLineScript += "publishCoverage adapters: [jacocoAdapter('" + PATTERN_PREFIX + fileName + "*')]\n";
                 break;
             case TOOLTYPE_TEST_RESULTS:
                 pipeLineScript += "junit testResults: '**/" + fileName + "'\n";
+                break;
 
         }
         pipeLineScript += "autoGrade('" + configuration + "')\n"
@@ -292,7 +355,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     private FreeStyleProject createFreeStyleProject(final String fileName, final Publisher publisher,
-            final String configuration) {
+                                                    final String configuration) {
         FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles(fileName);
         project.getPublishersList().add(publisher);
         project.getPublishersList().add(new AutoGrader(configuration));
