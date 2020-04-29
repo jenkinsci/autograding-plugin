@@ -71,8 +71,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     @Test
-    public void shouldGradeTestScoreAchieve97() {
-        final String filename = "TEST-io.jenkins.plugins.grading.TestScore-97";
+    public void shouldGradeWith97AtTests() {
+        final String filename = "tests-97";
         WorkflowJob job = createPipelineWithWorkspaceFiles(filename + ".xml");
 
         configureTester(job, filename, "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-1,\"skippedImpact\":-1}}");
@@ -86,8 +86,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     @Test
-    public void shouldGradeTestScoreAchieve2() {
-        final String filename = "TEST-io.jenkins.plugins.grading.TestScore-2";
+    public void shouldGradeWith2AtTests() {
+        final String filename = "tests-2";
         WorkflowJob job = createPipelineWithWorkspaceFiles(filename + ".xml");
 
         configureTester(job, filename, "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-1,\"skippedImpact\":-1}}");
@@ -101,8 +101,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     @Test
-    public void shouldGradeTestScoreAchieve1() {
-        final String filename = "TEST-io.jenkins.plugins.grading.TestScore-1";
+    public void shouldGradeWith1AtTests() {
+        final String filename = "tests-1";
         WorkflowJob job = createPipelineWithWorkspaceFiles(filename + ".xml");
 
         configureTester(job, filename, "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-1,\"skippedImpact\":-1}}");
@@ -113,6 +113,66 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         AggregatedScore score = actions.get(0).getResult();
 
         assertThat(score).hasAchieved(1);
+    }
+
+    @Test
+    public void shouldGradeWith66Coverage() {
+        final String filename = "coverage-66";
+        WorkflowJob job = createPipelineWithWorkspaceFiles(filename + ".xml");
+
+        configureJacoco(job, filename, "{\"coverage\": {\"maxScore\": 100,\"coveredImpact\": 0,\"missedImpact\": -1}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(66);
+    }
+
+    @Test
+    public void shouldGradeWith99AtCheckStyle() {
+        final String filename = "checkstyle-99";
+        WorkflowJob job = createPipelineWithWorkspaceFiles(filename + ".xml");
+
+        configureScanner(job, filename, "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-1,\"highImpact\":0,\"normalImpact\":0,\"lowImpact\":0}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(99);
+    }
+
+    @Test
+    public void shouldGradeWith80AtCheckStyle() {
+        final String filename = "checkstyle-80";
+        WorkflowJob job = createPipelineWithWorkspaceFiles(filename + ".xml");
+
+        configureScanner(job, filename, "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-2,\"highImpact\":0,\"normalImpact\":0,\"lowImpact\":0}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(80);
+    }
+
+    @Test
+    public void shouldGradeWith99AtPit() {
+        final String filename = "mutations";
+        WorkflowJob job = createPipelineWithWorkspaceFiles(filename + ".xml");
+
+        configurePit(job, filename, "{\"pit\":{\"maxScore\":100,\"detectedImpact\":0,\"undetectedImpact\":-1,\"ratioImpact\":0}}");
+        Run<?, ?> baseline = buildSuccessfully(job);
+
+        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        AggregatedScore score = actions.get(0).getResult();
+
+        assertThat(score).hasAchieved(99);
     }
 
     /**
@@ -144,8 +204,26 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     private void configureTester(final WorkflowJob job, final String fileName, final String configuration) {
         job.setDefinition(new CpsFlowDefinition("node {\n"
                 + "  stage ('Build and Static Analysis') {\n"
-                + "         junit testResults: '**/" + fileName + ".xml'\n"
+                + "         junit testResults: '**/" + fileName + "*'\n"
                 + "         autoGrade('" + configuration + "')\n"
+                + "  }\n"
+                + "}", true));
+    }
+
+    private void configureJacoco(final WorkflowJob job, final String fileName, final String configuration) {
+        job.setDefinition(new CpsFlowDefinition("node {\n"
+                + "  stage ('Jacoco Coverage Test') {\n"
+                + "     publishCoverage adapters: [ jacocoAdapter('**/" + fileName + "*') ]\n"
+                + "     autoGrade('" + configuration + "')\n"
+                + "  }\n"
+                + "}", true));
+    }
+
+    private void configurePit(final WorkflowJob job, final String fileName, final String configuration) {
+        job.setDefinition(new CpsFlowDefinition("node {\n"
+                + "  stage ('Pit Mutation') {\n"
+                + "     step([$class: 'PitPublisher', mutationStatsFile: '**/" + fileName + "*'])\n"
+                + "     autoGrade('" + configuration + "')\n"
                 + "  }\n"
                 + "}", true));
     }

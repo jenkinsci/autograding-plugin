@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="4.1">
+  <file name="io.jenkins.plugins.grading.TestScore.java">
+    <error line="1" column="42" severity="error" message="Foo" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+  </file>
+</checkstyle>
