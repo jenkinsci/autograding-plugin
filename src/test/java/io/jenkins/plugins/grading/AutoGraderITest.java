@@ -44,8 +44,13 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     private static final String TOOLTYPE_TEST_RESULTS = "test-results";
     private static final String TOOLTYPE_CSSLINT = "cssLint";
 
+    private static final String CHECKSTYLE_FILE = "checkstyle.xml";
     private static final String CSSLINT_FILE = "csslint.xml";
     private static final String PIT_FILE = "mutations.xml";
+    private static final String COVERAGE_FILE = "coverage.xml";
+    private static final String TEST_FILE_SUCCESS = "test-successful.xml";
+    private static final String TEST_FILE_ERROR = "test-assertion-error.xml";
+    private static final String TEST_FILE_ERROR_SKIP = "test-assertion-error-with-skip.xml";
 
     private static final String PATTERN_PREFIX = "**/";
 
@@ -54,10 +59,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldSkipGradingIfConfigurationIsEmpty() {
-        WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
-
-        configureScanner(job, TOOLTYPE_CHECKSTYLE, "checkstyle", "{}");
-        Run<?, ?> baseline = buildSuccessfully(job);
+        Run<?, ?> baseline = buildJob(CHECKSTYLE_FILE, TOOLTYPE_CHECKSTYLE, "{}");
 
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping static analysis results");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Skipping test results");
@@ -71,10 +73,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldAbortBuildSinceNoTestActionHasBeenRegistered() {
-        WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
-
-        configureScanner(job, TOOLTYPE_CHECKSTYLE, "checkstyle", AUTOGRADE_TESTS_CONFIGURATION);
-        Run<?, ?> baseline = buildWithResult(job, Result.FAILURE);
+        Run<?, ?> baseline = buildJobWithResult(CHECKSTYLE_FILE, TOOLTYPE_CHECKSTYLE, AUTOGRADE_TESTS_CONFIGURATION,
+                Result.FAILURE);
 
         assertThat(getConsoleLog(baseline)).contains(
                 "java.lang.IllegalArgumentException: Test scoring has been enabled, but no test results have been found.");
@@ -85,10 +85,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeCheckStyleWarnings() {
-        WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
-
-        configureScanner(job, TOOLTYPE_CHECKSTYLE, "checkstyle", AUTOGRADE_ANALYSIS_CONFIGURATION);
-        Run<?, ?> baseline = buildSuccessfully(job);
+        Run<?, ?> baseline = buildJob(CHECKSTYLE_FILE, TOOLTYPE_CHECKSTYLE, AUTOGRADE_ANALYSIS_CONFIGURATION);
 
         assertTestResults(baseline, "[Autograding] Grading static analysis results for CheckStyle",
                 "[Autograding] -> Score -60 (warnings distribution err:6, high:0, normal:0, low:0)",
@@ -102,11 +99,9 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeLintResults() {
-        WorkflowJob job = createPipelineWithWorkspaceFiles("csslint.xml");
+        Run<?, ?> baseline = buildJob(CSSLINT_FILE, TOOLTYPE_CSSLINT, AUTOGRADE_ANALYSIS_CONFIGURATION);
 
-        configureScanner(job, TOOLTYPE_CSSLINT, "csslint", AUTOGRADE_ANALYSIS_CONFIGURATION);
-
-        assertTestResults(buildSuccessfully(job), "[Autograding] Grading static analysis results for CssLint",
+        assertTestResults(baseline, "[Autograding] Grading static analysis results for CssLint",
                 "[Autograding] -> Score -228 (warnings distribution err:0, high:42, normal:9, low:0)",
                 "[Autograding] Total score for static analysis results: 0 of 100", 0);
     }
@@ -123,9 +118,9 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         cssLint.setPattern(PATTERN_PREFIX + CSSLINT_FILE);
         issuesRecorder.setTools(cssLint);
 
-        FreeStyleProject project = createFreeStyleProject(CSSLINT_FILE, issuesRecorder, AUTOGRADE_ANALYSIS_CONFIGURATION);
+        Run<?, ?> baseline = buildFreeStyleProject(CSSLINT_FILE, issuesRecorder, AUTOGRADE_ANALYSIS_CONFIGURATION);
 
-        assertTestResults(buildSuccessfully(project), "[Autograding] Grading static analysis results for CssLint",
+        assertTestResults(baseline, "[Autograding] Grading static analysis results for CssLint",
                 "[Autograding] -> Score -228 (warnings distribution err:0, high:42, normal:9, low:0)",
                 "[Autograding] Total score for static analysis results: 0 of 100", 0);
     }
@@ -135,11 +130,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeTestResults() {
-        String fileName = "test-successful.xml";
-        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
-
-        configureScanner(job, TOOLTYPE_TEST_RESULTS, fileName, TEST_RESULTS_CONFIGURATION);
-        Run<?, ?> baseline = buildSuccessfully(job);
+        Run<?, ?> baseline = buildJob(TEST_FILE_SUCCESS, TOOLTYPE_TEST_RESULTS, TEST_RESULTS_CONFIGURATION);
 
         assertTestResults(baseline, "[Autograding] Grading test results ",
                 "[Autograding] -> Score 2 - from recorded test results: 2, 2, 0, 0",
@@ -151,11 +142,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeTestResultsInFreeStyle() {
-        String fileName = "test-successful.xml";
-        FreeStyleProject project = createFreeStyleProject(fileName, new JUnitResultArchiver(fileName),
+        Run<?, ?> baseline = buildFreeStyleProject(TEST_FILE_SUCCESS, new JUnitResultArchiver(TEST_FILE_SUCCESS),
                 TEST_RESULTS_CONFIGURATION);
-
-        Run<?, ?> baseline = buildSuccessfully(project);
 
         assertTestResults(baseline, "[Autograding] Grading test results ",
                 "[Autograding] -> Score 2 - from recorded test results: 2, 2, 0, 0",
@@ -167,11 +155,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeTestResultsWithAssertionError() {
-        String fileName = "test-assertion-error.xml";
-        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
-
-        configureScanner(job, TOOLTYPE_TEST_RESULTS, fileName, TEST_RESULTS_CONFIGURATION);
-        Run<?, ?> baseline = buildWithResult(job, Result.UNSTABLE);
+        Run<?, ?> baseline = buildJobWithResult(TEST_FILE_ERROR, TOOLTYPE_TEST_RESULTS, TEST_RESULTS_CONFIGURATION,
+                Result.UNSTABLE);
 
         assertTestResults(baseline, "[Autograding] Grading test results ",
                 "[Autograding] -> Score -10 - from recorded test results: 2, 0, 2, 0",
@@ -183,11 +168,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorInFreeStyle() {
-        String fileName = "test-assertion-error.xml";
-        FreeStyleProject project = createFreeStyleProject(fileName, new JUnitResultArchiver(fileName),
-                TEST_RESULTS_CONFIGURATION);
-
-        Run<?, ?> baseline = buildWithResult(project, Result.UNSTABLE);
+        Run<?, ?> baseline = buildFreeStyleProjectWithResult(TEST_FILE_ERROR, new JUnitResultArchiver(TEST_FILE_ERROR),
+                TEST_RESULTS_CONFIGURATION, Result.UNSTABLE);
 
         assertTestResults(baseline, "[Autograding] Grading test results ",
                 "[Autograding] -> Score -10 - from recorded test results: 2, 0, 2, 0",
@@ -199,11 +181,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorAndSkipTest() {
-        String fileName = "test-assertion-error-with-skip.xml";
-        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
-
-        configureScanner(job, TOOLTYPE_TEST_RESULTS, fileName, TEST_RESULTS_CONFIGURATION);
-        Run<?, ?> baseline = buildWithResult(job, Result.UNSTABLE);
+        Run<?, ?> baseline = buildJobWithResult(TEST_FILE_ERROR_SKIP, TOOLTYPE_TEST_RESULTS, TEST_RESULTS_CONFIGURATION,
+                Result.UNSTABLE);
 
         assertTestResults(baseline, "[Autograding] Grading test results ",
                 "[Autograding] -> Score -5 - from recorded test results: 3, 1, 1, 1",
@@ -215,11 +194,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeTestResultsWithAssertionErrorAndSkipTestInFreeStyle() {
-        String fileName = "test-assertion-error-with-skip.xml";
-        FreeStyleProject project = createFreeStyleProject(fileName, new JUnitResultArchiver(fileName),
-                TEST_RESULTS_CONFIGURATION);
-
-        Run<?, ?> baseline = buildWithResult(project, Result.UNSTABLE);
+        Run<?, ?> baseline = buildFreeStyleProjectWithResult(TEST_FILE_ERROR_SKIP, new JUnitResultArchiver(TEST_FILE_ERROR_SKIP),
+                TEST_RESULTS_CONFIGURATION, Result.UNSTABLE);
 
         assertTestResults(baseline, "[Autograding] Grading test results ",
                 "[Autograding] -> Score -5 - from recorded test results: 3, 1, 1, 1",
@@ -231,11 +207,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeCoverage() {
-        String fileName = "coverage.xml";
-        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
-
-        configureScanner(job, TOOLTYPE_COVERAGE, fileName, COVERAGE_CONFIGURATION);
-        Run<?, ?> baseline = buildSuccessfully(job);
+        Run<?, ?> baseline = buildJob(COVERAGE_FILE, TOOLTYPE_COVERAGE, COVERAGE_CONFIGURATION);
 
         assertCoverageResults(baseline);
     }
@@ -245,11 +217,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradeCoverageInFreeStyle() {
-        String fileName = "coverage.xml";
-        CoveragePublisher coveragePublisher = createCoveragePublisher(fileName);
-        FreeStyleProject project = createFreeStyleProject(fileName, coveragePublisher, COVERAGE_CONFIGURATION);
-
-        Run<?, ?> baseline = buildSuccessfully(project);
+        CoveragePublisher coveragePublisher = createCoveragePublisher(COVERAGE_FILE);
+        Run<?, ?> baseline = buildFreeStyleProject(COVERAGE_FILE, coveragePublisher, COVERAGE_CONFIGURATION);
 
         assertCoverageResults(baseline);
     }
@@ -261,11 +230,9 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradePitResults() {
-        WorkflowJob job = createPipelineWithWorkspaceFiles(PIT_FILE);
+        Run<?, ?> baseline = buildJob(PIT_FILE, TOOLTYPE_PIT, AUTOGRADE_MUTATION_CONFIGURATION);
 
-        configureScanner(job, TOOLTYPE_PIT, "mutations", AUTOGRADE_MUTATION_CONFIGURATION);
-
-        assertTestResults(buildSuccessfully(job), "[Autograding] Grading PIT mutation results PIT Mutation Report",
+        assertTestResults(baseline, "[Autograding] Grading PIT mutation results PIT Mutation Report",
                 "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34",
                 "[Autograding] Total score for mutation coverage results: 61", 61);
     }
@@ -277,10 +244,10 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      */
     @Test
     public void shouldGradePitResultsFreeStyle() {
-        FreeStyleProject project = createFreeStyleProject(PIT_FILE, new PitPublisher(PIT_FILE, 0,
+        Run<?, ?> baseline = buildFreeStyleProject(PIT_FILE, new PitPublisher(PIT_FILE, 0,
                 false), AUTOGRADE_MUTATION_CONFIGURATION);
 
-        assertTestResults(buildSuccessfully(project), "[Autograding] Grading PIT mutation results PIT Mutation Report",
+        assertTestResults(baseline, "[Autograding] Grading PIT mutation results PIT Mutation Report",
                 "[Autograding] -> Score -39 - from recorded PIT mutation results: 15, 5, 10, 34",
                 "[Autograding] Total score for mutation coverage results: 61", 61);
     }
@@ -348,8 +315,33 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         job.setDefinition(new CpsFlowDefinition(pipeLineScript, true));
     }
 
-    private FreeStyleProject createFreeStyleProject(final String fileName, final Publisher publisher,
-                                                    final String configuration) {
+    private Run<?, ?> buildJob(final String fileName, final String toolType, final String configuration) {
+        return buildSuccessfully(configureJob(fileName, toolType, configuration));
+    }
+
+    private Run<?, ?> buildJobWithResult(final String fileName, final String toolType, final String configuration,
+                                         final Result result) {
+        return buildWithResult(configureJob(fileName, toolType, configuration), result);
+    }
+
+    private WorkflowJob configureJob(final String fileName, final String toolType, final String configuration) {
+        WorkflowJob job = createPipelineWithWorkspaceFiles(fileName);
+        configureScanner(job, toolType, fileName, configuration);
+        return job;
+    }
+
+    private Run<?, ?> buildFreeStyleProject(final String fileName, final Publisher publisher,
+                                            final String configuration) {
+        return buildSuccessfully(configureProject(fileName, publisher, configuration));
+    }
+
+    private Run<?, ?> buildFreeStyleProjectWithResult(final String fileName, final Publisher publisher,
+                                                      final String configuration, Result result) {
+        return buildWithResult(configureProject(fileName, publisher, configuration), result);
+    }
+
+    private FreeStyleProject configureProject(final String fileName, final Publisher publisher,
+                                              final String configuration) {
         FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles(fileName);
         project.getPublishersList().add(publisher);
         project.getPublishersList().add(new AutoGrader(configuration));
