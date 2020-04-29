@@ -191,6 +191,7 @@ class ScoreTest {
                 .build();
 
         AnalysisScore analysisScore = createAnalysisScore(49);
+        
         int analysisAchieved = score.addAnalysisTotal(analysisConfiguration, Collections.singletonList(analysisScore));
 
         assertThat(analysisAchieved).isEqualTo(49);
