@@ -16,6 +16,8 @@ import static org.mockito.Mockito.*;
  * @author Eva-Maria Zeintl
  * @author Ullrich Hafner
  * @author Andreas Stiglmeier
+ * @author Andreas Riepl
+ * @author Oliver Scholz
  */
 class AnalysisScoreTest {
     private static final String NAME = "Results";
@@ -124,5 +126,25 @@ class AnalysisScoreTest {
 
         when(result.getId()).thenReturn(null);
         assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(NAME, configuration, result));
+    }
+
+    @Test
+    void shouldComputeImpactBySizeZero() {
+        AnalysisResult result = mock(AnalysisResult.class);
+        when(result.getId()).thenReturn("dummy");
+        when(result.getTotalErrorsSize()).thenReturn(0);
+        when(result.getTotalHighPrioritySize()).thenReturn(0);
+        when(result.getTotalNormalPrioritySize()).thenReturn(0);
+        when(result.getTotalLowPrioritySize()).thenReturn(0);
+
+        AnalysisConfiguration configuration = new AnalysisConfigurationBuilder()
+                .setErrorImpact(100)
+                .setHighImpact(100)
+                .setNormalImpact(100)
+                .setLowImpact(100)
+                .build();
+
+        AnalysisScore score = new AnalysisScore("dummy", configuration, result);
+        assertThat(score).hasTotalImpact(0);
     }
 }
