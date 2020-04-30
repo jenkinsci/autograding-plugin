@@ -384,7 +384,9 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     private PitPublisher createPitPublisher() {
-        return new PitPublisher(PIT_FILE, 0, false);
+        PitPublisher pitPublisher = new PitPublisher();
+        pitPublisher.setMutationStatsFile(PIT_FILE);
+        return pitPublisher;
     }
 
     private JUnitResultArchiver createTestsPublisher(final String fileName) {

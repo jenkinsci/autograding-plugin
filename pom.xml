@@ -32,7 +32,7 @@
     <plugin-util-api.version>1.2.0</plugin-util-api.version>
 
     <code-coverage-api-plugin.version>1.1.4</code-coverage-api-plugin.version>
-    <pitmutation-plugin.version>1.0-17</pitmutation-plugin.version>
+    <pitmutation-plugin.version>1.0-18</pitmutation-plugin.version>
     <junit-plugin.version>1.28</junit-plugin.version>
     <warnings-ng-plugin.version>8.1.0</warnings-ng-plugin.version>
 
