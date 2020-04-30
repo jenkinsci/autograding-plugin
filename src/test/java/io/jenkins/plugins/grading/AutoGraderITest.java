@@ -255,7 +255,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldCalculatePitFreestyle() {
         FreeStyleProject job = createFreeStyleProjectWithWorkspaceFiles("mutations.xml");
 
-        PitPublisher publisher = new PitPublisher("**/mutations.xml", 0, false);
+        PitPublisher publisher = new PitPublisher();
+        publisher.setMutationStatsFile("**/mutations.xml");
 
         job.getPublishersList().add(publisher);
         job.getPublishersList().add(new AutoGrader(PIT_CONFIGURATION));
@@ -323,7 +324,8 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         coveragePublisher.setAdapters(adapters);
         job.getPublishersList().add(coveragePublisher);
 
-        PitPublisher pitPublisher = new PitPublisher("**/mutations.xml", 0, false);
+        PitPublisher pitPublisher = new PitPublisher();
+        pitPublisher.setMutationStatsFile("**/mutations.xml");
         job.getPublishersList().add(pitPublisher);
 
         job.getPublishersList().add(new AutoGrader(FULL_CONFIGURATION));
