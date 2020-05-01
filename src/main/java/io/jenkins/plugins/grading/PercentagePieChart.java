@@ -18,6 +18,7 @@ public class PercentagePieChart {
      *
      * @return the chart model
      */
+    // TODO: add validation
     public PieChartModel create(final int percentage) {
         PieChartModel model = new PieChartModel("Percentage");
 

@@ -4,90 +4,79 @@ import org.junit.jupiter.api.Test;
 
 import edu.hm.hafner.echarts.Palette;
 import edu.hm.hafner.echarts.PieChartModel;
+import edu.hm.hafner.echarts.PieData;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
+import static edu.hm.hafner.echarts.assertions.Assertions.*;
 
 /**
  * Tests the class {@link PercentagePieChart}.
  *
  * @author Andreas Riepl
  * @author Oliver Scholz
- *
  */
 class PercentagePieChartTest {
+    private static final String GREEN = Palette.GREEN.getNormal();
+    private static final String YELLOW = Palette.YELLOW.getNormal();
+    private static final String RED = Palette.RED.getNormal();
+    private static final String GRAY = Palette.GRAY.getNormal();
 
     @Test
-    void shouldComputeColorToRed() {
+    void shouldComputeColorToRedLowerBoundary() {
         PercentagePieChart chart = new PercentagePieChart();
-        PieChartModel model = chart.create(49);
 
-        assertThat(model.getColors().get(0), notNullValue());
-        assertThat(model.getColors().get(0), is(Palette.RED.getNormal()));
+        assertThat(chart.create(49)).hasColors(RED, GRAY)
+                .hasData(createFilledTo(49), getNotFilledTo(51));
+    }
 
-        assertThat(model.getData().get(0).getName(), is("Filled"));
-        assertThat(model.getData().get(0).getValue(), is(49));
+    @Test
+    void shouldComputeColorToRedUpperBoundary() {
+        PercentagePieChart chart = new PercentagePieChart();
 
-        assertThat(model.getColors().get(1), notNullValue());
-        assertThat(model.getColors().get(1), is(Palette.GRAY.getNormal()));
-
-        assertThat(model.getData().get(1).getName(), is("NotFilled"));
-        assertThat(model.getData().get(1).getValue(), is(51));
+        assertThat(chart.create(49)).hasColors(RED, GRAY)
+                .hasData(createFilledTo(49), getNotFilledTo(51));
     }
 
     @Test
     void shouldComputeColorToYellowLowerBoundary() {
         PercentagePieChart chart = new PercentagePieChart();
-        PieChartModel model = chart.create(50);
 
-        assertThat(model.getColors().get(0), notNullValue());
-        assertThat(model.getColors().get(0), is(Palette.YELLOW.getNormal()));
-
-        assertThat(model.getData().get(0).getName(), is("Filled"));
-        assertThat(model.getData().get(0).getValue(), is(50));
-
-        assertThat(model.getColors().get(1), notNullValue());
-        assertThat(model.getColors().get(1), is(Palette.GRAY.getNormal()));
-
-        assertThat(model.getData().get(1).getName(), is("NotFilled"));
-        assertThat(model.getData().get(1).getValue(), is(50));
-
+        assertThat(chart.create(50)).hasColors(YELLOW, GRAY)
+                .hasData(createFilledTo(50), getNotFilledTo(50));
     }
 
     @Test
     void shouldComputeColorToYellowUpperBoundary() {
         PercentagePieChart chart = new PercentagePieChart();
-        PieChartModel model = chart.create(79);
 
-        assertThat(model.getColors().get(0), notNullValue());
-        assertThat(model.getColors().get(0), is(Palette.YELLOW.getNormal()));
-
-        assertThat(model.getData().get(0).getName(), is("Filled"));
-        assertThat(model.getData().get(0).getValue(), is(79));
-
-        assertThat(model.getColors().get(1), notNullValue());
-        assertThat(model.getColors().get(1), is(Palette.GRAY.getNormal()));
-
-        assertThat(model.getData().get(1).getName(), is("NotFilled"));
-        assertThat(model.getData().get(1).getValue(), is(21));
-
+        assertThat(chart.create(79)).hasColors(YELLOW, GRAY)
+                .hasData(createFilledTo(79), getNotFilledTo(21));
     }
 
     @Test
-    void shouldComputeColorToGreen() {
+    void shouldComputeColorToGreenLowerBoundary() {
         PercentagePieChart chart = new PercentagePieChart();
-        PieChartModel model = chart.create(80);
 
-        assertThat(model.getColors().get(0), notNullValue());
-        assertThat(model.getColors().get(0), is(Palette.GREEN.getNormal()));
+        assertThat(chart.create(80)).hasColors(GREEN, GRAY)
+                .hasData(createFilledTo(80), getNotFilledTo(20));
+    }
 
-        assertThat(model.getData().get(0).getName(), is("Filled"));
-        assertThat(model.getData().get(0).getValue(), is(80));
+    @Test
+    void shouldComputeColorToGreenUpperBoundary() {
+        PercentagePieChart chart = new PercentagePieChart();
 
-        assertThat(model.getColors().get(1), notNullValue());
-        assertThat(model.getColors().get(1), is(Palette.GRAY.getNormal()));
+        assertThat(chart.create(100)).hasColors(GREEN, GRAY)
+                .hasData(createFilledTo(100), getNotFilledTo(0));
+    }
 
-        assertThat(model.getData().get(1).getName(), is("NotFilled"));
-        assertThat(model.getData().get(1).getValue(), is(20));
+    private PieData getNotFilledTo(final int percentage) {
+        return createPieData(percentage, "NotFilled");
+    }
+
+    private PieData createFilledTo(final int percentage) {
+        return createPieData(percentage, "Filled");
+    }
+
+    private PieData createPieData(final int percentage, final String filled) {
+        return new PieData(filled, percentage);
     }
 }

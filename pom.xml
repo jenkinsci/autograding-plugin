@@ -1,11 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
     <version>4.0.0</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <groupId>io.jenkins.plugins</groupId>
@@ -29,6 +30,7 @@
     <bootstrap4-api.version>4.4.1-10</bootstrap4-api.version>
     <data-tables-api.version>1.10.20-14</data-tables-api.version>
     <echarts-api.version>4.6.0-9</echarts-api.version>
+    <echarts-build-trends.version>1.1.2</echarts-build-trends.version>
     <plugin-util-api.version>1.2.0</plugin-util-api.version>
 
     <code-coverage-api-plugin.version>1.1.4</code-coverage-api-plugin.version>
@@ -172,6 +174,14 @@
       <groupId>io.jenkins.plugins</groupId>
       <artifactId>plugin-util-api</artifactId>
       <version>${plugin-util-api.version}</version>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>edu.hm.hafner</groupId>
+      <artifactId>echarts-build-trends</artifactId>
+      <version>${echarts-build-trends.version}</version>
       <scope>test</scope>
       <type>test-jar</type>
     </dependency>
