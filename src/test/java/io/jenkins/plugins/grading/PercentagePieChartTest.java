@@ -21,11 +21,23 @@ class PercentagePieChartTest {
     private static final String GRAY = Palette.GRAY.getNormal();
 
     @Test
+    void shouldThrowExceptionIfInvalid() {
+        PercentagePieChart chart = new PercentagePieChart();
+
+        assertThatExceptionOfType(AssertionError.class)
+                .isThrownBy(() -> chart.create(-1))
+                .withMessageContaining("Percentage -1");
+        assertThatExceptionOfType(AssertionError.class)
+                .isThrownBy(() -> chart.create(101))
+                .withMessageContaining("Percentage 101");
+    }
+
+    @Test
     void shouldComputeColorToRedLowerBoundary() {
         PercentagePieChart chart = new PercentagePieChart();
 
-        assertThat(chart.create(49)).hasColors(RED, GRAY)
-                .hasData(createFilledTo(49), getNotFilledTo(51));
+        assertThat(chart.create(0)).hasColors(RED, GRAY)
+                .hasData(createFilledTo(0), getNotFilledTo(100));
     }
 
     @Test

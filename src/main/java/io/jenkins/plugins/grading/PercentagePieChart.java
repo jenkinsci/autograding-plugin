@@ -3,6 +3,7 @@ package io.jenkins.plugins.grading;
 import edu.hm.hafner.echarts.Palette;
 import edu.hm.hafner.echarts.PieChartModel;
 import edu.hm.hafner.echarts.PieData;
+import edu.hm.hafner.util.Ensure;
 
 /**
  * Builds the model for a pie chart showing a percentage.
@@ -18,8 +19,11 @@ public class PercentagePieChart {
      *
      * @return the chart model
      */
-    // TODO: add validation
+    // TODO: Move chart to echarts-build-trends module
     public PieChartModel create(final int percentage) {
+        Ensure.that(percentage < 0 || percentage > 100)
+                .isFalse("Percentage %s must be in interval [0,100]", percentage);
+
         PieChartModel model = new PieChartModel("Percentage");
 
         Palette color = computeColor(percentage);
