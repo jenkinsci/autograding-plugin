@@ -145,8 +145,9 @@ class ScoreTest {
         PitScore pitScore = mock(PitScore.class);
         when(pitScore.getTotalImpact()).thenReturn(-20);
 
-        score.addPitTotal(pitConfiguration, pitScore);
+        int pitAchieved = score.addPitTotal(pitConfiguration, pitScore);
 
+        assertThat(pitAchieved).isEqualTo(80);
         assertThat(score).hasAchieved(80);
         assertThat(score).hasTotal(100);
         assertThat(score).hasRatio(80);
@@ -160,8 +161,9 @@ class ScoreTest {
         TestScore testScore = mock(TestScore.class);
         when(testScore.getTotalImpact()).thenReturn(40);
 
-        score.addTestsTotal(testConfiguration, testScore);
+        int testsAchieved = score.addTestsTotal(testConfiguration, testScore);
 
+        assertThat(testsAchieved).isEqualTo(40);
         assertThat(score).hasAchieved(120);
         assertThat(score).hasTotal(200);
         assertThat(score).hasRatio(60);
@@ -175,8 +177,9 @@ class ScoreTest {
         CoverageScore coverageScore = mock(CoverageScore.class);
         when(coverageScore.getTotalImpact()).thenReturn(-70);
 
-        score.addCoverageTotal(coverageConfiguration, coverageScore);
+        int coverageAchieved = score.addCoverageTotal(coverageConfiguration, coverageScore);
 
+        assertThat(coverageAchieved).isEqualTo(30);
         assertThat(score).hasAchieved(150);
         assertThat(score).hasTotal(300);
         assertThat(score).hasRatio(50);
@@ -188,8 +191,10 @@ class ScoreTest {
                 .build();
 
         AnalysisScore analysisScore = createAnalysisScore(49);
-        score.addAnalysisTotal(analysisConfiguration, Collections.singletonList(analysisScore));
+        
+        int analysisAchieved = score.addAnalysisTotal(analysisConfiguration, Collections.singletonList(analysisScore));
 
+        assertThat(analysisAchieved).isEqualTo(49);
         assertThat(score).hasAchieved(199);
         assertThat(score).hasTotal(400);
         assertThat(score).hasRatio(49);

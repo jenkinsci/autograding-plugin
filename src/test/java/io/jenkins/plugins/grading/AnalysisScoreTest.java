@@ -16,6 +16,8 @@ import static org.mockito.Mockito.*;
  * @author Eva-Maria Zeintl
  * @author Ullrich Hafner
  * @author Andreas Stiglmeier
+ * @author Andreas Riepl
+ * @author Oliver Scholz
  */
 class AnalysisScoreTest {
     private static final String NAME = "Results";
@@ -24,21 +26,20 @@ class AnalysisScoreTest {
     @Test
     void shouldCalculate() {
         AnalysisResult result = mock(AnalysisResult.class);
-        when(result.getTotalErrorsSize()).thenReturn(1);
-        when(result.getTotalHighPrioritySize()).thenReturn(1);
-        when(result.getTotalNormalPrioritySize()).thenReturn(1);
-        when(result.getTotalLowPrioritySize()).thenReturn(1);
+        when(result.getTotalErrorsSize()).thenReturn(2);
+        when(result.getTotalHighPrioritySize()).thenReturn(2);
+        when(result.getTotalNormalPrioritySize()).thenReturn(2);
+        when(result.getTotalLowPrioritySize()).thenReturn(2);
         when(result.getId()).thenReturn(ID);
 
         AnalysisConfiguration analysisConfiguration = new AnalysisConfigurationBuilder()
-                .setMaxScore(25)
                 .setErrorImpact(-4)
                 .setHighImpact(-3)
                 .setNormalImpact(-2)
                 .setLowImpact(-1)
                 .build();
         AnalysisScore analysisScore = new AnalysisScore(NAME, analysisConfiguration, result);
-        assertThat(analysisScore).hasTotalImpact(-4 - 3 - 2 - 1);
+        assertThat(analysisScore).hasTotalImpact(2 * -4 - 2 * 3 - 2 * 2 - 2 * 1);
     }
 
     @Test
@@ -59,6 +60,7 @@ class AnalysisScoreTest {
         when(result.getTotalHighPrioritySize()).thenReturn(5);
         when(result.getTotalNormalPrioritySize()).thenReturn(2);
         when(result.getTotalLowPrioritySize()).thenReturn(4);
+        when(result.getTotalSize()).thenReturn(14);
         when(result.getId()).thenReturn(ID);
 
         AnalysisScore analysisScore = new AnalysisScore(NAME, createConfigurationWithOnePointForEachSeverity(), result);
@@ -68,6 +70,7 @@ class AnalysisScoreTest {
         assertThat(analysisScore).hasHighPrioritySize(5);
         assertThat(analysisScore).hasNormalPrioritySize(2);
         assertThat(analysisScore).hasLowPrioritySize(4);
+        assertThat(analysisScore).hasTotalSize(14);
         assertThat(analysisScore).hasName(NAME);
         assertThat(analysisScore).hasId(ID);
     }
@@ -79,6 +82,7 @@ class AnalysisScoreTest {
         when(result.getTotalHighPrioritySize()).thenReturn(-5);
         when(result.getTotalNormalPrioritySize()).thenReturn(-2);
         when(result.getTotalLowPrioritySize()).thenReturn(-4);
+        when(result.getTotalSize()).thenReturn(-14);
         when(result.getId()).thenReturn(ID);
 
         AnalysisScore analysisScore = new AnalysisScore(NAME, createConfigurationWithOnePointForEachSeverity(), result);
@@ -88,6 +92,7 @@ class AnalysisScoreTest {
         assertThat(analysisScore).hasHighPrioritySize(-5);
         assertThat(analysisScore).hasNormalPrioritySize(-2);
         assertThat(analysisScore).hasLowPrioritySize(-4);
+        assertThat(analysisScore).hasTotalSize(-14);
         assertThat(analysisScore).hasName(NAME);
         assertThat(analysisScore).hasId(ID);
     }
@@ -121,5 +126,25 @@ class AnalysisScoreTest {
 
         when(result.getId()).thenReturn(null);
         assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(NAME, configuration, result));
+    }
+
+    @Test
+    void shouldComputeImpactBySizeZero() {
+        AnalysisResult result = mock(AnalysisResult.class);
+        when(result.getId()).thenReturn("dummy");
+        when(result.getTotalErrorsSize()).thenReturn(0);
+        when(result.getTotalHighPrioritySize()).thenReturn(0);
+        when(result.getTotalNormalPrioritySize()).thenReturn(0);
+        when(result.getTotalLowPrioritySize()).thenReturn(0);
+
+        AnalysisConfiguration configuration = new AnalysisConfigurationBuilder()
+                .setErrorImpact(100)
+                .setHighImpact(100)
+                .setNormalImpact(100)
+                .setLowImpact(100)
+                .build();
+
+        AnalysisScore score = new AnalysisScore("dummy", configuration, result);
+        assertThat(score).hasTotalImpact(0);
     }
 }
