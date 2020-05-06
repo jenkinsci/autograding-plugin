@@ -266,8 +266,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 break;
             case "checkstyle":
                 script += "  stage ('Integration Test') {\n"
-                        + "         recordIssues tool: checkStyle(pattern: '**/" + fileName + "*')\n"
-                        + "         autoGrade('" + configuration + "')\n";
+                        + "         recordIssues tool: checkStyle(pattern: '**/" + fileName + "*')\n";
                 break;
             case "mutations":
                 script += "  stage ('Test Mutation Coverage') {\n"
