@@ -1,7 +1,11 @@
 package io.jenkins.plugins.grading;
 
+import java.nio.file.Path;
+
 import hudson.util.XStream2;
 
+import io.jenkins.plugins.forensics.blame.Blames;
+import io.jenkins.plugins.forensics.blame.BlamesXmlStream;
 import io.jenkins.plugins.util.AbstractXmlStream;
 
 /**
