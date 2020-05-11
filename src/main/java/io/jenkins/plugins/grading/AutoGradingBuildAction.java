@@ -1,5 +1,6 @@
 package io.jenkins.plugins.grading;
 
+import edu.hm.hafner.grading.AggregatedScore;
 import edu.hm.hafner.util.VisibleForTesting;
 
 import org.kohsuke.stapler.StaplerProxy;

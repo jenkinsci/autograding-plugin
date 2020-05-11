@@ -3,6 +3,17 @@ package io.jenkins.plugins.grading;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
+import edu.hm.hafner.grading.AggregatedScore;
+import edu.hm.hafner.grading.AnalysisConfiguration;
+import edu.hm.hafner.grading.AnalysisScore;
+import edu.hm.hafner.grading.CoverageConfiguration;
+import edu.hm.hafner.grading.CoverageScore;
+import edu.hm.hafner.grading.PitConfiguration;
+import edu.hm.hafner.grading.PitScore;
+import edu.hm.hafner.grading.TestConfiguration;
+import edu.hm.hafner.grading.TestScore;
 import edu.hm.hafner.util.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -117,7 +128,9 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
         logHandler.log("Grading PIT mutation results " + action.getDisplayName());
         PitConfiguration pitConfiguration = PitConfiguration.from(jsonConfiguration);
-        PitScore score = new PitScore(pitConfiguration, action);
+        PitScore score = new PitScore(pitConfiguration,
+                action.getReport().getMutationStats().getTotalMutations(),
+                action.getReport().getMutationStats().getUndetected(), action.getDisplayName());
         int total = actualScore.addPitTotal(pitConfiguration, score);
 
         logHandler.log("-> Score %d - from recorded PIT mutation results: %d, %d, %d, %d",
@@ -153,7 +166,9 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
     private CoverageScore createCoverageScore(final CoverageAction action,
             final CoverageConfiguration coverageConfiguration, final CoverageElement type) {
-        return new CoverageScore(type.getName(), coverageConfiguration, action.getResult().getCoverage(type));
+        return new CoverageScore(StringUtils.lowerCase(type.getName()), type.getName(), coverageConfiguration,
+                action.getResult().getCoverage(type).getPercentage(),
+                100 - action.getResult().getCoverage(type).getPercentage());
     }
 
     @VisibleForTesting
@@ -167,7 +182,8 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
         logHandler.log("Grading test results " + action.getDisplayName());
         TestConfiguration testsConfiguration = TestConfiguration.from(testConfiguration);
-        TestScore score = new TestScore(testsConfiguration, action);
+        TestScore score = new TestScore(testsConfiguration, action, action.getFailCount(), action.getSkipCount(),
+                action.getTotalCount());
         int total = actualScore.addTestsTotal(testsConfiguration, score);
 
         logHandler.log("-> Score %d - from recorded test results: %d, %d, %d, %d",
@@ -185,11 +201,14 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         for (ResultAction action : actions) {
             String name = action.getLabelProvider().getName();
             logHandler.log("Grading static analysis results for " + name);
-            AnalysisScore score = new AnalysisScore(name, analysisConfiguration, action.getResult());
+            AnalysisScore score = new AnalysisScore(name, analysisConfiguration,
+                    action.getResult().getTotalErrorsSize(), action.getResult().getTotalHighPrioritySize(),
+                    action.getResult().getTotalNormalPrioritySize(), action.getResult().getTotalLowPrioritySize(),
+                    action.getResult().getTotalSize(), action.getResult().getId());
             analysisScores.add(score);
             logHandler.log("-> Score %d (warnings distribution err:%d, high:%d, normal:%d, low:%d)",
-                    score.getTotalImpact(), score.getErrorsSize(), score.getHighPrioritySize(),
-                    score.getNormalPrioritySize(), score.getLowPrioritySize());
+                    score.getTotalImpact(), score.getErrorsSize(), score.getHighSeveritySize(),
+                    score.getNormalSeveritySize(), score.getLowSeveritySize());
         }
         int total = actualScore.addAnalysisTotal(analysisConfiguration, analysisScores);
         logHandler.log("Total score for static analysis results: %d of %d",

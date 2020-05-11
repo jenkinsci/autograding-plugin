@@ -1,8 +1,7 @@
-package io.jenkins.plugins.grading;
+package edu.hm.hafner.grading;
 
 import java.util.Objects;
 
-import edu.hm.hafner.analysis.Severity;
 import edu.hm.hafner.util.Generated;
 
 import net.sf.json.JSONObject;
@@ -86,7 +85,8 @@ public class AnalysisConfiguration extends Configuration {
         return lowImpact;
     }
 
-    @Override @Generated
+    @Override
+    @Generated
     public boolean equals(final Object o) {
         if (this == o) {
             return true;
@@ -104,7 +104,8 @@ public class AnalysisConfiguration extends Configuration {
                 && lowImpact == that.lowImpact;
     }
 
-    @Override @Generated
+    @Override
+    @Generated
     public int hashCode() {
         return Objects.hash(super.hashCode(), errorImpact, highImpact, normalImpact, lowImpact);
     }
@@ -124,10 +125,10 @@ public class AnalysisConfiguration extends Configuration {
         }
 
         /**
-         * Sets the number of points to increase or decrease the score if a warning with {@link Severity#ERROR} has been detected.
+         * Sets the number of points to increase or decrease the score if an error has been detected.
          *
          * @param errorImpact
-         *         number of points to increase or decrease the score if a warning with {@link Severity#ERROR} has been detected
+         *         number of points to increase or decrease the score if an error has been detected
          *
          * @return this
          */
@@ -137,10 +138,11 @@ public class AnalysisConfiguration extends Configuration {
         }
 
         /**
-         * Sets the number of points to increase or decrease the score if a warning with {@link Severity#WARNING_HIGH} has been detected.
+         * Sets the number of points to increase or decrease the score if a warning with severity high has been
+         * detected.
          *
          * @param highImpact
-         *         number of points to increase or decrease the score if a warning with {@link Severity#WARNING_HIGH} has been detected
+         *         number of points to increase or decrease the score if a warning with severity high has been detected
          *
          * @return this
          */
@@ -150,10 +152,12 @@ public class AnalysisConfiguration extends Configuration {
         }
 
         /**
-         * Sets the number of points to increase or decrease the score if a warning with {@link Severity#WARNING_NORMAL} has been detected.
+         * Sets the number of points to increase or decrease the score if a warning with severity normal has been
+         * detected.
          *
          * @param normalImpact
-         *         number of points to increase or decrease the score if a warning with {@link Severity#WARNING_NORMAL} has been detected
+         *         number of points to increase or decrease the score if a warning with severity normal has been
+         *         detected
          *
          * @return this
          */
@@ -163,10 +167,11 @@ public class AnalysisConfiguration extends Configuration {
         }
 
         /**
-         * Sets the number of points to increase or decrease the score if a warning with {@link Severity#WARNING_LOW} has been detected.
+         * Sets the number of points to increase or decrease the score if a warning with severity low has been
+         * detected.
          *
          * @param weightLow
-         *         number of points to increase or decrease the score if a warning with {@link Severity#WARNING_LOW} has been detected
+         *         number of points to increase or decrease the score if a warning with severity low has been detected
          *
          * @return this
          */

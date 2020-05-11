@@ -1,14 +1,16 @@
-package io.jenkins.plugins.grading;
+package edu.hm.hafner.grading;
 
 import java.util.Arrays;
 import java.util.Collections;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
+import edu.hm.hafner.grading.AnalysisConfiguration.AnalysisConfigurationBuilder;
+import edu.hm.hafner.grading.CoverageConfiguration.CoverageConfigurationBuilder;
+import edu.hm.hafner.grading.TestConfiguration.TestConfigurationBuilder;
+
 import io.jenkins.plugins.coverage.targets.Ratio;
-import io.jenkins.plugins.grading.AnalysisConfiguration.AnalysisConfigurationBuilder;
-import io.jenkins.plugins.grading.CoverageConfiguration.CoverageConfigurationBuilder;
-import io.jenkins.plugins.grading.TestConfiguration.TestConfigurationBuilder;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -74,8 +76,12 @@ class ScoreTest {
 
         AggregatedScore score = new AggregatedScore();
         score.addCoverageTotal(coverageConfiguration,
-                new CoverageScore("Line", coverageConfiguration, Ratio.create(50, 100)),
-                new CoverageScore("Branch", coverageConfiguration, Ratio.create(60, 100)));
+                new CoverageScore(StringUtils.lowerCase("Line"), "Line", coverageConfiguration,
+                        Ratio.create(50, 100).getPercentage(), 100 - Ratio.create(50, 100).getPercentage()
+                ),
+                new CoverageScore(StringUtils.lowerCase("Branch"), "Branch", coverageConfiguration,
+                        Ratio.create(60, 100).getPercentage(), 100 - Ratio.create(60, 100).getPercentage()
+                ));
 
         assertThat(score).hasAchieved(10);
         assertThat(score).hasTotal(100);

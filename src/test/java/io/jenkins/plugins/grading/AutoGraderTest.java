@@ -8,8 +8,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.assertj.core.api.Assertions;
-import static io.jenkins.plugins.grading.assertions.Assertions.*;
 import org.junit.jupiter.api.Test;
+
+import edu.hm.hafner.grading.AggregatedScore;
+import edu.hm.hafner.grading.TestScore;
 
 import hudson.FilePath;
 import hudson.Launcher;
@@ -18,6 +20,7 @@ import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
 import hudson.tasks.junit.TestResultAction;
 
+import static io.jenkins.plugins.grading.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**

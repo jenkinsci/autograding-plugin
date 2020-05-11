@@ -1,4 +1,4 @@
-package io.jenkins.plugins.grading;
+package edu.hm.hafner.grading;
 
 import java.util.Objects;
 
@@ -30,13 +30,17 @@ public class TestScore extends Score {
      *         the grading configuration
      * @param action
      *         the action that contains the test results
+     * @param failCount
+     * @param skipCount
+     * @param totalCount
      */
-    public TestScore(final TestConfiguration configuration, final TestResultAction action) {
+    public TestScore(final TestConfiguration configuration, final TestResultAction action, final int failCount,
+            final int skipCount, final int totalCount) {
         super(ID, action.getDisplayName());
 
-        failedSize = action.getFailCount();
-        skippedSize = action.getSkipCount();
-        totalSize = action.getTotalCount();
+        failedSize = failCount;
+        skippedSize = skipCount;
+        totalSize = totalCount;
         passedSize = totalSize - failedSize - skippedSize;
 
         setTotalImpact(computeImpact(configuration));

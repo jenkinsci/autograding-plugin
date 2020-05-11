@@ -1,7 +1,8 @@
-package io.jenkins.plugins.grading;
+package edu.hm.hafner.grading;
+
+import org.junit.jupiter.api.Test;
 
 import net.sf.json.JSONObject;
-import org.junit.jupiter.api.Test;
 
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
 import org.jenkinsci.plugins.pitmutation.targets.MutationStatsImpl;
@@ -71,7 +72,10 @@ class PitScoreTest {
                 .setDetectedImpact(1)
                 .build();
 
-        PitScore pits = new PitScore(pitConfiguration, createAction(30, 5));
+        PitScore pits = new PitScore(pitConfiguration,
+                createAction(30, 5).getReport().getMutationStats().getTotalMutations(),
+                createAction(30, 5).getReport().getMutationStats().getUndetected(),
+                createAction(30, 5).getDisplayName());
 
         assertThat(pits).hasTotalImpact(15);
     }
@@ -82,7 +86,10 @@ class PitScoreTest {
                 .setRatioImpact(-2)
                 .build();
 
-        PitScore pits = new PitScore(pitConfiguration, createAction(30, 3));
+        PitScore pits = new PitScore(pitConfiguration,
+                createAction(30, 3).getReport().getMutationStats().getTotalMutations(),
+                createAction(30, 3).getReport().getMutationStats().getUndetected(),
+                createAction(30, 3).getDisplayName());
 
         assertThat(pits).hasTotalImpact(-20);
     }
@@ -94,7 +101,10 @@ class PitScoreTest {
                 .setDetectedImpact(1)
                 .build();
 
-        PitScore pits = new PitScore(pitConfiguration, createAction(30, 20));
+        PitScore pits = new PitScore(pitConfiguration,
+                createAction(30, 20).getReport().getMutationStats().getTotalMutations(),
+                createAction(30, 20).getReport().getMutationStats().getUndetected(),
+                createAction(30, 20).getDisplayName());
 
         assertThat(pits).hasTotalImpact(-30);
     }
@@ -103,7 +113,10 @@ class PitScoreTest {
     void shouldCalculateZeroTotalImpact() {
         PitConfiguration pitConfiguration = new PitConfiguration.PitConfigurationBuilder().setMaxScore(25).build();
 
-        PitScore pits = new PitScore(pitConfiguration, createAction(30, 20));
+        PitScore pits = new PitScore(pitConfiguration,
+                createAction(30, 20).getReport().getMutationStats().getTotalMutations(),
+                createAction(30, 20).getReport().getMutationStats().getUndetected(),
+                createAction(30, 20).getDisplayName());
 
         assertThat(pits).hasTotalImpact(0);
     }
@@ -116,7 +129,9 @@ class PitScoreTest {
                 .build();
         PitBuildAction pitBuildAction = createAction(100, 25);
 
-        PitScore pits = new PitScore(pitConfiguration, pitBuildAction);
+        PitScore pits = new PitScore(pitConfiguration,
+                pitBuildAction.getReport().getMutationStats().getTotalMutations(),
+                pitBuildAction.getReport().getMutationStats().getUndetected(), pitBuildAction.getDisplayName());
 
         assertThat(pits).hasId(PitScore.ID);
         assertThat(pits).hasName(pitBuildAction.getDisplayName());

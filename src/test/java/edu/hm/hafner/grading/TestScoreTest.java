@@ -1,4 +1,4 @@
-package io.jenkins.plugins.grading;
+package edu.hm.hafner.grading;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -65,7 +65,8 @@ class TestScoreTest {
     @MethodSource("createTestConfigurationParameters")
     void shouldComputeTestScoreWith(final TestConfiguration configuration,
             final TestResultAction resultAction, final int expectedTotalImpact) {
-        TestScore test = new TestScore(configuration, resultAction);
+        TestScore test = new TestScore(configuration, resultAction, resultAction.getFailCount(),
+                resultAction.getSkipCount(), resultAction.getTotalCount());
         assertThat(test).hasTotalSize(resultAction.getTotalCount());
         assertThat(test).hasPassedSize(
                 resultAction.getTotalCount() - resultAction.getFailCount() - resultAction.getSkipCount());

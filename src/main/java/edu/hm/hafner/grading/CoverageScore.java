@@ -1,16 +1,12 @@
-package io.jenkins.plugins.grading;
+package edu.hm.hafner.grading;
 
 import java.util.Objects;
 
-import org.apache.commons.lang3.StringUtils;
-
 import edu.hm.hafner.util.Generated;
 
-import io.jenkins.plugins.coverage.targets.Ratio;
-
 /**
- * Computes the {@link AggregatedScore} impact of code coverage results. These results are obtained by inspecting a {@link
- * CoverageConfiguration} instance of the Code Coverage API plugin.
+ * Computes the {@link AggregatedScore} impact of code coverage results. These results are obtained by inspecting a
+ * {@link CoverageConfiguration} instance of the Code Coverage API plugin.
  *
  * @author Eva-Maria Zeintl
  */
@@ -24,18 +20,23 @@ public class CoverageScore extends Score {
     /**
      * Creates a new {@link CoverageScore} instance.
      *
-     * @param type
-     *         coverage type (like line or branch coverage)
+     * @param id
+     *         the ID of the coverage
+     * @param displayName
+     *         display name of the coverage type (like line or branch coverage)
      * @param configuration
      *         the grading configuration
-     * @param ratio
-     *         the coverage ratio
+     * @param coveredSize
+     *         the percentage (covered)
+     * @param missedSize
+     *         the percentage (misses, i.e. not covered)
      */
-    public CoverageScore(final String type, final CoverageConfiguration configuration, final Ratio ratio) {
-        super(StringUtils.lowerCase(type), type);
+    public CoverageScore(final String id, final String displayName, final CoverageConfiguration configuration,
+            final int coveredSize, final int missedSize) {
+        super(id, displayName);
 
-        this.coveredSize = ratio.getPercentage();
-        this.missedSize = 100 - ratio.getPercentage();
+        this.coveredSize = coveredSize;
+        this.missedSize = missedSize;
 
         setTotalImpact(computeImpact(configuration));
     }
@@ -57,7 +58,8 @@ public class CoverageScore extends Score {
         return missedSize;
     }
 
-    @Override @Generated
+    @Override
+    @Generated
     public boolean equals(final Object o) {
         if (this == o) {
             return true;
@@ -69,7 +71,8 @@ public class CoverageScore extends Score {
         return coveredSize == that.coveredSize && missedSize == that.missedSize;
     }
 
-    @Override @Generated
+    @Override
+    @Generated
     public int hashCode() {
         return Objects.hash(coveredSize, missedSize);
     }

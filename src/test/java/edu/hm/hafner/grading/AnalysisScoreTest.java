@@ -1,11 +1,12 @@
-package io.jenkins.plugins.grading;
+package edu.hm.hafner.grading;
 
 import org.junit.jupiter.api.Test;
+
+import edu.hm.hafner.grading.AnalysisConfiguration.AnalysisConfigurationBuilder;
 
 import net.sf.json.JSONObject;
 
 import io.jenkins.plugins.analysis.core.model.AnalysisResult;
-import io.jenkins.plugins.grading.AnalysisConfiguration.AnalysisConfigurationBuilder;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,7 +39,9 @@ class AnalysisScoreTest {
                 .setNormalImpact(-2)
                 .setLowImpact(-1)
                 .build();
-        AnalysisScore analysisScore = new AnalysisScore(NAME, analysisConfiguration, result);
+        AnalysisScore analysisScore = new AnalysisScore(NAME, analysisConfiguration,
+                result.getTotalErrorsSize(), result.getTotalHighPrioritySize(), result.getTotalNormalPrioritySize(),
+                result.getTotalLowPrioritySize(), result.getTotalSize(), result.getId());
         assertThat(analysisScore).hasTotalImpact(2 * -4 - 2 * 3 - 2 * 2 - 2 * 1);
     }
 
@@ -63,13 +66,15 @@ class AnalysisScoreTest {
         when(result.getTotalSize()).thenReturn(14);
         when(result.getId()).thenReturn(ID);
 
-        AnalysisScore analysisScore = new AnalysisScore(NAME, createConfigurationWithOnePointForEachSeverity(), result);
+        AnalysisScore analysisScore = new AnalysisScore(NAME, createConfigurationWithOnePointForEachSeverity(),
+                result.getTotalErrorsSize(), result.getTotalHighPrioritySize(), result.getTotalNormalPrioritySize(),
+                result.getTotalLowPrioritySize(), result.getTotalSize(), result.getId());
 
         assertThat(analysisScore.getErrorsSize()).isEqualTo(3);
         assertThat(analysisScore).hasErrorsSize(3);
-        assertThat(analysisScore).hasHighPrioritySize(5);
-        assertThat(analysisScore).hasNormalPrioritySize(2);
-        assertThat(analysisScore).hasLowPrioritySize(4);
+        assertThat(analysisScore).hasHighSeveritySize(5);
+        assertThat(analysisScore).hasNormalSeveritySize(2);
+        assertThat(analysisScore).hasLowSeveritySize(4);
         assertThat(analysisScore).hasTotalSize(14);
         assertThat(analysisScore).hasName(NAME);
         assertThat(analysisScore).hasId(ID);
@@ -85,13 +90,15 @@ class AnalysisScoreTest {
         when(result.getTotalSize()).thenReturn(-14);
         when(result.getId()).thenReturn(ID);
 
-        AnalysisScore analysisScore = new AnalysisScore(NAME, createConfigurationWithOnePointForEachSeverity(), result);
+        AnalysisScore analysisScore = new AnalysisScore(NAME, createConfigurationWithOnePointForEachSeverity(),
+                result.getTotalErrorsSize(), result.getTotalHighPrioritySize(), result.getTotalNormalPrioritySize(),
+                result.getTotalLowPrioritySize(), result.getTotalSize(), result.getId());
 
         assertThat(analysisScore.getErrorsSize()).isEqualTo(-3);
         assertThat(analysisScore).hasErrorsSize(-3);
-        assertThat(analysisScore).hasHighPrioritySize(-5);
-        assertThat(analysisScore).hasNormalPrioritySize(-2);
-        assertThat(analysisScore).hasLowPrioritySize(-4);
+        assertThat(analysisScore).hasHighSeveritySize(-5);
+        assertThat(analysisScore).hasNormalSeveritySize(-2);
+        assertThat(analysisScore).hasLowSeveritySize(-4);
         assertThat(analysisScore).hasTotalSize(-14);
         assertThat(analysisScore).hasName(NAME);
         assertThat(analysisScore).hasId(ID);
@@ -122,10 +129,14 @@ class AnalysisScoreTest {
                 .build();
 
         when(result.getId()).thenReturn(ID);
-        assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(null, configuration, result));
+        assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(null, configuration,
+                result.getTotalErrorsSize(), result.getTotalHighPrioritySize(), result.getTotalNormalPrioritySize(),
+                result.getTotalLowPrioritySize(), result.getTotalSize(), result.getId()));
 
         when(result.getId()).thenReturn(null);
-        assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(NAME, configuration, result));
+        assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(NAME, configuration,
+                result.getTotalErrorsSize(), result.getTotalHighPrioritySize(), result.getTotalNormalPrioritySize(),
+                result.getTotalLowPrioritySize(), result.getTotalSize(), result.getId()));
     }
 
     @Test
@@ -144,7 +155,9 @@ class AnalysisScoreTest {
                 .setLowImpact(100)
                 .build();
 
-        AnalysisScore score = new AnalysisScore("dummy", configuration, result);
+        AnalysisScore score = new AnalysisScore("dummy", configuration, result.getTotalErrorsSize(),
+                result.getTotalHighPrioritySize(), result.getTotalNormalPrioritySize(),
+                result.getTotalLowPrioritySize(), result.getTotalSize(), result.getId());
         assertThat(score).hasTotalImpact(0);
     }
 }

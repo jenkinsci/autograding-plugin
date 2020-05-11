@@ -6,6 +6,8 @@ import java.util.List;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
+import edu.hm.hafner.grading.AggregatedScore;
+
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import hudson.model.Result;

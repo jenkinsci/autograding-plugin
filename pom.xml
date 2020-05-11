@@ -19,7 +19,7 @@
   <url>https://github.com/jenkinsci/autograding-plugin</url>
 
   <properties>
-    <revision>1.1.1</revision>
+    <revision>2.0.0</revision>
     <changelist>-SNAPSHOT</changelist>
     <module.name>${project.groupId}.autograding</module.name>
 
@@ -212,6 +212,7 @@
         <configuration>
           <packages combine.children="append">
             <package>io.jenkins.plugins.grading</package>
+            <package>edu.hm.hafner.grading</package>
           </packages>
           <entryPointClassPackage>io.jenkins.plugins.grading.assertions</entryPointClassPackage>
         </configuration>

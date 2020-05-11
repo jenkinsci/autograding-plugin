@@ -1,4 +1,4 @@
-package io.jenkins.plugins.grading;
+package edu.hm.hafner.grading;
 
 import java.util.Objects;
 
@@ -31,15 +31,17 @@ public class PitScore extends Score {
      *
      * @param configuration
      *         the grading configuration
-     * @param action
-     *         the action that contains the PIT results
+     * @param totalMutations total number of mutations
+     * @param undetected number of undetected mutations
+     * @param displayName
      */
     @SuppressFBWarnings(value = "NP", justification = "False positive")
-    public PitScore(final PitConfiguration configuration, final PitBuildAction action) {
-        super(ID, action.getDisplayName());
+    public PitScore(final PitConfiguration configuration, final int totalMutations,
+            final int undetected, final String displayName) {
+        super(ID, displayName);
 
-        mutationsSize = action.getReport().getMutationStats().getTotalMutations();
-        undetectedSize = action.getReport().getMutationStats().getUndetected();
+        mutationsSize = totalMutations;
+        undetectedSize = undetected;
         detectedSize = mutationsSize - undetectedSize;
         ratio = 100 - detectedSize * 100 / mutationsSize;
 
