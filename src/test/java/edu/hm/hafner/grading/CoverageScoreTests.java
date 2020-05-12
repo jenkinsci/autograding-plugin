@@ -7,8 +7,6 @@ import edu.hm.hafner.grading.CoverageConfiguration.CoverageConfigurationBuilder;
 
 import net.sf.json.JSONObject;
 
-import io.jenkins.plugins.coverage.targets.Ratio;
-
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
 
 /**
@@ -20,12 +18,13 @@ import static io.jenkins.plugins.grading.assertions.Assertions.*;
  * @author Johannes Hintermaier
  */
 class CoverageScoreTests {
+    private static final int PERCENTAGE = 99;
+
     @Test
     void shouldCalculateTotalImpactWithZeroCoveredImpact() {
         CoverageConfiguration coverageConfiguration = createCoverageConfiguration(-2, 0);
-        CoverageScore coverageScore = new CoverageScore(StringUtils.lowerCase("Line"), "Line", coverageConfiguration,
-                Ratio.create(99, 100).getPercentage()
-        );
+        CoverageScore coverageScore = new CoverageScore(StringUtils.lowerCase("Line"), "Line",
+                coverageConfiguration, PERCENTAGE);
 
         assertThat(coverageScore).hasTotalImpact(-2);
     }
@@ -33,8 +32,8 @@ class CoverageScoreTests {
     @Test
     void shouldCalculateTotalImpactWithZeroMissedImpact() {
         CoverageConfiguration coverageConfiguration = createCoverageConfiguration(0, 5);
-        CoverageScore coverageScore = new CoverageScore(StringUtils.lowerCase("Line"), "Line", coverageConfiguration,
-                Ratio.create(99, 100).getPercentage()
+        CoverageScore coverageScore = new CoverageScore(StringUtils.lowerCase("Line"), "Line",
+                coverageConfiguration, PERCENTAGE
         );
 
         assertThat(coverageScore).hasTotalImpact(495);
@@ -43,24 +42,21 @@ class CoverageScoreTests {
     @Test
     void shouldCalculateTotalImpact() {
         CoverageConfiguration coverageConfiguration = createCoverageConfiguration(-1, 3);
-        CoverageScore coverageScore = new CoverageScore(StringUtils.lowerCase("Line"), "Line", coverageConfiguration,
-                Ratio.create(99, 100).getPercentage()
-        );
+        CoverageScore coverageScore = new CoverageScore(StringUtils.lowerCase("Line"), "Line",
+                coverageConfiguration, PERCENTAGE);
 
         assertThat(coverageScore).hasTotalImpact(296);
     }
 
     @Test
     void shouldGetProperties() {
-        Ratio codeCoverageRatio = Ratio.create(99, 100);
         CoverageConfiguration coverageConfiguration = createCoverageConfiguration(1, 1);
-        CoverageScore coverageScore = new CoverageScore(StringUtils.lowerCase("Line"), "Line", coverageConfiguration,
-                codeCoverageRatio.getPercentage()
-        );
+        CoverageScore coverageScore = new CoverageScore(StringUtils.lowerCase("Line"), "Line",
+                coverageConfiguration, PERCENTAGE);
 
         assertThat(coverageScore).hasName("Line");
-        assertThat(coverageScore).hasCoveredPercentage(codeCoverageRatio.getPercentage());
-        assertThat(coverageScore).hasMissedPercentage(100 - codeCoverageRatio.getPercentage());
+        assertThat(coverageScore).hasCoveredPercentage(PERCENTAGE);
+        assertThat(coverageScore).hasMissedPercentage(100 - PERCENTAGE);
     }
 
     private CoverageConfiguration createCoverageConfiguration(final int missedImpact, final int coveredImpact) {
@@ -73,7 +69,8 @@ class CoverageScoreTests {
     @Test
     void shouldConvertFromJson() {
         CoverageConfiguration configuration = CoverageConfiguration.from(
-                JSONObject.fromObject("{\"maxScore\": 4, \"coveredPercentageImpact\":5, \"missedPercentageImpact\":3}"));
+                JSONObject.fromObject(
+                        "{\"maxScore\": 4, \"coveredPercentageImpact\":5, \"missedPercentageImpact\":3}"));
         assertThat(configuration).hasMaxScore(4);
         assertThat(configuration).hasCoveredPercentageImpact(5);
         assertThat(configuration).hasMissedPercentageImpact(3);
@@ -96,7 +93,8 @@ class CoverageScoreTests {
     @Test
     void shouldNotReadAdditionalAttributes() {
         CoverageConfiguration configuration = CoverageConfiguration.from(
-                JSONObject.fromObject("{\"maxScore\": 2, \"coveredPercentageImpact\":3, \"missedPercentageImpact\":4, \"notRead\":5}"));
+                JSONObject.fromObject(
+                        "{\"maxScore\": 2, \"coveredPercentageImpact\":3, \"missedPercentageImpact\":4, \"notRead\":5}"));
         assertThat(configuration).hasMaxScore(2);
         assertThat(configuration).hasCoveredPercentageImpact(3);
         assertThat(configuration).hasMissedPercentageImpact(4);

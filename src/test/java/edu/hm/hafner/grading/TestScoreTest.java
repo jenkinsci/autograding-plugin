@@ -11,10 +11,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import net.sf.json.JSONObject;
 
-import hudson.tasks.junit.TestResultAction;
-
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
-import static org.mockito.Mockito.*;
 
 /**
  * Tests the class {@link TestScore}.
@@ -24,38 +21,42 @@ import static org.mockito.Mockito.*;
  * @author Lukas Kirner
  */
 class TestScoreTest {
+
+    private static final String NAME = "Tests";
+    private static final int MAX_SCORE = 25;
+
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     @SuppressFBWarnings("UPM")
     private static Collection<Object[]> createTestConfigurationParameters() {
         return Arrays.asList(new Object[][] {
                 {
-                        createTestConfiguration(25, -1, -2, 1),
-                        createAction(8, 1, 1),
+                        createTestConfiguration(-1, -2, 1),
+                        8, 1, 1,
                         3
                 },
                 {
-                        createTestConfiguration(25, -1, -2, 1),
-                        createAction(8, 5, 1),
+                        createTestConfiguration(-1, -2, 1),
+                        8, 5, 1,
                         -9
                 },
                 {
-                        createTestConfiguration(25, -1, -2, -1),
-                        createAction(8, 5, 1),
+                        createTestConfiguration(-1, -2, -1),
+                        8, 5, 1,
                         -13
                 },
                 {
-                        createTestConfiguration(25, 0, 0, 0),
-                        createAction(0, 0, 0),
+                        createTestConfiguration(0, 0, 0),
+                        0, 0, 0,
                         0
                 },
                 {
-                        createTestConfiguration(25, 99, 99, 99),
-                        createAction(0, 0, 0),
+                        createTestConfiguration(99, 99, 99),
+                        0, 0, 0,
                         0
                 },
                 {
-                        createTestConfiguration(25, 1, 1, 1),
-                        createAction(3, 3, 0),
+                        createTestConfiguration(1, 1, 1),
+                        3, 3, 0,
                         3
                 },
         });
@@ -64,37 +65,26 @@ class TestScoreTest {
     @ParameterizedTest
     @MethodSource("createTestConfigurationParameters")
     void shouldComputeTestScoreWith(final TestConfiguration configuration,
-            final TestResultAction resultAction, final int expectedTotalImpact) {
-        TestScore test = new TestScore(resultAction.getDisplayName(), configuration, resultAction.getTotalCount(),
-                resultAction.getFailCount(),
-                resultAction.getSkipCount());
-        assertThat(test).hasTotalSize(resultAction.getTotalCount());
-        assertThat(test).hasPassedSize(
-                resultAction.getTotalCount() - resultAction.getFailCount() - resultAction.getSkipCount());
-        assertThat(test).hasFailedSize(resultAction.getFailCount());
-        assertThat(test).hasSkippedSize(resultAction.getSkipCount());
+            final int totalSize, final int failedSize, final int skippedSize, final int expectedTotalImpact) {
+        TestScore test = new TestScore(NAME, configuration, totalSize, failedSize, skippedSize);
+
+        assertThat(test).hasTotalSize(totalSize);
+        assertThat(test).hasPassedSize(totalSize - failedSize - skippedSize);
+        assertThat(test).hasFailedSize(failedSize);
+        assertThat(test).hasSkippedSize(skippedSize);
         assertThat(test).hasId(TestScore.ID);
-        assertThat(test).hasName(resultAction.getDisplayName());
+        assertThat(test).hasName(NAME);
         assertThat(test).hasTotalImpact(expectedTotalImpact);
     }
 
     private static TestConfiguration createTestConfiguration(
-            final int maxScore, final int skippedImpact, final int failureImpact, final int passedImpact) {
+            final int skippedImpact, final int failureImpact, final int passedImpact) {
         return new TestConfiguration.TestConfigurationBuilder()
-                .setMaxScore(maxScore)
+                .setMaxScore(MAX_SCORE)
                 .setSkippedImpact(skippedImpact)
                 .setFailureImpact(failureImpact)
                 .setPassedImpact(passedImpact)
                 .build();
-    }
-
-    private static TestResultAction createAction(final int totalSize, final int failedSize, final int skippedSize) {
-        TestResultAction action = mock(TestResultAction.class);
-        when(action.getTotalCount()).thenReturn(totalSize);
-        when(action.getFailCount()).thenReturn(failedSize);
-        when(action.getSkipCount()).thenReturn(skippedSize);
-        when(action.getDisplayName()).thenReturn("Tests");
-        return action;
     }
 
     @Test

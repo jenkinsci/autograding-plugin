@@ -4,12 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import net.sf.json.JSONObject;
 
-import org.jenkinsci.plugins.pitmutation.PitBuildAction;
-import org.jenkinsci.plugins.pitmutation.targets.MutationStatsImpl;
-import org.jenkinsci.plugins.pitmutation.targets.ProjectMutations;
-
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
-import static org.mockito.Mockito.*;
 
 /**
  * Tests the class {@link PitScore}.
@@ -20,6 +15,9 @@ import static org.mockito.Mockito.*;
  * @author Thomas Großbeck
  */
 class PitScoreTest {
+
+    private static final String NAME = "pit";
+
     @Test
     void shouldInitialiseConfigurationWithJson() {
         JSONObject json = new JSONObject();
@@ -77,10 +75,7 @@ class PitScoreTest {
                 .setDetectedImpact(1)
                 .build();
 
-        PitScore pits = new PitScore(createAction(30, 5).getDisplayName(), pitConfiguration,
-                createAction(30, 5).getReport().getMutationStats().getTotalMutations(),
-                createAction(30, 5).getReport().getMutationStats().getUndetected()
-        );
+        PitScore pits = new PitScore(NAME, pitConfiguration, 30, 5);
 
         assertThat(pits).hasTotalImpact(15);
     }
@@ -91,11 +86,7 @@ class PitScoreTest {
                 .setUndetectedPercentageImpact(-2)
                 .build();
 
-        PitBuildAction action = createAction(30, 3);
-        PitScore pits = new PitScore(action.getDisplayName(), pitConfiguration,
-                action.getReport().getMutationStats().getTotalMutations(),
-                action.getReport().getMutationStats().getUndetected()
-        );
+        PitScore pits = new PitScore(NAME, pitConfiguration, 30, 3);
 
         assertThat(pits).hasTotalImpact(-20);
     }
@@ -107,10 +98,7 @@ class PitScoreTest {
                 .setDetectedImpact(1)
                 .build();
 
-        PitScore pits = new PitScore(createAction(30, 20).getDisplayName(), pitConfiguration,
-                createAction(30, 20).getReport().getMutationStats().getTotalMutations(),
-                createAction(30, 20).getReport().getMutationStats().getUndetected()
-        );
+        PitScore pits = new PitScore(NAME, pitConfiguration, 30, 20);
 
         assertThat(pits).hasTotalImpact(-30);
     }
@@ -119,10 +107,7 @@ class PitScoreTest {
     void shouldCalculateZeroTotalImpact() {
         PitConfiguration pitConfiguration = new PitConfiguration.PitConfigurationBuilder().setMaxScore(25).build();
 
-        PitScore pits = new PitScore(createAction(30, 20).getDisplayName(), pitConfiguration,
-                createAction(30, 20).getReport().getMutationStats().getTotalMutations(),
-                createAction(30, 20).getReport().getMutationStats().getUndetected()
-        );
+        PitScore pits = new PitScore(NAME, pitConfiguration, 30, 20);
 
         assertThat(pits).hasTotalImpact(0);
     }
@@ -133,34 +118,15 @@ class PitScoreTest {
                 .setUndetectedImpact(-1)
                 .setDetectedImpact(1)
                 .build();
-        PitBuildAction pitBuildAction = createAction(100, 25);
-
-        PitScore pits = new PitScore(pitBuildAction.getDisplayName(), pitConfiguration,
-                pitBuildAction.getReport().getMutationStats().getTotalMutations(),
-                pitBuildAction.getReport().getMutationStats().getUndetected());
+        PitScore pits = new PitScore(NAME, pitConfiguration, 100, 25);
 
         assertThat(pits).hasId(PitScore.ID);
-        assertThat(pits).hasName(pitBuildAction.getDisplayName());
+        assertThat(pits).hasName(NAME);
         assertThat(pits).hasTotalImpact(50);
         assertThat(pits).hasMutationsSize(100);
         assertThat(pits).hasDetectedSize(75);
         assertThat(pits).hasUndetectedSize(25);
         assertThat(pits).hasUndetectedPercentage(25);
         assertThat(pits).hasDetectedPercentage(75);
-    }
-
-    private PitBuildAction createAction(final int mutationsSize, final int undetectedSize) {
-        MutationStatsImpl stats = mock(MutationStatsImpl.class);
-        when(stats.getTotalMutations()).thenReturn(mutationsSize);
-        when(stats.getUndetected()).thenReturn(undetectedSize);
-
-        ProjectMutations mutations = mock(ProjectMutations.class);
-        when(mutations.getMutationStats()).thenReturn(stats);
-
-        PitBuildAction action = mock(PitBuildAction.class);
-        when(action.getReport()).thenReturn(mutations);
-        when(action.getDisplayName()).thenReturn("pit-build-action");
-
-        return action;
     }
 }
