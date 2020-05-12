@@ -1,4 +1,4 @@
-package io.jenkins.plugins.grading;
+package io.jenkins.plugins.grading; // NOPMD
 
 import java.util.ArrayList;
 import java.util.List;

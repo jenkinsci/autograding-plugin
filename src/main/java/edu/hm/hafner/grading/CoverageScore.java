@@ -11,7 +11,7 @@ import edu.hm.hafner.util.Generated;
  * @author Eva-Maria Zeintl
  */
 @SuppressWarnings("PMD.DataClass")
-public class CoverageScore extends Score {
+public final class CoverageScore extends Score {
     private static final long serialVersionUID = 1L;
 
     private final int coveredPercentage;
@@ -54,8 +54,7 @@ public class CoverageScore extends Score {
         return 100 - coveredPercentage;
     }
 
-    @Override
-    @Generated
+    @Override @Generated
     public boolean equals(final Object o) {
         if (this == o) {
             return true;
@@ -67,8 +66,7 @@ public class CoverageScore extends Score {
         return coveredPercentage == that.coveredPercentage;
     }
 
-    @Override
-    @Generated
+    @Override @Generated
     public int hashCode() {
         return Objects.hash(coveredPercentage);
     }

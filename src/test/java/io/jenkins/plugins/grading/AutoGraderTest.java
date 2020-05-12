@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import edu.hm.hafner.grading.AggregatedScore;
@@ -29,12 +28,11 @@ import static org.mockito.Mockito.*;
  * @author Ullrich Hafner
  */
 class AutoGraderTest {
-
     @Test
     void shouldThrowExceptionOnBrokenConfiguration() {
         AutoGrader autoGrader = new AutoGrader("broken");
 
-        Assertions.assertThatIllegalArgumentException().isThrownBy(() ->
+        assertThatIllegalArgumentException().isThrownBy(() ->
                 autoGrader.perform(mock(Run.class), new FilePath((VirtualChannel) null, "/"), mock(Launcher.class),
                         TaskListener.NULL));
     }
@@ -44,7 +42,7 @@ class AutoGraderTest {
         String json = "{ 'key': 'value' }";
         AutoGrader autoGrader = new AutoGrader(json);
 
-        Assertions.assertThatNullPointerException().isThrownBy(() ->
+        assertThatNullPointerException().isThrownBy(() ->
                 autoGrader.perform(mock(Run.class), new FilePath((VirtualChannel) null, "/"), mock(Launcher.class),
                         TaskListener.NULL));
     }

@@ -13,7 +13,7 @@ import hudson.tasks.junit.TestResultAction;
  * @author Eva-Maria Zeintl
  */
 @SuppressWarnings("PMD.DataClass")
-public class TestScore extends Score {
+public final class TestScore extends Score {
     private static final long serialVersionUID = 1L;
 
     static final String ID = "tests";

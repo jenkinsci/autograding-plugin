@@ -13,7 +13,7 @@ import org.jenkinsci.plugins.pitmutation.PitBuildAction;
  * @author Eva-Maria Zeintl
  */
 @SuppressWarnings("PMD.DataClass")
-public class PitScore extends Score {
+public final class PitScore extends Score {
     private static final long serialVersionUID = 1L;
 
     static final String ID = "pit";
