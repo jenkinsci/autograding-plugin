@@ -13,7 +13,7 @@ import org.jenkinsci.plugins.pitmutation.PitBuildAction;
  * @author Eva-Maria Zeintl
  */
 @SuppressWarnings("PMD.DataClass")
-public final class PitScore extends Score {
+public class PitScore extends Score {
     private static final long serialVersionUID = 1L;
 
     static final String ID = "pit";
@@ -62,31 +62,31 @@ public final class PitScore extends Score {
     private int computeImpact(final PitConfiguration configs) {
         int change = 0;
 
-        change = change + configs.getUndetectedImpact() * undetectedSize;
-        change = change + configs.getUndetectedPercentageImpact() * undetectedPercentage;
+        change = change + configs.getUndetectedImpact() * getUndetectedSize();
+        change = change + configs.getUndetectedPercentageImpact() * getUndetectedPercentage();
         change = change + configs.getDetectedImpact() * getDetectedSize();
         change = change + configs.getDetectedPercentageImpact() * getDetectedPercentage();
 
         return change;
     }
 
-    public int getMutationsSize() {
+    public final int getMutationsSize() {
         return mutationsSize;
     }
 
-    public int getUndetectedSize() {
+    public final int getUndetectedSize() {
         return undetectedSize;
     }
 
-    public int getDetectedSize() {
+    public final int getDetectedSize() {
         return mutationsSize - undetectedSize;
     }
 
-    public int getUndetectedPercentage() {
+    public final int getUndetectedPercentage() {
         return undetectedPercentage;
     }
 
-    public int getDetectedPercentage() {
+    public final int getDetectedPercentage() {
         return 100 - undetectedPercentage;
     }
 

@@ -13,7 +13,7 @@ import hudson.tasks.junit.TestResultAction;
  * @author Eva-Maria Zeintl
  */
 @SuppressWarnings("PMD.DataClass")
-public final class TestScore extends Score {
+public class TestScore extends Score {
     private static final long serialVersionUID = 1L;
 
     static final String ID = "tests";
@@ -67,26 +67,26 @@ public final class TestScore extends Score {
     private int computeImpact(final TestConfiguration configs) {
         int change = 0;
 
-        change = change + configs.getPassedImpact() * passedSize;
-        change = change + configs.getFailureImpact() * failedSize;
-        change = change + configs.getSkippedImpact() * skippedSize;
+        change = change + configs.getPassedImpact() * getPassedSize();
+        change = change + configs.getFailureImpact() * getFailedSize();
+        change = change + configs.getSkippedImpact() * getSkippedSize();
 
         return change;
     }
 
-    public int getPassedSize() {
+    public final int getPassedSize() {
         return passedSize;
     }
 
-    public int getTotalSize() {
+    public final int getTotalSize() {
         return passedSize + failedSize + skippedSize;
     }
 
-    public int getFailedSize() {
+    public final int getFailedSize() {
         return failedSize;
     }
 
-    public int getSkippedSize() {
+    public final int getSkippedSize() {
         return skippedSize;
     }
 

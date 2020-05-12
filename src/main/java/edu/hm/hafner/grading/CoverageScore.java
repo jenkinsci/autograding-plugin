@@ -11,7 +11,7 @@ import edu.hm.hafner.util.Generated;
  * @author Eva-Maria Zeintl
  */
 @SuppressWarnings("PMD.DataClass")
-public final class CoverageScore extends Score {
+public class CoverageScore extends Score {
     private static final long serialVersionUID = 1L;
 
     private final int coveredPercentage;
@@ -41,16 +41,16 @@ public final class CoverageScore extends Score {
         int change = 0;
 
         change = change + configuration.getMissedPercentageImpact() * getMissedPercentage();
-        change = change + configuration.getCoveredPercentageImpact() * coveredPercentage;
+        change = change + configuration.getCoveredPercentageImpact() * getCoveredPercentage();
 
         return change;
     }
 
-    public int getCoveredPercentage() {
+    public final int getCoveredPercentage() {
         return coveredPercentage;
     }
 
-    public int getMissedPercentage() {
+    public final int getMissedPercentage() {
         return 100 - coveredPercentage;
     }
 

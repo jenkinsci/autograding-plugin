@@ -11,7 +11,7 @@ import edu.hm.hafner.util.Generated;
  * @author Eva-Maria Zeintl
  */
 @SuppressWarnings("PMD.DataClass")
-public final class AnalysisScore extends Score {
+public class AnalysisScore extends Score {
     private static final long serialVersionUID = 1L;
 
     private final int errorsSize;
