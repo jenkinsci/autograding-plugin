@@ -15,9 +15,10 @@ import net.sf.json.JSONObject;
 public class PitConfiguration extends Configuration {
     private static final long serialVersionUID = 1L;
 
-    private int ratioImpact;
-    private int detectedImpact;
     private int undetectedImpact;
+    private int detectedImpact;
+    private int undetectedPercentageImpact;
+    private int detectedPercentageImpact;
 
     /**
      * Converts the specified JSON object to a new instance if {@link PitConfiguration}.
@@ -36,16 +37,18 @@ public class PitConfiguration extends Configuration {
      */
     @SuppressWarnings("unused") // Required for JSON conversion
     public PitConfiguration() {
-        this(0, 0, 0, 0);
+        this(0, 0, 0, 0, 0);
     }
 
     private PitConfiguration(final int maxScore,
-            final int undetectedImpact, final int detectedImpact, final int ratioImpact) {
+            final int undetectedImpact, final int detectedImpact, 
+            final int undetectedPercentageImpact, final int detectedPercentageImpact) {
         super(maxScore);
 
         this.undetectedImpact = undetectedImpact;
         this.detectedImpact = detectedImpact;
-        this.ratioImpact = ratioImpact;
+        this.undetectedPercentageImpact = undetectedPercentageImpact;
+        this.detectedPercentageImpact = detectedPercentageImpact;
     }
 
     public int getUndetectedImpact() {
@@ -66,13 +69,22 @@ public class PitConfiguration extends Configuration {
         this.detectedImpact = detectedImpact;
     }
 
-    public int getRatioImpact() {
-        return ratioImpact;
+    public int getDetectedPercentageImpact() {
+        return detectedPercentageImpact;
     }
 
     @SuppressWarnings("unused") // Required for JSON conversion
-    public void setRatioImpact(final int ratioImpact) {
-        this.ratioImpact = ratioImpact;
+    public void setDetectedPercentageImpact(final int detectedPercentageImpact) {
+        this.detectedPercentageImpact = detectedPercentageImpact;
+    }
+
+    public int getUndetectedPercentageImpact() {
+        return undetectedPercentageImpact;
+    }
+
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setUndetectedPercentageImpact(final int undetectedPercentageImpact) {
+        this.undetectedPercentageImpact = undetectedPercentageImpact;
     }
 
     @Override @Generated
@@ -87,14 +99,15 @@ public class PitConfiguration extends Configuration {
             return false;
         }
         PitConfiguration that = (PitConfiguration) o;
-        return ratioImpact == that.ratioImpact
+        return detectedPercentageImpact == that.detectedPercentageImpact
+                && undetectedPercentageImpact == that.undetectedPercentageImpact
                 && detectedImpact == that.detectedImpact
                 && undetectedImpact == that.undetectedImpact;
     }
 
     @Override @Generated
     public int hashCode() {
-        return Objects.hash(super.hashCode(), ratioImpact, detectedImpact, undetectedImpact);
+        return Objects.hash(super.hashCode(), detectedPercentageImpact, undetectedPercentageImpact, detectedImpact, undetectedImpact);
     }
 
     /**
@@ -103,7 +116,8 @@ public class PitConfiguration extends Configuration {
     public static class PitConfigurationBuilder extends ConfigurationBuilder {
         private int undetectedImpact = 0;
         private int detectedImpact = 0;
-        private int ratioImpact = 0;
+        private int undetectedPercentageImpact = 0;
+        private int detectedPercentageImpact = 0;
 
         @Override
         public PitConfigurationBuilder setMaxScore(final int maxScore) {
@@ -114,7 +128,7 @@ public class PitConfiguration extends Configuration {
          * Sets the number of points to decrease the score for each undetected mutation.
          *
          * @param undetectedImpact
-         *         the number of points to increase the score for each coverage percentage point.
+         *         the number of points to decrease the score for each undetected mutation.
          *
          * @return this
          */
@@ -127,7 +141,7 @@ public class PitConfiguration extends Configuration {
          * Sets the number of points to increase the score for each detected mutation.
          *
          * @param detectedImpact
-         *         the number of points to increase the score for each coverage percentage point.
+         *         the number of points to increase the score for each detected mutation.
          *
          * @return this
          */
@@ -139,13 +153,26 @@ public class PitConfiguration extends Configuration {
         /**
          * Sets the number of points to decrease the score for each missed coverage percentage point.
          *
-         * @param ratioImpact
+         * @param undetectedPercentageImpact
          *         the number of points to decrease the score for each missed coverage percentage point.
          *
          * @return this
          */
-        public PitConfigurationBuilder setRatioImpact(final int ratioImpact) {
-            this.ratioImpact = ratioImpact;
+        public PitConfigurationBuilder setUndetectedPercentageImpact(final int undetectedPercentageImpact) {
+            this.undetectedPercentageImpact = undetectedPercentageImpact;
+            return this;
+        }
+
+        /**
+         * Sets the number of points to increase the score for each detected coverage percentage point.
+         *
+         * @param detectedPercentageImpact
+         *         the number of points to increase the score for each detected coverage percentage point.
+         *
+         * @return this
+         */
+        public PitConfigurationBuilder setDetectedPercentageImpact(final int detectedPercentageImpact) {
+            this.detectedPercentageImpact = detectedPercentageImpact;
             return this;
         }
 
@@ -155,7 +182,8 @@ public class PitConfiguration extends Configuration {
          * @return the created instance
          */
         public PitConfiguration build() {
-            return new PitConfiguration(getMaxScore(), undetectedImpact, detectedImpact, ratioImpact);
+            return new PitConfiguration(getMaxScore(), undetectedImpact, detectedImpact,
+                    undetectedPercentageImpact, detectedPercentageImpact);
         }
     }
 }

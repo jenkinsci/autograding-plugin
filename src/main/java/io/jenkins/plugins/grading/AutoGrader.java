@@ -23,6 +23,7 @@ import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.jenkinsci.Symbol;
 import org.jenkinsci.plugins.pitmutation.PitBuildAction;
+import org.jenkinsci.plugins.pitmutation.targets.MutationStats;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -56,7 +57,6 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
      * @param configuration
      *         the configuration to use, must be in JSON format
      */
-    // TODO: Create JSON schema
     @DataBoundConstructor
     public AutoGrader(final String configuration) {
         super();
@@ -128,14 +128,14 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
         logHandler.log("Grading PIT mutation results " + action.getDisplayName());
         PitConfiguration pitConfiguration = PitConfiguration.from(jsonConfiguration);
-        PitScore score = new PitScore(pitConfiguration,
-                action.getReport().getMutationStats().getTotalMutations(),
-                action.getReport().getMutationStats().getUndetected(), action.getDisplayName());
+        MutationStats mutationStats = action.getReport().getMutationStats();
+        PitScore score = new PitScore(action.getDisplayName(), pitConfiguration,
+                mutationStats.getTotalMutations(), mutationStats.getUndetected());
         int total = actualScore.addPitTotal(pitConfiguration, score);
 
-        logHandler.log("-> Score %d - from recorded PIT mutation results: %d, %d, %d, %d",
+        logHandler.log("-> Score %d - from recorded PIT mutation results: %d, %d, %d, %d%%, %d%%",
                 score.getTotalImpact(), score.getMutationsSize(), score.getUndetectedSize(),
-                score.getDetectedSize(), score.getRatio());
+                score.getDetectedSize(), score.getUndetectedPercentage(), score.getDetectedPercentage());
         logHandler.log("Total score for mutation coverage results: " + total);
     }
 
@@ -153,11 +153,11 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
         CoverageScore lineCoverage = createCoverageScore(action, coverageConfiguration, CoverageElement.LINE);
         logHandler.log("-> Score %d - from recorded line coverage results: %d%%",
-                lineCoverage.getTotalImpact(), lineCoverage.getCoveredSize());
+                lineCoverage.getTotalImpact(), lineCoverage.getCoveredPercentage());
 
         CoverageScore branchCoverage = createCoverageScore(action, coverageConfiguration, CoverageElement.CONDITIONAL);
         logHandler.log("-> Score %d - from recorded branch coverage results: %d%%",
-                branchCoverage.getTotalImpact(), branchCoverage.getCoveredSize());
+                branchCoverage.getTotalImpact(), branchCoverage.getCoveredPercentage());
 
         int total = actualScore.addCoverageTotal(coverageConfiguration, lineCoverage, branchCoverage);
 
@@ -167,8 +167,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
     private CoverageScore createCoverageScore(final CoverageAction action,
             final CoverageConfiguration coverageConfiguration, final CoverageElement type) {
         return new CoverageScore(StringUtils.lowerCase(type.getName()), type.getName(), coverageConfiguration,
-                action.getResult().getCoverage(type).getPercentage(),
-                100 - action.getResult().getCoverage(type).getPercentage());
+                action.getResult().getCoverage(type).getPercentage());
     }
 
     @VisibleForTesting
@@ -182,8 +181,8 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
 
         logHandler.log("Grading test results " + action.getDisplayName());
         TestConfiguration testsConfiguration = TestConfiguration.from(testConfiguration);
-        TestScore score = new TestScore(testsConfiguration, action, action.getFailCount(), action.getSkipCount(),
-                action.getTotalCount());
+        TestScore score = new TestScore(action.getDisplayName(), testsConfiguration,
+                action.getTotalCount(), action.getFailCount(), action.getSkipCount());
         int total = actualScore.addTestsTotal(testsConfiguration, score);
 
         logHandler.log("-> Score %d - from recorded test results: %d, %d, %d, %d",
@@ -201,10 +200,9 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         for (ResultAction action : actions) {
             String name = action.getLabelProvider().getName();
             logHandler.log("Grading static analysis results for " + name);
-            AnalysisScore score = new AnalysisScore(name, analysisConfiguration,
+            AnalysisScore score = new AnalysisScore(action.getResult().getId(), name, analysisConfiguration,
                     action.getResult().getTotalErrorsSize(), action.getResult().getTotalHighPrioritySize(),
-                    action.getResult().getTotalNormalPrioritySize(), action.getResult().getTotalLowPrioritySize(),
-                    action.getResult().getTotalSize(), action.getResult().getId());
+                    action.getResult().getTotalNormalPrioritySize(), action.getResult().getTotalLowPrioritySize());
             analysisScores.add(score);
             logHandler.log("-> Score %d (warnings distribution err:%d, high:%d, normal:%d, low:%d)",
                     score.getTotalImpact(), score.getErrorsSize(), score.getHighSeveritySize(),

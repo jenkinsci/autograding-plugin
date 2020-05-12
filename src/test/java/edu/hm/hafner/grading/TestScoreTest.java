@@ -65,8 +65,9 @@ class TestScoreTest {
     @MethodSource("createTestConfigurationParameters")
     void shouldComputeTestScoreWith(final TestConfiguration configuration,
             final TestResultAction resultAction, final int expectedTotalImpact) {
-        TestScore test = new TestScore(configuration, resultAction, resultAction.getFailCount(),
-                resultAction.getSkipCount(), resultAction.getTotalCount());
+        TestScore test = new TestScore(resultAction.getDisplayName(), configuration, resultAction.getTotalCount(),
+                resultAction.getFailCount(),
+                resultAction.getSkipCount());
         assertThat(test).hasTotalSize(resultAction.getTotalCount());
         assertThat(test).hasPassedSize(
                 resultAction.getTotalCount() - resultAction.getFailCount() - resultAction.getSkipCount());

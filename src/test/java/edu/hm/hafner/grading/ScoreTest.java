@@ -71,16 +71,16 @@ class ScoreTest {
     void shouldUpdateCoverage() {
         CoverageConfiguration coverageConfiguration = new CoverageConfigurationBuilder()
                 .setMaxScore(100)
-                .setMissedImpact(-1)
+                .setMissedPercentageImpact(-1)
                 .build();
 
         AggregatedScore score = new AggregatedScore();
         score.addCoverageTotal(coverageConfiguration,
                 new CoverageScore(StringUtils.lowerCase("Line"), "Line", coverageConfiguration,
-                        Ratio.create(50, 100).getPercentage(), 100 - Ratio.create(50, 100).getPercentage()
+                        Ratio.create(50, 100).getPercentage()
                 ),
                 new CoverageScore(StringUtils.lowerCase("Branch"), "Branch", coverageConfiguration,
-                        Ratio.create(60, 100).getPercentage(), 100 - Ratio.create(60, 100).getPercentage()
+                        Ratio.create(60, 100).getPercentage()
                 ));
 
         assertThat(score).hasAchieved(10);
@@ -90,7 +90,7 @@ class ScoreTest {
         assertThat(score).hasCoverageRatio(10);
 
         assertThat(score.getCoverageConfiguration()).hasMaxScore(100);
-        assertThat(score.getCoverageConfiguration()).hasMissedImpact(-1);
+        assertThat(score.getCoverageConfiguration()).hasMissedPercentageImpact(-1);
     }
 
     @Test

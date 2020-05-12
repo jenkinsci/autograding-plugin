@@ -15,8 +15,8 @@ import net.sf.json.JSONObject;
 public class CoverageConfiguration extends Configuration {
     private static final long serialVersionUID = 1L;
 
-    private int coveredImpact;
-    private int missedImpact;
+    private int coveredPercentageImpact;
+    private int missedPercentageImpact;
 
     /**
      * Converts the specified JSON object to a new instance if {@link CoverageConfiguration}.
@@ -38,29 +38,29 @@ public class CoverageConfiguration extends Configuration {
     }
 
     private CoverageConfiguration(final int maxScore,
-            final int coveredImpact, final int missedImpact) {
+            final int coveredPercentageImpact, final int missedPercentageImpact) {
         super(maxScore);
 
-        this.coveredImpact = coveredImpact;
-        this.missedImpact = missedImpact;
+        this.coveredPercentageImpact = coveredPercentageImpact;
+        this.missedPercentageImpact = missedPercentageImpact;
     }
 
-    public int getCoveredImpact() {
-        return coveredImpact;
-    }
-
-    @SuppressWarnings("unused") // Required for JSON conversion
-    public void setCoveredImpact(final int coveredImpact) {
-        this.coveredImpact = coveredImpact;
-    }
-
-    public int getMissedImpact() {
-        return missedImpact;
+    public int getCoveredPercentageImpact() {
+        return coveredPercentageImpact;
     }
 
     @SuppressWarnings("unused") // Required for JSON conversion
-    public void setMissedImpact(final int missedImpact) {
-        this.missedImpact = missedImpact;
+    public void setCoveredPercentageImpact(final int coveredPercentageImpact) {
+        this.coveredPercentageImpact = coveredPercentageImpact;
+    }
+
+    public int getMissedPercentageImpact() {
+        return missedPercentageImpact;
+    }
+
+    @SuppressWarnings("unused") // Required for JSON conversion
+    public void setMissedPercentageImpact(final int missedPercentageImpact) {
+        this.missedPercentageImpact = missedPercentageImpact;
     }
 
     @Override @Generated
@@ -75,20 +75,21 @@ public class CoverageConfiguration extends Configuration {
             return false;
         }
         CoverageConfiguration that = (CoverageConfiguration) o;
-        return coveredImpact == that.coveredImpact && missedImpact == that.missedImpact;
+        return coveredPercentageImpact == that.coveredPercentageImpact
+                && missedPercentageImpact == that.missedPercentageImpact;
     }
 
     @Override @Generated
     public int hashCode() {
-        return Objects.hash(super.hashCode(), coveredImpact, missedImpact);
+        return Objects.hash(super.hashCode(), coveredPercentageImpact, missedPercentageImpact);
     }
 
     /**
      * Builder to create a {@link CoverageConfiguration} instance.
      */
     public static class CoverageConfigurationBuilder extends ConfigurationBuilder {
-        private int coveredImpact = 0;
-        private int missedImpact = 0;
+        private int coveredPercentageImpact = 0;
+        private int missedPercentageImpact = 0;
 
         @Override
         public CoverageConfigurationBuilder setMaxScore(final int maxScore) {
@@ -98,26 +99,26 @@ public class CoverageConfiguration extends Configuration {
         /**
          * Sets the number of points to increase the score for each coverage percentage point.
          *
-         * @param coveredImpact
+         * @param coveredPercentageImpact
          *         the number of points to increase the score for each coverage percentage point.
          *
          * @return this
          */
-        public CoverageConfigurationBuilder setCoveredImpact(final int coveredImpact) {
-            this.coveredImpact = coveredImpact;
+        public CoverageConfigurationBuilder setCoveredPercentageImpact(final int coveredPercentageImpact) {
+            this.coveredPercentageImpact = coveredPercentageImpact;
             return this;
         }
 
         /**
          * Sets the number of points to decrease the score for each missing coverage percentage point.
          *
-         * @param missedImpact
+         * @param missedPercentageImpact
          *         the number of points to decrease the score for each missing coverage percentage point.
          *
          * @return this
          */
-        public CoverageConfigurationBuilder setMissedImpact(final int missedImpact) {
-            this.missedImpact = missedImpact;
+        public CoverageConfigurationBuilder setMissedPercentageImpact(final int missedPercentageImpact) {
+            this.missedPercentageImpact = missedPercentageImpact;
             return this;
         }
 
@@ -127,7 +128,7 @@ public class CoverageConfiguration extends Configuration {
          * @return the created instance
          */
         public CoverageConfiguration build() {
-            return new CoverageConfiguration(getMaxScore(), coveredImpact, missedImpact);
+            return new CoverageConfiguration(getMaxScore(), coveredPercentageImpact, missedPercentageImpact);
         }
     }
 }

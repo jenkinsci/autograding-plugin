@@ -85,8 +85,7 @@ public class AnalysisConfiguration extends Configuration {
         return lowImpact;
     }
 
-    @Override
-    @Generated
+    @Override @Generated
     public boolean equals(final Object o) {
         if (this == o) {
             return true;
@@ -104,8 +103,7 @@ public class AnalysisConfiguration extends Configuration {
                 && lowImpact == that.lowImpact;
     }
 
-    @Override
-    @Generated
+    @Override @Generated
     public int hashCode() {
         return Objects.hash(super.hashCode(), errorImpact, highImpact, normalImpact, lowImpact);
     }

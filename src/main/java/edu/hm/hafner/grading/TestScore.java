@@ -19,7 +19,6 @@ public class TestScore extends Score {
     static final String ID = "tests";
 
     private final int passedSize;
-    private final int totalSize;
     private final int failedSize;
     private final int skippedSize;
 
@@ -28,26 +27,46 @@ public class TestScore extends Score {
      *
      * @param configuration
      *         the grading configuration
-     * @param action
-     *         the action that contains the test results
-     * @param failCount
-     * @param skipCount
      * @param totalCount
+     *         total number of tests
+     * @param failCount
+     *         number of failed tests
+     * @param skipCount
+     *         number of skipped tests
      */
-    public TestScore(final TestConfiguration configuration, final TestResultAction action, final int failCount,
-            final int skipCount, final int totalCount) {
-        super(ID, action.getDisplayName());
+    public TestScore(final TestConfiguration configuration,
+            final int totalCount, final int failCount, final int skipCount) {
+        this("Test results", configuration, totalCount, failCount, skipCount);
+    }
 
-        failedSize = failCount;
-        skippedSize = skipCount;
-        totalSize = totalCount;
-        passedSize = totalSize - failedSize - skippedSize;
+    /**
+     * Creates a new {@link TestScore} instance.
+     *
+     * @param displayName
+     *         human readable name of the tests results
+     * @param configuration
+     *         the grading configuration
+     * @param totalSize
+     *         total number of tests
+     * @param failedSize
+     *         number of failed tests
+     * @param skippedSize
+     *         number of skipped tests
+     */
+    public TestScore(final String displayName, final TestConfiguration configuration,
+            final int totalSize, final int failedSize, final int skippedSize) {
+        super(ID, displayName);
+
+        this.failedSize = failedSize;
+        this.skippedSize = skippedSize;
+        passedSize = totalSize - this.failedSize - this.skippedSize;
 
         setTotalImpact(computeImpact(configuration));
     }
 
     private int computeImpact(final TestConfiguration configs) {
         int change = 0;
+
         change = change + configs.getPassedImpact() * passedSize;
         change = change + configs.getFailureImpact() * failedSize;
         change = change + configs.getSkippedImpact() * skippedSize;
@@ -60,7 +79,7 @@ public class TestScore extends Score {
     }
 
     public int getTotalSize() {
-        return totalSize;
+        return passedSize + failedSize + skippedSize;
     }
 
     public int getFailedSize() {
@@ -84,13 +103,12 @@ public class TestScore extends Score {
         }
         TestScore testScore = (TestScore) o;
         return passedSize == testScore.passedSize
-                && totalSize == testScore.totalSize
                 && failedSize == testScore.failedSize
                 && skippedSize == testScore.skippedSize;
     }
 
     @Override @Generated
     public int hashCode() {
-        return Objects.hash(super.hashCode(), passedSize, totalSize, failedSize, skippedSize);
+        return Objects.hash(super.hashCode(), passedSize, failedSize, skippedSize);
     }
 }

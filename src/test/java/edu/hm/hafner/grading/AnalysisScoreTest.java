@@ -39,9 +39,9 @@ class AnalysisScoreTest {
                 .setNormalImpact(-2)
                 .setLowImpact(-1)
                 .build();
-        AnalysisScore analysisScore = new AnalysisScore(NAME, analysisConfiguration,
+        AnalysisScore analysisScore = new AnalysisScore(result.getId(), NAME, analysisConfiguration,
                 result.getTotalErrorsSize(), result.getTotalHighPrioritySize(), result.getTotalNormalPrioritySize(),
-                result.getTotalLowPrioritySize(), result.getTotalSize(), result.getId());
+                result.getTotalLowPrioritySize());
         assertThat(analysisScore).hasTotalImpact(2 * -4 - 2 * 3 - 2 * 2 - 2 * 1);
     }
 
@@ -66,9 +66,9 @@ class AnalysisScoreTest {
         when(result.getTotalSize()).thenReturn(14);
         when(result.getId()).thenReturn(ID);
 
-        AnalysisScore analysisScore = new AnalysisScore(NAME, createConfigurationWithOnePointForEachSeverity(),
+        AnalysisScore analysisScore = new AnalysisScore(result.getId(), NAME, createConfigurationWithOnePointForEachSeverity(),
                 result.getTotalErrorsSize(), result.getTotalHighPrioritySize(), result.getTotalNormalPrioritySize(),
-                result.getTotalLowPrioritySize(), result.getTotalSize(), result.getId());
+                result.getTotalLowPrioritySize());
 
         assertThat(analysisScore.getErrorsSize()).isEqualTo(3);
         assertThat(analysisScore).hasErrorsSize(3);
@@ -90,9 +90,9 @@ class AnalysisScoreTest {
         when(result.getTotalSize()).thenReturn(-14);
         when(result.getId()).thenReturn(ID);
 
-        AnalysisScore analysisScore = new AnalysisScore(NAME, createConfigurationWithOnePointForEachSeverity(),
+        AnalysisScore analysisScore = new AnalysisScore(result.getId(), NAME, createConfigurationWithOnePointForEachSeverity(),
                 result.getTotalErrorsSize(), result.getTotalHighPrioritySize(), result.getTotalNormalPrioritySize(),
-                result.getTotalLowPrioritySize(), result.getTotalSize(), result.getId());
+                result.getTotalLowPrioritySize());
 
         assertThat(analysisScore.getErrorsSize()).isEqualTo(-3);
         assertThat(analysisScore).hasErrorsSize(-3);
@@ -129,14 +129,14 @@ class AnalysisScoreTest {
                 .build();
 
         when(result.getId()).thenReturn(ID);
-        assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(null, configuration,
+        assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(result.getId(), null, configuration,
                 result.getTotalErrorsSize(), result.getTotalHighPrioritySize(), result.getTotalNormalPrioritySize(),
-                result.getTotalLowPrioritySize(), result.getTotalSize(), result.getId()));
+                result.getTotalLowPrioritySize()));
 
         when(result.getId()).thenReturn(null);
-        assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(NAME, configuration,
+        assertThatNullPointerException().isThrownBy(() -> new AnalysisScore(result.getId(), NAME, configuration,
                 result.getTotalErrorsSize(), result.getTotalHighPrioritySize(), result.getTotalNormalPrioritySize(),
-                result.getTotalLowPrioritySize(), result.getTotalSize(), result.getId()));
+                result.getTotalLowPrioritySize()));
     }
 
     @Test
@@ -155,9 +155,9 @@ class AnalysisScoreTest {
                 .setLowImpact(100)
                 .build();
 
-        AnalysisScore score = new AnalysisScore("dummy", configuration, result.getTotalErrorsSize(),
+        AnalysisScore score = new AnalysisScore(result.getId(), "dummy", configuration, result.getTotalErrorsSize(),
                 result.getTotalHighPrioritySize(), result.getTotalNormalPrioritySize(),
-                result.getTotalLowPrioritySize(), result.getTotalSize(), result.getId());
+                result.getTotalLowPrioritySize());
         assertThat(score).hasTotalImpact(0);
     }
 }

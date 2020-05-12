@@ -19,11 +19,11 @@ public class AnalysisScore extends Score {
     private final int normalSeveritySize;
     private final int lowSeveritySize;
 
-    private final int totalSize;
-
     /**
      * Creates a new {@link AnalysisScore} instance.
      *
+     * @param id
+     *         the ID of the analysis tool
      * @param displayName
      *         the human readable name of the analysis tool
      * @param configuration
@@ -36,21 +36,16 @@ public class AnalysisScore extends Score {
      *         total number of warnings with severity normal
      * @param totalLowSeveritySize
      *         total number of warnings with severity low
-     * @param totalSize
-     *         total number of warnings
-     * @param id
-     *         the ID of the analysis tool
      */
-    public AnalysisScore(final String displayName, final AnalysisConfiguration configuration,
-            final int totalErrorsSize, final int totalHighSeveritySize, final int totalNormalSeveritySize,
-            final int totalLowSeveritySize, final int totalSize, final String id) {
+    public AnalysisScore(final String id, final String displayName, final AnalysisConfiguration configuration,
+            final int totalErrorsSize,
+            final int totalHighSeveritySize, final int totalNormalSeveritySize, final int totalLowSeveritySize) {
         super(id, displayName);
 
         this.errorsSize = totalErrorsSize;
         this.highSeveritySize = totalHighSeveritySize;
         this.normalSeveritySize = totalNormalSeveritySize;
         this.lowSeveritySize = totalLowSeveritySize;
-        this.totalSize = totalSize;
 
         setTotalImpact(computeImpact(configuration));
     }
@@ -83,11 +78,10 @@ public class AnalysisScore extends Score {
     }
 
     public int getTotalSize() {
-        return totalSize;
+        return getErrorsSize() + getHighSeveritySize() + getNormalSeveritySize() + getLowSeveritySize();
     }
 
-    @Override
-    @Generated
+    @Override @Generated
     public boolean equals(final Object o) {
         if (this == o) {
             return true;
@@ -99,13 +93,11 @@ public class AnalysisScore extends Score {
         return errorsSize == that.errorsSize
                 && highSeveritySize == that.highSeveritySize
                 && normalSeveritySize == that.normalSeveritySize
-                && lowSeveritySize == that.lowSeveritySize
-                && totalSize == that.totalSize;
+                && lowSeveritySize == that.lowSeveritySize;
     }
 
-    @Override
-    @Generated
+    @Override @Generated
     public int hashCode() {
-        return Objects.hash(errorsSize, highSeveritySize, normalSeveritySize, lowSeveritySize, totalSize);
+        return Objects.hash(errorsSize, highSeveritySize, normalSeveritySize, lowSeveritySize);
     }
 }

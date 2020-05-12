@@ -14,8 +14,7 @@ import edu.hm.hafner.util.Generated;
 public class CoverageScore extends Score {
     private static final long serialVersionUID = 1L;
 
-    private final int coveredSize;
-    private final int missedSize;
+    private final int coveredPercentage;
 
     /**
      * Creates a new {@link CoverageScore} instance.
@@ -26,17 +25,14 @@ public class CoverageScore extends Score {
      *         display name of the coverage type (like line or branch coverage)
      * @param configuration
      *         the grading configuration
-     * @param coveredSize
+     * @param coveredPercentage
      *         the percentage (covered)
-     * @param missedSize
-     *         the percentage (misses, i.e. not covered)
      */
     public CoverageScore(final String id, final String displayName, final CoverageConfiguration configuration,
-            final int coveredSize, final int missedSize) {
+            final int coveredPercentage) {
         super(id, displayName);
 
-        this.coveredSize = coveredSize;
-        this.missedSize = missedSize;
+        this.coveredPercentage = coveredPercentage;
 
         setTotalImpact(computeImpact(configuration));
     }
@@ -44,18 +40,18 @@ public class CoverageScore extends Score {
     private int computeImpact(final CoverageConfiguration configuration) {
         int change = 0;
 
-        change = change + configuration.getMissedImpact() * missedSize;
-        change = change + configuration.getCoveredImpact() * coveredSize;
+        change = change + configuration.getMissedPercentageImpact() * getMissedPercentage();
+        change = change + configuration.getCoveredPercentageImpact() * coveredPercentage;
 
         return change;
     }
 
-    public int getCoveredSize() {
-        return coveredSize;
+    public int getCoveredPercentage() {
+        return coveredPercentage;
     }
 
-    public int getMissedSize() {
-        return missedSize;
+    public int getMissedPercentage() {
+        return 100 - coveredPercentage;
     }
 
     @Override
@@ -68,12 +64,12 @@ public class CoverageScore extends Score {
             return false;
         }
         CoverageScore that = (CoverageScore) o;
-        return coveredSize == that.coveredSize && missedSize == that.missedSize;
+        return coveredPercentage == that.coveredPercentage;
     }
 
     @Override
     @Generated
     public int hashCode() {
-        return Objects.hash(coveredSize, missedSize);
+        return Objects.hash(coveredPercentage);
     }
 }
