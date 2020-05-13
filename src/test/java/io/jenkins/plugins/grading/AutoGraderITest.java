@@ -35,7 +35,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
     private static final String ANALYSIS_CONFIGURATION = "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}";
     private static final String TESTS_CONFIGURATION = "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}";
-//    private static final String COVERAGE_CONFIGURATION = "{\"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}}";
+    private static final String COVERAGE_CONFIGURATION = "{\"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}}";
     private static final String PIT_CONFIGURATION = "{\"pit\": {\"maxScore\": 100,\"detectedImpact\": 1,\"undetectedImpact\": -1,\"ratioImpact\": 0}}";
 
 
@@ -103,16 +103,6 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         AggregatedScore score = actions.get(0).getResult();
         assertThat(score).hasAchieved(94);
     }
-
-//    @Test
-//    public void shouldGradeCoverageScoreWith94() {
-//        WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
-//        configureScanner(job, "jacoco", COVERAGE_CONFIGURATION);
-//        Run<?, ?> baseline = buildSuccessfully(job);
-//
-//        List<AutoGradingBuildAction> actions = baseline.getActions(AutoGradingBuildAction.class);
-//
-//    }
 
 
     /**
@@ -186,7 +176,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldGradeCodeCoverageInFreestyle() {
         FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("jacoco.xml");
 
-        JacocoReportAdapter jacocoReportAdapter = new JacocoReportAdapter("**/jacoco.xml");
+        JacocoReportAdapter jacocoReportAdapter = new JacocoReportAdapter("jacoco.xml");
         DefaultSourceFileResolver defaultSourceFileResolver = new DefaultSourceFileResolver(
                 SourceFileResolverLevel.NEVER_STORE);
 
@@ -198,14 +188,15 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         coveragePublisher.setSourceFileResolver(defaultSourceFileResolver);
 
         project.getPublishersList().add(coveragePublisher);
+        project.getPublishersList().add(new AutoGrader(COVERAGE_CONFIGURATION));
 
-//        Run<?, ?> run = buildSuccessfully(project);
+        Run<?, ?> run = buildSuccessfully(project);
 
-//        List<AutoGradingBuildAction> actions = run.getActions(AutoGradingBuildAction.class);
-//        assertThat(actions).hasSize(1);
-//
-//        AggregatedScore score = actions.get(0).getResult();
-//        assertThat(score).hasAchieved(94);
+        List<AutoGradingBuildAction> actions = run.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+
+        AggregatedScore score = actions.get(0).getResult();
+        assertThat(score).hasAchieved(100);
     }
 
     /**
