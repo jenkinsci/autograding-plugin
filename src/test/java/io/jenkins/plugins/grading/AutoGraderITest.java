@@ -31,7 +31,6 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     private static final String TESTS_CONFIGURATION = "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}";
     private static final String PIT_CONFIGURATION = "{\"pit\": {\"maxScore\": 100,\"detectedImpact\": 1,\"undetectedImpact\": -1,\"ratioImpact\": 0}}";
 
-
     /** Verifies that the step skips all autograding parts if the configuration is empty. */
     @Test
     public void shouldSkipGradingIfConfigurationIsEmpty() {
@@ -217,12 +216,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 break;
             case "mutations":
                 script += "  stage ('Test Mutation Coverage') {\n"
-                        + "         step([$class: 'PitPublisher', mutationStatsFile: '**/" + fileName + "*'])\n";
-                break;
-            case "jacoco":
-                script += " stage ('Code coverage Analysis') {\n"
-                        + "         publishCoverage adapters: [jacocoAdapter('**/" + fileName
-                        + "*')], sourceFileResolver: sourceFiles('NEVER_STORE')\n";
+                        + "         step([$class: 'PitPublisher', mutationStatsFile: '**/" + fileName + ".xml'])\n";
                 break;
             default:
                 break;
