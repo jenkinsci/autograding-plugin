@@ -1,6 +1,7 @@
 package io.jenkins.plugins.grading;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -16,6 +17,11 @@ import hudson.tasks.junit.JUnitResultArchiver;
 
 import io.jenkins.plugins.analysis.core.steps.IssuesRecorder;
 import io.jenkins.plugins.analysis.warnings.checkstyle.CheckStyle;
+import io.jenkins.plugins.coverage.CoveragePublisher;
+import io.jenkins.plugins.coverage.adapter.CoverageAdapter;
+import io.jenkins.plugins.coverage.adapter.JacocoReportAdapter;
+import io.jenkins.plugins.coverage.source.DefaultSourceFileResolver;
+import io.jenkins.plugins.coverage.source.SourceFileResolver.SourceFileResolverLevel;
 import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
@@ -30,6 +36,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     private static final String ANALYSIS_CONFIGURATION = "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}";
     private static final String TESTS_CONFIGURATION = "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}";
     private static final String PIT_CONFIGURATION = "{\"pit\": {\"maxScore\": 100,\"detectedImpact\": 1,\"undetectedImpact\": -1,\"ratioImpact\": 0}}";
+    private static final String COVERAGE_CONFIGURATION = "{\"coverage\":{\"maxScore\":100,\"coveredImpact\":1,\"missedImpact\":-1}}";
 
     /** Verifies that the step skips all autograding parts if the configuration is empty. */
     @Test
@@ -103,17 +110,31 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
         List<AutoGradingBuildAction> actions = build.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
-        assertMutationsCoverageOutput(build);
+        assertMutationsOutput(build);
 
         AggregatedScore score = actions.get(0).getResult();
         assertThat(score).hasAchieved(73);
     }
 
-    /* ---- Freestyle - Tests --- */
+    /**
+     * Verifies that jacoco Coverage results are graded with a score of 100.
+     */
+    @Test
+    public void shouldGradeCoverageScoreWith100() {
+        WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
+        configureScanner(job, "jacoco", COVERAGE_CONFIGURATION);
+        Run<?, ?> build = buildSuccessfully(job);
 
+        List<AutoGradingBuildAction> actions = build.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        assertCoverageOutput(build);
+
+        AggregatedScore score = actions.get(0).getResult();
+        assertThat(score).hasAchieved(100);
+    }
 
     /**
-     * Verifies that CheckStyle results are correctly graded.
+     * Verifies that CheckStyle results are correctly graded within a Freestyle Project.
      */
     @Test
     public void shouldGradeCheckStyleInFreestyleWith40() {
@@ -136,7 +157,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     * Verifies that jUnit results are graded with a score of 94.
+     * Verifies that jUnit results are graded with a score of 94 within a Freestyle Project.
      */
     @Test
     public void shouldGradeTestScoreInFreestyleWith94() {
@@ -156,7 +177,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     /**
-     * Verifies that Mutations results are graded with a score of 73.
+     * Verifies that Mutations results are graded with a score of 73 within a Freestyle Project.
      */
     @Test
     public void shouldGradeMutationsInFreestyleWith73() {
@@ -170,10 +191,39 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
         List<AutoGradingBuildAction> actions = build.getActions(AutoGradingBuildAction.class);
         assertThat(actions).hasSize(1);
-        assertMutationsCoverageOutput(build);
+        assertMutationsOutput(build);
 
         AggregatedScore score = actions.get(0).getResult();
         assertThat(score).hasAchieved(73);
+    }
+
+    /**
+     * Verifies that jacoco Coverage results are graded with a score of 100 within a Freestyle Project.
+     */
+    @Test
+    public void shouldGradeCoverageInFreestyleWith100() {
+        FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("jacoco.xml");
+
+        JacocoReportAdapter jacocoReportAdapter = new JacocoReportAdapter("**/jacoco.xml");
+        DefaultSourceFileResolver defaultSourceFileResolver = new DefaultSourceFileResolver(
+                SourceFileResolverLevel.NEVER_STORE);
+        List<CoverageAdapter> coverageAdapters = new ArrayList<>();
+        coverageAdapters.add(jacocoReportAdapter);
+
+        CoveragePublisher coveragePublisher = new CoveragePublisher();
+        coveragePublisher.setAdapters(coverageAdapters);
+        coveragePublisher.setSourceFileResolver(defaultSourceFileResolver);
+
+        project.getPublishersList().add(coveragePublisher);
+        project.getPublishersList().add(new AutoGrader(COVERAGE_CONFIGURATION));
+        Run<?, ?> build = buildSuccessfully(project);
+
+        List<AutoGradingBuildAction> actions = build.getActions(AutoGradingBuildAction.class);
+        assertThat(actions).hasSize(1);
+        assertCoverageOutput(build);
+
+        AggregatedScore score = actions.get(0).getResult();
+        assertThat(score).hasAchieved(100);
     }
 
     /**
@@ -219,6 +269,11 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 script += "  stage ('Test Mutation Coverage') {\n"
                         + "         step([$class: 'PitPublisher', mutationStatsFile: '**/" + fileName + ".xml'])\n";
                 break;
+            case "jacoco":
+                script += " stage ('Code coverage Analysis') {\n"
+                        + "         publishCoverage adapters: [jacocoAdapter('**/" + fileName
+                        + ".xml')], sourceFileResolver: sourceFiles('NEVER_STORE')\n";
+                break;
             default:
                 break;
         }
@@ -241,9 +296,16 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for test results: 94");
     }
 
-    private void assertMutationsCoverageOutput(final Run<?, ?> baseline) {
+    private void assertMutationsOutput(final Run<?, ?> baseline) {
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading PIT mutation results PIT Mutation Report");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 73 - from recorded PIT mutation results: 191, 59, 132, 31");
         assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for mutation coverage results: 73");
+    }
+
+    private void assertCoverageOutput(final Run<?, ?> baseline) {
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Grading coverage results Coverage Report");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 76 - from recorded line coverage results: 88%");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] -> Score 24 - from recorded branch coverage results: 62%");
+        assertThat(getConsoleLog(baseline)).contains("[Autograding] Total score for coverage results: 100");
     }
 }
