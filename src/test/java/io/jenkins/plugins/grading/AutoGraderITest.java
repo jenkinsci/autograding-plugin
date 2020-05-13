@@ -122,7 +122,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 "checkstyle.xml");
         IssuesRecorder recorder = new IssuesRecorder();
         CheckStyle checkStyle = new CheckStyle();
-        checkStyle.setPattern("checkstyle.xml");
+        checkStyle.setPattern("**/checkstyle.xml");
         recorder.setTools(checkStyle);
         project.getPublishersList().add(recorder);
         project.getPublishersList().add(new AutoGrader(ANALYSIS_CONFIGURATION));
@@ -163,7 +163,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     public void shouldGradeMutationsInFreestyleWith73() {
         FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles(
                 "mutations.xml");
-        PitPublisher pitPublisher = new PitPublisher("mutations.xml", 50, false);
+        PitPublisher pitPublisher = new PitPublisher("**/mutations.xml", 50, false);
         project.getPublishersList().add(pitPublisher);
         project.getPublishersList().add(new AutoGrader(PIT_CONFIGURATION));
         Run<?, ?> build = buildSuccessfully(project);
