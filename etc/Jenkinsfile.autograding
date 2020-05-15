@@ -42,6 +42,6 @@ node {
     }
 
     stage ('Autograding') {
-        autoGrade('{"analysis":{"maxScore":100,"errorImpact":-10,"highImpact":-5,"normalImpact":-2,"lowImpact":-1}, "tests":{"maxScore":100,"passedImpact":1,"failureImpact":-5,"skippedImpact":-1}, "coverage":{"maxScore":100,"coveredImpact":1,"missedImpact":-1}, "pit":{"maxScore":100,"detectedImpact":1,"undetectedImpact":-1,"ratioImpact":0}}')
+        autoGrade('{"analysis":{"maxScore":100,"errorImpact":-5,"highImpact":-2,"normalImpact":-1,"lowImpact":-1}, "tests":{"maxScore":100,"passedImpact":0,"failureImpact":-5,"skippedImpact":-1}, "coverage":{"maxScore":100,"coveredPercentageImpact":0,"missedPercentageImpact":-1}, "pit":{"maxScore":100,"detectedImpact":0,"undetectedImpact":0,"undetectedPercentageImpact":-1,"detectedPercentageImpact":0}}')
     }
 }

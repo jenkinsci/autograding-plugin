@@ -127,7 +127,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         }
 
         logHandler.log("Grading PIT mutation results " + action.getDisplayName());
-        PitConfiguration pitConfiguration = PitConfiguration.from(jsonConfiguration);
+        PitConfiguration pitConfiguration = PitConfiguration.from(jsonConfiguration.toString());
         MutationStats mutationStats = action.getReport().getMutationStats();
         PitScore score = new PitScore(action.getDisplayName(), pitConfiguration,
                 mutationStats.getTotalMutations(), mutationStats.getUndetected());
@@ -149,7 +149,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         }
 
         logHandler.log("Grading coverage results " + action.getDisplayName());
-        CoverageConfiguration coverageConfiguration = CoverageConfiguration.from(jsonConfiguration);
+        CoverageConfiguration coverageConfiguration = CoverageConfiguration.from(jsonConfiguration.toString());
 
         CoverageScore lineCoverage = createCoverageScore(action, coverageConfiguration, CoverageElement.LINE);
         logHandler.log("-> Score %d - from recorded line coverage results: %d%%",
@@ -180,7 +180,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         }
 
         logHandler.log("Grading test results " + action.getDisplayName());
-        TestConfiguration testsConfiguration = TestConfiguration.from(testConfiguration);
+        TestConfiguration testsConfiguration = TestConfiguration.from(testConfiguration.toString());
         TestScore score = new TestScore(action.getDisplayName(), testsConfiguration,
                 action.getTotalCount(), action.getFailCount(), action.getSkipCount());
         int total = actualScore.addTestsTotal(testsConfiguration, score);
@@ -195,7 +195,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
     void gradeAnalysisResults(final Run<?, ?> run,
             final AggregatedScore actualScore, final JSONObject jsonConfiguration, final LogHandler logHandler) {
         List<ResultAction> actions = run.getActions(ResultAction.class);
-        AnalysisConfiguration analysisConfiguration = AnalysisConfiguration.from(jsonConfiguration);
+        AnalysisConfiguration analysisConfiguration = AnalysisConfiguration.from(jsonConfiguration.toString());
         List<AnalysisScore> analysisScores = new ArrayList<>();
         for (ResultAction action : actions) {
             String name = action.getLabelProvider().getName();
