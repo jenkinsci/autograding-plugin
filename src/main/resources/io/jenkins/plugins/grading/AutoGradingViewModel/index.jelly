@@ -167,10 +167,10 @@
                           <a href="../coverage">${checks.name}</a>
                         </td>
                         <td>
-                          ${checks.coveredSize}
+                          ${checks.coveredPercentage}
                         </td>
                         <td>
-                          ${checks.missedSize}
+                          ${checks.missedPercentage}
                         </td>
                         <td>
                           ${checks.totalImpact}
@@ -181,8 +181,8 @@
                   <tfoot>
                     <tr>
                       <th>${%column.impact.configuration}</th>
-                      <th>${coverageConfig.coveredImpact}</th>
-                      <th>${coverageConfig.missedImpact}</th>
+                      <th>${coverageConfig.coveredPercentageImpact}</th>
+                      <th>${coverageConfig.missedPercentageImpact}</th>
                       <th>${%column.not.available}</th>
                     </tr>
                   </tfoot>
@@ -203,10 +203,10 @@
                   <thead>
                     <tr>
                       <th>${%Type}</th>
-                      <th>${%Mutations}</th>
                       <th>${%Detected}</th>
                       <th>${%Undetected}</th>
-                      <th>${%Missing Ratio}</th>
+                      <th>${%Detected Percentage}</th>
+                      <th>${%Undetected Percentage}</th>
                       <th>${%Score Impact}</th>
                     </tr>
                   </thead>
@@ -223,10 +223,10 @@
                           ${checks.undetectedSize}
                         </td>
                         <td>
-                          ${checks.mutationsSize}
+                          ${checks.detectedPercentage}
                         </td>
                         <td>
-                          ${checks.ratio}
+                          ${checks.undetectedPercentage}
                         </td>
                         <td>
                           ${checks.totalImpact}
@@ -239,8 +239,8 @@
                       <th>${%column.impact.configuration}</th>
                       <th>${pitConfig.detectedImpact}</th>
                       <th>${pitConfig.undetectedImpact}</th>
-                      <th>${%column.not.available}</th>
-                      <th>${pitConfig.ratioImpact}</th>
+                      <th>${pitConfig.detectedPercentageImpact}</th>
+                      <th>${pitConfig.undetectedPercentageImpact}</th>
                       <th>${%column.not.available}</th>
                     </tr>
                   </tfoot>
@@ -281,13 +281,13 @@
                           ${checks.errorsSize}
                         </td>
                         <td>
-                          ${checks.highPrioritySize}
+                          ${checks.highSeveritySize}
                         </td>
                         <td>
-                          ${checks.normalPrioritySize}
+                          ${checks.normalSeveritySize}
                         </td>
                         <td>
-                          ${checks.lowPrioritySize}
+                          ${checks.lowSeveritySize}
                         </td>
                         <td>
                           ${checks.totalSize}
