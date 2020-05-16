@@ -1,5 +1,7 @@
 package io.jenkins.plugins.grading;
 
+import edu.hm.hafner.grading.AggregatedScore;
+
 import hudson.model.Job;
 
 import io.jenkins.plugins.util.JobAction;

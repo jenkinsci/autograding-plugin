@@ -1,6 +1,8 @@
 package io.jenkins.plugins.grading;
 
 import edu.hm.hafner.echarts.JacksonFacade;
+import edu.hm.hafner.echarts.PercentagePieChart;
+import edu.hm.hafner.grading.AggregatedScore;
 
 import hudson.model.ModelObject;
 import hudson.model.Run;

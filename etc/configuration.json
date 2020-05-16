@@ -71,7 +71,7 @@
         {
           "maxScore": 100,
           "failureImpact": -5,
-          "passedImpact": 1,
+          "passedImpact": 0,
           "skippedImpact": -1
         }
       ],
@@ -120,8 +120,8 @@
       "examples": [
         {
           "maxScore": 100,
-          "coveredImpact": 1,
-          "missedImpact": -1
+          "coveredPercentageImpact": 0,
+          "missedPercentageImpact": -1
         }
       ],
       "required": [
@@ -136,7 +136,7 @@
             100
           ]
         },
-        "coveredImpact": {
+        "coveredPercentageImpact": {
           "type": "integer",
           "title": "Impact of one achieved (line and branch) coverage percentage point",
           "default": 0,
@@ -144,7 +144,7 @@
             1
           ]
         },
-        "missedImpact": {
+        "missedPercentageImpact": {
           "type": "integer",
           "title": "Impact of one missed (line and branch) coverage percentage point",
           "default": 0,
@@ -161,7 +161,8 @@
       "examples": [
         {
           "maxScore": 100,
-          "ratioImpact": 0,
+          "undetectedPercentageImpact": 0,
+          "detectedPercentageImpact": 0,
           "undetectedImpact": -1,
           "detectedImpact": 1
         }
@@ -188,18 +189,26 @@
         },
         "undetectedImpact": {
           "type": "integer",
-          "title": "Impact of one undetectedImpact mutation",
+          "title": "Impact of one undetected mutation",
           "default": 0,
           "examples": [
             1
           ]
         },
-        "ratioImpact": {
+        "detectedPercentageImpact": {
           "type": "integer",
           "title": "Impact of one achieved mutation coverage percentage point",
           "default": 0,
           "examples": [
             1
+          ]
+        },
+        "undetectedPercentageImpact": {
+          "type": "integer",
+          "title": "Impact of one missed mutation coverage percentage point",
+          "default": 0,
+          "examples": [
+            -1
           ]
         }
       }

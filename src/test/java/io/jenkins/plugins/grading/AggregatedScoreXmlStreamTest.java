@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import edu.hm.hafner.grading.AggregatedScore;
+import edu.hm.hafner.grading.AnalysisScore;
 import edu.hm.hafner.util.SerializableTest;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;

@@ -1,0 +1,11 @@
+edu.hm.hafner.grading.AggregatedScore
+edu.hm.hafner.grading.Configuration
+edu.hm.hafner.grading.Score
+edu.hm.hafner.grading.PitConfiguration
+edu.hm.hafner.grading.PitScore
+edu.hm.hafner.grading.CoverageScore
+edu.hm.hafner.grading.CoverageConfiguration
+edu.hm.hafner.grading.TestScore
+edu.hm.hafner.grading.TestConfiguration
+edu.hm.hafner.grading.AnalysisScore
+edu.hm.hafner.grading.AnalysisConfiguration
