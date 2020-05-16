@@ -71,50 +71,52 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
     @Override
     public void perform(@NonNull final Run<?, ?> run, @NonNull final FilePath workspace,
             @NonNull final Launcher launcher, @NonNull final TaskListener listener) {
-        LogHandler logHandler = new LogHandler(listener, "Autograding");
-        logHandler.log("Using configuration '%s'", configuration);
-
         try {
-            JSONObject gradingConfiguration = JSONObject.fromObject(configuration);
-
-            AggregatedScore score = new AggregatedScore();
-            JSONObject analysisConfiguration = (JSONObject) gradingConfiguration.get("analysis");
-            if (analysisConfiguration == null) {
-                logHandler.log("Skipping static analysis results");
-            }
-            else {
-                gradeAnalysisResults(run, score, analysisConfiguration, logHandler);
-            }
-
-            JSONObject testConfiguration = (JSONObject) gradingConfiguration.get("tests");
-            if (testConfiguration == null) {
-                logHandler.log("Skipping test results");
-            }
-            else {
-                gradeTestResults(run, score, testConfiguration, logHandler);
-            }
-
-            JSONObject coverageConfiguration = (JSONObject) gradingConfiguration.get("coverage");
-            if (coverageConfiguration == null) {
-                logHandler.log("Skipping coverage results");
-            }
-            else {
-                gradeCoverageResults(run, score, coverageConfiguration, logHandler);
-            }
-
-            JSONObject pitConfiguration = (JSONObject) gradingConfiguration.get("pit");
-            if (pitConfiguration == null) {
-                logHandler.log("Skipping mutation coverage results");
-            }
-            else {
-                gradePitResults(run, score, pitConfiguration, logHandler);
-            }
-
-            run.addAction(new AutoGradingBuildAction(run, score));
+            gradeBuild(run, new LogHandler(listener, "Autograding"));
         }
         catch (JSONException exception) {
             throw new IllegalArgumentException("Invalid configuration: " + configuration, exception);
         }
+    }
+
+    private void gradeBuild(@NonNull final Run<?, ?> run, final LogHandler logHandler) {
+        JSONObject gradingConfiguration = JSONObject.fromObject(configuration);
+        logHandler.log("Using configuration '%s'", gradingConfiguration.toString(4));
+
+        AggregatedScore score = new AggregatedScore();
+        JSONObject analysisConfiguration = (JSONObject) gradingConfiguration.get("analysis");
+        if (analysisConfiguration == null) {
+            logHandler.log("Skipping static analysis results");
+        }
+        else {
+            gradeAnalysisResults(run, score, analysisConfiguration, logHandler);
+        }
+
+        JSONObject testConfiguration = (JSONObject) gradingConfiguration.get("tests");
+        if (testConfiguration == null) {
+            logHandler.log("Skipping test results");
+        }
+        else {
+            gradeTestResults(run, score, testConfiguration, logHandler);
+        }
+
+        JSONObject coverageConfiguration = (JSONObject) gradingConfiguration.get("coverage");
+        if (coverageConfiguration == null) {
+            logHandler.log("Skipping coverage results");
+        }
+        else {
+            gradeCoverageResults(run, score, coverageConfiguration, logHandler);
+        }
+
+        JSONObject pitConfiguration = (JSONObject) gradingConfiguration.get("pit");
+        if (pitConfiguration == null) {
+            logHandler.log("Skipping mutation coverage results");
+        }
+        else {
+            gradePitResults(run, score, pitConfiguration, logHandler);
+        }
+
+        run.addAction(new AutoGradingBuildAction(run, score));
     }
 
     @VisibleForTesting
