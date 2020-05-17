@@ -28,10 +28,10 @@
     <commons.lang.version>3.10</commons.lang.version>
 
     <font-awesome-api.version>5.12.0-7</font-awesome-api.version>
-    <jquery3-api.version>3.4.1-10</jquery3-api.version>
-    <bootstrap4-api.version>4.4.1-10</bootstrap4-api.version>
+    <jquery3-api.version>3.5.1-1</jquery3-api.version>
+    <bootstrap4-api.version>4.5.0-1</bootstrap4-api.version>
     <data-tables-api.version>1.10.20-14</data-tables-api.version>
-    <echarts-api.version>4.7.0-1-rc230.b74e34821cdb</echarts-api.version>
+    <echarts-api.version>4.7.0-1</echarts-api.version>
     <echarts-build-trends.version>2.0.0</echarts-build-trends.version>
     <plugin-util-api.version>1.2.0</plugin-util-api.version>
 
