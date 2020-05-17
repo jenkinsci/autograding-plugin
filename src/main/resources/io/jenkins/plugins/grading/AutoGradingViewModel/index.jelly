@@ -24,7 +24,7 @@
       <div class="fluid-container">
 
         <div class="row py-3">
-          <div class="col-xl-12 col-xxl-4">
+          <div class="col-xl-12 col-xxl">
             <bs:card title="Autograding score" fontAwesomeIcon="graduation-cap">
               <div class="row align-items-center justify-content-center">
                 <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-12">
@@ -42,7 +42,7 @@
               </div>
             </bs:card>
           </div>
-          <div class="col-xxl-2 d-none d-xxl-block">
+          <div class="col-xxl d-none d-xxl-block">
             <bs:card title="Unit tests score" fontAwesomeIcon="check-square">
               <p>
                 <div class="">
@@ -53,7 +53,7 @@
               </p>
             </bs:card>
           </div>
-          <div class="col-xxl-2 d-none d-xxl-block">
+          <div class="col-xxl d-none d-xxl-block">
             <bs:card title="Test coverage score" fontAwesomeIcon="microscope">
               <p>
                 <div class="">
@@ -64,7 +64,7 @@
               </p>
             </bs:card>
           </div>
-          <div class="col-xxl-2 d-none d-xxl-block">
+          <div class="col-xxl d-none d-xxl-block">
             <bs:card title="Mutation coverage score" fontAwesomeIcon="viruses">
               <p>
                 <div class="">
@@ -75,7 +75,7 @@
               </p>
             </bs:card>
           </div>
-          <div class="col-xxl-2 d-none d-xxl-block">
+          <div class="col-xxl d-none d-xxl-block">
             <bs:card title="Static analysis score" fontAwesomeIcon="exclamation-triangle">
               <p>
                 <div class="">
