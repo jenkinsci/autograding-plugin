@@ -24,26 +24,26 @@
       <div class="fluid-container">
 
         <div class="row py-3">
-          <div class="col-xl-12 col-xxl">
-            <bs:card title="Autograding score" fontAwesomeIcon="graduation-cap">
+          <div class="col-l-12 col-xl col-xxl">
+            <bs:card title="${%title.total}" fontAwesomeIcon="graduation-cap">
               <div class="row align-items-center justify-content-center">
-                <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-12">
+                <div class="col-md-6 col-lg-6 col-xl-12 col-xxl-12">
                   <c:progress-chart id="total-progress" model="${it.getProgressModel(score.ratio)}" height="150"
                                     value="${score.ratio}" tooltip="${%tooltip(score.achieved, score.total)}"/>
                 </div>
-                <div class="col-md-6 col-lg-6 col-xl-6 d-none d-block d-xl-block d-xxl-none">
-                  <g:score title="Unit tests score" ratio="${score.testRatio}" achieved="${score.testAchieved}" total="${testConfig.maxScore}"/>
-                  <g:score title="Test coverage score" ratio="${score.coverageRatio}" achieved="${score.coverageAchieved}"
+                <div class="col-md-6 col-lg-6 col-xl-6 d-none d-block d-l-block d-xl-none">
+                  <g:score title="${%title.tests}" ratio="${score.testRatio}" achieved="${score.testAchieved}" total="${testConfig.maxScore}"/>
+                  <g:score title="${%title.coverage}" ratio="${score.coverageRatio}" achieved="${score.coverageAchieved}"
                            total="${coverageConfig.maxScore}"/>
-                  <g:score title="Mutation coverage score" ratio="${score.pitRatio}" achieved="${score.pitAchieved}" total="${pitConfig.maxScore}"/>
-                  <g:score title="Static analysis score" ratio="${score.analysisRatio}" achieved="${score.analysisAchieved}"
+                  <g:score title="${%title.pit}" ratio="${score.pitRatio}" achieved="${score.pitAchieved}" total="${pitConfig.maxScore}"/>
+                  <g:score title="${%title.analysis}" ratio="${score.analysisRatio}" achieved="${score.analysisAchieved}"
                            total="${analysisConfig.maxScore}"/>
                 </div>
               </div>
             </bs:card>
           </div>
-          <div class="col-xxl d-none d-xxl-block">
-            <bs:card title="Unit tests score" fontAwesomeIcon="check-square">
+          <div class="col-xl col-xxl d-none d-xl-block">
+            <bs:card title="${%title.tests}" fontAwesomeIcon="check-square">
               <p>
                 <div class="">
                   <c:progress-chart id="test-progress" model="${it.getProgressModel(score.testRatio)}" height="150"
@@ -53,8 +53,8 @@
               </p>
             </bs:card>
           </div>
-          <div class="col-xxl d-none d-xxl-block">
-            <bs:card title="Test coverage score" fontAwesomeIcon="microscope">
+          <div class="col-xl col-xxl d-none d-xl-block">
+            <bs:card title="${%title.coverage}" fontAwesomeIcon="microscope">
               <p>
                 <div class="">
                   <c:progress-chart id="coverage-progress" model="${it.getProgressModel(score.coverageRatio)}"
@@ -64,8 +64,8 @@
               </p>
             </bs:card>
           </div>
-          <div class="col-xxl d-none d-xxl-block">
-            <bs:card title="Mutation coverage score" fontAwesomeIcon="viruses">
+          <div class="col-xl col-xxl d-none d-xl-block">
+            <bs:card title="${%title.pit}" fontAwesomeIcon="viruses">
               <p>
                 <div class="">
                   <c:progress-chart id="pit-progress" model="${it.getProgressModel(score.pitRatio)}" height="150"
@@ -75,8 +75,8 @@
               </p>
             </bs:card>
           </div>
-          <div class="col-xxl d-none d-xxl-block">
-            <bs:card title="Static analysis score" fontAwesomeIcon="exclamation-triangle">
+          <div class="col-xl col-xxl d-none d-xl-block">
+            <bs:card title="${%title.analysis}" fontAwesomeIcon="exclamation-triangle">
               <p>
                 <div class="">
                   <c:progress-chart id="analysis-progress" model="${it.getProgressModel(score.analysisRatio)}"
@@ -91,7 +91,7 @@
         <div class="row py-3">
           <div class="col-12">
 
-            <bs:card title="Unit Tests" fontAwesomeIcon="check-square">
+            <bs:card title="${%title.tests}" fontAwesomeIcon="check-square">
               <div class="table-responsive">
                 <table class="table table-hover table-striped display" id="test">
                   <thead>
@@ -149,7 +149,7 @@
         <div class="row py-3">
           <div class="col-12">
 
-            <bs:card title="Code Coverage" fontAwesomeIcon="microscope">
+            <bs:card title="${%title.coverage}" fontAwesomeIcon="microscope">
               <div class="table-responsive">
                 <table class="table table-hover table-striped display" id="coverage">
                   <thead>
@@ -197,7 +197,7 @@
         <div class="row py-3">
           <div class="col-12">
 
-            <bs:card title="PIT Mutations" fontAwesomeIcon="viruses">
+            <bs:card title="${%title.pit}" fontAwesomeIcon="viruses">
               <div class="table-responsive">
                 <table class="table table-hover table-striped display" id="pit">
                   <thead>
@@ -256,7 +256,7 @@
         <div class="row py-3">
           <div class="col-12">
 
-            <bs:card title="Static Analysis Warnings" fontAwesomeIcon="exclamation-triangle">
+            <bs:card title="${%title.analysis}" fontAwesomeIcon="exclamation-triangle">
               <j:set var="analysisScores" value="${score.analysisScores}"/>
               <div class="table-responsive">
                 <table class="table table-hover table-striped display" id="analysis">
