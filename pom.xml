@@ -3,7 +3,7 @@
 
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>autograding</artifactId>
-  <packaging>hpi</packaging>
+  <packaging>pom</packaging>
   <version>${revision}${changelist}</version>
 
   <name>Aggregator for Autograding Plugin</name>
