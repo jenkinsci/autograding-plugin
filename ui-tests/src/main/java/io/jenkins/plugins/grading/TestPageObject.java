@@ -11,6 +11,8 @@ import org.jenkinsci.test.acceptance.po.PageObject;
  */
 public class TestPageObject extends PageObject {
 
+    private String test;
+
     /**
      * Creates an instance of the page displaying the details of the issues for a specific tool.
      *
@@ -21,9 +23,10 @@ public class TestPageObject extends PageObject {
      */
     public TestPageObject(final Injector injector, final URL url) {
         super(injector, url);
+        this.test = url.toString();
     }
 
-    protected TestPageObject(final PageObject context, final URL url) {
-        super(context, url);
+    public String getTest() {
+        return test;
     }
 }
