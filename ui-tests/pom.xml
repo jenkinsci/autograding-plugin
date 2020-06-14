@@ -107,7 +107,7 @@
           <environmentVariables>
             <PLUGINS_DIR>../../docker/volumes/jenkins-home/plugins</PLUGINS_DIR>
             <JENKINS_VERSION>${jenkins.version}</JENKINS_VERSION>
-            <LOCAL_JARS>../plugin/target/warnings-ng.hpi</LOCAL_JARS>
+            <LOCAL_JARS>../plugin/target/autograding.hpi</LOCAL_JARS>
             <BROWSER>firefox</BROWSER>
           </environmentVariables>
         </configuration>
