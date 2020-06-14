@@ -1,5 +1,8 @@
 package io.jenkins.plugins.grading;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.junit.Test;
 
 import org.jenkinsci.test.acceptance.junit.AbstractJUnitTest;
@@ -27,11 +30,13 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
     @Test
     public void test() {
         FreeStyleJob job = createFreeStyleJob("checkstyle-result.xml");
-        job.addPublisher(IssuesRecorder.class, recorder -> {
-            recorder.setTool("CheckStyle");
-        });
+        job.addPublisher(IssuesRecorder.class, recorder -> recorder.setTool("CheckStyle"));
+        job.addPublisher(AutoGradeStep.class, grade -> grade.setConfiguration("{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}"));
+
         job.save();
         Build build = shouldBuildJobSuccessfully(job);
+
+        AutoGradePageObject pageObject = new AutoGradePageObject(build, buildAutoGradeURLFromJob(job));
 
         assertThat(true).isTrue();
     }
@@ -49,5 +54,14 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
             job.copyResource(AUTOGRADING_PLUGIN_PREFIX + resource);
         }
         return job;
+    }
+
+    private URL buildAutoGradeURLFromJob(final Job job) {
+        try {
+            return new URL(job.url.toString() + "/autograding");
+        }
+        catch (MalformedURLException x) {
+            return null;
+        }
     }
 }
