@@ -23,6 +23,11 @@ import static org.assertj.core.api.Assertions.*;
 @WithPlugins("autograding")
 public class AutoGradingPluginUiTest extends AbstractJUnitTest {
     private static final String AUTOGRADING_PLUGIN_PREFIX = "/autograding_test/";
+    private static final String HEADER_TOTAL_SCORE = "Total Score";
+    private static final String HEADER_TEST_RESULTS = "Test Results";
+    private static final String HEADER_CODE_COVERAGE = "Code Coverage";
+    private static final String HEADER_PIT_MUTATIONS = "PIT Mutations";
+    private static final String HEADER_STATIC_ANALYSIS = "Static Analysis";
 
     /**
      * Some Test Java Doc.

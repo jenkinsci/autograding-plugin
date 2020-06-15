@@ -1,7 +1,12 @@
 package io.jenkins.plugins.grading;
 
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.openqa.selenium.WebElement;
+
 import org.jenkinsci.test.acceptance.po.PageObject;
 
 /**
@@ -10,6 +15,24 @@ import org.jenkinsci.test.acceptance.po.PageObject;
  * @author Lukas Kirner
  */
 public class AutoGradePageObject extends PageObject {
+
+    private final List<String> cardHeaders;
+
+    private final List<String> testHeaders;
+    private final Map<String, List<String>> testBody;
+    private final List<String> testFooter;
+
+    private final List<String> coverageHeaders;
+    private final Map<String, List<String>> coverageBody;
+    private final List<String> coverageFooter;
+
+    private final List<String> pitHeaders;
+    private final Map<String, List<String>> pitBody;
+    private final List<String> pitFooter;
+
+    private final List<String> analysisHeaders;
+    private final Map<String, List<String>> analysisBody;
+    private final List<String> analysisFooter;
 
     /**
      * Creates an instance of the page displaying the details of the issues for a specific tool.
@@ -22,5 +45,115 @@ public class AutoGradePageObject extends PageObject {
     public AutoGradePageObject(final PageObject pageObject, final URL url) {
         super(pageObject, url);
         this.open();
+
+        WebElement page = this.getElement(by.tagName("body"));
+
+        cardHeaders = page.findElements(by.xpath("/html/body/div[4]/div[2]/div/div")).stream()
+                .map(row -> row.findElement(by.tagName("h5")))
+                .map(WebElement::getText)
+                .map(String::trim)
+                .collect(Collectors.toList());
+
+        WebElement testTable = page.findElement(by.id("test"));
+        testHeaders = getTableHeaders(testTable);
+        testBody = getTableBody(testTable);
+        testFooter = getTableFooter(testTable);
+
+        WebElement coverageTable = page.findElement(by.id("coverage"));
+        coverageHeaders = getTableHeaders(coverageTable);
+        coverageBody = getTableBody(coverageTable);
+        coverageFooter = getTableFooter(coverageTable);
+
+        WebElement pitTable = page.findElement(by.id("pit"));
+        pitHeaders = getTableHeaders(pitTable);
+        pitBody = getTableBody(pitTable);
+        pitFooter = getTableFooter(pitTable);
+
+        WebElement analysisTable = page.findElement(by.id("analysis"));
+        analysisHeaders = getTableHeaders(analysisTable);
+        analysisBody = getTableBody(analysisTable);
+        analysisFooter = getTableFooter(analysisTable);
+    }
+
+    public List<String> getCardHeaders() {
+        return cardHeaders;
+    }
+
+
+    public List<String> getTestHeaders() {
+        return testHeaders;
+    }
+
+    public Map<String, List<String>> getTestBody() {
+        return testBody;
+    }
+
+    public List<String> getTestFooter() {
+        return testFooter;
+    }
+
+    public List<String> getCoverageHeaders() {
+        return coverageHeaders;
+    }
+
+    public Map<String, List<String>> getCoverageBody() {
+        return coverageBody;
+    }
+
+    public List<String> getCoverageFooter() {
+        return coverageFooter;
+    }
+
+    public List<String> getPitHeaders() {
+        return pitHeaders;
+    }
+
+    public Map<String, List<String>> getPitBody() {
+        return pitBody;
+    }
+
+    public List<String> getPitFooter() {
+        return pitFooter;
+    }
+
+    public List<String> getAnalysisHeaders() {
+        return analysisHeaders;
+    }
+
+    public Map<String, List<String>> getAnalysisBody() {
+        return analysisBody;
+    }
+
+    public List<String> getAnalysisFooter() {
+        return analysisFooter;
+    }
+
+    private List<String> getTableHeaders(final WebElement table) {
+        return table.findElement(by.tagName("thead"))
+            .findElements(by.tagName("th")).stream()
+            .map(WebElement::getText)
+            .map(String::trim)
+            .collect(Collectors.toList());
+    }
+
+    private Map<String, List<String>> getTableBody(final WebElement table) {
+        return table.findElement(by.tagName("tbody"))
+            .findElements(by.tagName("tr")).stream()
+            .collect(Collectors.toMap(
+                tr -> tr.findElements(by.tagName("td")).get(0).getText().trim(),
+                tr -> tr.findElements(by.tagName("td")).stream()
+                    .skip(1)
+                    .map(WebElement::getText)
+                    .map(String::trim)
+                    .collect(Collectors.toList())
+            ));
+    }
+
+    private List<String> getTableFooter(final WebElement table) {
+        return table.findElement(by.tagName("tfoot"))
+            .findElements(by.tagName("th")).stream()
+            .map(WebElement::getText)
+            .map(String::trim)
+            .collect(Collectors.toList());
     }
 }
