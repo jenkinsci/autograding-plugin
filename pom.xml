@@ -204,6 +204,14 @@
       <type>test-jar</type>
     </dependency>
 
+    <dependency>
+      <groupId>edu.hm.hafner</groupId>
+      <artifactId>autograding-model</artifactId>
+      <version>${autograding-model.version}</version>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -214,7 +222,6 @@
         <configuration>
           <packages combine.children="append">
             <package>io.jenkins.plugins.grading</package>
-            <package>edu.hm.hafner.grading</package>
           </packages>
           <entryPointClassPackage>io.jenkins.plugins.grading.assertions</entryPointClassPackage>
         </configuration>
