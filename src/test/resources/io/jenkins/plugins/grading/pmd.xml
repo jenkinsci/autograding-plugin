@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd" version="6.22.0" timestamp="2020-04-25T19:00:22.341">
+  <file name="/var/data/workspace/Autograding/src/main/java/io/jenkins/plugins/grading/PercentagePieChart.java">
+    <violation beginline="32" endline="32" begincolumn="26" endcolumn="27" rule="AvoidLiteralsInIfCondition" ruleset="Error Prone" package="io.jenkins.plugins.grading" class="PercentagePieChart" method="computeColor" externalInfoUrl="https://pmd.github.io/pmd-6.22.0/pmd_rules_java_errorprone.html#avoidliteralsinifcondition" priority="3">
+      Avoid using Literals in Conditional Statements
+    </violation>
+    <violation beginline="35" endline="35" begincolumn="31" endcolumn="32" rule="AvoidLiteralsInIfCondition" ruleset="Error Prone" package="io.jenkins.plugins.grading" class="PercentagePieChart" method="computeColor" externalInfoUrl="https://pmd.github.io/pmd-6.22.0/pmd_rules_java_errorprone.html#avoidliteralsinifcondition" priority="3">
+      Avoid using Literals in Conditional Statements
+    </violation>
+  </file>
+  <file name="/var/data/workspace/Autograding/src/test/java/io/jenkins/plugins/grading/AutoGraderTest.java">
+    <violation beginline="34" endline="34" begincolumn="9" endcolumn="53" rule="UnnecessaryFullyQualifiedName" ruleset="Code Style" package="io.jenkins.plugins.grading" class="AutoGraderTest" method="shouldThrowExceptionOnBrokenConfiguration" externalInfoUrl="https://pmd.github.io/pmd-6.22.0/pmd_rules_java_codestyle.html#unnecessaryfullyqualifiedname" priority="4">
+      Unnecessary use of fully qualified name 'Assertions.assertThatIllegalArgumentException' due to existing static import 'io.jenkins.plugins.grading.assertions.Assertions.*'
+    </violation>
+    <violation beginline="44" endline="44" begincolumn="9" endcolumn="49" rule="UnnecessaryFullyQualifiedName" ruleset="Code Style" package="io.jenkins.plugins.grading" class="AutoGraderTest" method="shouldThrowNullPointerExceptionOnValidButNotCorrectConfiguration" externalInfoUrl="https://pmd.github.io/pmd-6.22.0/pmd_rules_java_codestyle.html#unnecessaryfullyqualifiedname" priority="4">
+      Unnecessary use of fully qualified name 'Assertions.assertThatNullPointerException' due to existing static import 'io.jenkins.plugins.grading.assertions.Assertions.*'
+    </violation>
+  </file>
+</pmd>
