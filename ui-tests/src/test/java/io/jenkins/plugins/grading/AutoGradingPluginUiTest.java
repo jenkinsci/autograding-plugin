@@ -32,6 +32,9 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
     private static final String HEADER_PIT_MUTATIONS = "PIT Mutations";
     private static final String HEADER_STATIC_ANALYSIS = "Static Analysis";
 
+    /**
+     * Test all cards with all tools.
+     */
     @Test
     public void testWithAllCards() {
         WorkflowJob job = jenkins.jobs.create(WorkflowJob.class);
@@ -70,6 +73,9 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
         assertThat(pageObject.getAnalysisFooter()).containsExactly("-5", "-3", "-2", "-1", "n/a", "n/a");
     }
 
+    /**
+     * Test all Cards except Test Results (Tests not present).
+     */
     @Test
     public void testWithAllCardsExceptTestResults() {
         WorkflowJob job = jenkins.jobs.create(WorkflowJob.class);
