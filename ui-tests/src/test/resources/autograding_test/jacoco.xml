@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<report name="Java coding style">
+  <package name="io/jenkins/plugins/grading">
+    <counter type="BRANCH" missed="10" covered="50"/>
+    <counter type="LINE" missed="10" covered="50"/>
+  </package>
+</report>

@@ -18,20 +18,24 @@ public class AutoGradePageObject extends PageObject {
 
     private final List<String> cardHeaders;
 
+    private final String totalScoreInPercent;
+
+    private final List<String> totalScores;
+
     private final List<String> testHeaders;
-    private final Map<String, List<String>> testBody;
+    private final Map<String, List<Integer>> testBody;
     private final List<String> testFooter;
 
     private final List<String> coverageHeaders;
-    private final Map<String, List<String>> coverageBody;
+    private final Map<String, List<Integer>> coverageBody;
     private final List<String> coverageFooter;
 
     private final List<String> pitHeaders;
-    private final Map<String, List<String>> pitBody;
+    private final Map<String, List<Integer>> pitBody;
     private final List<String> pitFooter;
 
     private final List<String> analysisHeaders;
-    private final Map<String, List<String>> analysisBody;
+    private final Map<String, List<Integer>> analysisBody;
     private final List<String> analysisFooter;
 
     /**
@@ -52,6 +56,13 @@ public class AutoGradePageObject extends PageObject {
                 .map(row -> row.findElement(by.tagName("h5")))
                 .map(WebElement::getText)
                 .map(String::trim)
+                .collect(Collectors.toList());
+
+        totalScoreInPercent = page.findElement(by.id("total-progress-chart")).getAttribute("data-title");
+
+        totalScores = page.findElements(by.css("div.progress-container")).stream()
+                .map(p -> p.findElement(by.css("div.progress-bar")))
+                .map(WebElement::getText)
                 .collect(Collectors.toList());
 
         WebElement testTable = page.findElement(by.id("test"));
@@ -79,12 +90,19 @@ public class AutoGradePageObject extends PageObject {
         return cardHeaders;
     }
 
+    public String getTotalScoreInPercent() {
+        return totalScoreInPercent;
+    }
+
+    public List<String> getTotalScores() {
+        return totalScores;
+    }
 
     public List<String> getTestHeaders() {
         return testHeaders;
     }
 
-    public Map<String, List<String>> getTestBody() {
+    public Map<String, List<Integer>> getTestBody() {
         return testBody;
     }
 
@@ -96,7 +114,7 @@ public class AutoGradePageObject extends PageObject {
         return coverageHeaders;
     }
 
-    public Map<String, List<String>> getCoverageBody() {
+    public Map<String, List<Integer>> getCoverageBody() {
         return coverageBody;
     }
 
@@ -108,7 +126,7 @@ public class AutoGradePageObject extends PageObject {
         return pitHeaders;
     }
 
-    public Map<String, List<String>> getPitBody() {
+    public Map<String, List<Integer>> getPitBody() {
         return pitBody;
     }
 
@@ -120,7 +138,7 @@ public class AutoGradePageObject extends PageObject {
         return analysisHeaders;
     }
 
-    public Map<String, List<String>> getAnalysisBody() {
+    public Map<String, List<Integer>> getAnalysisBody() {
         return analysisBody;
     }
 
@@ -136,7 +154,7 @@ public class AutoGradePageObject extends PageObject {
             .collect(Collectors.toList());
     }
 
-    private Map<String, List<String>> getTableBody(final WebElement table) {
+    private Map<String, List<Integer>> getTableBody(final WebElement table) {
         return table.findElement(by.tagName("tbody"))
             .findElements(by.tagName("tr")).stream()
             .collect(Collectors.toMap(
@@ -145,6 +163,7 @@ public class AutoGradePageObject extends PageObject {
                     .skip(1)
                     .map(WebElement::getText)
                     .map(String::trim)
+                    .map(Integer::parseInt)
                     .collect(Collectors.toList())
             ));
     }
@@ -152,6 +171,7 @@ public class AutoGradePageObject extends PageObject {
     private List<String> getTableFooter(final WebElement table) {
         return table.findElement(by.tagName("tfoot"))
             .findElements(by.tagName("th")).stream()
+            .skip(1)
             .map(WebElement::getText)
             .map(String::trim)
             .collect(Collectors.toList());
