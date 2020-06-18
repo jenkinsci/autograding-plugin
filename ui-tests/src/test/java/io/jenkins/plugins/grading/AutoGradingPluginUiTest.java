@@ -12,6 +12,7 @@ import org.jenkinsci.test.acceptance.plugins.warnings_ng.ScrollerUtil;
 import org.jenkinsci.test.acceptance.po.Build;
 import org.jenkinsci.test.acceptance.po.FreeStyleJob;
 import org.jenkinsci.test.acceptance.po.Job;
+import org.jenkinsci.test.acceptance.po.PageObject;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -30,10 +31,29 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
     private static final String HEADER_STATIC_ANALYSIS = "Static Analysis";
 
     /**
-     * Some Test Java Doc.
+     * Test the basic view.
      */
     @Test
-    public void test() {
+    public void basicViewTest() {
+        FreeStyleJob job = createFreeStyleJob();
+        job.addPublisher(AutoGradeStep.class, grade -> grade.setConfiguration("{}"));
+        job.save();
+        Build build = shouldBuildJobSuccessfully(job);
+
+        AutoGradePageObject pageObject = new AutoGradePageObject(build, buildAutoGradeURLFromJob(job));
+
+        assertThatCardHeadersAreCorrect(pageObject);
+        assertThat(pageObject.getCoverageBody()).isEmpty();
+        assertThat(pageObject.getTestBody()).isEmpty();
+        assertThat(pageObject.getPitBody()).isEmpty();
+        assertThat(pageObject.getAnalysisBody()).isEmpty();
+    }
+
+    /**
+     * Test Static Analysis card.
+     */
+    @Test
+    public void checkstyle() {
         FreeStyleJob job = createFreeStyleJob("checkstyle-result.xml");
         job.addPublisher(IssuesRecorder.class, recorder -> recorder.setTool("CheckStyle"));
         job.addPublisher(AutoGradeStep.class, grade -> grade.setConfiguration("{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}"));
@@ -42,8 +62,12 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
         Build build = shouldBuildJobSuccessfully(job);
 
         AutoGradePageObject pageObject = new AutoGradePageObject(build, buildAutoGradeURLFromJob(job));
+        assertThatCardHeadersAreCorrect(pageObject);
+    }
 
-        assertThat(true).isTrue();
+    private void assertThatCardHeadersAreCorrect(final AutoGradePageObject pageObject) {
+        assertThat(pageObject.getCardHeaders()).containsExactlyInAnyOrder(HEADER_TOTAL_SCORE, HEADER_TEST_RESULTS,
+                HEADER_CODE_COVERAGE, HEADER_PIT_MUTATIONS, HEADER_STATIC_ANALYSIS);
     }
 
     private Build shouldBuildJobSuccessfully(final Job job) {
