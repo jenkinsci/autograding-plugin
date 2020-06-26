@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.*;
  *
  * @author Lukas Kirner
  */
-@WithPlugins("autograding")
+@WithPlugins({"autograding", "warnings-ng", "junit", "pitmutation", "code-coverage-api"})
 public class AutoGradingPluginUiTest extends AbstractJUnitTest {
     private static final String AUTOGRADING_PLUGIN_PREFIX = "/autograding_test/";
     private static final String HEADER_TOTAL_SCORE = "Total Score";
