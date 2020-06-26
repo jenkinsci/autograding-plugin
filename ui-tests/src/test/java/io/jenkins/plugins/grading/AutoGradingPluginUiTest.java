@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.*;
  *
  * @author Lukas Kirner
  */
-@WithPlugins({"autograding", "warnings-ng", "junit", "pitmutation", "code-coverage-api"})
 public class AutoGradingPluginUiTest extends AbstractJUnitTest {
     private static final String AUTOGRADING_PLUGIN_PREFIX = "/autograding_test/";
     private static final String HEADER_TOTAL_SCORE = "Total Score";
@@ -33,6 +32,7 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
      * Test all cards with all tools.
      */
     @Test
+    @WithPlugins({"autograding", "warnings-ng", "junit", "pitmutation", "code-coverage-api"})
     public void testWithAllCards() {
         WorkflowJob job = jenkins.jobs.create(WorkflowJob.class);
         job.sandbox.check();
@@ -74,6 +74,7 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
      * Test all Cards except Test Results (Tests not present).
      */
     @Test
+    @WithPlugins({"autograding", "warnings-ng", "junit", "pitmutation", "code-coverage-api"})
     public void testWithAllCardsExceptTestResults() {
         WorkflowJob job = jenkins.jobs.create(WorkflowJob.class);
         job.sandbox.check();
