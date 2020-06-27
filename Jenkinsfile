@@ -87,7 +87,7 @@
                                     mavenOptions += "-DskipTests"
                                 }
                                 mavenOptions += "-ntp -Djenkins.test.timeout=2500 clean install"
-                                infra.runMaven(mavenOptions, jdk, null, null, addToolEnv)
+                                infra.runMaven(mavenOptions, jdk, ["BROWSER=firefox-container"], null, addToolEnv)
                             } else {
                                 echo "WARNING: Gradle mode for buildPlugin() is deprecated, please use buildPluginWithGradle()"
                                 List<String> gradleOptions = [
