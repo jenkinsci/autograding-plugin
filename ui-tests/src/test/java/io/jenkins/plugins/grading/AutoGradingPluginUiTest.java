@@ -23,11 +23,11 @@ import static org.assertj.core.api.Assertions.*;
 @WithPlugins({"autograding", "warnings-ng", "junit", "pitmutation", "code-coverage-api", "pipeline-stage-step", "workflow-durable-task-step", "workflow-basic-steps"})
 public class AutoGradingPluginUiTest extends AbstractJUnitTest {
     private static final String AUTOGRADING_PLUGIN_PREFIX = "/autograding_test/";
-    private static final String HEADER_TOTAL_SCORE = "Total Score";
-    private static final String HEADER_TEST_RESULTS = "Test Results";
+    private static final String HEADER_TOTAL_SCORE = "Autograding score";
+    private static final String HEADER_TEST_RESULTS = "Unit Tests";
     private static final String HEADER_CODE_COVERAGE = "Code Coverage";
     private static final String HEADER_PIT_MUTATIONS = "PIT Mutations";
-    private static final String HEADER_STATIC_ANALYSIS = "Static Analysis";
+    private static final String HEADER_STATIC_ANALYSIS = "Static Analysis Warnings";
 
     /**
      * Test all cards with all tools.
