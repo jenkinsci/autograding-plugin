@@ -23,11 +23,6 @@ import static org.assertj.core.api.Assertions.*;
 @WithPlugins({"autograding", "warnings-ng", "junit", "pitmutation", "code-coverage-api", "pipeline-stage-step", "workflow-durable-task-step", "workflow-basic-steps"})
 public class AutoGradingPluginUiTest extends AbstractJUnitTest {
     private static final String AUTOGRADING_PLUGIN_PREFIX = "/autograding_test/";
-    private static final String HEADER_TOTAL_SCORE = "Autograding score";
-    private static final String HEADER_TEST_RESULTS = "Unit Tests";
-    private static final String HEADER_CODE_COVERAGE = "Code Coverage";
-    private static final String HEADER_PIT_MUTATIONS = "PIT Mutations";
-    private static final String HEADER_STATIC_ANALYSIS = "Static Analysis Warnings";
 
     /**
      * Test all cards with all tools.
@@ -44,7 +39,6 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
         Build build = shouldBuildJobUnstable(job); // unstable due to failing tests
 
         AutoGradePageObject pageObject = new AutoGradePageObject(build, buildAutoGradeURLFromJob(job));
-        assertThatCardHeadersAreCorrect(pageObject);
 
         assertThat(pageObject.getTotalScoreInPercent()).isEqualTo("75%");
         assertThat(pageObject.getTotalScores()).containsExactly("92%", "100%", "91%", "18%");
@@ -85,7 +79,6 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
         Build build = shouldBuildJobSuccessfully(job);
 
         AutoGradePageObject pageObject = new AutoGradePageObject(build, buildAutoGradeURLFromJob(job));
-        assertThatCardHeadersAreCorrect(pageObject);
 
         assertThat(pageObject.getTotalScoreInPercent()).isEqualTo("69%");
         assertThat(pageObject.getTotalScores()).containsExactly("100%", "100%", "91%", "18%");
@@ -133,11 +126,6 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
                 + "publishCoverage adapters: [jacocoAdapter('**/jacoco*')], sourceFileResolver: sourceFiles('STORE_ALL_BUILD')\n"
                 + "autoGrade('" + configuration + "')\n"
                 + "}");
-    }
-
-    private void assertThatCardHeadersAreCorrect(final AutoGradePageObject pageObject) {
-        assertThat(pageObject.getCardHeaders()).containsExactlyInAnyOrder(HEADER_TOTAL_SCORE, HEADER_TEST_RESULTS,
-                HEADER_CODE_COVERAGE, HEADER_PIT_MUTATIONS, HEADER_STATIC_ANALYSIS);
     }
 
     private Build shouldBuildJobSuccessfully(final Job job) {
