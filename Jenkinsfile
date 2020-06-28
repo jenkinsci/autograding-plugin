@@ -1,4 +1,4 @@
-    Map params = [useAci: true]
+    Map params = [platform: "docker && highmem", jdk: "8", timeout: 120]
 
     // Faster build and reduces IO needs
     properties([
@@ -84,7 +84,7 @@
                                     mavenOptions += "-Djava.level=${javaLevel}"
                                 }
                                 if (skipTests) {
-                                    mavenOptions += "-DskipTests"
+                                    mavenOptions += "-DskipTests -DskipITs"
                                 }
                                 mavenOptions += "clean install -npu -Djenkins.test.timeout=2500 -DElasticTime.factor=2 -Dsurefire.rerunFailingTestsCount=2 -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver"
                                 infra.runMaven(mavenOptions, jdk, ["BROWSER=firefox-container"], null, addToolEnv)
