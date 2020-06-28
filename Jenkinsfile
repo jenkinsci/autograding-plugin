@@ -86,7 +86,7 @@
                                 if (skipTests) {
                                     mavenOptions += "-DskipTests -DskipITs"
                                 }
-                                mavenOptions += "clean install -npu -Djenkins.test.timeout=2500 -DElasticTime.factor=2 -Dsurefire.rerunFailingTestsCount=2 -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver"
+                                mavenOptions += "clean install -npu -Djenkins.test.timeout=2500 -DElasticTime.factor=2 -Dsurefire.rerunFailingTestsCount=2"
                                 infra.runMaven(mavenOptions, jdk, ["BROWSER=firefox-container"], null, addToolEnv)
                             } else {
                                 echo "WARNING: Gradle mode for buildPlugin() is deprecated, please use buildPluginWithGradle()"
@@ -129,7 +129,7 @@
                                         includePattern:'**/*.java',
                                         excludePattern:'target/**',
                                         highTags:'FIXME',
-                                        normalTags:'TODO'), sourceCodeEncoding: 'UTF-8'
+                                        normalTags:'TODO'), sourceCodeEncoding: 'UTF-8', referenceJobName: 'Plugins/autograding-plugin/master'
                                 if (failFast && currentBuild.result == 'UNSTABLE') {
                                     error 'There were static analysis warnings; halting early'
                                 }
@@ -153,8 +153,6 @@
                                     }
                                     archiveArtifacts artifacts: artifacts, fingerprint: true
                                 }
-                            } else {
-                                echo "INFO: Skipping archiving of artifacts"
                             }
                         }
                     }
@@ -174,8 +172,6 @@
     parallel(tasks)
     if (publishingIncrementals) {
         infra.maybePublishIncrementals()
-    } else {
-        echo "INFO: Skipping publishing of incrementals"
     }
 
 boolean hasDockerLabel() {
