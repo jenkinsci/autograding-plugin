@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mutations>
+  <mutation detected='false' status='SURVIVED' numberOfTestsRun='42'>
+    <sourceFile>PitScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.PitScore</mutatedClass>
+    <mutatedMethod>computeImpact</mutatedMethod>
+    <lineNumber>44</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.PrimitiveReturnsMutator</mutator>
+    <index>33</index>
+    <block>4</block>
+    <killingTest/>
+    <description>replaced int return with 0 for io/jenkins/plugins/grading/AggregatedScore::addAnalysisTotal
+    </description>
+  </mutation>
+  <mutation detected='true' status='KILLED' numberOfTestsRun='4'>
+    <sourceFile>TestScore.java</sourceFile>
+    <mutatedClass>io.jenkins.plugins.grading.TestScore</mutatedClass>
+    <mutatedMethod>computeImpact</mutatedMethod>
+    <methodDescription>(II)I</methodDescription>
+    <lineNumber>40</lineNumber>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator</mutator>
+    <index>4</index>
+    <block>0</block>
+    <killingTest>
+      io.jenkins.plugins.grading.ScoreTest.[engine:junit-jupiter]/[class:io.jenkins.plugins.grading.ScoreTest]/[method:shouldSumAnalysisConfiguration()]
+    </killingTest>
+    <description>changed conditional boundary</description>
+  </mutation>
+</mutations>
