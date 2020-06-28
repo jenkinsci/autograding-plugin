@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.jenkins.plugins</groupId>
-  <artifactId>autograding</artifactId>
+  <artifactId>autograding-parent</artifactId>
   <packaging>pom</packaging>
   <version>${revision}${changelist}</version>
 
