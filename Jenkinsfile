@@ -1,4 +1,4 @@
-    Map params = [useAci: true]
+    Map params = [platform: "docker && highmem", jdk: "8", timeout: 120]
 
     // Faster build and reduces IO needs
     properties([
@@ -84,10 +84,10 @@
                                     mavenOptions += "-Djava.level=${javaLevel}"
                                 }
                                 if (skipTests) {
-                                    mavenOptions += "-DskipTests"
+                                    mavenOptions += "-DskipTests -DskipITs"
                                 }
-                                mavenOptions += "-ntp -Djenkins.test.timeout=2500 clean install"
-                                infra.runMaven(mavenOptions, jdk, null, null, addToolEnv)
+                                mavenOptions += "clean install -npu -Djenkins.test.timeout=2500 -DElasticTime.factor=2 -Dsurefire.rerunFailingTestsCount=2"
+                                infra.runMaven(mavenOptions, jdk, ["BROWSER=firefox-container"], null, addToolEnv)
                             } else {
                                 echo "WARNING: Gradle mode for buildPlugin() is deprecated, please use buildPluginWithGradle()"
                                 List<String> gradleOptions = [
@@ -129,7 +129,7 @@
                                         includePattern:'**/*.java',
                                         excludePattern:'target/**',
                                         highTags:'FIXME',
-                                        normalTags:'TODO'), sourceCodeEncoding: 'UTF-8'
+                                        normalTags:'TODO'), sourceCodeEncoding: 'UTF-8', referenceJobName: 'Plugins/autograding-plugin/master'
                                 if (failFast && currentBuild.result == 'UNSTABLE') {
                                     error 'There were static analysis warnings; halting early'
                                 }
@@ -153,8 +153,6 @@
                                     }
                                     archiveArtifacts artifacts: artifacts, fingerprint: true
                                 }
-                            } else {
-                                echo "INFO: Skipping archiving of artifacts"
                             }
                         }
                     }
@@ -174,8 +172,6 @@
     parallel(tasks)
     if (publishingIncrementals) {
         infra.maybePublishIncrementals()
-    } else {
-        echo "INFO: Skipping publishing of incrementals"
     }
 
 boolean hasDockerLabel() {
