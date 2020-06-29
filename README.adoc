@@ -2,7 +2,7 @@
 
 = Jenkins AutoGrading Plugin
 
-image:https://badges.gitter.im/jenkinsci/warnings-plugin.svg[Join the Gitter chat, https://gitter.im/jenkinsci/warnings-plugin]
+image:https://badges.gitter.im/jenkinsci/warnings-plugin.svg[Join the Gitter chat, link=https://gitter.im/jenkinsci/warnings-plugin]
 image:https://img.shields.io/github/release/jenkinsci/autograding-plugin.svg?label=changelog[changelog, link=https://github.com/jenkinsci/autograding-plugin/releases/latest]
 image:https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/badge/icon?subject=Jenkins%20CI[Jenkins, link=https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/]
 image:https://github.com/jenkinsci/autograding-plugin/workflows/GitHub%20CI/badge.svg?branch=master[GitHub Actions, link=https://github.com/jenkinsci/autograding-plugin/actions]
