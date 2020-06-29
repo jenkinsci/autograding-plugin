@@ -48,8 +48,8 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
         assertThat(pageObject.getTestFooter()).containsExactly("1", "-10", "-1", "n/a", "n/a");
 
         assertThatCodeCoverageHeaderIsCorrect(pageObject.getCoverageHeaders());
-        assertThat(pageObject.getCoverageBody().get("Line")).containsExactly(83, 17, 0);
-        assertThat(pageObject.getCoverageBody().get("Conditional")).containsExactly(83, 17, 0);
+        assertThat(pageObject.getCoverageBody().get("Line Coverage")).containsExactly(83, 17, 0);
+        assertThat(pageObject.getCoverageBody().get("Conditional Coverage")).containsExactly(83, 17, 0);
         assertThat(pageObject.getCoverageFooter()).containsExactly("0", "0", "n/a");
 
         assertThatPITMutationsHeaderIsCorrect(pageObject.getPitHeaders());
@@ -87,8 +87,8 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
         assertThat(pageObject.getTestBody().size()).isZero();
 
         assertThatCodeCoverageHeaderIsCorrect(pageObject.getCoverageHeaders());
-        assertThat(pageObject.getCoverageBody().get("Line")).containsExactly(83, 17, 0);
-        assertThat(pageObject.getCoverageBody().get("Conditional")).containsExactly(83, 17, 0);
+        assertThat(pageObject.getCoverageBody().get("Line Coverage")).containsExactly(83, 17, 0);
+        assertThat(pageObject.getCoverageBody().get("Conditional Coverage")).containsExactly(83, 17, 0);
         assertThat(pageObject.getCoverageFooter()).containsExactly("0", "0", "n/a");
 
         assertThatPITMutationsHeaderIsCorrect(pageObject.getPitHeaders());

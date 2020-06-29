@@ -4,7 +4,7 @@
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>autograding-parent</artifactId>
   <packaging>pom</packaging>
-  <version>${revision}${changelist}</version>
+  <version>UNVERSIONED</version>
 
   <name>Aggregator for Autograding Plugin</name>
 

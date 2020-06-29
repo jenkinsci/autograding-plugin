@@ -1,5 +1,5 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:t="/lib/hudson" xmlns:fa="/font-awesome">
+<j:jelly xmlns:j="jelly:core" xmlns:t="/lib/hudson">
 
     <t:summary icon="/plugin/autograding/icons/autograding-48x48.png">
         ${%title}: <a href="autograding">${%result(it.achieved, it.total)}</a>
