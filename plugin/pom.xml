@@ -24,7 +24,7 @@
 
     <autograding-model.version>0.2.0</autograding-model.version>
 
-    <commons.lang.version>3.10</commons.lang.version>
+    <commons.lang.version>3.11</commons.lang.version>
 
     <font-awesome-api.version>5.13.0-1</font-awesome-api.version>
     <jquery3-api.version>3.5.1-1</jquery3-api.version>
