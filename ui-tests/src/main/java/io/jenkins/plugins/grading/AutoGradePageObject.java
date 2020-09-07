@@ -15,9 +15,6 @@ import org.jenkinsci.test.acceptance.po.PageObject;
  * @author Lukas Kirner
  */
 public class AutoGradePageObject extends PageObject {
-
-    private final List<String> cardHeaders;
-
     private final String totalScoreInPercent;
 
     private final List<String> totalScores;
@@ -52,12 +49,6 @@ public class AutoGradePageObject extends PageObject {
 
         WebElement page = this.getElement(by.tagName("body"));
 
-        cardHeaders = page.findElements(by.xpath("/html/body/div[4]/div[2]/div/div")).stream()
-                .map(row -> row.findElement(by.tagName("h5")))
-                .map(WebElement::getText)
-                .map(String::trim)
-                .collect(Collectors.toList());
-
         totalScoreInPercent = page.findElement(by.id("total-progress-chart")).getAttribute("data-title");
 
         totalScores = page.findElements(by.css("div.progress-container")).stream()
@@ -84,10 +75,6 @@ public class AutoGradePageObject extends PageObject {
         analysisHeaders = getTableHeaders(analysisTable);
         analysisBody = getTableBody(analysisTable);
         analysisFooter = getTableFooter(analysisTable);
-    }
-
-    public List<String> getCardHeaders() {
-        return cardHeaders;
     }
 
     public String getTotalScoreInPercent() {

@@ -107,11 +107,11 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
         job.script.set("node {\n"
                 + createReportFilesStep(job, 1, files)
                 + "junit testResults: '**/TEST-*'\n"
-                + "recordIssues tool: checkStyle(pattern: '**/checkstyle*')\n"
+                + "recordIssues tool: checkStyle(pattern: '**/checkstyle*'), skipPublishingChecks: true\n"
                 + "step([$class: 'PitPublisher', mutationStatsFile: '**/mutations*'])\n"
-                + "recordIssues tool: pmdParser(pattern: '**/pmd*')\n"
-                + "recordIssues tools: [cpd(pattern: '**/cpd*', highThreshold:8, normalThreshold:3), findBugs()], aggregatingResults: 'false' \n"
-                + "publishCoverage adapters: [jacocoAdapter('**/jacoco*')], sourceFileResolver: sourceFiles('STORE_ALL_BUILD')\n"
+                + "recordIssues tool: pmdParser(pattern: '**/pmd*'), skipPublishingChecks: true\n"
+                + "recordIssues tools: [cpd(pattern: '**/cpd*', highThreshold:8, normalThreshold:3), findBugs()], aggregatingResults: 'false', skipPublishingChecks: true \n"
+                + "publishCoverage adapters: [jacocoAdapter('**/jacoco*')], sourceFileResolver: sourceFiles('STORE_ALL_BUILD'), skipPublishingChecks: true\n"
                 + "autoGrade('" + configuration + "')\n"
                 + "}");
     }
@@ -119,11 +119,11 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
     private void configurePipelineWithoutJUnitTests(final WorkflowJob job, final String configuration, final String...files) {
         job.script.set("node {\n"
                 + createReportFilesStep(job, 1, files)
-                + "recordIssues tool: checkStyle(pattern: '**/checkstyle*')\n"
+                + "recordIssues tool: checkStyle(pattern: '**/checkstyle*'), skipPublishingChecks: true\n"
                 + "step([$class: 'PitPublisher', mutationStatsFile: '**/mutations*'])\n"
-                + "recordIssues tool: pmdParser(pattern: '**/pmd*')\n"
-                + "recordIssues tools: [cpd(pattern: '**/cpd*', highThreshold:8, normalThreshold:3), findBugs()], aggregatingResults: 'false' \n"
-                + "publishCoverage adapters: [jacocoAdapter('**/jacoco*')], sourceFileResolver: sourceFiles('STORE_ALL_BUILD')\n"
+                + "recordIssues tool: pmdParser(pattern: '**/pmd*'), skipPublishingChecks: true\n"
+                + "recordIssues tools: [cpd(pattern: '**/cpd*', highThreshold:8, normalThreshold:3), findBugs()], aggregatingResults: 'false', skipPublishingChecks: true\n"
+                + "publishCoverage adapters: [jacocoAdapter('**/jacoco*')], sourceFileResolver: sourceFiles('STORE_ALL_BUILD'), skipPublishingChecks: true\n"
                 + "autoGrade('" + configuration + "')\n"
                 + "}");
     }
@@ -152,7 +152,7 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
             return new URL(job.url.toString() + "/autograding");
         }
         catch (MalformedURLException x) {
-            return null;
+            throw new AssertionError((x));
         }
     }
 
