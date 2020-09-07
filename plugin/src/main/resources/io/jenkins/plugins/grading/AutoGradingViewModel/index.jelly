@@ -1,324 +1,320 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:bs="/bootstrap" xmlns:c="/charts"
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:bs="/bootstrap" xmlns:c="/charts"
          xmlns:g="/grading">
 
   <st:header name="Content-Type" value="text/html;charset=UTF-8"/>
 
-  <bs:layout title="${it.displayName}" norefresh="true">
+  <bs:page it="${it}">
 
-    <st:include it="${it.owner}" page="sidepanel.jelly"/>
+    <link rel="stylesheet" href="${resURL}/plugin/autograding/css/custom-style.css"/>
 
-    <l:main-panel>
+    <st:adjunct includes="io.jenkins.plugins.data-tables"/>
 
-      <link rel="stylesheet" href="${resURL}/plugin/autograding/css/custom-style.css"/>
+    <j:set var="score" value="${it.score}"/>
+    <j:set var="analysisConfig" value="${score.analysisConfiguration}"/>
+    <j:set var="testConfig" value="${score.testConfiguration}"/>
+    <j:set var="pitConfig" value="${score.pitConfiguration}"/>
+    <j:set var="coverageConfig" value="${score.coverageConfiguration}"/>
 
-      <st:adjunct includes="io.jenkins.plugins.bootstrap4"/>
-      <st:adjunct includes="io.jenkins.plugins.data-tables"/>
+    <div class="fluid-container">
 
-      <j:set var="score" value="${it.score}"/>
-      <j:set var="analysisConfig" value="${score.analysisConfiguration}"/>
-      <j:set var="testConfig" value="${score.testConfiguration}"/>
-      <j:set var="pitConfig" value="${score.pitConfiguration}"/>
-      <j:set var="coverageConfig" value="${score.coverageConfiguration}"/>
-
-      <div class="fluid-container">
-
-        <div class="row py-3">
-          <div class="col-l-12 col-xl col-xxl">
-            <bs:card title="${%title.total}" fontAwesomeIcon="graduation-cap">
-              <div class="row align-items-center justify-content-center">
-                <div class="col-md-6 col-lg-6 col-xl-12 col-xxl-12">
-                  <c:progress-chart id="total-progress" model="${it.getProgressModel(score.ratio)}" height="150"
-                                    value="${score.ratio}" tooltip="${%tooltip(score.achieved, score.total)}"/>
-                </div>
-                <div class="col-md-6 col-lg-6 col-xl-6 d-none d-block d-l-block d-xl-none">
-                  <g:score title="${%title.tests}" ratio="${score.testRatio}" achieved="${score.testAchieved}" total="${testConfig.maxScore}"/>
-                  <g:score title="${%title.coverage}" ratio="${score.coverageRatio}" achieved="${score.coverageAchieved}"
-                           total="${coverageConfig.maxScore}"/>
-                  <g:score title="${%title.pit}" ratio="${score.pitRatio}" achieved="${score.pitAchieved}" total="${pitConfig.maxScore}"/>
-                  <g:score title="${%title.analysis}" ratio="${score.analysisRatio}" achieved="${score.analysisAchieved}"
-                           total="${analysisConfig.maxScore}"/>
-                </div>
+      <div class="row py-3">
+        <div class="col-l-12 col-xl col-xxl">
+          <bs:card title="${%title.total}" fontAwesomeIcon="graduation-cap">
+            <div class="row align-items-center justify-content-center">
+              <div class="col-md-6 col-lg-6 col-xl-12 col-xxl-12">
+                <c:progress-chart id="total-progress" model="${it.getProgressModel(score.ratio)}" height="150"
+                                  value="${score.ratio}" tooltip="${%tooltip(score.achieved, score.total)}"/>
               </div>
-            </bs:card>
-          </div>
-          <div class="col-xl col-xxl d-none d-xl-block">
-            <bs:card title="${%title.tests}" fontAwesomeIcon="check-square">
-              <p>
-                <div class="">
-                  <c:progress-chart id="test-progress" model="${it.getProgressModel(score.testRatio)}" height="150"
-                                    value="${score.testRatio}"
-                                    tooltip="${%tooltip(score.testAchieved, testConfig.maxScore)}"/>
-                </div>
-              </p>
-            </bs:card>
-          </div>
-          <div class="col-xl col-xxl d-none d-xl-block">
-            <bs:card title="${%title.coverage}" fontAwesomeIcon="microscope">
-              <p>
-                <div class="">
-                  <c:progress-chart id="coverage-progress" model="${it.getProgressModel(score.coverageRatio)}"
-                                    height="150" value="${score.coverageRatio}"
-                                    tooltip="${%tooltip(score.coverageAchieved, coverageConfig.maxScore)}"/>
-                </div>
-              </p>
-            </bs:card>
-          </div>
-          <div class="col-xl col-xxl d-none d-xl-block">
-            <bs:card title="${%title.pit}" fontAwesomeIcon="viruses">
-              <p>
-                <div class="">
-                  <c:progress-chart id="pit-progress" model="${it.getProgressModel(score.pitRatio)}" height="150"
-                                    value="${score.pitRatio}"
-                                    tooltip="${%tooltip(score.pitAchieved, pitConfig.maxScore)}"/>
-                </div>
-              </p>
-            </bs:card>
-          </div>
-          <div class="col-xl col-xxl d-none d-xl-block">
-            <bs:card title="${%title.analysis}" fontAwesomeIcon="exclamation-triangle">
-              <p>
-                <div class="">
-                  <c:progress-chart id="analysis-progress" model="${it.getProgressModel(score.analysisRatio)}"
-                                    height="150" value="${score.analysisRatio}"
-                                    tooltip="${%tooltip(score.analysisAchieved, analysisConfig.maxScore)}"/>
-                </div>
-              </p>
-            </bs:card>
-          </div>
-        </div>
-
-        <div class="row py-3">
-          <div class="col-12">
-
-            <bs:card title="${%title.tests}" fontAwesomeIcon="check-square">
-              <div class="table-responsive">
-                <table class="table table-hover table-striped display" id="test">
-                  <thead>
-                    <tr>
-                      <th>${%Name}</th>
-                      <th>${%Passed}</th>
-                      <th>${%Failed}</th>
-                      <th>${%Skipped}</th>
-                      <th>${%Total}</th>
-                      <th>${%Score Impact}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <j:forEach var="checks" items="${score.testScores}">
-                      <tr>
-                        <td>
-                          <a href="../testReport">${checks.id}</a>
-                        </td>
-                        <td>
-                          ${checks.passedSize}
-                        </td>
-                        <td>
-                          ${checks.failedSize}
-                        </td>
-                        <td>
-                          ${checks.skippedSize}
-                        </td>
-                        <td>
-                          ${checks.totalSize}
-                        </td>
-                        <td>
-                          ${checks.totalImpact}
-                        </td>
-                      </tr>
-                    </j:forEach>
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <th>${%column.impact.configuration}</th>
-                      <th>${testConfig.passedImpact}</th>
-                      <th>${testConfig.failureImpact}</th>
-                      <th>${testConfig.skippedImpact}</th>
-                      <th>${%column.not.available}</th>
-                      <th>${%column.not.available}</th>
-                    </tr>
-                  </tfoot>
-                </table>
+              <div class="col-md-6 col-lg-6 col-xl-6 d-none d-block d-l-block d-xl-none">
+                <g:score title="${%title.tests}" ratio="${score.testRatio}" achieved="${score.testAchieved}"
+                         total="${testConfig.maxScore}"/>
+                <g:score title="${%title.coverage}" ratio="${score.coverageRatio}" achieved="${score.coverageAchieved}"
+                         total="${coverageConfig.maxScore}"/>
+                <g:score title="${%title.pit}" ratio="${score.pitRatio}" achieved="${score.pitAchieved}"
+                         total="${pitConfig.maxScore}"/>
+                <g:score title="${%title.analysis}" ratio="${score.analysisRatio}" achieved="${score.analysisAchieved}"
+                         total="${analysisConfig.maxScore}"/>
               </div>
-
-            </bs:card>
-
-          </div>
+            </div>
+          </bs:card>
         </div>
-
-        <div class="row py-3">
-          <div class="col-12">
-
-            <bs:card title="${%title.coverage}" fontAwesomeIcon="microscope">
-              <div class="table-responsive">
-                <table class="table table-hover table-striped display" id="coverage">
-                  <thead>
-                    <tr>
-                      <th>${%Type}</th>
-                      <th>${%Covered Percentage}</th>
-                      <th>${%Missed Percentage}</th>
-                      <th>${%Score Impact}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <j:forEach var="checks" items="${score.coverageScores}">
-                      <tr>
-                        <td>
-                          <a href="../coverage">${checks.name}</a>
-                        </td>
-                        <td>
-                          ${checks.coveredPercentage}
-                        </td>
-                        <td>
-                          ${checks.missedPercentage}
-                        </td>
-                        <td>
-                          ${checks.totalImpact}
-                        </td>
-                      </tr>
-                    </j:forEach>
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <th>${%column.impact.configuration}</th>
-                      <th>${coverageConfig.coveredPercentageImpact}</th>
-                      <th>${coverageConfig.missedPercentageImpact}</th>
-                      <th>${%column.not.available}</th>
-                    </tr>
-                  </tfoot>
-                </table>
+        <div class="col-xl col-xxl d-none d-xl-block">
+          <bs:card title="${%title.tests}" fontAwesomeIcon="check-square">
+            <p>
+              <div class="">
+                <c:progress-chart id="test-progress" model="${it.getProgressModel(score.testRatio)}" height="150"
+                                  value="${score.testRatio}"
+                                  tooltip="${%tooltip(score.testAchieved, testConfig.maxScore)}"/>
               </div>
-
-            </bs:card>
-
-          </div>
+            </p>
+          </bs:card>
         </div>
-
-        <div class="row py-3">
-          <div class="col-12">
-
-            <bs:card title="${%title.pit}" fontAwesomeIcon="viruses">
-              <div class="table-responsive">
-                <table class="table table-hover table-striped display" id="pit">
-                  <thead>
-                    <tr>
-                      <th>${%Type}</th>
-                      <th>${%Detected}</th>
-                      <th>${%Undetected}</th>
-                      <th>${%Detected Percentage}</th>
-                      <th>${%Undetected Percentage}</th>
-                      <th>${%Score Impact}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <j:forEach var="checks" items="${score.pitScores}">
-                      <tr>
-                        <td>
-                          <a href="../pitmutation">${checks.id}</a>
-                        </td>
-                        <td>
-                          ${checks.detectedSize}
-                        </td>
-                        <td>
-                          ${checks.undetectedSize}
-                        </td>
-                        <td>
-                          ${checks.detectedPercentage}
-                        </td>
-                        <td>
-                          ${checks.undetectedPercentage}
-                        </td>
-                        <td>
-                          ${checks.totalImpact}
-                        </td>
-                      </tr>
-                    </j:forEach>
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <th>${%column.impact.configuration}</th>
-                      <th>${pitConfig.detectedImpact}</th>
-                      <th>${pitConfig.undetectedImpact}</th>
-                      <th>${pitConfig.detectedPercentageImpact}</th>
-                      <th>${pitConfig.undetectedPercentageImpact}</th>
-                      <th>${%column.not.available}</th>
-                    </tr>
-                  </tfoot>
-
-                </table>
+        <div class="col-xl col-xxl d-none d-xl-block">
+          <bs:card title="${%title.coverage}" fontAwesomeIcon="microscope">
+            <p>
+              <div class="">
+                <c:progress-chart id="coverage-progress" model="${it.getProgressModel(score.coverageRatio)}"
+                                  height="150" value="${score.coverageRatio}"
+                                  tooltip="${%tooltip(score.coverageAchieved, coverageConfig.maxScore)}"/>
               </div>
-
-            </bs:card>
-
-          </div>
+            </p>
+          </bs:card>
         </div>
-
-        <div class="row py-3">
-          <div class="col-12">
-
-            <bs:card title="${%title.analysis}" fontAwesomeIcon="exclamation-triangle">
-              <j:set var="analysisScores" value="${score.analysisScores}"/>
-              <div class="table-responsive">
-                <table class="table table-hover table-striped display" id="analysis">
-                  <thead>
-                    <tr>
-                      <th>${%Tool}</th>
-                      <th>${%Errors}</th>
-                      <th>${%High}</th>
-                      <th>${%Normal}</th>
-                      <th>${%Low}</th>
-                      <th>${%Total}</th>
-                      <th>${%Score Impact}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <j:forEach var="checks" items="${analysisScores}">
-                      <tr>
-                        <td>
-                          <a href="../${checks.id}">${checks.name}</a>
-                        </td>
-                        <td>
-                          ${checks.errorsSize}
-                        </td>
-                        <td>
-                          ${checks.highSeveritySize}
-                        </td>
-                        <td>
-                          ${checks.normalSeveritySize}
-                        </td>
-                        <td>
-                          ${checks.lowSeveritySize}
-                        </td>
-                        <td>
-                          ${checks.totalSize}
-                        </td>
-                        <td>
-                          ${checks.totalImpact}
-                        </td>
-                      </tr>
-                    </j:forEach>
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <th>${%column.impact.configuration}</th>
-                      <th>${analysisConfig.errorImpact}</th>
-                      <th>${analysisConfig.highImpact}</th>
-                      <th>${analysisConfig.normalImpact}</th>
-                      <th>${analysisConfig.lowImpact}</th>
-                      <th>${%column.not.available}</th>
-                      <th>${%column.not.available}</th>
-                    </tr>
-                  </tfoot>
-                </table>
+        <div class="col-xl col-xxl d-none d-xl-block">
+          <bs:card title="${%title.pit}" fontAwesomeIcon="viruses">
+            <p>
+              <div class="">
+                <c:progress-chart id="pit-progress" model="${it.getProgressModel(score.pitRatio)}" height="150"
+                                  value="${score.pitRatio}"
+                                  tooltip="${%tooltip(score.pitAchieved, pitConfig.maxScore)}"/>
               </div>
-
-            </bs:card>
-
-          </div>
+            </p>
+          </bs:card>
         </div>
-
+        <div class="col-xl col-xxl d-none d-xl-block">
+          <bs:card title="${%title.analysis}" fontAwesomeIcon="exclamation-triangle">
+            <p>
+              <div class="">
+                <c:progress-chart id="analysis-progress" model="${it.getProgressModel(score.analysisRatio)}"
+                                  height="150" value="${score.analysisRatio}"
+                                  tooltip="${%tooltip(score.analysisAchieved, analysisConfig.maxScore)}"/>
+              </div>
+            </p>
+          </bs:card>
+        </div>
       </div>
 
-    </l:main-panel>
-  </bs:layout>
+      <div class="row py-3">
+        <div class="col-12">
+
+          <bs:card title="${%title.tests}" fontAwesomeIcon="check-square">
+            <div class="table-responsive">
+              <table class="table table-hover table-striped display" id="test">
+                <thead>
+                  <tr>
+                    <th>${%Name}</th>
+                    <th>${%Passed}</th>
+                    <th>${%Failed}</th>
+                    <th>${%Skipped}</th>
+                    <th>${%Total}</th>
+                    <th>${%Score Impact}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <j:forEach var="checks" items="${score.testScores}">
+                    <tr>
+                      <td>
+                        <a href="../testReport">${checks.id}</a>
+                      </td>
+                      <td>
+                        ${checks.passedSize}
+                      </td>
+                      <td>
+                        ${checks.failedSize}
+                      </td>
+                      <td>
+                        ${checks.skippedSize}
+                      </td>
+                      <td>
+                        ${checks.totalSize}
+                      </td>
+                      <td>
+                        ${checks.totalImpact}
+                      </td>
+                    </tr>
+                  </j:forEach>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>${%column.impact.configuration}</th>
+                    <th>${testConfig.passedImpact}</th>
+                    <th>${testConfig.failureImpact}</th>
+                    <th>${testConfig.skippedImpact}</th>
+                    <th>${%column.not.available}</th>
+                    <th>${%column.not.available}</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+          </bs:card>
+
+        </div>
+      </div>
+
+      <div class="row py-3">
+        <div class="col-12">
+
+          <bs:card title="${%title.coverage}" fontAwesomeIcon="microscope">
+            <div class="table-responsive">
+              <table class="table table-hover table-striped display" id="coverage">
+                <thead>
+                  <tr>
+                    <th>${%Type}</th>
+                    <th>${%Covered Percentage}</th>
+                    <th>${%Missed Percentage}</th>
+                    <th>${%Score Impact}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <j:forEach var="checks" items="${score.coverageScores}">
+                    <tr>
+                      <td>
+                        <a href="../coverage">${checks.name}</a>
+                      </td>
+                      <td>
+                        ${checks.coveredPercentage}
+                      </td>
+                      <td>
+                        ${checks.missedPercentage}
+                      </td>
+                      <td>
+                        ${checks.totalImpact}
+                      </td>
+                    </tr>
+                  </j:forEach>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>${%column.impact.configuration}</th>
+                    <th>${coverageConfig.coveredPercentageImpact}</th>
+                    <th>${coverageConfig.missedPercentageImpact}</th>
+                    <th>${%column.not.available}</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+          </bs:card>
+
+        </div>
+      </div>
+
+      <div class="row py-3">
+        <div class="col-12">
+
+          <bs:card title="${%title.pit}" fontAwesomeIcon="viruses">
+            <div class="table-responsive">
+              <table class="table table-hover table-striped display" id="pit">
+                <thead>
+                  <tr>
+                    <th>${%Type}</th>
+                    <th>${%Detected}</th>
+                    <th>${%Undetected}</th>
+                    <th>${%Detected Percentage}</th>
+                    <th>${%Undetected Percentage}</th>
+                    <th>${%Score Impact}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <j:forEach var="checks" items="${score.pitScores}">
+                    <tr>
+                      <td>
+                        <a href="../pitmutation">${checks.id}</a>
+                      </td>
+                      <td>
+                        ${checks.detectedSize}
+                      </td>
+                      <td>
+                        ${checks.undetectedSize}
+                      </td>
+                      <td>
+                        ${checks.detectedPercentage}
+                      </td>
+                      <td>
+                        ${checks.undetectedPercentage}
+                      </td>
+                      <td>
+                        ${checks.totalImpact}
+                      </td>
+                    </tr>
+                  </j:forEach>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>${%column.impact.configuration}</th>
+                    <th>${pitConfig.detectedImpact}</th>
+                    <th>${pitConfig.undetectedImpact}</th>
+                    <th>${pitConfig.detectedPercentageImpact}</th>
+                    <th>${pitConfig.undetectedPercentageImpact}</th>
+                    <th>${%column.not.available}</th>
+                  </tr>
+                </tfoot>
+
+              </table>
+            </div>
+
+          </bs:card>
+
+        </div>
+      </div>
+
+      <div class="row py-3">
+        <div class="col-12">
+
+          <bs:card title="${%title.analysis}" fontAwesomeIcon="exclamation-triangle">
+            <j:set var="analysisScores" value="${score.analysisScores}"/>
+            <div class="table-responsive">
+              <table class="table table-hover table-striped display" id="analysis">
+                <thead>
+                  <tr>
+                    <th>${%Tool}</th>
+                    <th>${%Errors}</th>
+                    <th>${%High}</th>
+                    <th>${%Normal}</th>
+                    <th>${%Low}</th>
+                    <th>${%Total}</th>
+                    <th>${%Score Impact}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <j:forEach var="checks" items="${analysisScores}">
+                    <tr>
+                      <td>
+                        <a href="../${checks.id}">${checks.name}</a>
+                      </td>
+                      <td>
+                        ${checks.errorsSize}
+                      </td>
+                      <td>
+                        ${checks.highSeveritySize}
+                      </td>
+                      <td>
+                        ${checks.normalSeveritySize}
+                      </td>
+                      <td>
+                        ${checks.lowSeveritySize}
+                      </td>
+                      <td>
+                        ${checks.totalSize}
+                      </td>
+                      <td>
+                        ${checks.totalImpact}
+                      </td>
+                    </tr>
+                  </j:forEach>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>${%column.impact.configuration}</th>
+                    <th>${analysisConfig.errorImpact}</th>
+                    <th>${analysisConfig.highImpact}</th>
+                    <th>${analysisConfig.normalImpact}</th>
+                    <th>${analysisConfig.lowImpact}</th>
+                    <th>${%column.not.available}</th>
+                    <th>${%column.not.available}</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+          </bs:card>
+
+        </div>
+      </div>
+
+    </div>
+
+  </bs:page>
 </j:jelly>
