@@ -32,7 +32,7 @@
     <data-tables-api.version>1.10.21-2</data-tables-api.version>
     <echarts-api.version>4.7.0-1</echarts-api.version>
     <echarts-build-trends.version>2.0.0</echarts-build-trends.version>
-    <plugin-util-api.version>1.2.0</plugin-util-api.version>
+    <plugin-util-api.version>1.2.5</plugin-util-api.version>
 
     <code-coverage-api-plugin.version>1.1.4</code-coverage-api-plugin.version>
     <pitmutation-plugin.version>1.0-18</pitmutation-plugin.version>
