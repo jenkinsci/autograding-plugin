@@ -40,7 +40,7 @@
     <junit-plugin.version>1.34</junit-plugin.version>
     <warnings-ng-plugin.version>8.4.1</warnings-ng-plugin.version>
 
-    <pipeline-stage-step.version>2.3</pipeline-stage-step.version>
+    <pipeline-stage-step.version>2.5</pipeline-stage-step.version>
     <workflow-support.version>3.3</workflow-support.version>
     <jackson2-api.version>2.11.1</jackson2-api.version>
   </properties>
