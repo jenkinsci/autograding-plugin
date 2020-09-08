@@ -5,7 +5,7 @@
   <parent>
     <groupId>edu.hm.hafner</groupId>
     <artifactId>codingstyle-pom</artifactId>
-    <version>1.1.1</version>
+    <version>1.5.0</version>
     <relativePath/>
   </parent>
 
@@ -26,7 +26,7 @@
     <dependency>
       <groupId>org.jenkins-ci</groupId>
       <artifactId>acceptance-test-harness</artifactId>
-      <version>1.72</version>
+      <version>1.75</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -80,6 +80,29 @@
       </properties>
     </profile>
     <profile>
+      <id>ui-tests-locally</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <reuseForks>false</reuseForks>
+              <environmentVariables>
+                <PLUGINS_DIR>../plugin/target/test-classes/test-dependencies</PLUGINS_DIR>
+                <JENKINS_VERSION>${jenkins.version}</JENKINS_VERSION>
+                <BROWSER>chrome</BROWSER>
+              </environmentVariables>
+              <rerunFailingTestsCount>1</rerunFailingTestsCount>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <properties>
+        <maven.test.skip>false</maven.test.skip>
+      </properties>
+    </profile>
+    <profile>
       <id>consume-incrementals</id>
     </profile>
     <profile>
@@ -105,12 +128,37 @@
         <configuration>
           <reuseForks>false</reuseForks>
           <environmentVariables>
-            <PLUGINS_DIR>../../docker/volumes/jenkins-home/plugins</PLUGINS_DIR>
+            <PLUGINS_DIR>../plugin/target/test-classes/test-dependencies</PLUGINS_DIR>
             <JENKINS_VERSION>${jenkins.version}</JENKINS_VERSION>
-            <LOCAL_JARS>../plugin/target/autograding.hpi</LOCAL_JARS>
-            <BROWSER>firefox</BROWSER>
+            <BROWSER>firefox-container</BROWSER>
           </environmentVariables>
+          <rerunFailingTestsCount>1</rerunFailingTestsCount>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>../plugin/target/test-classes/test-dependencies</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>../plugin/target/</directory>
+                  <includes>
+                    <include>autograding.hpi</include>
+                  </includes>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

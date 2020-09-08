@@ -24,25 +24,25 @@
 
     <autograding-model.version>0.2.0</autograding-model.version>
 
-    <commons.lang.version>3.10</commons.lang.version>
+    <commons.lang.version>3.11</commons.lang.version>
 
-    <font-awesome-api.version>5.13.0-1</font-awesome-api.version>
+    <font-awesome-api.version>5.14.0-1</font-awesome-api.version>
     <jquery3-api.version>3.5.1-1</jquery3-api.version>
     <bootstrap4-api.version>4.5.2-1</bootstrap4-api.version>
-    <data-tables-api.version>1.10.20-14</data-tables-api.version>
-    <echarts-api.version>4.7.0-1</echarts-api.version>
+    <data-tables-api.version>1.10.21-2</data-tables-api.version>
+    <echarts-api.version>4.8.0-2</echarts-api.version>
     <echarts-build-trends.version>2.0.0</echarts-build-trends.version>
-    <plugin-util-api.version>1.2.0</plugin-util-api.version>
+    <plugin-util-api.version>1.2.5</plugin-util-api.version>
+    <codingstyle.library.version>1.5.0</codingstyle.library.version>
 
-    <code-coverage-api-plugin.version>1.1.4</code-coverage-api-plugin.version>
+    <code-coverage-api-plugin.version>1.2.0</code-coverage-api-plugin.version>
     <pitmutation-plugin.version>1.0-18</pitmutation-plugin.version>
-    <junit-plugin.version>1.28</junit-plugin.version>
-    <warnings-ng-plugin.version>8.1.0</warnings-ng-plugin.version>
+    <junit-plugin.version>1.34</junit-plugin.version>
+    <warnings-ng-plugin.version>8.4.1</warnings-ng-plugin.version>
 
     <pipeline-stage-step.version>2.3</pipeline-stage-step.version>
-    <workflow-step-api.version>2.20</workflow-step-api.version>
     <workflow-support.version>3.3</workflow-support.version>
-    <jackson2-api.version>2.11.0</jackson2-api.version>
+    <jackson2-api.version>2.11.1</jackson2-api.version>
   </properties>
 
   <licenses>
@@ -60,6 +60,15 @@
     </developer>
   </developers>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>edu.hm.hafner</groupId>
+        <artifactId>codingstyle</artifactId>
+        <version>${codingstyle.library.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
 
     <dependency>
