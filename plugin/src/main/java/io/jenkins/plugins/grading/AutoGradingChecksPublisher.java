@@ -60,7 +60,7 @@ class AutoGradingChecksPublisher {
 
     @SuppressWarnings("deprecation")
     private String getAbsoluteUrl(final Run<?, ?> run) {
-        return new JenkinsFacade().getAbsoluteUrl(run.getAbsoluteUrl(), AutoGradingJobAction.ID);
+        return new JenkinsFacade().getAbsoluteUrl(run.getUrl(), AutoGradingJobAction.ID);
     }
 
     private List<ChecksAnnotation> createAnnotations(final List<Report> reports) {
