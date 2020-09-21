@@ -22,7 +22,7 @@
     <changelist>-SNAPSHOT</changelist>
     <module.name>${project.groupId}.autograding</module.name>
 
-    <autograding-model.version>0.2.0</autograding-model.version>
+    <autograding-model.version>0.3.0</autograding-model.version>
 
     <commons.lang.version>3.11</commons.lang.version>
 
