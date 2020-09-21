@@ -53,7 +53,8 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         FilteredLog log = new FilteredLog(LOG_TITLE);
 
         AggregatedScore score = new AggregatedScore(configuration, log);
-        score.addAnalysisScores(new JenkinsAnalysisSupplier(run));
+        JenkinsAnalysisSupplier analysisScores = new JenkinsAnalysisSupplier(run);
+        score.addAnalysisScores(analysisScores);
         score.addTestScores(new JenkinsTestSupplier(run));
         score.addCoverageScores(new JenkinsCoverageSupplier(run));
         score.addPitScores(new JenkinsPitSupplier(run));
@@ -62,6 +63,9 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         logHandler.log(log);
 
         run.addAction(new AutoGradingBuildAction(run, score));
+
+        AutoGradingChecksPublisher checksPublisher = new AutoGradingChecksPublisher();
+        checksPublisher.publishChecks(run, listener, score, analysisScores.getReports());
     }
 
     @Override
