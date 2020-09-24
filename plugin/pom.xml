@@ -38,7 +38,7 @@
     <code-coverage-api-plugin.version>1.2.0</code-coverage-api-plugin.version>
     <pitmutation-plugin.version>1.0-18</pitmutation-plugin.version>
     <junit-plugin.version>1.36</junit-plugin.version>
-    <warnings-ng-plugin.version>8.4.2</warnings-ng-plugin.version>
+    <warnings-ng-plugin.version>8.4.4</warnings-ng-plugin.version>
 
     <pipeline-stage-step.version>2.5</pipeline-stage-step.version>
     <workflow-support.version>3.3</workflow-support.version>
