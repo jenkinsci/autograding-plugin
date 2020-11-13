@@ -23,7 +23,7 @@ jobs:
       with:
         java-version: 1.8
     - name: Cache the Maven packages to speed up build
-      uses: actions/cache@v2.1.2
+      uses: actions/cache@v2.1.3
       with:
         path: ~/.m2
         key: m2-${{ hashFiles('**/pom.xml') }}
