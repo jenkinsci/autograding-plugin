@@ -6,3 +6,5 @@ work
 pom.xml.versionsBackup
 .DS_Store
 .idea
+pom.xml.releaseBackup
+release.properties
