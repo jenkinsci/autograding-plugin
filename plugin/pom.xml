@@ -12,7 +12,7 @@
   <artifactId>autograding</artifactId>
   <packaging>hpi</packaging>
   <name>Autograding Plugin</name>
-  <version>${revision}${changelist}</version>
+  <version>3.2.0</version>
 
   <description>This plugin autogrades projects based on a configurable set of metrics.</description>
   <url>https://github.com/jenkinsci/autograding-plugin</url>
@@ -329,7 +329,7 @@
     <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-    <tag>autograding-2.0.0</tag>
+    <tag>v3.2.0</tag>
   </scm>
 
   <repositories>
