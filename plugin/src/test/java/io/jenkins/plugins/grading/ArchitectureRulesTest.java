@@ -14,7 +14,7 @@ import io.jenkins.plugins.util.PluginArchitectureRules;
  * @author Ullrich Hafner
  */
 @SuppressWarnings("hideutilityclassconstructor")
-@AnalyzeClasses(packages = "io.jenkins.plugins.grading..")
+@AnalyzeClasses(packages = "io.jenkins.plugins.grading")
 class ArchitectureRulesTest {
     @ArchTest
     static final ArchRule NO_JENKINS_INSTANCE_CALL = PluginArchitectureRules.NO_JENKINS_INSTANCE_CALL;
