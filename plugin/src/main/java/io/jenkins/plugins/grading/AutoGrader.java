@@ -56,13 +56,13 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
         JacksonFacade jackson = new JacksonFacade();
         AggregatedScore score = new AggregatedScore(configuration, log);
 
-        log.logInfo("Test Configuration: " + jackson.toJson(score.getTestConfiguration()));
+        log.logInfo("Test Configuration: %s", jackson.toJson(score.getTestConfiguration()));
         score.addTestScores(new JenkinsTestSupplier(run));
-        log.logInfo("Code Coverage Configuration: " + jackson.toJson(score.getCoverageConfiguration()));
+        log.logInfo("Code Coverage Configuration: %s", jackson.toJson(score.getCoverageConfiguration()));
         score.addCoverageScores(new JenkinsCoverageSupplier(run));
-        log.logInfo("PIT Mutation Coverage Configuration: " + jackson.toJson(score.getPitConfiguration()));
+        log.logInfo("PIT Mutation Coverage Configuration: %s", jackson.toJson(score.getPitConfiguration()));
         score.addPitScores(new JenkinsPitSupplier(run));
-        log.logInfo("Static Analysis Configuration: " + jackson.toJson(score.getAnalysisConfiguration()));
+        log.logInfo("Static Analysis Configuration: %s", jackson.toJson(score.getAnalysisConfiguration()));
         JenkinsAnalysisSupplier analysisScores = new JenkinsAnalysisSupplier(run);
         score.addAnalysisScores(analysisScores);
 
