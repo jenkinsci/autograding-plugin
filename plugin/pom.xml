@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>4.7.0</version>
+    <version>5.0.0-beta-1</version>
     <relativePath />
   </parent>
 
@@ -22,18 +22,16 @@
     <changelist>-SNAPSHOT</changelist>
     <module.name>${project.groupId}.autograding</module.name>
 
-    <autograding-model.version>1.1.0</autograding-model.version>
+    <autograding-model.version>1.2.0</autograding-model.version>
 
-    <commons.lang.version>3.11</commons.lang.version>
+    <plugin-util-api.version>2.0.0-rc276.3347381c7e4d</plugin-util-api.version>
+    <data-tables-api.version>1.10.23-3-rc391.920c10987e49</data-tables-api.version>
+    <echarts-api.version>4.9.0-4-rc351.79d6c6255205</echarts-api.version>
+    <echarts-build-trends.version>2.0.0</echarts-build-trends.version>
 
     <font-awesome-api.version>5.15.2-1</font-awesome-api.version>
     <jquery3-api.version>3.5.1-2</jquery3-api.version>
     <bootstrap4-api.version>4.6.0-1</bootstrap4-api.version>
-    <data-tables-api.version>1.10.23-2</data-tables-api.version>
-    <echarts-api.version>4.9.0-3</echarts-api.version>
-    <echarts-build-trends.version>2.0.0</echarts-build-trends.version>
-    <plugin-util-api.version>1.7.0</plugin-util-api.version>
-    <codingstyle.library.version>1.6.0</codingstyle.library.version>
 
     <code-coverage-api-plugin.version>1.2.1</code-coverage-api-plugin.version>
     <pitmutation-plugin.version>1.0-18</pitmutation-plugin.version>
@@ -42,8 +40,9 @@
 
     <pipeline-stage-step.version>2.5</pipeline-stage-step.version>
     <workflow-support.version>3.3</workflow-support.version>
-    <jackson2-api.version>2.11.1</jackson2-api.version>
+    <jackson2-api.version>2.12.1</jackson2-api.version>
     <checks-api.version>1.5.0</checks-api.version>
+
   </properties>
 
   <licenses>
@@ -64,27 +63,15 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>edu.hm.hafner</groupId>
-        <artifactId>codingstyle</artifactId>
-        <version>${codingstyle.library.version}</version>
-        <exclusions>
-          <!-- Remove once on at least 2.249 baseline -->
-          <exclusion>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs-annotations</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>apache-httpcomponents-client-4-api</artifactId>
         <version>4.5.13-1.0</version>
         <scope>compile</scope>
       </dependency>
       <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>2.8.0</version>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+        <version>20201115</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -120,12 +107,6 @@
       <version>${plugin-util-api.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>${commons.lang.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>io.jenkins.plugins</groupId>
       <artifactId>checks-api</artifactId>
       <version>${checks-api.version}</version>
@@ -156,6 +137,10 @@
         <exclusion>
           <artifactId>guava</artifactId>
           <groupId>com.google.guava</groupId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-beanutils</groupId>
+          <artifactId>commons-beanutils</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
