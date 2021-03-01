@@ -70,13 +70,4 @@ class AggregatedScoreXmlStreamTest extends SerializableTest<AggregatedScore> {
         assertThat(score).hasPitAchieved(73);
         assertThat(score.getPitScores()).hasSize(1);
     }
-
-    private Path createTempFile() {
-        try {
-            return Files.createTempFile("test", ".test");
-        }
-        catch (IOException exception) {
-            throw new AssertionError(exception);
-        }
-    }
 }
