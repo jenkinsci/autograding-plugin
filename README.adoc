@@ -3,7 +3,6 @@
 = Jenkins AutoGrading Plugin
 
 image:https://badges.gitter.im/jenkinsci/warnings-plugin.svg[Join the Gitter chat, link=https://gitter.im/jenkinsci/warnings-plugin]
-image:https://img.shields.io/github/release/jenkinsci/autograding-plugin.svg?label=changelog[changelog, link=https://github.com/jenkinsci/autograding-plugin/releases/latest]
 image:https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/badge/icon?subject=Jenkins%20CI[Jenkins, link=https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/]
 image:https://github.com/jenkinsci/autograding-plugin/workflows/GitHub%20CI/badge.svg?branch=master[GitHub Actions, link=https://github.com/jenkinsci/autograding-plugin/actions]
 image:https://api.codacy.com/project/badge/Grade/1be7bb5b899446968e411e6e59c8ea6c[Codacy Badge, link=https://www.codacy.com/app/jenkinsci/autograding-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jenkinsci/autograding-plugin&amp;utm_campaign=Badge_Grade]
@@ -11,7 +10,7 @@ image:https://codecov.io/gh/jenkinsci/autograding-plugin/branch/master/graph/bad
 
 image::graduation-cap.svg[Scores, width="100"]
 
-Jenkins plugin that autogrades projects based on a configurable set of metrics. Currently, you can select from the 
+Jenkins plugin that autogrades projects based on a configurable set of metrics. Currently, you can select from the
 following metrics:
 
 - Test statistics (e.g., number of failed tests) from the https://github.com/jenkinsci/junit-plugin[JUnit Plugin]
@@ -29,7 +28,7 @@ image::progress.png[Scores]
 == Required workflow
 
 In order to autograde a project, you first need to build your project using your favorite build tool. Make sure
-your build invokes all tools that will produce the artifacts required for the autograding later on. Then 
+your build invokes all tools that will produce the artifacts required for the autograding later on. Then
 run all post build steps that record the desired results using the plugins from the list above. Autograding is based
 on the persisted Jenkins model of these plugins (i.e., Jenkins build actions), so make sure the results of these plugins
 show correctly up in the Jenkins build view. The autograding has to be started as the last step: you can configure
@@ -49,7 +48,7 @@ image::details.png[Scores Details]
 
 Please have a look at the
 https://github.com/jenkinsci/autograding-plugin/blob/master/etc/Jenkinsfile.autograding[example pipeline] that shows how to use this plugin in practice.
-It consists of the following stages:   
+It consists of the following stages:
 
 . Checkout from SCM
 . Build and test the project and run the static analysis with Maven
