@@ -34,7 +34,7 @@
     <bootstrap4-api.version>4.6.0-2</bootstrap4-api.version>
     <popper-api.version>1.16.1-2</popper-api.version>
 
-    <code-coverage-api-plugin.version>1.2.1</code-coverage-api-plugin.version>
+    <code-coverage-api-plugin.version>1.4.0</code-coverage-api-plugin.version>
     <pitmutation-plugin.version>1.0-18</pitmutation-plugin.version>
     <junit-plugin.version>1.37</junit-plugin.version>
     <warnings-ng-plugin.version>8.10.0</warnings-ng-plugin.version>
