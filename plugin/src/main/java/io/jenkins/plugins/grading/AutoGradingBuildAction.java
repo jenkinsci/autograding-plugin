@@ -9,7 +9,7 @@ import hudson.model.Run;
 import io.jenkins.plugins.util.BuildAction;
 
 /**
- * Controls the live cycle of the score results in a job. This action persists the results of a build and displays a
+ * Controls the life cycle of the score results in a job. This action persists the results of a build and displays a
  * summary on the build page. The actual visualization of the results is defined in the matching {@code summary.jelly}
  * file.
  *
