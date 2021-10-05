@@ -26,7 +26,7 @@
 
     <plugin-util-api.version>2.0.0</plugin-util-api.version>
     <data-tables-api.version>1.10.23-3</data-tables-api.version>
-    <echarts-api.version>4.9.0-4</echarts-api.version>
+    <echarts-api.version>5.2.1-2</echarts-api.version>
     <echarts-build-trends.version>2.0.0</echarts-build-trends.version>
 
     <font-awesome-api.version>5.15.2-2</font-awesome-api.version>
