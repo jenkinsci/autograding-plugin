@@ -1,10 +1,12 @@
+node
 node_modules
 target
-work
 *.iml
 .classpath
+.project
+.settings
 pom.xml.versionsBackup
-.DS_Store
-.idea
 pom.xml.releaseBackup
 release.properties
+.DS_Store
+/package-lock.json
