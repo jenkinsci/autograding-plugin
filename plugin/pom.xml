@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>5.0.0</version>
+    <version>5.13.0</version>
     <relativePath />
   </parent>
 
@@ -41,7 +41,7 @@
 
     <pipeline-stage-step.version>2.5</pipeline-stage-step.version>
     <workflow-support.version>3.3</workflow-support.version>
-    <jackson2-api.version>2.12.1</jackson2-api.version>
+    <jackson2-api.version>2.13.0-229.v5bfd0fab80eb</jackson2-api.version>
     <checks-api.version>1.7.2</checks-api.version>
 
   </properties>
