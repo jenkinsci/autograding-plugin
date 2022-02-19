@@ -73,7 +73,7 @@
           </bs:card>
         </div>
         <div class="col-xl col-xxl d-none d-xl-block">
-          <bs:card title="${%title.analysis}" fontAwesomeIcon="exclamation-triangle">
+          <bs:card title="${%title.analysis}" fontAwesomeIcon="triangle-exclamation">
             <p>
               <div class="">
                 <c:progress-chart id="analysis-progress" model="${it.getProgressModel(score.analysisRatio)}"
@@ -253,7 +253,7 @@
       <div class="row py-3">
         <div class="col-12">
 
-          <bs:card title="${%title.analysis}" fontAwesomeIcon="exclamation-triangle">
+          <bs:card title="${%title.analysis}" fontAwesomeIcon="triangle-exclamation">
             <j:set var="analysisScores" value="${score.analysisScores}"/>
             <div class="table-responsive">
               <table class="table table-hover table-striped display" id="analysis">
