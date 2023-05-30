@@ -36,7 +36,7 @@
 
     <code-coverage-api-plugin.version>2.0.4</code-coverage-api-plugin.version>
     <pitmutation-plugin.version>1.0-18</pitmutation-plugin.version>
-    <junit-plugin.version>1189.v3d74e8c7de95</junit-plugin.version>
+    <junit-plugin.version>1215.vc5b_3b_6232f4b_</junit-plugin.version>
     <warnings-ng-plugin.version>8.10.0</warnings-ng-plugin.version>
 
     <pipeline-stage-step.version>306.ve23f3ce97e8a_</pipeline-stage-step.version>
