@@ -39,7 +39,7 @@
     <junit-plugin.version>1189.v3d74e8c7de95</junit-plugin.version>
     <warnings-ng-plugin.version>8.10.0</warnings-ng-plugin.version>
 
-    <pipeline-stage-step.version>306.ve23f3ce97e8a_</pipeline-stage-step.version>
+    <pipeline-stage-step.version>310.v05e72db_17401</pipeline-stage-step.version>
     <workflow-support.version>3.3</workflow-support.version>
     <jackson2-api.version>2.14.2-320.vb_5a_411652da_d</jackson2-api.version>
     <checks-api.version>1.7.2</checks-api.version>
