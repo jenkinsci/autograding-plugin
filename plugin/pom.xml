@@ -22,7 +22,7 @@
     <changelist>-SNAPSHOT</changelist>
     <module.name>${project.groupId}.autograding</module.name>
 
-    <autograding-model.version>1.3.0</autograding-model.version>
+    <autograding-model.version>2.0.0</autograding-model.version>
 
     <plugin-util-api.version>2.5.1</plugin-util-api.version>
     <data-tables-api.version>1.11.3-1</data-tables-api.version>
