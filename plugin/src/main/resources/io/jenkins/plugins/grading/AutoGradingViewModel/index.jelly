@@ -40,7 +40,7 @@
           </bs:card>
         </div>
         <div class="col-xl col-xxl d-none d-xl-block">
-          <bs:card title="${%title.tests}" fontAwesomeIcon="check-square">
+          <bs:card title="${%title.tests}" fontAwesomeIcon="list-check">
             <p>
               <div class="">
                 <c:progress-chart id="test-progress" model="${it.getProgressModel(score.testRatio)}" height="150"
@@ -51,7 +51,7 @@
           </bs:card>
         </div>
         <div class="col-xl col-xxl d-none d-xl-block">
-          <bs:card title="${%title.coverage}" fontAwesomeIcon="microscope">
+          <bs:card title="${%title.coverage}" symbol="symbol-footsteps-outline plugin-ionicons-api">
             <p>
               <div class="">
                 <c:progress-chart id="coverage-progress" model="${it.getProgressModel(score.coverageRatio)}"
@@ -62,7 +62,7 @@
           </bs:card>
         </div>
         <div class="col-xl col-xxl d-none d-xl-block">
-          <bs:card title="${%title.pit}" fontAwesomeIcon="viruses">
+          <bs:card title="${%title.pit}" fontAwesomeIcon="virus-slash">
             <p>
               <div class="">
                 <c:progress-chart id="pit-progress" model="${it.getProgressModel(score.pitRatio)}" height="150"
@@ -146,7 +146,7 @@
       <div class="row py-3">
         <div class="col-12">
 
-          <bs:card title="${%title.coverage}" fontAwesomeIcon="footsteps-outline">
+          <bs:card title="${%title.coverage}" symbol="symbol-footsteps-outline plugin-ionicons-api">
             <div class="table-responsive">
               <table class="table table-hover table-striped display" id="coverage">
                 <thead>
