@@ -26,6 +26,7 @@ import io.jenkins.plugins.coverage.metrics.steps.CoverageBuildAction;
  * @author Ullrich Hafner
  */
 class JenkinsCoverageSupplier extends CoverageSupplier {
+    private static final String COVERAGE_DEFAULT_ID = "coverage";
     private final Run<?, ?> run;
 
     JenkinsCoverageSupplier(final Run<?, ?> run) {
@@ -37,10 +38,12 @@ class JenkinsCoverageSupplier extends CoverageSupplier {
     @Override
     protected List<CoverageScore> createScores(final CoverageConfiguration configuration) {
         List<CoverageScore> scores = new ArrayList<>();
-        CoverageBuildAction action = run.getAction(CoverageBuildAction.class);
-        if (action != null) {
-            scores.addAll(createCoverageScore(action, configuration, Metric.LINE));
-            scores.addAll(createCoverageScore(action, configuration, Metric.BRANCH));
+        List<CoverageBuildAction> actions = run.getActions(CoverageBuildAction.class);
+        for (CoverageBuildAction action : actions) {
+            if (COVERAGE_DEFAULT_ID.equals(action.getUrlName())) {
+                scores.addAll(createCoverageScore(action, configuration, Metric.LINE));
+                scores.addAll(createCoverageScore(action, configuration, Metric.BRANCH));
+            }
         }
         return scores;
     }

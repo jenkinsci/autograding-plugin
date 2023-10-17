@@ -22,6 +22,7 @@ import io.jenkins.plugins.coverage.metrics.steps.CoverageBuildAction;
  * @author Ullrich Hafner
  */
 class JenkinsPitSupplier extends PitSupplier {
+    private static final String PIT_DEFAULT_ID = "pit";
     private final Run<?, ?> run;
 
     JenkinsPitSupplier(final Run<?, ?> run) {
@@ -32,17 +33,19 @@ class JenkinsPitSupplier extends PitSupplier {
 
     @Override
     protected List<PitScore> createScores(final PitConfiguration configuration) {
-        CoverageBuildAction action = run.getAction(CoverageBuildAction.class);
-        if (action != null) {
-            var value = action.getValueForMetric(Baseline.PROJECT, Metric.MUTATION);
-            if (value.isPresent() && value.get() instanceof Coverage) {
-                var coverage = (Coverage)value.get();
-                PitScore score = new PitScoreBuilder().withConfiguration(configuration)
-                        .withDisplayName(action.getDisplayName())
-                        .withTotalMutations(coverage.getTotal())
-                        .withUndetectedMutations(coverage.getMissed())
-                        .build();
-                return Collections.singletonList(score);
+        List<CoverageBuildAction> actions = run.getActions(CoverageBuildAction.class);
+        for (CoverageBuildAction action : actions) {
+            if (PIT_DEFAULT_ID.equals(action.getUrlName())) {
+                var value = action.getValueForMetric(Baseline.PROJECT, Metric.MUTATION);
+                if (value.isPresent() && value.get() instanceof Coverage) {
+                    var coverage = (Coverage) value.get();
+                    PitScore score = new PitScoreBuilder().withConfiguration(configuration)
+                            .withDisplayName(action.getDisplayName())
+                            .withTotalMutations(coverage.getTotal())
+                            .withUndetectedMutations(coverage.getMissed())
+                            .build();
+                    return Collections.singletonList(score);
+                }
             }
         }
         return List.of();

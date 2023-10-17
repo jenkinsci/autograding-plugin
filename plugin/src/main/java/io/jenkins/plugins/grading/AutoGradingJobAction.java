@@ -14,7 +14,7 @@ import io.jenkins.plugins.util.JobAction;
  * @author Eva-Maria Zeintl
  */
 public class AutoGradingJobAction extends JobAction<AutoGradingBuildAction> {
-    static final String SMALL_ICON = "/plugin/autograding/icons/autograding-24x24.png";
+    static final String ICON = "symbol-solid/graduation-cap plugin-font-awesome-api";
     static final String ID = "autograding";
 
     /**
@@ -34,7 +34,7 @@ public class AutoGradingJobAction extends JobAction<AutoGradingBuildAction> {
 
     @Override
     public String getIconFileName() {
-        return SMALL_ICON;
+        return ICON;
     }
 
     @Override

@@ -286,6 +286,7 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("mutations.xml");
 
         CoverageRecorder coveragePublisher = new CoverageRecorder();
+        coveragePublisher.setId("pit");
         var tool = new CoverageTool();
         tool.setParser(Parser.PIT);
         coveragePublisher.setTools(List.of(tool));
@@ -360,7 +361,7 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
         switch (stepName) {
             case "mutations":
-                pipelineScript.append("         recordCoverage tools: [[parser: 'PIT']]\n");
+                pipelineScript.append("         recordCoverage tools: [[parser: 'PIT']], id: 'pit'\n");
                 break;
             case "jacoco":
                 pipelineScript.append("         recordCoverage tools: [[parser: 'JACOCO']]\n");

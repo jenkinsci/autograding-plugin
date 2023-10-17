@@ -1,5 +1,5 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:bs="/bootstrap" xmlns:c="/charts"
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:bs="/bootstrap5" xmlns:c="/charts"
          xmlns:g="/grading">
 
   <st:header name="Content-Type" value="text/html;charset=UTF-8"/>
@@ -88,7 +88,7 @@
       <div class="row py-3">
         <div class="col-12">
 
-          <bs:card title="${%title.tests}" fontAwesomeIcon="check-square">
+          <bs:card title="${%title.tests}" fontAwesomeIcon="list-check">
             <div class="table-responsive">
               <table class="table table-hover table-striped display" id="test">
                 <thead>
@@ -146,7 +146,7 @@
       <div class="row py-3">
         <div class="col-12">
 
-          <bs:card title="${%title.coverage}" fontAwesomeIcon="microscope">
+          <bs:card title="${%title.coverage}" fontAwesomeIcon="footsteps-outline">
             <div class="table-responsive">
               <table class="table table-hover table-striped display" id="coverage">
                 <thead>
@@ -194,7 +194,7 @@
       <div class="row py-3">
         <div class="col-12">
 
-          <bs:card title="${%title.pit}" fontAwesomeIcon="viruses">
+          <bs:card title="${%title.pit}" fontAwesomeIcon="virus-slash">
             <div class="table-responsive">
               <table class="table table-hover table-striped display" id="pit">
                 <thead>

@@ -52,7 +52,7 @@ public class AutoGradingBuildAction extends BuildAction<AggregatedScore> impleme
 
     @Override
     public String getIconFileName() {
-        return AutoGradingJobAction.SMALL_ICON;
+        return AutoGradingJobAction.ICON;
     }
 
     @Override
