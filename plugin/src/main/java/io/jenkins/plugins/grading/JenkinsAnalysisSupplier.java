@@ -24,9 +24,12 @@ class JenkinsAnalysisSupplier extends AnalysisSupplier {
     private final Run<?, ?> run;
 
     JenkinsAnalysisSupplier(final Run<?, ?> run) {
+        super();
+
         this.run = run;
     }
 
+    @Override
     protected List<AnalysisScore> createScores(final AnalysisConfiguration configuration) {
         return run.getActions(ResultAction.class).stream().map(action ->
                 new AnalysisScoreBuilder().withConfiguration(configuration)

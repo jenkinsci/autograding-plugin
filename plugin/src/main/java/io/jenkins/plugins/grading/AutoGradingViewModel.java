@@ -59,5 +59,4 @@ public class AutoGradingViewModel implements ModelObject {
     public String getProgressModel(final int percentage) {
         return JACKSON_FACADE.toJson(new PercentagePieChart().create(percentage));
     }
-
 }

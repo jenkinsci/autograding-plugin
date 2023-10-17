@@ -1,11 +1,10 @@
 package io.jenkins.plugins.grading;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
 import edu.hm.hafner.grading.AggregatedScore;
@@ -16,7 +15,6 @@ import edu.hm.hafner.grading.PitConfiguration;
 import edu.hm.hafner.grading.PitScore;
 import edu.hm.hafner.grading.TestScore;
 
-import org.jenkinsci.plugins.pitmutation.PitPublisher;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import hudson.model.FreeStyleProject;
@@ -24,15 +22,13 @@ import hudson.model.Run;
 import hudson.tasks.junit.JUnitResultArchiver;
 
 import io.jenkins.plugins.analysis.core.steps.IssuesRecorder;
+import io.jenkins.plugins.analysis.warnings.CheckStyle;
 import io.jenkins.plugins.analysis.warnings.Cpd;
 import io.jenkins.plugins.analysis.warnings.Pmd;
 import io.jenkins.plugins.analysis.warnings.SpotBugs;
-import io.jenkins.plugins.analysis.warnings.checkstyle.CheckStyle;
-import io.jenkins.plugins.coverage.CoveragePublisher;
-import io.jenkins.plugins.coverage.adapter.CoverageAdapter;
-import io.jenkins.plugins.coverage.adapter.JacocoReportAdapter;
-import io.jenkins.plugins.coverage.source.DefaultSourceFileResolver;
-import io.jenkins.plugins.coverage.source.SourceFileResolver.SourceFileResolverLevel;
+import io.jenkins.plugins.coverage.metrics.steps.CoverageRecorder;
+import io.jenkins.plugins.coverage.metrics.steps.CoverageTool;
+import io.jenkins.plugins.coverage.metrics.steps.CoverageTool.Parser;
 import io.jenkins.plugins.util.IntegrationTestWithJenkinsPerSuite;
 
 import static io.jenkins.plugins.grading.assertions.Assertions.*;
@@ -43,7 +39,7 @@ import static io.jenkins.plugins.grading.assertions.Assertions.*;
  * @author Ullrich Hafner
  */
 @SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity"})
-public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
+class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     private static final String TEST_CONFIGURATION = "{\"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-5,\"skippedImpact\":-1}}";
     private static final String ANALYSIS_CONFIGURATION = "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-10,\"highImpact\":-5,\"normalImpact\":-2,\"lowImpact\":-1}}";
     private static final String COVERAGE_CONFIGURATION = "{\"coverage\": {\"maxScore\": 100, \"coveredPercentageImpact\": 1, \"missedPercentageImpact\": -1}}";
@@ -63,7 +59,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
     /** Verifies that the step skips all autograding parts if the configuration is empty. */
     @Test
-    public void shouldSkipGradingIfConfigurationIsEmpty() {
+    void shouldSkipGradingIfConfigurationIsEmpty() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
         configureScanner(job, "checkstyle", "{}");
@@ -79,7 +75,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      * Verifies that an error will be reported if testing has been requested, but no testing action has been recorded.
      */
     @Test
-    public void shouldAbortBuildSinceNoTestActionHasBeenRegistered() {
+    void shouldAbortBuildSinceNoTestActionHasBeenRegistered() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
 
         configureScanner(job, "checkstyle", TEST_CONFIGURATION);
@@ -94,7 +90,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      * Verifies that a single analysis result will be correctly added.
      */
     @Test
-    public void shouldCountCheckStyleWarnings() {
+    void shouldCountCheckStyleWarnings() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("checkstyle.xml");
         configureScanner(job, "checkstyle", ANALYSIS_CONFIGURATION);
 
@@ -144,7 +140,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      * Verifies that multiple analysis results will be correctly summed.
      */
     @Test
-    public void shouldGradeMultipleAnalysisResults() {
+    void shouldGradeMultipleAnalysisResults() {
         WorkflowJob pipelineJob = createPipelineWithWorkspaceFiles(ANALYSIS_REPORTS);
         configureScanner(pipelineJob, "recordIssues", ANALYSIS_CONFIGURATION);
 
@@ -213,7 +209,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      * Verifies that multiple test results will be correctly summed.
      */
     @Test
-    public void shouldGradeMultipleTestResults() {
+    void shouldGradeMultipleTestResults() {
         WorkflowJob job = createPipelineWithWorkspaceFiles(TEST_REPORTS);
         configureScanner(job, "junit", TEST_CONFIGURATION);
 
@@ -245,22 +241,16 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      * Verifies that coverage results will be correctly scored.
      */
     @Test
-    public void shouldGradeCoverageWithScoreOf100() {
+    void shouldGradeCoverageWithScoreOf100() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
         configureScanner(job, "jacoco", COVERAGE_CONFIGURATION);
 
         FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("jacoco.xml");
 
-        JacocoReportAdapter jacocoReportAdapter = new JacocoReportAdapter("**/jacoco.xml");
-        DefaultSourceFileResolver defaultSourceFileResolver = new DefaultSourceFileResolver(
-                SourceFileResolverLevel.NEVER_STORE);
-
-        List<CoverageAdapter> coverageAdapters = new ArrayList<>();
-        coverageAdapters.add(jacocoReportAdapter);
-
-        CoveragePublisher coveragePublisher = new CoveragePublisher();
-        coveragePublisher.setAdapters(coverageAdapters);
-        coveragePublisher.setSourceFileResolver(defaultSourceFileResolver);
+        CoverageRecorder coveragePublisher = new CoverageRecorder();
+        var tool = new CoverageTool();
+        tool.setParser(Parser.JACOCO);
+        coveragePublisher.setTools(List.of(tool));
 
         project.getPublishersList().add(coveragePublisher);
         project.getPublishersList().add(new AutoGrader(COVERAGE_CONFIGURATION));
@@ -289,15 +279,18 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      * Verifies that PIT results will be correctly scored.
      */
     @Test
-    public void shouldGradePitMutationWithScoreOf87() {
+    void shouldGradePitMutationWithScoreOf87() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("mutations.xml");
         configureScanner(job, "mutations", PIT_CONFIGURATION);
 
         FreeStyleProject project = createFreeStyleProjectWithWorkspaceFiles("mutations.xml");
 
-        PitPublisher publisher = new PitPublisher();
-        publisher.setMutationStatsFile("**/mutations.xml");
-        project.getPublishersList().add(publisher);
+        CoverageRecorder coveragePublisher = new CoverageRecorder();
+        var tool = new CoverageTool();
+        tool.setParser(Parser.PIT);
+        coveragePublisher.setTools(List.of(tool));
+
+        project.getPublishersList().add(coveragePublisher);
         project.getPublishersList().add(new AutoGrader(PIT_CONFIGURATION));
 
         Run<?, ?> freestyle = buildSuccessfully(project);
@@ -305,11 +298,11 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
         assertAchievedScore(pipeline, 87);
         assertAchievedScore(pipeline, 87);
-        assertPitMuatation(freestyle);
-        assertPitMuatation(pipeline);
+        assertPitMutation(freestyle);
+        assertPitMutation(pipeline);
     }
 
-    private void assertPitMuatation(final Run<?, ?> baseline) {
+    private void assertPitMutation(final Run<?, ?> baseline) {
         AggregatedScore score = getAggregatedScore(baseline);
         PitConfiguration pitConfiguration = new PitConfiguration.PitConfigurationBuilder()
                 .setDetectedImpact(1)
@@ -349,6 +342,7 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      *
      * @return the console log
      */
+    @Override
     protected String getConsoleLog(final Run<?, ?> build) {
         try {
             return JenkinsRule.getLog(build);
@@ -359,25 +353,28 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     }
 
     private void configureScanner(final WorkflowJob job, final String stepName, final String configuration) {
-        StringBuilder pipelineScript = new StringBuilder("node {\n");
-        pipelineScript.append("  stage ('Integration Test') {\n");
+        var pipelineScript = new StringBuilder(1024);
+
+        pipelineScript.append("node {\n"
+                + "  stage ('Integration Test') {\n");
 
         switch (stepName) {
             case "mutations":
-                pipelineScript.append(
-                        "         step([$class: 'PitPublisher', mutationStatsFile: '**/mutations.xml'])\n");
+                pipelineScript.append("         recordCoverage tools: [[parser: 'PIT']]\n");
                 break;
             case "jacoco":
-                pipelineScript.append(
-                        "         publishCoverage adapters: [jacocoAdapter('**/jacoco.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')\n");
+                pipelineScript.append("         recordCoverage tools: [[parser: 'JACOCO']]\n");
                 break;
             case "checkstyle":
                 pipelineScript.append("         recordIssues tool: checkStyle(pattern: '**/checkstyle*')\n");
                 break;
             case "recordIssues":
-                pipelineScript.append("         recordIssues tools: [spotBugs(pattern: '**/spotbugsXml.xml'),\n");
-                pipelineScript.append("                 pmdParser(pattern: '**/pmd.xml'),\n");
-                pipelineScript.append("                 cpd(pattern: '**/cpd.xml')]\n");
+                pipelineScript.append("         recordIssues tools: ["
+                        + "spotBugs(pattern: '**/spotbugsXml.xml'),\n");
+                pipelineScript.append("                 "
+                        + "pmdParser(pattern: '**/pmd.xml'),\n");
+                pipelineScript.append("                 "
+                        + "cpd(pattern: '**/cpd.xml')]\n");
                 break;
             case "junit":
                 pipelineScript.append("         junit testResults: '**/TEST-*.xml'\n");
@@ -386,9 +383,12 @@ public class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 break;
 
         }
-        pipelineScript.append("         autoGrade('").append(configuration).append("')\n");
-        pipelineScript.append("  }\n");
-        pipelineScript.append("}");
+        pipelineScript
+                .append("         autoGrade('")
+                .append(configuration)
+                .append("')\n");
+        pipelineScript.append("  }\n"
+                + "}");
         job.setDefinition(new CpsFlowDefinition(pipelineScript.toString(), true));
     }
 }

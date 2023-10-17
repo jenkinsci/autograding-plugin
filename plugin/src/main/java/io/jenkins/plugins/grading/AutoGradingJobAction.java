@@ -15,7 +15,6 @@ import io.jenkins.plugins.util.JobAction;
  */
 public class AutoGradingJobAction extends JobAction<AutoGradingBuildAction> {
     static final String SMALL_ICON = "/plugin/autograding/icons/autograding-24x24.png";
-
     static final String ID = "autograding";
 
     /**
