@@ -40,7 +40,7 @@ class JenkinsPitSupplier extends PitSupplier {
                 if (value.isPresent() && value.get() instanceof Coverage) {
                     var coverage = (Coverage) value.get();
                     PitScore score = new PitScoreBuilder().withConfiguration(configuration)
-                            .withDisplayName(action.getDisplayName())
+                            .withDisplayName("Mutations")
                             .withTotalMutations(coverage.getTotal())
                             .withUndetectedMutations(coverage.getMissed())
                             .build();

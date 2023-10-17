@@ -36,9 +36,10 @@ class JenkinsPitSupplierTest {
         CoverageBuildAction action = mock(CoverageBuildAction.class);
         when(action.getValueForMetric(Baseline.PROJECT, Metric.MUTATION)).thenReturn(Optional.of(coverageBuilder.build()));
         when(action.getDisplayName()).thenReturn(DISPLAY_NAME);
+        when(action.getUrlName()).thenReturn("pit");
 
         Run<?, ?> run = mock(Run.class);
-        when(run.getAction(any())).thenReturn(action);
+        when(run.getActions(any())).thenReturn(List.of(action));
 
         JenkinsPitSupplier pitSupplier = new JenkinsPitSupplier(run);
         PitConfiguration configuration = new PitConfigurationBuilder().build();
@@ -47,7 +48,7 @@ class JenkinsPitSupplierTest {
 
         assertThat(scores).hasSize(1).contains(new PitScoreBuilder()
                 .withConfiguration(configuration)
-                        .withDisplayName(DISPLAY_NAME)
+                        .withDisplayName("Mutations")
                         .withTotalMutations(10)
                         .withUndetectedMutations(5)
                         .build());

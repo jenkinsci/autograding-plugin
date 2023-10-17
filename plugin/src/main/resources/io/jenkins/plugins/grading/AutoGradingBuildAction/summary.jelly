@@ -1,7 +1,7 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:t="/lib/hudson">
 
-    <t:summary icon="/plugin/autograding/icons/autograding-48x48.png">
+    <t:summary icon="symbol-solid/graduation-cap plugin-font-awesome-api">
         ${%title}: <a href="autograding">${%result(it.achieved, it.total)}</a>
     </t:summary>
 

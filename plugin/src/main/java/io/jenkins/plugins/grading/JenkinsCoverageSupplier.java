@@ -55,7 +55,7 @@ class JenkinsCoverageSupplier extends CoverageSupplier {
             var coverage = (Coverage)value.get();
             return Collections.singleton(new CoverageScoreBuilder()
                     .withId(StringUtils.lowerCase(metric.toTagName()))
-                    .withDisplayName(action.getFormatter().getLabel(metric))
+                    .withDisplayName(action.getFormatter().getLabel(metric) + " Coverage")
                     .withCoveredPercentage((int)coverage.getCoveredPercentage().toDouble())
                     .withConfiguration(configuration).build());
         }

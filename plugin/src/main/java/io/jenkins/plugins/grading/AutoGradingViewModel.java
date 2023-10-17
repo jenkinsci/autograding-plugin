@@ -7,6 +7,8 @@ import edu.hm.hafner.grading.AggregatedScore;
 import hudson.model.ModelObject;
 import hudson.model.Run;
 
+import io.jenkins.plugins.echarts.JenkinsPalette;
+
 /**
  * Server side model that provides the data for the details view of the autograding results. The layout of the
  * associated view is defined in the corresponding jelly view 'index.jelly'.
@@ -57,6 +59,20 @@ public class AutoGradingViewModel implements ModelObject {
      */
     @SuppressWarnings("unused") // Called by jelly view
     public String getProgressModel(final int percentage) {
-        return JACKSON_FACADE.toJson(new PercentagePieChart().create(percentage));
+        return JACKSON_FACADE.toJson(new PercentagePieChart()
+                .createWithStringMapper(percentage, this::mapColors));
+    }
+
+    private String mapColors(final int percentage) {
+        if (percentage < 50) {
+            return JenkinsPalette.RED.normal();
+        }
+        else if (percentage < 80) {
+            return JenkinsPalette.ORANGE.normal();
+        }
+        else {
+            return JenkinsPalette.GREEN.normal();
+        }
+
     }
 }

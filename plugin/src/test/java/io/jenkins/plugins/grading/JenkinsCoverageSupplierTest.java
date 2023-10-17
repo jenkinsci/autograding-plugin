@@ -41,9 +41,9 @@ class JenkinsCoverageSupplierTest {
         when(action.getValueForMetric(Baseline.PROJECT, Metric.BRANCH)).thenReturn(Optional.of(coverageBuilder.build()));
         when(action.getDisplayName()).thenReturn(DISPLAY_NAME);
         when(action.getFormatter()).thenReturn(new ElementFormatter());
-
+        when(action.getUrlName()).thenReturn("coverage");
         Run<?, ?> run = mock(Run.class);
-        when(run.getAction(any())).thenReturn(action);
+        when(run.getActions(any())).thenReturn(List.of(action));
 
         JenkinsCoverageSupplier coverageSupplier = new JenkinsCoverageSupplier(run);
         CoverageConfiguration configuration = new CoverageConfigurationBuilder().build();
@@ -54,9 +54,9 @@ class JenkinsCoverageSupplierTest {
                 .withConfiguration(configuration)
                 .withCoveredPercentage(50);
         assertThat(scores).hasSize(2).contains(
-                builder.withId("line").withDisplayName("Line")
+                builder.withId("line").withDisplayName("Line Coverage")
                         .build(),
-                builder.withId("branch").withDisplayName("Branch")
+                builder.withId("branch").withDisplayName("Branch Coverage")
                         .build()
         );
     }

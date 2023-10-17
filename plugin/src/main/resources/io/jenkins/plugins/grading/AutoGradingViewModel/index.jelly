@@ -26,7 +26,7 @@
                 <c:progress-chart id="total-progress" model="${it.getProgressModel(score.ratio)}" height="150"
                                   value="${score.ratio}" tooltip="${%tooltip(score.achieved, score.total)}"/>
               </div>
-              <div class="col-md-6 col-lg-6 col-xl-6 d-none d-block d-l-block d-xl-none">
+              <div class="col-md-6 col-lg-6 col-xl-6 d-xl-none">
                 <g:score title="${%title.tests}" ratio="${score.testRatio}" achieved="${score.testAchieved}"
                          total="${testConfig.maxScore}"/>
                 <g:score title="${%title.coverage}" ratio="${score.coverageRatio}" achieved="${score.coverageAchieved}"
@@ -105,7 +105,7 @@
                   <j:forEach var="checks" items="${score.testScores}">
                     <tr>
                       <td>
-                        <a href="../testReport">${checks.id}</a>
+                        <a href="../testReport">${checks.name}</a>
                       </td>
                       <td>
                         ${checks.passedSize}
