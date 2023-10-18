@@ -17,7 +17,7 @@ following metrics:
 - PIT mutation coverage (e.g., missed mutations' percentage)  from the https://github.com/jenkinsci/pitmutation-plugin[PIT Mutation reporting plugin]
 - Static analysis (e.g., number of warnings) from the https://github.com/jenkinsci/warnings-ng-plugin[Warnings Plugin - Next Generation]
 
-For each metric you can define the impact on the overall score and the individual scoring criteria. After each build
+For each metric, you can define the impact on the overall score and the individual scoring criteria. After each build,
 the autograding plugin shows a summary in several progress charts and details in a table for each metric.
 
 .Overall score and individual score of participating metrics

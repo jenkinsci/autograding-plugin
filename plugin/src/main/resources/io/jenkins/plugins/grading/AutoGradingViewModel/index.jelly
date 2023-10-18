@@ -21,7 +21,8 @@
       <div class="row py-3">
         <div class="col-l-12 col-xl col-xxl">
           <bs:card title="${%title.total}" fontAwesomeIcon="graduation-cap">
-            <div class="row align-items-center justify-content-center">
+            <p>
+              <div class="row align-items-center justify-content-center">
               <div class="col-md-6 col-lg-6 col-xl-12 col-xxl-12">
                 <c:progress-chart id="total-progress" model="${it.getProgressModel(score.ratio)}" height="150"
                                   value="${score.ratio}" tooltip="${%tooltip(score.achieved, score.total)}"/>
@@ -37,6 +38,7 @@
                          total="${analysisConfig.maxScore}"/>
               </div>
             </div>
+            </p>
           </bs:card>
         </div>
         <div class="col-xl col-xxl d-none d-xl-block">
@@ -211,7 +213,7 @@
                   <j:forEach var="checks" items="${score.pitScores}">
                     <tr>
                       <td>
-                        <a href="../pitmutation">${checks.id}</a>
+                        <a href="../pitmutation">${checks.name}</a>
                       </td>
                       <td>
                         ${checks.detectedSize}

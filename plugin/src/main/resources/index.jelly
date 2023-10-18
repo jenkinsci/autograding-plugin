@@ -18,7 +18,7 @@
       <a href="https://github.com/jenkinsci/code-coverage-api-plugin">Code Coverage Plugin</a>.
     </li>
     <li>
-      Static analysis (e.g., number of warnings) from the [Warnings
+      Static analysis (e.g., number of warnings) from the
       <a href="https://github.com/jenkinsci/warnings-ng-plugin">Warnings Plugin</a>.
     </li>
   </ul>
