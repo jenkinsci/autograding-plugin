@@ -4,7 +4,7 @@
 
 image:https://badges.gitter.im/jenkinsci/warnings-plugin.svg[Join the Gitter chat, link=https://gitter.im/jenkinsci/warnings-plugin]
 image:https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/main/badge/icon?subject=Jenkins%20CI[Jenkins, link=https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/main/]
-image:https://github.com/jenkinsci/autograding-plugin/workflows/GitHub%20CI/badge.svg?branch=master[GitHub Actions, link=https://github.com/jenkinsci/autograding-plugin/actions]
+image:https://github.com/jenkinsci/autograding-plugin/workflows/GitHub%20CI/badge.svg[GitHub Actions, link=https://github.com/jenkinsci/autograding-plugin/actions]
 image:https://codecov.io/gh/jenkinsci/autograding-plugin/branch/main/graph/badge.svg[codecov, link=https://codecov.io/gh/jenkinsci/autograding-plugin]
 
 image::graduation-cap.svg[Scores, width="100"]
