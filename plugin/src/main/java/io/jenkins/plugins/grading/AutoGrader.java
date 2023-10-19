@@ -22,10 +22,11 @@ import jenkins.tasks.SimpleBuildStep;
 import io.jenkins.plugins.util.LogHandler;
 
 /**
- * This recorder gathers all the needed results of previous run check in the job. Inputs are Saved, and Quality Score is
- * computed on base of defined configurations.
+ * A pipeline {@code Step} or Freestyle or Maven {@link Recorder} that automatically grades projects
+ * based on a configurable set of metrics.
  *
  * @author Eva-Maria Zeintl
+ * @author Ullrich Hafner
  */
 @SuppressWarnings("checkstyle:ClassFanOutComplexity")
 public class AutoGrader extends Recorder implements SimpleBuildStep {

@@ -20,8 +20,8 @@ import static org.assertj.core.api.Assertions.*;
  *
  * @author Lukas Kirner
  */
-@WithPlugins({"autograding", "warnings-ng", "junit", "pitmutation", "code-coverage-api", "pipeline-stage-step", "workflow-durable-task-step", "workflow-basic-steps"})
-public class AutoGradingPluginUiTest extends AbstractJUnitTest {
+@WithPlugins({"autograding", "warnings-ng", "junit", "code-coverage-api", "pipeline-stage-step", "workflow-durable-task-step", "workflow-basic-steps"})
+public class SmokeTests extends AbstractJUnitTest {
     private static final String AUTOGRADING_PLUGIN_PREFIX = "/autograding_test/";
     private static final String CONFIGURATION = "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-5,\"highImpact\":-3,\"normalImpact\":-2,\"lowImpact\":-1}, \"coverage\":{\"maxScore\":200,\"coveredPercentageImpact\":1,\"missedPercentageImpact\":0}, \"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-10,\"skippedImpact\":-1}, \"pit\":{\"maxScore\":100,\"detectedImpact\":1,\"undetectedImpact\":-10,\"ratioImpact\":0}}";
 
@@ -79,7 +79,7 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
 
     private void configurePipeline(final WorkflowJob job, final String configuration, final String...files) {
         job.script.set("node {\n"
-                + createReportFilesStep(job, 1, files)
+                + createReportFilesStep(job, files)
                 + "junit testResults: '**/TEST-*'\n"
                 + "recordIssues tool: checkStyle(pattern: '**/checkstyle*'), skipPublishingChecks: true\n"
                 + "step([$class: 'PitPublisher', mutationStatsFile: '**/mutations*'])\n"
@@ -92,7 +92,7 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
 
     private void configurePipelineWithoutJUnitTests(final WorkflowJob job, final String configuration, final String...files) {
         job.script.set("node {\n"
-                + createReportFilesStep(job, 1, files)
+                + createReportFilesStep(job, files)
                 + "recordIssues tool: checkStyle(pattern: '**/checkstyle*'), skipPublishingChecks: true\n"
                 + "step([$class: 'PitPublisher', mutationStatsFile: '**/mutations*'])\n"
                 + "recordIssues tool: pmdParser(pattern: '**/pmd*'), skipPublishingChecks: true\n"
@@ -114,7 +114,7 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
         return build;
     }
 
-    private StringBuilder createReportFilesStep(final WorkflowJob job, final int build, final String...files) {
+    private StringBuilder createReportFilesStep(final WorkflowJob job, final String...files) {
         StringBuilder resourceCopySteps = new StringBuilder();
         Arrays.stream(files).forEach(fileName ->
                 resourceCopySteps.append(job.copyResourceStep(AUTOGRADING_PLUGIN_PREFIX + fileName)));
@@ -126,7 +126,7 @@ public class AutoGradingPluginUiTest extends AbstractJUnitTest {
             return new URL(job.url.toString() + "/autograding");
         }
         catch (MalformedURLException x) {
-            throw new AssertionError((x));
+            throw new AssertionError(x);
         }
     }
 
