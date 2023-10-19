@@ -45,7 +45,7 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
     private static final String COVERAGE_CONFIGURATION = "{\"coverage\": {\"maxScore\": 100, \"coveredPercentageImpact\": 1, \"missedPercentageImpact\": -1}}";
     private static final String PIT_CONFIGURATION = "{\"pit\": {\"maxScore\": 100, \"detectedImpact\": 1, \"undetectedImpact\": -1, \"detectedPercentageImpact\": 0, \"undetectedPercentageImpact\": 0}}";
     private static final String[] TEST_REPORTS = {"TEST-InjectedTest.xml",
-            "TEST-io.jenkins.plugins.grading.AggregatedScoreXmlStreamTest.xml",
+            "TEST-io.jenkins.plugins.grading.AggregatedScoreXmlStreamITest.xml",
             "TEST-io.jenkins.plugins.grading.AnalysisScoreTest.xml",
             "TEST-io.jenkins.plugins.grading.ArchitectureRulesTest.xml",
             "TEST-io.jenkins.plugins.grading.AutoGraderITest.xml",

@@ -18,7 +18,7 @@ import static io.jenkins.plugins.grading.assertions.Assertions.*;
  *
  * @author Ullrich Hafner
  */
-class AggregatedScoreXmlStreamTest extends SerializableTest<AggregatedScore> {
+class AggregatedScoreXmlStreamITest extends SerializableTest<AggregatedScore> {
     @Override
     protected AggregatedScore createSerializable() {
         return read("auto-grading.xml");
