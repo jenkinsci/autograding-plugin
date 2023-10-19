@@ -3,10 +3,9 @@
 = Jenkins AutoGrading Plugin
 
 image:https://badges.gitter.im/jenkinsci/warnings-plugin.svg[Join the Gitter chat, link=https://gitter.im/jenkinsci/warnings-plugin]
-image:https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/badge/icon?subject=Jenkins%20CI[Jenkins, link=https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/master/]
-image:https://github.com/jenkinsci/autograding-plugin/workflows/GitHub%20CI/badge.svg?branch=master[GitHub Actions, link=https://github.com/jenkinsci/autograding-plugin/actions]
-image:https://api.codacy.com/project/badge/Grade/1be7bb5b899446968e411e6e59c8ea6c[Codacy Badge, link=https://www.codacy.com/app/jenkinsci/autograding-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jenkinsci/autograding-plugin&amp;utm_campaign=Badge_Grade]
-image:https://codecov.io/gh/jenkinsci/autograding-plugin/branch/master/graph/badge.svg[codecov, link=https://codecov.io/gh/jenkinsci/autograding-plugin]
+image:https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/main/badge/icon?subject=Jenkins%20CI[Jenkins, link=https://ci.jenkins.io/job/Plugins/job/autograding-plugin/job/main/]
+image:https://github.com/jenkinsci/autograding-plugin/workflows/GitHub%20CI/badge.svg[GitHub Actions, link=https://github.com/jenkinsci/autograding-plugin/actions]
+image:https://codecov.io/gh/jenkinsci/autograding-plugin/branch/main/graph/badge.svg[codecov, link=https://codecov.io/gh/jenkinsci/autograding-plugin]
 
 image::graduation-cap.svg[Scores, width="100"]
 
@@ -18,7 +17,7 @@ following metrics:
 - PIT mutation coverage (e.g., missed mutations' percentage)  from the https://github.com/jenkinsci/pitmutation-plugin[PIT Mutation reporting plugin]
 - Static analysis (e.g., number of warnings) from the https://github.com/jenkinsci/warnings-ng-plugin[Warnings Plugin - Next Generation]
 
-For each metric you can define the impact on the overall score and the individual scoring criteria. After each build
+For each metric, you can define the impact on the overall score and the individual scoring criteria. After each build,
 the autograding plugin shows a summary in several progress charts and details in a table for each metric.
 
 .Overall score and individual score of participating metrics

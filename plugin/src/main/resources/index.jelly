@@ -1,0 +1,26 @@
+<?jelly escape-by-default='true'?>
+
+<div>
+  Automatically grades projects based on a configurable set of metrics. Currently, you can select from the
+  following metrics:
+
+  <ul>
+    <li>
+      Test statistics (e.g., number of failed tests) from the
+      <a href="https://github.com/jenkinsci/junit-plugin">JUnit Plugin</a>.
+    </li>
+    <li>
+      Code coverage (e.g., line coverage percentage) from the
+      <a href="https://github.com/jenkinsci/code-coverage-api-plugin">Code Coverage Plugin</a>.
+    </li>
+    <li>
+      Mutation coverage (e.g., missed mutations' percentage) from the
+      <a href="https://github.com/jenkinsci/code-coverage-api-plugin">Code Coverage Plugin</a>.
+    </li>
+    <li>
+      Static analysis (e.g., number of warnings) from the
+      <a href="https://github.com/jenkinsci/warnings-ng-plugin">Warnings Plugin</a>.
+    </li>
+  </ul>
+
+</div>

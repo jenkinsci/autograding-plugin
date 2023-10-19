@@ -8,16 +8,16 @@
 }
 
 .progress-bar.progress-bg-excellent {
-    background-color: #A5D6A7;
-    color: black;
+    background-color: var(--green);
+    color: var(--white);
 }
 
 .progress-bar.progress-bg-good {
-    background-color: #FFF59D;
-    color: black;
+    background-color: var(--yellow);
+    color: var(--text-color);
 }
 
 .progress-bar.progress-bg-failed {
-    background-color: #EF9A9A;
-    color: black;
+    background-color: var(--red);
+    color: var(--white);
 }

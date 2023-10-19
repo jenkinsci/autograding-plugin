@@ -7,6 +7,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.jenkinsci.Symbol;
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -21,10 +22,11 @@ import jenkins.tasks.SimpleBuildStep;
 import io.jenkins.plugins.util.LogHandler;
 
 /**
- * This recorder gathers all the needed results of previous run check in the job. Inputs are Saved, and Quality Score is
- * computed on base of defined configurations.
+ * A pipeline {@code Step} or Freestyle or Maven {@link Recorder} that automatically grades projects
+ * based on a configurable set of metrics.
  *
  * @author Eva-Maria Zeintl
+ * @author Ullrich Hafner
  */
 @SuppressWarnings("checkstyle:ClassFanOutComplexity")
 public class AutoGrader extends Recorder implements SimpleBuildStep {
@@ -49,7 +51,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
     }
 
     @Override
-    public void perform(@NonNull final Run<?, ?> run, @NonNull final FilePath workspace,
+    public void perform(@NonNull final Run<?, ?> run, @NonNull final FilePath workspace, @NonNull final EnvVars env,
             @NonNull final Launcher launcher, @NonNull final TaskListener listener) {
         FilteredLog log = new FilteredLog(LOG_TITLE);
 

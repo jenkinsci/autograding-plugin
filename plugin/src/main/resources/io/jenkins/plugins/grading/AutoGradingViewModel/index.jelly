@@ -1,5 +1,5 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:bs="/bootstrap" xmlns:c="/charts"
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:bs="/bootstrap5" xmlns:c="/charts"
          xmlns:g="/grading">
 
   <st:header name="Content-Type" value="text/html;charset=UTF-8"/>
@@ -21,12 +21,13 @@
       <div class="row py-3">
         <div class="col-l-12 col-xl col-xxl">
           <bs:card title="${%title.total}" fontAwesomeIcon="graduation-cap">
-            <div class="row align-items-center justify-content-center">
+            <p>
+              <div class="row align-items-center justify-content-center">
               <div class="col-md-6 col-lg-6 col-xl-12 col-xxl-12">
                 <c:progress-chart id="total-progress" model="${it.getProgressModel(score.ratio)}" height="150"
                                   value="${score.ratio}" tooltip="${%tooltip(score.achieved, score.total)}"/>
               </div>
-              <div class="col-md-6 col-lg-6 col-xl-6 d-none d-block d-l-block d-xl-none">
+              <div class="col-md-6 col-lg-6 col-xl-6 d-xl-none">
                 <g:score title="${%title.tests}" ratio="${score.testRatio}" achieved="${score.testAchieved}"
                          total="${testConfig.maxScore}"/>
                 <g:score title="${%title.coverage}" ratio="${score.coverageRatio}" achieved="${score.coverageAchieved}"
@@ -37,10 +38,11 @@
                          total="${analysisConfig.maxScore}"/>
               </div>
             </div>
+            </p>
           </bs:card>
         </div>
         <div class="col-xl col-xxl d-none d-xl-block">
-          <bs:card title="${%title.tests}" fontAwesomeIcon="check-square">
+          <bs:card title="${%title.tests}" fontAwesomeIcon="list-check">
             <p>
               <div class="">
                 <c:progress-chart id="test-progress" model="${it.getProgressModel(score.testRatio)}" height="150"
@@ -51,7 +53,7 @@
           </bs:card>
         </div>
         <div class="col-xl col-xxl d-none d-xl-block">
-          <bs:card title="${%title.coverage}" fontAwesomeIcon="microscope">
+          <bs:card title="${%title.coverage}" symbol="symbol-footsteps-outline plugin-ionicons-api">
             <p>
               <div class="">
                 <c:progress-chart id="coverage-progress" model="${it.getProgressModel(score.coverageRatio)}"
@@ -62,7 +64,7 @@
           </bs:card>
         </div>
         <div class="col-xl col-xxl d-none d-xl-block">
-          <bs:card title="${%title.pit}" fontAwesomeIcon="viruses">
+          <bs:card title="${%title.pit}" fontAwesomeIcon="virus-slash">
             <p>
               <div class="">
                 <c:progress-chart id="pit-progress" model="${it.getProgressModel(score.pitRatio)}" height="150"
@@ -88,7 +90,7 @@
       <div class="row py-3">
         <div class="col-12">
 
-          <bs:card title="${%title.tests}" fontAwesomeIcon="check-square">
+          <bs:card title="${%title.tests}" fontAwesomeIcon="list-check">
             <div class="table-responsive">
               <table class="table table-hover table-striped display" id="test">
                 <thead>
@@ -105,7 +107,7 @@
                   <j:forEach var="checks" items="${score.testScores}">
                     <tr>
                       <td>
-                        <a href="../testReport">${checks.id}</a>
+                        <a href="../testReport">${checks.name}</a>
                       </td>
                       <td>
                         ${checks.passedSize}
@@ -146,7 +148,7 @@
       <div class="row py-3">
         <div class="col-12">
 
-          <bs:card title="${%title.coverage}" fontAwesomeIcon="microscope">
+          <bs:card title="${%title.coverage}" symbol="symbol-footsteps-outline plugin-ionicons-api">
             <div class="table-responsive">
               <table class="table table-hover table-striped display" id="coverage">
                 <thead>
@@ -194,7 +196,7 @@
       <div class="row py-3">
         <div class="col-12">
 
-          <bs:card title="${%title.pit}" fontAwesomeIcon="viruses">
+          <bs:card title="${%title.pit}" fontAwesomeIcon="virus-slash">
             <div class="table-responsive">
               <table class="table table-hover table-striped display" id="pit">
                 <thead>
@@ -211,7 +213,7 @@
                   <j:forEach var="checks" items="${score.pitScores}">
                     <tr>
                       <td>
-                        <a href="../pitmutation">${checks.id}</a>
+                        <a href="../pitmutation">${checks.name}</a>
                       </td>
                       <td>
                         ${checks.detectedSize}
