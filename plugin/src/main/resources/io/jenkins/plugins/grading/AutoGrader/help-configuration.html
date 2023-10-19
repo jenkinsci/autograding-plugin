@@ -8,28 +8,47 @@
     </div>
     <h3>Example</h3>
 
+    <pre>
     <code style=display:block;white-space:pre-wrap>
 {
   "analysis": {
+    "tools": [
+      {
+        "id": "checkstyle",
+        "pattern": "target/checkstyle.xml"
+      },
+      {
+        "id": "spotbugs",
+        "pattern": "target/spotbugsXml.xml"
+      }
+    ],
+    "typesIgnorePattern": "HideUtilityClassConstructorCheck|UseUtilityClass|UseVarargs",
+    "fileFilter": "Assignment[0-9][0-9].java",
     "maxScore": 100,
-    "errorImpact": -10,
-    "highImpact": -5,
+    "errorImpact": -5,
+    "highImpact": -3,
     "normalImpact": -2,
     "lowImpact": -1
   },
   "tests": {
     "maxScore": 100,
-    "failureImpact": -2,
+    "passedImpact": 0,
+    "failureImpact": -5,
     "skippedImpact": -1
   },
   "coverage": {
     "maxScore": 100,
-    "missedImpact": -1
+    "coveredPercentageImpact": 0,
+    "missedPercentageImpact": -1
   },
   "pit": {
     "maxScore": 100,
-    "undetectedImpact": -1,
+    "detectedImpact": 0,
+    "undetectedImpact": 0,
+    "detectedPercentageImpact": 0,
+    "undetectedPercentageImpact": -1
   }
 }
-</code>
+    </code>
+    </pre>
 </div>

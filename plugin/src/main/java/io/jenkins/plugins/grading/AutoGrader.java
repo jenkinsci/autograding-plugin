@@ -7,6 +7,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.jenkinsci.Symbol;
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -18,6 +19,7 @@ import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import jenkins.tasks.SimpleBuildStep;
 
+import io.jenkins.plugins.forensics.miner.Messages;
 import io.jenkins.plugins.util.LogHandler;
 
 /**
@@ -49,7 +51,7 @@ public class AutoGrader extends Recorder implements SimpleBuildStep {
     }
 
     @Override
-    public void perform(@NonNull final Run<?, ?> run, @NonNull final FilePath workspace,
+    public void perform(@NonNull final Run<?, ?> run, @NonNull final FilePath workspace, @NonNull final EnvVars env,
             @NonNull final Launcher launcher, @NonNull final TaskListener listener) {
         FilteredLog log = new FilteredLog(LOG_TITLE);
 

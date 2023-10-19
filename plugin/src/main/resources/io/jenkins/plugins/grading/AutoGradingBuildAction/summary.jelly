@@ -1,8 +1,32 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:t="/lib/hudson">
+<j:jelly xmlns:j="jelly:core" xmlns:t="/lib/hudson" xmlns:fa="/font-awesome" >
 
     <t:summary icon="symbol-solid/graduation-cap plugin-font-awesome-api">
-        ${%title}: <a href="autograding">${%result(it.achieved, it.total)}</a>
+        ${%title}: <a href="autograding">${%result(it.achieved)}</a> ${%total(it.total)}
+        <fa:image-button label="${%Open log messages}" name="circle-info" tooltip="${%icon.info.tooltip}" url="${it.urlName}/info"/>
+
+        <ul>
+            <j:if test="${it.result.testConfiguration.enabled}">
+                <li>
+                    ${%test(it.result.testAchieved)}
+                </li>
+            </j:if>
+            <j:if test="${it.result.coverageConfiguration.enabled}">
+                <li>
+                    ${%coverage(it.result.coverageAchieved)}
+                </li>
+            </j:if>
+            <j:if test="${it.result.pitConfiguration.enabled}">
+                <li>
+                    ${%mutations(it.result.pitAchieved)}
+                </li>
+            </j:if>
+            <j:if test="${it.result.analysisConfiguration.enabled}">
+                <li>
+                    ${%analysis(it.result.analysisAchieved)}
+                </li>
+            </j:if>
+        </ul>
     </t:summary>
 
 </j:jelly>
