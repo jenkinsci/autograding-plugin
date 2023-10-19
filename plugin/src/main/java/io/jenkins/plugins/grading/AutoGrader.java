@@ -19,7 +19,6 @@ import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import jenkins.tasks.SimpleBuildStep;
 
-import io.jenkins.plugins.forensics.miner.Messages;
 import io.jenkins.plugins.util.LogHandler;
 
 /**
