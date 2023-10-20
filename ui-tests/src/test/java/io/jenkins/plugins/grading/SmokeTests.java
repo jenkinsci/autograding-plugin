@@ -40,8 +40,8 @@ public class SmokeTests extends AbstractJUnitTest {
 
         AutoGradePageObject pageObject = new AutoGradePageObject(build, buildAutoGradeURLFromJob(job));
 
-        assertThat(pageObject.getTotalScoreInPercent()).isEqualTo("76%");
-        assertThat(pageObject.getTotalScores()).containsExactly("92%", "91%", "91%", "18%");
+        assertThat(pageObject.getTotalScoreInPercent()).isEqualTo("77%");
+        assertThat(pageObject.getTotalScores()).containsExactly("92%", "92%", "91%", "18%");
 
         verifyTests(pageObject);
         verifyCoverage(pageObject);
@@ -64,7 +64,7 @@ public class SmokeTests extends AbstractJUnitTest {
     private void verifyCoverage(final AutoGradePageObject pageObject) {
         assertThatCodeCoverageHeaderIsCorrect(pageObject.getCoverageHeaders());
         assertThat(pageObject.getCoverageBody().get("Line Coverage")).containsExactly(91, 9, 91);
-        assertThat(pageObject.getCoverageBody().get("Branch Coverage")).containsExactly(91, 9, 91);
+        assertThat(pageObject.getCoverageBody().get("Branch Coverage")).containsExactly(93, 7, 93);
         assertThat(pageObject.getCoverageFooter()).containsExactly("1", "0", "n/a");
     }
 
