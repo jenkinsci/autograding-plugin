@@ -10,7 +10,7 @@
 
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>autograding</artifactId>
-  <version>4.1.0</version>
+  <version>${revision}${changelist}</version>
   <packaging>hpi</packaging>
 
   <name>Autograding Plugin</name>
@@ -18,7 +18,7 @@
   <url>https://github.com/jenkinsci/autograding-plugin</url>
 
   <properties>
-    <revision>4.1.0</revision>
+    <revision>4.2.0</revision>
     <changelist>-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/autograding-plugin</gitHubRepo>
 
@@ -315,7 +315,7 @@
     <connection>scm:git:https://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-    <tag>v4.1.0</tag>
+    <tag>${scmTag}</tag>
   </scm>
 
   <repositories>
