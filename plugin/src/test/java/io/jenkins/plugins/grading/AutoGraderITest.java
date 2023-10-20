@@ -241,7 +241,7 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
      * Verifies that coverage results will be correctly scored.
      */
     @Test
-    void shouldGradeCoverageWithScoreOf100() {
+    void shouldGradeCoverage() {
         WorkflowJob job = createPipelineWithWorkspaceFiles("jacoco.xml");
         configureScanner(job, "jacoco", COVERAGE_CONFIGURATION);
 
@@ -258,8 +258,8 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
         Run<?, ?> pipeline = buildSuccessfully(job);
         Run<?, ?> freestyle = buildSuccessfully(project);
 
-        assertAchievedScore(pipeline, 100);
-        assertAchievedScore(freestyle, 100);
+        assertAchievedScore(pipeline, 96);
+        assertAchievedScore(freestyle, 96);
         assertGradeCoverage(freestyle);
         assertGradeCoverage(pipeline);
     }

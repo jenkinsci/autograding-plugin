@@ -40,8 +40,8 @@ public class SmokeTests extends AbstractJUnitTest {
 
         AutoGradePageObject pageObject = new AutoGradePageObject(build, buildAutoGradeURLFromJob(job));
 
-        assertThat(pageObject.getTotalScoreInPercent()).isEqualTo("73%");
-        assertThat(pageObject.getTotalScores()).containsExactly("92%", "83%", "91%", "18%");
+        assertThat(pageObject.getTotalScoreInPercent()).isEqualTo("77%");
+        assertThat(pageObject.getTotalScores()).containsExactly("92%", "92%", "91%", "18%");
 
         verifyTests(pageObject);
         verifyCoverage(pageObject);
@@ -51,20 +51,20 @@ public class SmokeTests extends AbstractJUnitTest {
 
     private void verifyTests(final AutoGradePageObject pageObject) {
         assertThatTestResultsHeaderIsCorrect(pageObject.getTestHeaders());
-        assertThat(pageObject.getTestBody().get("tests")).containsExactly(3, 1, 1, 5, -8);
+        assertThat(pageObject.getTestBody().get("Test Result")).containsExactly(3, 1, 1, 5, -8);
         assertThat(pageObject.getTestFooter()).containsExactly("1", "-10", "-1", "n/a", "n/a");
     }
 
     private void verifyMutationCoverage(final AutoGradePageObject pageObject) {
         assertThatPITMutationsHeaderIsCorrect(pageObject.getPitHeaders());
-        assertThat(pageObject.getPitBody().get("pit")).containsExactly(1, 1, 50, 50, -9);
+        assertThat(pageObject.getPitBody().get("Mutations")).containsExactly(1, 1, 50, 50, -9);
         assertThat(pageObject.getPitFooter()).containsExactly("1", "-10", "0", "0", "n/a");
     }
 
     private void verifyCoverage(final AutoGradePageObject pageObject) {
         assertThatCodeCoverageHeaderIsCorrect(pageObject.getCoverageHeaders());
-        assertThat(pageObject.getCoverageBody().get("Line Coverage")).containsExactly(83, 17, 83);
-        assertThat(pageObject.getCoverageBody().get("Conditional Coverage")).containsExactly(83, 17, 83);
+        assertThat(pageObject.getCoverageBody().get("Line Coverage")).containsExactly(91, 9, 91);
+        assertThat(pageObject.getCoverageBody().get("Branch Coverage")).containsExactly(93, 7, 93);
         assertThat(pageObject.getCoverageFooter()).containsExactly("1", "0", "n/a");
     }
 
@@ -82,30 +82,12 @@ public class SmokeTests extends AbstractJUnitTest {
                 + createReportFilesStep(job, files)
                 + "junit testResults: '**/TEST-*'\n"
                 + "recordIssues tool: checkStyle(pattern: '**/checkstyle*'), skipPublishingChecks: true\n"
-                + "step([$class: 'PitPublisher', mutationStatsFile: '**/mutations*'])\n"
+                + "recordCoverage tools: [[parser: 'JACOCO', pattern:'**/jacoco*']], sourceCodeRetention: 'EVERY_BUILD'\n"
                 + "recordIssues tool: pmdParser(pattern: '**/pmd*'), skipPublishingChecks: true\n"
                 + "recordIssues tools: [cpd(pattern: '**/cpd*', highThreshold:8, normalThreshold:3), findBugs()], aggregatingResults: 'false', skipPublishingChecks: true \n"
-                + "publishCoverage adapters: [jacocoAdapter('**/jacoco*')], sourceFileResolver: sourceFiles('STORE_ALL_BUILD'), skipPublishingChecks: true\n"
+                + "recordCoverage tools: [[parser: 'PIT', pattern:'**/mutations*']], id: 'pit', sourceCodeRetention: 'EVERY_BUILD'\n"
                 + "autoGrade('" + configuration + "')\n"
                 + "}");
-    }
-
-    private void configurePipelineWithoutJUnitTests(final WorkflowJob job, final String configuration, final String...files) {
-        job.script.set("node {\n"
-                + createReportFilesStep(job, files)
-                + "recordIssues tool: checkStyle(pattern: '**/checkstyle*'), skipPublishingChecks: true\n"
-                + "step([$class: 'PitPublisher', mutationStatsFile: '**/mutations*'])\n"
-                + "recordIssues tool: pmdParser(pattern: '**/pmd*'), skipPublishingChecks: true\n"
-                + "recordIssues tools: [cpd(pattern: '**/cpd*', highThreshold:8, normalThreshold:3), findBugs()], aggregatingResults: 'false', skipPublishingChecks: true\n"
-                + "publishCoverage adapters: [jacocoAdapter('**/jacoco*')], sourceFileResolver: sourceFiles('STORE_ALL_BUILD'), skipPublishingChecks: true\n"
-                + "autoGrade('" + configuration + "')\n"
-                + "}");
-    }
-
-    private Build shouldBuildJobSuccessfully(final Job job) {
-        Build build = job.startBuild().waitUntilFinished();
-        assertThat(build.isSuccess()).isTrue();
-        return build;
     }
 
     private Build shouldBuildJobUnstable(final Job job) {

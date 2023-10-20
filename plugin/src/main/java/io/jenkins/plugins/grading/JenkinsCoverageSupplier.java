@@ -50,7 +50,7 @@ class JenkinsCoverageSupplier extends CoverageSupplier {
 
     private Collection<CoverageScore> createCoverageScore(final CoverageBuildAction action,
             final CoverageConfiguration configuration, final Metric metric) {
-        var value = action.getValueForMetric(Baseline.PROJECT, Metric.LINE);
+        var value = action.getValueForMetric(Baseline.PROJECT, metric);
         if (value.isPresent() && value.get() instanceof Coverage) {
             var coverage = (Coverage)value.get();
             return Collections.singleton(new CoverageScoreBuilder()
