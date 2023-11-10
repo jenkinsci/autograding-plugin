@@ -7,10 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import edu.hm.hafner.coverage.Coverage.CoverageBuilder;
 import edu.hm.hafner.coverage.Metric;
-import edu.hm.hafner.grading.CoverageConfiguration;
-import edu.hm.hafner.grading.CoverageConfiguration.CoverageConfigurationBuilder;
-import edu.hm.hafner.grading.CoverageScore;
-import edu.hm.hafner.grading.CoverageScore.CoverageScoreBuilder;
+import edu.hm.hafner.coverage.ModuleNode;
+import edu.hm.hafner.grading.ToolConfiguration;
+import edu.hm.hafner.util.FilteredLog;
 
 import hudson.model.Run;
 
@@ -23,41 +22,42 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Tests the class {@link io.jenkins.plugins.grading.JenkinsCoverageSupplier}.
+ * Tests the class {@link JenkinsCoverageReportFactory}.
  *
  * @author Ullrich Hafner
  */
-class JenkinsCoverageSupplierTest {
-    private static final String DISPLAY_NAME = "coverage";
+class JenkinsCoverageReportFactoryTest {
+    private static final String ID = "coverage";
+    private static final String NAME = "Coverage";
 
     @Test
     void shouldLogScoreFromRecordedTestResults() {
         var coverageBuilder = new CoverageBuilder();
         coverageBuilder.setCovered(5).setTotal(10);
+
         CoverageBuildAction action = mock(CoverageBuildAction.class);
         coverageBuilder.setMetric(Metric.LINE);
         when(action.getValueForMetric(Baseline.PROJECT, Metric.LINE)).thenReturn(Optional.of(coverageBuilder.build()));
+
+        var node = new ModuleNode("empty");
+        when(action.getResult()).thenReturn(node);
+
         coverageBuilder.setMetric(Metric.BRANCH);
         when(action.getValueForMetric(Baseline.PROJECT, Metric.BRANCH)).thenReturn(Optional.of(coverageBuilder.build()));
-        when(action.getDisplayName()).thenReturn(DISPLAY_NAME);
+
+        when(action.getUrlName()).thenReturn(ID);
+        when(action.getDisplayName()).thenReturn(NAME);
         when(action.getFormatter()).thenReturn(new ElementFormatter());
         when(action.getUrlName()).thenReturn("coverage");
+
         Run<?, ?> run = mock(Run.class);
         when(run.getActions(any())).thenReturn(List.of(action));
 
-        JenkinsCoverageSupplier coverageSupplier = new JenkinsCoverageSupplier(run);
-        CoverageConfiguration configuration = new CoverageConfigurationBuilder().build();
+        JenkinsCoverageReportFactory analysisSupplier = new JenkinsCoverageReportFactory(run);
 
-        List<CoverageScore> scores = coverageSupplier.createScores(configuration);
+        var tool = new ToolConfiguration(ID, NAME, "unused");
+        var log = new FilteredLog("Test");
 
-        CoverageScoreBuilder builder = new CoverageScoreBuilder()
-                .withConfiguration(configuration)
-                .withCoveredPercentage(50);
-        assertThat(scores).hasSize(2).contains(
-                builder.withId("line").withDisplayName("Line Coverage")
-                        .build(),
-                builder.withId("branch").withDisplayName("Branch Coverage")
-                        .build()
-        );
+        assertThat(analysisSupplier.create(tool, log)).isSameAs(node);
     }
 }

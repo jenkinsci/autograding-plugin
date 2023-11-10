@@ -23,7 +23,87 @@ import static org.assertj.core.api.Assertions.*;
 @WithPlugins({"autograding", "warnings-ng", "junit", "code-coverage-api", "pipeline-stage-step", "workflow-durable-task-step", "workflow-basic-steps"})
 public class SmokeTests extends AbstractJUnitTest {
     private static final String AUTOGRADING_PLUGIN_PREFIX = "/autograding_test/";
-    private static final String CONFIGURATION = "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-5,\"highImpact\":-3,\"normalImpact\":-2,\"lowImpact\":-1}, \"coverage\":{\"maxScore\":200,\"coveredPercentageImpact\":1,\"missedPercentageImpact\":0}, \"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-10,\"skippedImpact\":-1}, \"pit\":{\"maxScore\":100,\"detectedImpact\":1,\"undetectedImpact\":-10,\"ratioImpact\":0}}";
+    private static final String CONFIGURATION = """
+                {
+                  "tests": [{
+                    "tools": [
+                      {
+                        "id": "tests"
+                      }
+                    ],
+                    "name": "JUnit",
+                    "passedImpact": 10,
+                    "skippedImpact": -1,
+                    "failureImpact": -5,
+                    "maxScore": 100
+                  }],
+                  "analysis": [
+                    {
+                      "tools": [
+                        {
+                          "id": "checkstyle",
+                          "name": "Checkstyle"
+                        },
+                        {
+                          "id": "pmd",
+                          "name": "PMD"
+                        },
+                        {
+                          "id": "cpd",
+                          "name": "CPD"
+                        },
+                        {
+                          "id": "findbugs",
+                          "name": "FindBugs"
+                        }
+                      ],
+                      "errorImpact": 1,
+                      "highImpact": 2,
+                      "normalImpact": 3,
+                      "lowImpact": 4,
+                      "maxScore": 100
+                    }
+                  ],
+                  "coverage": [
+                  {
+                      "tools": [
+                          {
+                            "id": "jacoco"
+                          }
+                        ],
+                    "name": "Line Coverage",
+                    "metric": "line",
+                    "maxScore": 50,
+                    "coveredPercentageImpact": 1,
+                    "missedPercentageImpact": -1
+                  },
+                  {
+                      "tools": [
+                          {
+                            "id": "jacoco"
+                          }
+                        ],
+                    "name": "Branch Coverage",
+                    "metric": "branch",
+                    "maxScore": 50,
+                    "coveredPercentageImpact": 1,
+                    "missedPercentageImpact": -1
+                  },
+                  {
+                      "tools": [
+                          {
+                            "id": "pit"
+                          }
+                        ],
+                    "name": "Mutation Coverage",
+                    "metric": "mutation",
+                    "maxScore": 50,
+                    "coveredPercentageImpact": 1,
+                    "missedPercentageImpact": -1
+                  }
+                  ]
+                }
+                """;
 
     /**
      * Test all cards with all tools.

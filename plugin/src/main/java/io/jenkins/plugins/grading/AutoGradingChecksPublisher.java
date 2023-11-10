@@ -37,7 +37,7 @@ import io.jenkins.plugins.util.JenkinsFacade;
  */
 class AutoGradingChecksPublisher {
     void publishChecks(final Run<?, ?> run, final TaskListener listener,
-            final AggregatedScore score, final List<Report> warnings) {
+            final AggregatedScore score) {
         ChecksPublisher publisher = ChecksPublisherFactory.fromRun(run, listener);
 
         GradingReport report = new GradingReport();
@@ -50,7 +50,6 @@ class AutoGradingChecksPublisher {
                         .withTitle(report.getHeader())
                         .withSummary(report.getSummary(score))
                         .withText(report.getDetails(score, Collections.emptyList())) // FIXME: we need to show the failures here as well
-                        .withAnnotations(createAnnotations(warnings))
                         .build())
                 .withDetailsURL(getAbsoluteUrl(run))
                 .build();

@@ -1,5 +1,7 @@
 package io.jenkins.plugins.grading;
 
+import java.io.Serial;
+
 import edu.hm.hafner.grading.AggregatedScore;
 import edu.hm.hafner.util.VisibleForTesting;
 
@@ -16,6 +18,7 @@ import io.jenkins.plugins.util.BuildAction;
  * @author Eva-Maria Zeintl
  */
 public class AutoGradingBuildAction extends BuildAction<AggregatedScore> implements StaplerProxy {
+    @Serial
     private static final long serialVersionUID = -1165416468486465651L;
 
     /**
@@ -77,11 +80,11 @@ public class AutoGradingBuildAction extends BuildAction<AggregatedScore> impleme
 
     @SuppressWarnings("unused")
     public int getAchieved() {
-        return getResult().getAchieved();
+        return getResult().getAchievedScore();
     }
 
     @SuppressWarnings("unused")
     public int getTotal() {
-        return getResult().getTotal();
+        return getResult().getAchievedScore();
     }
 }
