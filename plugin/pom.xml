@@ -29,7 +29,7 @@
     <code-coverage-api-plugin.version>4.9.0</code-coverage-api-plugin.version>
     <warnings-ng-plugin.version>10.5.0</warnings-ng-plugin.version>
 
-    <testcontainers.version>1.19.1</testcontainers.version>
+    <testcontainers.version>1.19.2</testcontainers.version>
   </properties>
 
   <licenses>
