@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>6.14.0</version>
+    <version>6.15.0</version>
     <relativePath />
   </parent>
 
@@ -24,10 +24,10 @@
 
     <module.name>${project.groupId}.autograding</module.name>
 
-    <autograding-model.version>3.0.0-SNAPSHOT</autograding-model.version>
+    <autograding-model.version>3.1.0</autograding-model.version>
 
-    <code-coverage-api-plugin.version>4.9.0</code-coverage-api-plugin.version>
-    <warnings-ng-plugin.version>10.5.0</warnings-ng-plugin.version>
+    <code-plugin.version>1.5.0</code-plugin.version>
+    <warnings-ng-plugin.version>10.5.1</warnings-ng-plugin.version>
 
     <testcontainers.version>1.19.1</testcontainers.version>
     <maven.compiler.release>17</maven.compiler.release>
@@ -87,6 +87,10 @@
           <artifactId>codingstyle</artifactId>
           <groupId>edu.hm.hafner</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>coverage-model</artifactId>
+          <groupId>edu.hm.hafner</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -114,8 +118,8 @@
     </dependency>
     <dependency>
       <groupId>io.jenkins.plugins</groupId>
-      <artifactId>code-coverage-api</artifactId>
-      <version>${code-coverage-api-plugin.version}</version>
+      <artifactId>coverage</artifactId>
+      <version>${code-plugin.version}</version>
       <exclusions>
         <exclusion>
           <groupId>com.github.spotbugs</groupId>
