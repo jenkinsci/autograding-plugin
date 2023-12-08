@@ -1,5 +1,8 @@
 package io.jenkins.plugins.grading;
 
+import org.apache.commons.lang3.StringUtils;
+
+import edu.hm.hafner.coverage.ContainerNode;
 import edu.hm.hafner.coverage.Coverage;
 import edu.hm.hafner.coverage.ModuleNode;
 import edu.hm.hafner.coverage.Node;
@@ -36,7 +39,14 @@ class JenkinsCoverageReportFactory implements CoverageReportFactory {
             var coverageResult = action.getResult();
             log.logInfo("-> Found result action for %s: %s",
                     action.getDisplayName(), coverageResult);
-            return coverageResult;
+            if (StringUtils.isBlank(tool.getName())) {
+                return coverageResult;
+            }
+            else {
+                var containerNode = new ContainerNode(tool.getName());
+                containerNode.addChild(coverageResult);
+                return containerNode;
+            }
         }
         else {
             log.logError("No result action found for ID '%s'", tool.getId());

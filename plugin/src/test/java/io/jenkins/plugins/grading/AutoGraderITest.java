@@ -242,17 +242,53 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
         assertThat(getConsoleLog(baseline)).contains(
                 "[Autograding] Grading static analysis results",
-                "[Autograding] Processing 1 static analysis configuration(s)",
+                "[Autograding] Processing 2 static analysis configuration(s)",
                 "[Autograding] -> Found result action for PMD Warnings with 4 issues",
                 "[Autograding] -> Found result action for CPD Duplications with 7 issues",
+                "[Autograding] => Style Score: 85 of 100",
                 "[Autograding] -> Found result action for SpotBugs Warnings with 0 issues",
-                "[Autograding] => Static Analysis Warnings Score: 85 of 100");
-        assertThat(getConsoleLog(baseline)).containsIgnoringWhitespaces(ANALYSIS_MULTI_CONFIGURATION);
+                "[Autograding] => Bugs Score: 100 of 100");
+        assertThat(getConsoleLog(baseline)).containsIgnoringWhitespaces("""
+                  "analysis": [
+                  {
+                    "tools": [
+                        {
+                          "id": "pmd",
+                          "name": "PMD"
+                        },
+                        {
+                          "id": "cpd",
+                          "name": "CPD"
+                        }
+                      ],
+                    "name": "Style",
+                    "errorImpact": -10,
+                    "highImpact": -5,
+                    "normalImpact": -2,
+                    "lowImpact": -1,
+                    "maxScore": 100
+                  },
+                  {
+                    "tools": [
+                        {
+                          "id": "spotbugs",
+                          "name": "SpotBugs"
+                        }
+                      ],
+                    "name": "Bugs",
+                    "errorImpact": -10,
+                    "highImpact": -5,
+                    "normalImpact": -2,
+                    "lowImpact": -1,
+                    "maxScore": 100
+                  }
+                  ],
+                """);
 
-        assertThat(score.getAnalysisScores()).hasSize(1);
+        assertThat(score.getAnalysisScores()).hasSize(2);
 
         var analysisScores = score.getAnalysisScores().get(0).getSubScores();
-        assertThat(analysisScores).hasSize(3);
+        assertThat(analysisScores).hasSize(2);
 
         assertThat(analysisScores.get(0)).hasId("pmd")
                 .hasErrorSize(0)
@@ -270,7 +306,10 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 .hasTotalSize(7)
                 .hasImpact(-7);
 
-        assertThat(analysisScores.get(2)).hasId("spotbugs")
+        analysisScores = score.getAnalysisScores().get(1).getSubScores();
+        assertThat(analysisScores).hasSize(1);
+
+        assertThat(analysisScores.get(0)).hasId("spotbugs")
                 .hasErrorSize(0)
                 .hasHighSeveritySize(0)
                 .hasNormalSeveritySize(0)
@@ -467,33 +506,51 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                     "skippedImpact": -1,
                     "maxScore": 100
                   },
-                  "analysis": {
+                  "analysis": [
+                  {
                     "tools": [
                         {
-                          "id": "pmd"
+                          "id": "pmd",
+                          "name": "PMD"
                         },
                         {
-                          "id": "cpd"
-                        },
-                        {
-                          "id": "spotbugs"
+                          "id": "cpd",
+                          "name": "CPD"
                         }
                       ],
+                    "name": "Style",
                     "errorImpact": -10,
                     "highImpact": -5,
                     "normalImpact": -2,
                     "lowImpact": -1,
                     "maxScore": 100
                   },
+                  {
+                    "tools": [
+                        {
+                          "id": "spotbugs",
+                          "name": "SpotBugs"
+                        }
+                      ],
+                    "name": "Bugs",
+                    "errorImpact": -10,
+                    "highImpact": -5,
+                    "normalImpact": -2,
+                    "lowImpact": -1,
+                    "maxScore": 100
+                  }
+                  ],
                   "coverage": [
                   {
                       "tools": [
                           {
                             "metric": "line",
+                            "name" : "Line Coverage",
                             "id": "coverage"
                           },
                           {
                             "metric": "branch",
+                            "name" : "Branch Coverage",
                             "id": "coverage"
                           }
                         ],
@@ -506,6 +563,7 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                       "tools": [
                           {
                             "metric": "mutation",
+                            "name" : "PIT Mutation Coverage",
                             "id": "pit"
                           }
                         ],
@@ -520,7 +578,7 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
         Run<?, ?> build = buildSuccessfully(project);
 
-        assertAchievedScore(build, 242);
+        assertAchievedScore(build, 342);
         assertTestScore(build);
         assertMultipleAnalysisScores(build);
 

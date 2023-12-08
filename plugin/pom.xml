@@ -24,10 +24,10 @@
 
     <module.name>${project.groupId}.autograding</module.name>
 
-    <autograding-model.version>3.1.0</autograding-model.version>
+    <autograding-model.version>3.9.0</autograding-model.version>
 
-    <code-plugin.version>1.5.0</code-plugin.version>
-    <warnings-ng-plugin.version>10.5.1</warnings-ng-plugin.version>
+    <coverage-plugin.version>1.6.0</coverage-plugin.version>
+    <warnings-ng-plugin.version>10.5.2</warnings-ng-plugin.version>
 
     <testcontainers.version>1.19.1</testcontainers.version>
     <maven.compiler.release>17</maven.compiler.release>
@@ -119,7 +119,7 @@
     <dependency>
       <groupId>io.jenkins.plugins</groupId>
       <artifactId>coverage</artifactId>
-      <version>${code-plugin.version}</version>
+      <version>${coverage-plugin.version}</version>
       <exclusions>
         <exclusion>
           <groupId>com.github.spotbugs</groupId>

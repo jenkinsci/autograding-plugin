@@ -2,7 +2,6 @@ package io.jenkins.plugins.grading;
 
 import org.junit.jupiter.api.Test;
 
-import edu.hm.hafner.grading.AggregatedScore.TestResult;
 import edu.hm.hafner.grading.ToolConfiguration;
 import edu.hm.hafner.util.FilteredLog;
 
@@ -36,9 +35,9 @@ class JenkinsTestReportFactoryTest {
 
         JenkinsTestReportFactory testSupplier = new JenkinsTestReportFactory(run);
 
-        var tool = new ToolConfiguration(ID, NAME, "unused");
+        var tool = new ToolConfiguration(ID, NAME, "unused", "unused", "unused");
         var log = new FilteredLog("Test");
 
-        assertThat(testSupplier.create(tool, log)).isEqualTo(new TestResult(2, 1, 2));
+        assertThat(testSupplier.create(tool, log)).isEqualTo(testSupplier.createTestReport(2, 1, 2));
     }
 }

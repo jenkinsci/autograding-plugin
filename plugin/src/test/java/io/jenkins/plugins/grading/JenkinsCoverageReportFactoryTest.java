@@ -17,7 +17,7 @@ import io.jenkins.plugins.coverage.metrics.model.Baseline;
 import io.jenkins.plugins.coverage.metrics.model.ElementFormatter;
 import io.jenkins.plugins.coverage.metrics.steps.CoverageBuildAction;
 
-import static org.assertj.core.api.Assertions.*;
+import static edu.hm.hafner.grading.assertions.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -33,16 +33,16 @@ class JenkinsCoverageReportFactoryTest {
     @Test
     void shouldLogScoreFromRecordedTestResults() {
         var coverageBuilder = new CoverageBuilder();
-        coverageBuilder.setCovered(5).setTotal(10);
+        coverageBuilder.withCovered(5).withTotal(10);
 
         CoverageBuildAction action = mock(CoverageBuildAction.class);
-        coverageBuilder.setMetric(Metric.LINE);
+        coverageBuilder.withMetric(Metric.LINE);
         when(action.getValueForMetric(Baseline.PROJECT, Metric.LINE)).thenReturn(Optional.of(coverageBuilder.build()));
 
         var node = new ModuleNode("empty");
         when(action.getResult()).thenReturn(node);
 
-        coverageBuilder.setMetric(Metric.BRANCH);
+        coverageBuilder.withMetric(Metric.BRANCH);
         when(action.getValueForMetric(Baseline.PROJECT, Metric.BRANCH)).thenReturn(Optional.of(coverageBuilder.build()));
 
         when(action.getUrlName()).thenReturn(ID);
@@ -55,9 +55,11 @@ class JenkinsCoverageReportFactoryTest {
 
         JenkinsCoverageReportFactory analysisSupplier = new JenkinsCoverageReportFactory(run);
 
-        var tool = new ToolConfiguration(ID, NAME, "unused");
+        var tool = new ToolConfiguration(ID, NAME, "unused", "unused", "unused");
         var log = new FilteredLog("Test");
 
-        assertThat(analysisSupplier.create(tool, log)).isSameAs(node);
+        var result = analysisSupplier.create(tool, log);
+        assertThat(result.getName()).isEqualTo("Coverage");
+        assertThat(result.getChildren()).containsExactly(node);
     }
 }

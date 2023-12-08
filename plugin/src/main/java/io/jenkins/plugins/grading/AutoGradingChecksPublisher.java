@@ -1,6 +1,5 @@
 package io.jenkins.plugins.grading;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,8 +47,8 @@ class AutoGradingChecksPublisher {
                 .withConclusion(ChecksConclusion.SUCCESS)
                 .withOutput(new ChecksOutputBuilder()
                         .withTitle(report.getHeader())
-                        .withSummary(report.getSummary(score))
-                        .withText(report.getDetails(score, Collections.emptyList())) // FIXME: we need to show the failures here as well
+                        .withSummary(report.getTextSummary(score))
+                        .withText(report.getMarkdownDetails(score))
                         .build())
                 .withDetailsURL(getAbsoluteUrl(run))
                 .build();

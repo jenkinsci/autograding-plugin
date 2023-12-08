@@ -48,7 +48,7 @@ class JenkinsAnalysisReportFactoryTest {
 
         JenkinsAnalysisReportFactory analysisSupplier = new JenkinsAnalysisReportFactory(run);
 
-        var tool = new ToolConfiguration(ID, NAME, "unused");
+        var tool = new ToolConfiguration(ID, NAME, "unused", "unused", "unused");
         var log = new FilteredLog("Test");
 
         assertThat(analysisSupplier.create(tool, log)).isSameAs(report);
