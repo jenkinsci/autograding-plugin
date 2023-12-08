@@ -68,25 +68,40 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
               }
             """;
     private static final String ANALYSIS_MULTI_CONFIGURATION = """
-              "analysis": {
-                "tools": [
-                    {
-                      "id": "pmd"
-                    },
-                    {
-                      "id": "cpd"
-                    },
-                    {
-                      "id": "spotbugs"
-                    }
-                  ],
-                "errorImpact": -10,
-                "highImpact": -5,
-                "normalImpact": -2,
-                "lowImpact": -1,
-                "maxScore": 100
-              }
-            """;
+                  "analysis": [{
+                    "tools": [
+                        {
+                          "id": "pmd",
+                          "name": "PMD"
+                        },
+                        {
+                          "id": "cpd",
+                          "name": "CPD"
+                        }
+                      ],
+                    "name": "Style",
+                    "errorImpact": -10,
+                    "highImpact": -5,
+                    "normalImpact": -2,
+                    "lowImpact": -1,
+                    "maxScore": 100
+                  },
+                  {
+                    "tools": [
+                        {
+                          "id": "spotbugs",
+                          "name": "SpotBugs"
+                        }
+                      ],
+                    "name": "Bugs",
+                    "errorImpact": -10,
+                    "highImpact": -5,
+                    "normalImpact": -2,
+                    "lowImpact": -1,
+                    "maxScore": 100
+                  }
+                  ]
+                  """;
     private static final String COVERAGE_CONFIGURATION = """
               "coverage": {
                 "tools": [
@@ -222,7 +237,7 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
         Run<?, ?> freestyle = buildSuccessfully(project);
 
-        assertAchievedScore(freestyle, 85);
+        assertAchievedScore(freestyle, 185);
         assertMultipleAnalysisScores(freestyle);
     }
 
@@ -233,7 +248,7 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
 
         Run<?, ?> pipeline = buildSuccessfully(pipelineJob);
 
-        assertAchievedScore(pipeline, 85);
+        assertAchievedScore(pipeline, 185);
         assertMultipleAnalysisScores(pipeline);
     }
 
@@ -248,42 +263,7 @@ class AutoGraderITest extends IntegrationTestWithJenkinsPerSuite {
                 "[Autograding] => Style Score: 85 of 100",
                 "[Autograding] -> Found result action for SpotBugs Warnings with 0 issues",
                 "[Autograding] => Bugs Score: 100 of 100");
-        assertThat(getConsoleLog(baseline)).containsIgnoringWhitespaces("""
-                  "analysis": [
-                  {
-                    "tools": [
-                        {
-                          "id": "pmd",
-                          "name": "PMD"
-                        },
-                        {
-                          "id": "cpd",
-                          "name": "CPD"
-                        }
-                      ],
-                    "name": "Style",
-                    "errorImpact": -10,
-                    "highImpact": -5,
-                    "normalImpact": -2,
-                    "lowImpact": -1,
-                    "maxScore": 100
-                  },
-                  {
-                    "tools": [
-                        {
-                          "id": "spotbugs",
-                          "name": "SpotBugs"
-                        }
-                      ],
-                    "name": "Bugs",
-                    "errorImpact": -10,
-                    "highImpact": -5,
-                    "normalImpact": -2,
-                    "lowImpact": -1,
-                    "maxScore": 100
-                  }
-                  ],
-                """);
+        assertThat(getConsoleLog(baseline)).containsIgnoringWhitespaces(ANALYSIS_MULTI_CONFIGURATION);
 
         assertThat(score.getAnalysisScores()).hasSize(2);
 

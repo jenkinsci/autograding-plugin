@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import org.jenkinsci.test.acceptance.po.PageObject;
@@ -14,6 +15,7 @@ import org.jenkinsci.test.acceptance.po.PageObject;
  *
  * @author Lukas Kirner
  */
+@SuppressWarnings("PMD.DataClass")
 public class AutoGradePageObject extends PageObject {
     private final String totalScoreInPercent;
 
@@ -56,22 +58,22 @@ public class AutoGradePageObject extends PageObject {
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
 
-        WebElement testTable = page.findElement(by.id("test"));
+        WebElement testTable = page.findElement(By.id("test.tests"));
         testHeaders = getTableHeaders(testTable);
         testBody = getTableBody(testTable);
         testFooter = getTableFooter(testTable);
 
-        WebElement coverageTable = page.findElement(by.id("coverage"));
+        WebElement coverageTable = page.findElement(By.id("coverage.coverage"));
         coverageHeaders = getTableHeaders(coverageTable);
         coverageBody = getTableBody(coverageTable);
         coverageFooter = getTableFooter(coverageTable);
 
-        WebElement pitTable = page.findElement(by.id("pit"));
+        WebElement pitTable = page.findElement(By.id("pit.mutation"));
         pitHeaders = getTableHeaders(pitTable);
         pitBody = getTableBody(pitTable);
         pitFooter = getTableFooter(pitTable);
 
-        WebElement analysisTable = page.findElement(by.id("analysis"));
+        WebElement analysisTable = page.findElement(By.id("analysis.analysis"));
         analysisHeaders = getTableHeaders(analysisTable);
         analysisBody = getTableBody(analysisTable);
         analysisFooter = getTableFooter(analysisTable);
