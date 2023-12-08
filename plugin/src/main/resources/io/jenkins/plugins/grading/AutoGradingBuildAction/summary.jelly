@@ -6,24 +6,25 @@
         <fa:image-button label="${%Open log messages}" name="circle-info" tooltip="${%icon.info.tooltip}" url="${it.urlName}/info"/>
 
         <ul>
-            <j:if test="${it.result.testConfiguration.enabled}">
+            <j:set var="score" value="${it.result}"/>
+            <j:if test="${score.hasTests()}">
                 <li>
-                    ${%test(it.result.testAchieved)}
+                    ${%test(score.testAchievedScore, score.testMaxScore)}
                 </li>
             </j:if>
-            <j:if test="${it.result.coverageConfiguration.enabled}">
+            <j:if test="${score.hasCodeCoverage()}">
                 <li>
-                    ${%coverage(it.result.coverageAchieved)}
+                    ${%coverage(score.codeCoverageAchievedScore, score.codeCoverageMaxScore)}
                 </li>
             </j:if>
-            <j:if test="${it.result.pitConfiguration.enabled}">
+            <j:if test="${score.hasMutationCoverage()}">
                 <li>
-                    ${%mutations(it.result.pitAchieved)}
+                    ${%mutations(score.mutationCoverageAchievedScore, score.mutationCoverageMaxScore)}
                 </li>
             </j:if>
-            <j:if test="${it.result.analysisConfiguration.enabled}">
+            <j:if test="${score.hasAnalysis()}">
                 <li>
-                    ${%analysis(it.result.analysisAchieved)}
+                    ${%analysis(score.analysisAchievedScore, score.analysisMaxScore)}
                 </li>
             </j:if>
         </ul>

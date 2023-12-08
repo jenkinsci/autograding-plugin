@@ -1,6 +1,8 @@
 package io.jenkins.plugins.grading;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -9,40 +11,42 @@ import org.junit.jupiter.api.Test;
 
 import edu.hm.hafner.grading.AggregatedScore;
 import edu.hm.hafner.grading.AnalysisScore;
-import edu.hm.hafner.util.SerializableTest;
+import edu.hm.hafner.util.ResourceTest;
 
-import static io.jenkins.plugins.grading.assertions.Assertions.*;
+import static edu.hm.hafner.grading.assertions.Assertions.*;
 
 /**
  * Tests serialization of {@link AggregatedScore} instances.
  *
  * @author Ullrich Hafner
  */
-class AggregatedScoreXmlStreamITest extends SerializableTest<AggregatedScore> {
-    @Override
-    protected AggregatedScore createSerializable() {
-        return read("auto-grading.xml");
-    }
+class AggregatedScoreXmlStreamITest extends ResourceTest {
+    private AggregatedScore createScore() {
+        var serialization = readAllBytes("aggregated-score.ser");
 
-    @Test
-    void shouldReadVersion1Serialization() {
-        AggregatedScore score = createSerializable();
-
-        verifyStream(score);
+        try (ObjectInputStream inputStream = new ObjectInputStream(new ByteArrayInputStream(serialization))) {
+            return (AggregatedScore)inputStream.readObject();
+        }
+        catch (IOException | ClassNotFoundException e) {
+            throw new AssertionError("Can't resolve instance from byte array", e);
+        }
     }
 
     @Test
     void shouldReturnDefaultForBrokenFile() {
         AggregatedScore score = read("checkstyle.xml");
 
-        assertThat(score).hasAnalysisAchieved(0).hasTestAchieved(0).hasCoverageAchieved(0).hasPitAchieved(0);
+        assertThat(score)
+                .hasAnalysisAchievedScore(0)
+                .hasTestAchievedScore(0)
+                .hasCoverageAchievedScore(0);
     }
 
     @Test
     void shouldReadAndWriteScores() throws IOException {
         AggregatedScoreXmlStream reader = new AggregatedScoreXmlStream();
 
-        AggregatedScore restored = createSerializable();
+        AggregatedScore restored = createScore();
         Path saved = createTempFile();
         reader.write(saved, restored);
 
@@ -58,16 +62,16 @@ class AggregatedScoreXmlStreamITest extends SerializableTest<AggregatedScore> {
     }
 
     private void verifyStream(final AggregatedScore score) {
-        assertThat(score).hasAnalysisAchieved(79);
-        assertThat(score.getAnalysisScores()).hasSize(8);
+        assertThat(score).hasAnalysisAchievedScore(30);
+        assertThat(score.getAnalysisScores()).hasSize(2);
 
-        assertThat(score).hasTestAchieved(60);
+        assertThat(score).hasTestAchievedScore(77);
         assertThat(score.getTestScores()).hasSize(1);
 
-        assertThat(score).hasCoverageAchieved(78);
-        assertThat(score.getCoverageScores()).hasSize(2);
+        assertThat(score).hasCodeCoverageAchievedScore(40);
+        assertThat(score.getCodeCoverageScores()).hasSize(1);
 
-        assertThat(score).hasPitAchieved(73);
-        assertThat(score.getPitScores()).hasSize(1);
+        assertThat(score).hasMutationCoverageAchievedScore(20);
+        assertThat(score.getMutationCoverageScores()).hasSize(1);
     }
 }

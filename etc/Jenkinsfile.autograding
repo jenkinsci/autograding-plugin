@@ -19,7 +19,7 @@ node {
         recordIssues tool: errorProne(), healthy: 1, unhealthy: 20
 
         junit testResults: '**/target/*-reports/TEST-*.xml'
-        recordCoverage tools: [[parser: 'JACOCO']], sourceCodeRetention: 'EVERY_BUILD'
+        recordCoverage tools: [[parser: 'JACOCO']], sourceCodeRetention: 'EVERY_BUILD', name: 'Code Coverage'
 
         recordIssues tools: [checkStyle(pattern: 'target/checkstyle-result.xml'),
             spotBugs(pattern: 'target/spotbugsXml.xml'),
@@ -33,7 +33,7 @@ node {
         withMaven(maven: 'mvn-default', mavenLocalRepo: '/var/data/m2repository', mavenOpts: '-Xmx768m -Xms512m') {
             sh "mvn -ntp org.pitest:pitest-maven:mutationCoverage"
         }
-        recordCoverage tools: [[parser: 'PIT']], id: 'pit', sourceCodeRetention: 'EVERY_BUILD'
+        recordCoverage tools: [[parser: 'PIT']], id: 'pit', name: 'Mutation Coverage', sourceCodeRetention: 'EVERY_BUILD'
     }
 
     stage ('Collect Maven Warnings') {
@@ -42,33 +42,88 @@ node {
 
     stage ('Autograding') {
         autoGrade('''
-            {
-              "analysis": {
-                "maxScore": 100,
-                "errorImpact": -5,
-                "highImpact": -2,
-                "normalImpact": -1,
-                "lowImpact": -1
-              },
-              "tests": {
-                "maxScore": 100,
-                "passedImpact": 0,
-                "failureImpact": -5,
-                "skippedImpact": -1
-              },
-              "coverage": {
-                "maxScore": 100,
-                "coveredPercentageImpact": 0,
-                "missedPercentageImpact": -1
-              },
-              "pit": {
-                  "maxScore": 100,
-                  "detectedImpact": 0,
-                  "undetectedImpact": 0,
-                  "detectedPercentageImpact": 0,
-                  "undetectedPercentageImpact": -1
+                {
+                  "tests": {
+                    "tools": [
+                      {
+                        "name": "Tests"
+                      }
+                    ],
+                    "name": "JUnit",
+                    "passedImpact": 0,
+                    "skippedImpact": -1,
+                    "failureImpact": -5,
+                    "maxScore": 100
+                  },
+                  "analysis": [
+                    {
+                      "name": "Style",
+                      "id": "style",
+                      "tools": [
+                        {
+                          "id": "checkstyle",
+                          "name": "CheckStyle"
+                        },
+                        {
+                          "id": "pmd",
+                          "name": "PMD"
+                        }
+                      ],
+                      "errorImpact": -1,
+                      "highImpact": -1,
+                      "normalImpact": -1,
+                      "lowImpact": -1,
+                      "maxScore": 100
+                    },
+                    {
+                      "name": "Bugs",
+                      "id": "bugs",
+                      "icon": "bug",
+                      "tools": [
+                        {
+                          "id": "spotbugs",
+                          "name": "SpotBugs"
+                        }
+                      ],
+                      "errorImpact": -3,
+                      "highImpact": -3,
+                      "normalImpact": -3,
+                      "lowImpact": -3,
+                      "maxScore": 100
+                    }
+                  ],
+                  "coverage": [
+                    {
+                      "tools": [
+                        {
+                          "id": "coverage",
+                          "name": "Line Coverage",
+                          "metric": "line"
+                        },
+                        {
+                          "id": "coverage",
+                          "name": "Branch Coverage",
+                          "metric": "branch"
+                        }
+                      ],
+                      "name": "Code Coverage",
+                      "maxScore": 100,
+                      "missedPercentageImpact": -1
+                    },
+                    {
+                      "tools": [
+                        {
+                          "id": "pit",
+                          "name": "Mutation Coverage",
+                          "metric": "mutation"
+                        }
+                      ],
+                      "name": "Mutation Coverage",
+                      "maxScore": 100,
+                      "missedPercentageImpact": -1
+                    }
+                  ]
                 }
-            }
             ''')
     }
 }

@@ -1,6 +1,5 @@
 package io.jenkins.plugins.grading;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +36,7 @@ import io.jenkins.plugins.util.JenkinsFacade;
  */
 class AutoGradingChecksPublisher {
     void publishChecks(final Run<?, ?> run, final TaskListener listener,
-            final AggregatedScore score, final List<Report> warnings) {
+            final AggregatedScore score) {
         ChecksPublisher publisher = ChecksPublisherFactory.fromRun(run, listener);
 
         GradingReport report = new GradingReport();
@@ -48,9 +47,8 @@ class AutoGradingChecksPublisher {
                 .withConclusion(ChecksConclusion.SUCCESS)
                 .withOutput(new ChecksOutputBuilder()
                         .withTitle(report.getHeader())
-                        .withSummary(report.getSummary(score))
-                        .withText(report.getDetails(score, Collections.emptyList())) // FIXME: we need to show the failures here as well
-                        .withAnnotations(createAnnotations(warnings))
+                        .withSummary(report.getTextSummary(score))
+                        .withText(report.getMarkdownDetails(score))
                         .build())
                 .withDetailsURL(getAbsoluteUrl(run))
                 .build();

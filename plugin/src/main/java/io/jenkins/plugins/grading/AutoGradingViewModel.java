@@ -1,5 +1,7 @@
 package io.jenkins.plugins.grading;
 
+import org.apache.commons.lang3.StringUtils;
+
 import edu.hm.hafner.echarts.JacksonFacade;
 import edu.hm.hafner.echarts.PercentagePieChart;
 import edu.hm.hafner.grading.AggregatedScore;
@@ -80,6 +82,23 @@ public class AutoGradingViewModel implements ModelObject {
         else {
             return JenkinsPalette.GREEN.normal();
         }
+    }
+
+    /**
+     * Returns the FontAwesome icon for the specified analysis tool. By default, a warning triangle is returned.
+     *
+     * @param id
+     *         the ID of the tool
+     * @param name
+     *         the name of the tool
+     *
+     * @return the icon
+     */
+    public String getAnalysisIcon(final String id, final String name) {
+        if (StringUtils.containsIgnoreCase(id, "bug") || StringUtils.containsIgnoreCase(name, "bug")) {
+            return "bug";
+        }
+        return "triangle-exclamation";
     }
 
     /**

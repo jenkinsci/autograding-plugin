@@ -9,39 +9,36 @@ image:https://codecov.io/gh/jenkinsci/autograding-plugin/branch/main/graph/badge
 
 image::graduation-cap.svg[Scores, width="100"]
 
-Jenkins plugin that autogrades projects based on a configurable set of metrics. Currently, you can select from the
-following metrics:
+Jenkins plugin that autogrades projects based on a configurable set of metrics. Currently, you can select from the following metrics:
 
 - Test statistics (e.g., number of failed tests) from the https://github.com/jenkinsci/junit-plugin[JUnit Plugin]
-- Code coverage (e.g., line coverage percentage) from the https://github.com/jenkinsci/code-coverage-api-plugin[Code Coverage API Plugin]
-- PIT mutation coverage (e.g., missed mutations' percentage)  from the https://github.com/jenkinsci/pitmutation-plugin[PIT Mutation reporting plugin]
-- Static analysis (e.g., number of warnings) from the https://github.com/jenkinsci/warnings-ng-plugin[Warnings Plugin - Next Generation]
+- Code coverage (e.g., line coverage percentage) from the https://github.com/jenkinsci/coverage-plugin[Coverage Plugin]
+- Mutation coverage (e.g., missed mutations' percentage)  from the https://github.com/jenkinsci/coverage-plugin[Coverage Plugin]
+- Static analysis (e.g., number of warnings) from the https://github.com/jenkinsci/warnings-ng-plugin[Warnings Plugin]
 
-For each metric, you can define the impact on the overall score and the individual scoring criteria. After each build,
-the autograding plugin shows a summary in several progress charts and details in a table for each metric.
+For each metric, you can define the impact on the overall score and the individual scoring criteria. After each build, the autograding plugin shows a summary in several progress charts and details in a table for each metric.
 
 .Overall score and individual score of participating metrics
 [#img-progress]
 image::progress.png[Scores]
 
+This plugin is a companion project for the https://github.com/marketplace/actions/autograding-action[GitHub Autograding Action] that can be used to autograde GitHub Classroom assignments.
+
 == Required workflow
 
-In order to autograde a project, you first need to build your project using your favorite build tool. Make sure
-your build invokes all tools that will produce the artifacts required for the autograding later on. Then
-run all post build steps that record the desired results using the plugins from the list above. Autograding is based
-on the persisted Jenkins model of these plugins (i.e., Jenkins build actions), so make sure the results of these plugins
-show correctly up in the Jenkins build view. The autograding has to be started as the last step: you can configure
-the impact of the individual results using a simple JSON string. Currently, no UI configuration of the configuration is
-available. The autograding step reads all requested build results and calculates a score based on the defined
-properties in the JSON configuration.
+To autograde a project, you first need to build your project using your favorite build tool. Make sure your build invokes all tools that will produce the artifacts required for the autograding later on. Then run all post-build steps that record the desired results using the plugins from the list above. Autograding is based on the persisted Jenkins model of these plugins (i.e., Jenkins build actions), so make sure the results of these plugins show correctly up in the Jenkins build view. The autograding has to be started as the last step: you can configure the impact of the individual results using a simple JSON string, see https://github.com/marketplace/actions/autograding-action[the GitHub Autograding Action] for details. Currently, no UI configuration of the configuration is available. The autograding step reads all requested build results and calculates a score based on the defined  properties in the JSON configuration.
 
 .Summary of the scoring
 [#img-overview]
 image::summary.png[Scores Summary]
 
-.Details for all metrics
-[#img-details]
-image::details.png[Scores Details]
+.Details for all test metrics
+[#img-test-details]
+image::details-tests.png[Scores Details]
+
+.Details for all analysis metrics
+[#img-analysis]
+image::details-analysis.png[Scores Details]
 
 == Job Configuration
 
@@ -89,10 +86,6 @@ The example pipeline uses the following configuration that shows all possible pa
 
 ----
 
-If you want to skip one of the tools just remove the corresponding JSON node from the configuration.
-Additionally, you need to select the individual configuration options based on your current assignment. Sometimes
-it makes sense to start with a given number of points and subtract points for each violation (e.g., minus points for
-each SpotBugs warning). For other metrics it makes more sense to add points for each achieved percentage (e.g., for
-line coverage).
+If you want to skip one of the tools, remove the corresponding JSON node from the configuration. Additionally, you need to select the individual configuration options based on your current assignment. Sometimes it makes sense to start with a given number of points and subtract points for each violation, e.g., minus points for each SpotBugs warning. For other metrics, it makes more sense to add points for each achieved percentage, e.g., for line coverage.
 
 

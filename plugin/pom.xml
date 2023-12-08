@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>6.14.0</version>
+    <version>6.17.0</version>
     <relativePath />
   </parent>
 
@@ -24,12 +24,15 @@
 
     <module.name>${project.groupId}.autograding</module.name>
 
-    <autograding-model.version>2.0.0</autograding-model.version>
+    <autograding-model.version>3.9.0</autograding-model.version>
 
-    <code-coverage-api-plugin.version>4.9.0</code-coverage-api-plugin.version>
-    <warnings-ng-plugin.version>10.5.0</warnings-ng-plugin.version>
+    <coverage-plugin.version>1.6.0</coverage-plugin.version>
+    <warnings-ng-plugin.version>10.5.2</warnings-ng-plugin.version>
+    <analysis-model-api.version>11.13.0</analysis-model-api.version>
 
     <testcontainers.version>1.19.1</testcontainers.version>
+    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.testRelease>17</maven.compiler.testRelease>
   </properties>
 
   <licenses>
@@ -85,6 +88,10 @@
           <artifactId>codingstyle</artifactId>
           <groupId>edu.hm.hafner</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>coverage-model</artifactId>
+          <groupId>edu.hm.hafner</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -112,8 +119,8 @@
     </dependency>
     <dependency>
       <groupId>io.jenkins.plugins</groupId>
-      <artifactId>code-coverage-api</artifactId>
-      <version>${code-coverage-api-plugin.version}</version>
+      <artifactId>coverage</artifactId>
+      <version>${coverage-plugin.version}</version>
       <exclusions>
         <exclusion>
           <groupId>com.github.spotbugs</groupId>
@@ -165,7 +172,7 @@
     <dependency>
       <groupId>io.jenkins.plugins</groupId>
       <artifactId>analysis-model-api</artifactId>
-      <version>11.10.0</version>
+      <version>${analysis-model-api.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
@@ -252,8 +259,8 @@
           <artifactId>spotbugs-annotations</artifactId>
         </exclusion>
       </exclusions>
+      <classifier>tests</classifier>
       <scope>test</scope>
-      <type>test-jar</type>
     </dependency>
 
   </dependencies>
@@ -266,9 +273,11 @@
         <configuration>
           <packages combine.children="append">
             <package>io.jenkins.plugins.grading</package>
-            <package>edu.hm.hafner.grading</package>
           </packages>
           <entryPointClassPackage>io.jenkins.plugins.grading.assertions</entryPointClassPackage>
+          <excludes combine.children="append">
+            <exclude>.*\.Score</exclude>
+          </excludes>
         </configuration>
       </plugin>
       <plugin>

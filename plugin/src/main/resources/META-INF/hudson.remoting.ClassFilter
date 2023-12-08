@@ -9,3 +9,4 @@ edu.hm.hafner.grading.TestScore
 edu.hm.hafner.grading.TestConfiguration
 edu.hm.hafner.grading.AnalysisScore
 edu.hm.hafner.grading.AnalysisConfiguration
+edu.hm.hafner.grading.ToolConfiguration

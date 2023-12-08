@@ -3,8 +3,8 @@ package io.jenkins.plugins.grading;
 import edu.hm.hafner.grading.AggregatedScore;
 import edu.hm.hafner.grading.AnalysisScore;
 import edu.hm.hafner.grading.CoverageScore;
-import edu.hm.hafner.grading.PitScore;
 import edu.hm.hafner.grading.TestScore;
+import edu.hm.hafner.util.FilteredLog;
 
 import hudson.util.XStream2;
 
@@ -25,7 +25,7 @@ public class AggregatedScoreXmlStream extends AbstractXmlStream<AggregatedScore>
 
     @Override
     protected AggregatedScore createDefaultValue() {
-        return new AggregatedScore();
+        return new AggregatedScore("", new FilteredLog("empty"));
     }
 
     @Override
@@ -34,6 +34,5 @@ public class AggregatedScoreXmlStream extends AbstractXmlStream<AggregatedScore>
         xStream.alias("analysisScore", AnalysisScore.class);
         xStream.alias("testScore", TestScore.class);
         xStream.alias("coverageScore", CoverageScore.class);
-        xStream.alias("pitScore", PitScore.class);
     }
 }

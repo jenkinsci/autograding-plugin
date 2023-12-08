@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import org.jenkinsci.test.acceptance.junit.AbstractJUnitTest;
@@ -20,10 +21,86 @@ import static org.assertj.core.api.Assertions.*;
  *
  * @author Lukas Kirner
  */
-@WithPlugins({"autograding", "warnings-ng", "junit", "code-coverage-api", "pipeline-stage-step", "workflow-durable-task-step", "workflow-basic-steps"})
+@WithPlugins({"autograding", "warnings-ng", "junit", "coverage", "pipeline-stage-step", "workflow-durable-task-step", "workflow-basic-steps"})
 public class SmokeTests extends AbstractJUnitTest {
     private static final String AUTOGRADING_PLUGIN_PREFIX = "/autograding_test/";
-    private static final String CONFIGURATION = "{\"analysis\":{\"maxScore\":100,\"errorImpact\":-5,\"highImpact\":-3,\"normalImpact\":-2,\"lowImpact\":-1}, \"coverage\":{\"maxScore\":200,\"coveredPercentageImpact\":1,\"missedPercentageImpact\":0}, \"tests\":{\"maxScore\":100,\"passedImpact\":1,\"failureImpact\":-10,\"skippedImpact\":-1}, \"pit\":{\"maxScore\":100,\"detectedImpact\":1,\"undetectedImpact\":-10,\"ratioImpact\":0}}";
+    private static final String CONFIGURATION = """
+                {
+                  "tests": [{
+                    "tools": [
+                      {
+                        "id": "tests"
+                      }
+                    ],
+                    "id": "tests",
+                    "name": "JUnit",
+                    "skippedImpact": -1,
+                    "failureImpact": -5,
+                    "maxScore": 100
+                  }],
+                  "analysis": [
+                    {
+                      "id": "analysis",
+                      "tools": [
+                        {
+                          "id": "checkstyle",
+                          "name": "CheckStyle"
+                        },
+                        {
+                          "id": "pmd",
+                          "name": "PMD"
+                        },
+                        {
+                          "id": "cpd",
+                          "name": "CPD"
+                        },
+                        {
+                          "id": "findbugs",
+                          "name": "FindBugs"
+                        }
+                      ],
+                      "errorImpact": 1,
+                      "highImpact": 2,
+                      "normalImpact": 3,
+                      "lowImpact": 4,
+                      "maxScore": 100
+                    }
+                  ],
+                  "coverage": [
+                  {
+                    "tools": [
+                      {
+                        "id": "coverage",
+                        "name": "Line Coverage",
+                        "metric": "line"
+                      },
+                      {
+                        "id": "coverage",
+                        "name": "Branch Coverage",
+                        "metric": "branch"
+                      }
+                    ],
+                    "id": "coverage",
+                    "name": "Line Coverage",
+                    "maxScore": 100,
+                    "missedPercentageImpact": -1
+                  },
+                  {
+                    "tools": [
+                      {
+                        "id": "pit",
+                        "name": "Mutation Coverage",
+                        "metric": "mutation"
+                      }
+                    ],
+                    "id": "mutation",
+                    "name": "Mutation Coverage",
+                    "maxScore": 100,
+                    "missedPercentageImpact": -1
+                  }
+                  ]
+                }
+                """;
 
     /**
      * Test all cards with all tools.
@@ -40,8 +117,8 @@ public class SmokeTests extends AbstractJUnitTest {
 
         AutoGradePageObject pageObject = new AutoGradePageObject(build, buildAutoGradeURLFromJob(job));
 
-        assertThat(pageObject.getTotalScoreInPercent()).isEqualTo("77%");
-        assertThat(pageObject.getTotalScores()).containsExactly("92%", "92%", "91%", "18%");
+        assertThat(pageObject.getTotalScoreInPercent()).isEqualTo("82%");
+        assertThat(pageObject.getTotalScores()).containsExactly("94%", "92%", "50%", "94%");
 
         verifyTests(pageObject);
         verifyCoverage(pageObject);
@@ -51,30 +128,30 @@ public class SmokeTests extends AbstractJUnitTest {
 
     private void verifyTests(final AutoGradePageObject pageObject) {
         assertThatTestResultsHeaderIsCorrect(pageObject.getTestHeaders());
-        assertThat(pageObject.getTestBody().get("Test Result")).containsExactly(3, 1, 1, 5, -8);
-        assertThat(pageObject.getTestFooter()).containsExactly("1", "-10", "-1", "n/a", "n/a");
-    }
-
-    private void verifyMutationCoverage(final AutoGradePageObject pageObject) {
-        assertThatPITMutationsHeaderIsCorrect(pageObject.getPitHeaders());
-        assertThat(pageObject.getPitBody().get("Mutations")).containsExactly(1, 1, 50, 50, -9);
-        assertThat(pageObject.getPitFooter()).containsExactly("1", "-10", "0", "0", "n/a");
+        assertThat(pageObject.getTestBody().get("Tests (1/1/3)")).containsExactly(3, 1, 1, 5, -6);
+        assertThat(pageObject.getTestFooter()).containsExactly("0", "-5", "-1", "n/a", "n/a");
     }
 
     private void verifyCoverage(final AutoGradePageObject pageObject) {
         assertThatCodeCoverageHeaderIsCorrect(pageObject.getCoverageHeaders());
-        assertThat(pageObject.getCoverageBody().get("Line Coverage")).containsExactly(91, 9, 91);
-        assertThat(pageObject.getCoverageBody().get("Branch Coverage")).containsExactly(93, 7, 93);
-        assertThat(pageObject.getCoverageFooter()).containsExactly("1", "0", "n/a");
+        assertThat(pageObject.getCoverageBody().get("LineCoverage")).containsExactly(91, 9, -9);
+        assertThat(pageObject.getCoverageBody().get("BranchCoverage")).containsExactly(94, 6, -6);
+        assertThat(pageObject.getCoverageFooter()).containsExactly("0", "-1", "n/a");
+    }
+
+    private void verifyMutationCoverage(final AutoGradePageObject pageObject) {
+        assertThatPITMutationsHeaderIsCorrect(pageObject.getPitHeaders());
+        assertThat(pageObject.getPitBody().get("MutationCoverage")).containsExactly(50, 50, -50);
+        assertThat(pageObject.getPitFooter()).containsExactly("0", "-1", "n/a");
     }
 
     private void verifyAnalysis(final AutoGradePageObject pageObject) {
         assertThatStaticAnalysisHeaderIsCorrect(pageObject.getAnalysisHeaders());
-        assertThat(pageObject.getAnalysisBody().get("CheckStyle")).containsExactly(6, 0, 2, 3, 11, -37);
-        assertThat(pageObject.getAnalysisBody().get("PMD")).containsExactly(0, 0, 3, 0, 3, -6);
-        assertThat(pageObject.getAnalysisBody().get("CPD")).containsExactly(0, 5, 9, 6, 20, -39);
+        assertThat(pageObject.getAnalysisBody().get("CheckStyle")).containsExactly(6, 0, 2, 3, 11, 24);
+        assertThat(pageObject.getAnalysisBody().get("PMD")).containsExactly(0, 0, 3, 0, 3, 9);
+        assertThat(pageObject.getAnalysisBody().get("CPD")).containsExactly(0, 5, 9, 6, 20, 61);
         assertThat(pageObject.getAnalysisBody().get("FindBugs")).containsExactly(0, 0, 0, 0, 0, 0);
-        assertThat(pageObject.getAnalysisFooter()).containsExactly("-5", "-3", "-2", "-1", "n/a", "n/a");
+        assertThat(pageObject.getAnalysisFooter()).containsExactly("1", "2", "3", "4", "n/a", "n/a");
     }
 
     private void configurePipeline(final WorkflowJob job, final String configuration, final String...files) {
@@ -82,11 +159,11 @@ public class SmokeTests extends AbstractJUnitTest {
                 + createReportFilesStep(job, files)
                 + "junit testResults: '**/TEST-*'\n"
                 + "recordIssues tool: checkStyle(pattern: '**/checkstyle*'), skipPublishingChecks: true\n"
-                + "recordCoverage tools: [[parser: 'JACOCO', pattern:'**/jacoco*']], sourceCodeRetention: 'EVERY_BUILD'\n"
+                + "recordCoverage tools: [[parser: 'JACOCO', pattern:'**/jacoco*']], sourceCodeRetention: 'EVERY_BUILD', name: 'Code Coverage'\n"
                 + "recordIssues tool: pmdParser(pattern: '**/pmd*'), skipPublishingChecks: true\n"
                 + "recordIssues tools: [cpd(pattern: '**/cpd*', highThreshold:8, normalThreshold:3), findBugs()], aggregatingResults: 'false', skipPublishingChecks: true \n"
-                + "recordCoverage tools: [[parser: 'PIT', pattern:'**/mutations*']], id: 'pit', sourceCodeRetention: 'EVERY_BUILD'\n"
-                + "autoGrade('" + configuration + "')\n"
+                + "recordCoverage tools: [[parser: 'PIT', pattern:'**/mutations*']], id: 'pit', sourceCodeRetention: 'EVERY_BUILD', name: 'Mutation Coverage'\n"
+                + "autoGrade('" + StringUtils.deleteWhitespace(configuration) + "')\n"
                 + "}");
     }
 
@@ -121,7 +198,7 @@ public class SmokeTests extends AbstractJUnitTest {
     }
 
     private void assertThatPITMutationsHeaderIsCorrect(final List<String> headers) {
-        assertThat(headers).containsExactly("Type", "Detected", "Undetected", "Detected Percentage", "Undetected Percentage", "Score Impact");
+        assertThat(headers).containsExactly("Type", "Killed Percentage", "Survived Percentage", "Score Impact");
     }
 
     private void assertThatStaticAnalysisHeaderIsCorrect(final List<String> headers) {
