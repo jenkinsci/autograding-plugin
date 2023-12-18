@@ -46,7 +46,7 @@ class AutoGradingChecksPublisher {
                 .withStatus(ChecksStatus.COMPLETED)
                 .withConclusion(ChecksConclusion.SUCCESS)
                 .withOutput(new ChecksOutputBuilder()
-                        .withTitle(report.getHeader())
+                        .withTitle("Autograding Results")
                         .withSummary(report.getTextSummary(score))
                         .withText(report.getMarkdownDetails(score))
                         .build())
