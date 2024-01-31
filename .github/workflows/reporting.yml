@@ -27,7 +27,7 @@ jobs:
       - name: Build and test with Maven
         run: mvn -V --color always -ntp clean verify --file pom.xml '-Dgpg.skip' '-Ppit' | tee maven.log
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3.1.5
+        uses: codecov/codecov-action@v3.1.6
         with:
           token: ${{secrets.CODECOV_TOKEN}}
       - name: Run Autograding
