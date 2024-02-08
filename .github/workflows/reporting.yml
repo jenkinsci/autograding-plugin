@@ -127,28 +127,28 @@ jobs:
           cat metrics.env >> "${GITHUB_OUTPUT}"
           mkdir -p badges
       - name: Generate the badge SVG image for the line coverage
-        uses: emibcn/badge-action@v2.0.2
+        uses: emibcn/badge-action@v2.0.3
         with:
           label: 'Line Coverage'
           status: ${{ steps.metrics.outputs.line }}%
           color: 'green'
           path: badges/line-coverage.svg
       - name: Generate the badge SVG image for the branch coverage
-        uses: emibcn/badge-action@v2.0.2
+        uses: emibcn/badge-action@v2.0.3
         with:
           label: 'Branch Coverage'
           status: ${{ steps.metrics.outputs.branch }}%
           color: 'green'
           path: badges/branch-coverage.svg
       - name: Generate the badge SVG image for the mutation coverage
-        uses: emibcn/badge-action@v2.0.2
+        uses: emibcn/badge-action@v2.0.3
         with:
           label: 'Mutation Coverage'
           status: ${{ steps.metrics.outputs.mutation }}%
           color: 'green'
           path: badges/mutation-coverage.svg
       - name: Generate the badge SVG image for the warnings
-        uses: emibcn/badge-action@v2.0.2
+        uses: emibcn/badge-action@v2.0.3
         with:
           label: 'Warnings'
           status: ${{ steps.metrics.outputs.warnings }}
