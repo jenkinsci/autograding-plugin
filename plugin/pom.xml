@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>6.17.0</version>
+    <version>7.2.0</version>
     <relativePath />
   </parent>
 
@@ -26,9 +26,9 @@
 
     <autograding-model.version>3.20.0</autograding-model.version>
 
-    <coverage-plugin.version>1.10.0</coverage-plugin.version>
-    <warnings-ng-plugin.version>10.5.2</warnings-ng-plugin.version>
-    <analysis-model-api.version>11.13.0</analysis-model-api.version>
+    <coverage-plugin.version>1.11.0</coverage-plugin.version>
+    <warnings-ng-plugin.version>11.0.0</warnings-ng-plugin.version>
+    <analysis-model-api.version>12.1.0</analysis-model-api.version>
 
     <testcontainers.version>1.19.6</testcontainers.version>
     <maven.compiler.release>17</maven.compiler.release>
