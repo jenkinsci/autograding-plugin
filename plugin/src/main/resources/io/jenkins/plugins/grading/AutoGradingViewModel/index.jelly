@@ -91,7 +91,7 @@
 
             <bs:card title="${testScore.name}" fontAwesomeIcon="list-check">
               <div class="table-responsive">
-                <table class="table table-hover table-striped display" id="test.${testScore.id}">
+                <table class="table table-hover display" id="test.${testScore.id}">
                   <thead>
                     <tr>
                       <th>${%Name}</th>
@@ -153,7 +153,7 @@
 
             <bs:card title="${codeCoverageScore.name}" symbol="symbol-footsteps-outline plugin-ionicons-api">
               <div class="table-responsive">
-                <table class="table table-hover table-striped display" id="coverage.${codeCoverageScore.id}">
+                <table class="table table-hover display" id="coverage.${codeCoverageScore.id}">
                   <thead>
                     <tr>
                       <th>${%Type}</th>
@@ -205,7 +205,7 @@
 
             <bs:card title="${mutationCoverageScore.name}"  fontAwesomeIcon="virus-slash">
               <div class="table-responsive">
-                <table class="table table-hover table-striped display" id="pit.${mutationCoverageScore.id}">
+                <table class="table table-hover display" id="pit.${mutationCoverageScore.id}">
                   <thead>
                     <tr>
                       <th>${%Type}</th>
@@ -257,7 +257,7 @@
 
             <bs:card title="${analysisScore.name}" fontAwesomeIcon="${it.getAnalysisIcon(analysisScore.id, analysisScore.name)}">
               <div class="table-responsive">
-                <table class="table table-hover table-striped display" id="analysis.${analysisScore.id}">
+                <table class="table table-hover display" id="analysis.${analysisScore.id}">
                   <thead>
                     <tr>
                       <th>${%Tool}</th>

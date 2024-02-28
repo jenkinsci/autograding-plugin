@@ -10,7 +10,7 @@
 
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>autograding</artifactId>
-  <version>${revision}${changelist}</version>
+  <version>4.3.0</version>
   <packaging>hpi</packaging>
 
   <name>Autograding Plugin</name>
@@ -24,8 +24,7 @@
 
     <module.name>${project.groupId}.autograding</module.name>
 
-    <autograding-model.version>3.20.0</autograding-model.version>
-
+    <autograding-model.version>3.21.0</autograding-model.version>
     <coverage-plugin.version>1.11.0</coverage-plugin.version>
     <warnings-ng-plugin.version>11.0.0</warnings-ng-plugin.version>
     <analysis-model-api.version>12.1.0</analysis-model-api.version>
@@ -324,7 +323,7 @@
     <connection>scm:git:https://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-    <tag>${scmTag}</tag>
+    <tag>v4.3.0</tag>
   </scm>
 
   <repositories>
