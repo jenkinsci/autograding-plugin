@@ -29,7 +29,7 @@
     <warnings-ng-plugin.version>11.0.0</warnings-ng-plugin.version>
     <analysis-model-api.version>12.1.0</analysis-model-api.version>
 
-    <testcontainers.version>1.19.6</testcontainers.version>
+    <testcontainers.version>1.19.7</testcontainers.version>
     <maven.compiler.release>17</maven.compiler.release>
     <maven.compiler.testRelease>17</maven.compiler.testRelease>
   </properties>
