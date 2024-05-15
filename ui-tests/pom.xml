@@ -16,7 +16,7 @@
   <name>UI Tests of Autograding Plugin</name>
 
   <properties>
-    <jenkins.version>2.446</jenkins.version>
+    <jenkins.version>2.458</jenkins.version>
     <hpi-plugin.version>3.52</hpi-plugin.version>
     <java.version>17</java.version>
 
