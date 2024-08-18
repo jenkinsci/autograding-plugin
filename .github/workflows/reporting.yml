@@ -23,7 +23,7 @@ jobs:
       - name: Set up Maven
         uses: stCarolas/setup-maven@v5
         with:
-          maven-version: 3.9.6
+          maven-version: 3.9.9
       - name: Build and test with Maven
         run: mvn -V --color always -ntp clean verify --file pom.xml '-Dgpg.skip' '-Ppit' | tee maven.log
       - name: Upload coverage to Codecov
