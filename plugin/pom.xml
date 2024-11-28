@@ -25,7 +25,7 @@
     <module.name>${project.groupId}.autograding</module.name>
 
     <autograding-model.version>3.21.0</autograding-model.version>
-    <coverage-plugin.version>1.11.0</coverage-plugin.version>
+    <coverage-plugin.version>1.14.0</coverage-plugin.version>
     <warnings-ng-plugin.version>11.0.0</warnings-ng-plugin.version>
     <analysis-model-api.version>12.1.0</analysis-model-api.version>
 
